@@ -20,6 +20,10 @@
   top: 20px;
   left: 20px;
   width: min(390px, calc(100vw - 40px));
+  max-height: calc(100dvh - 40px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   padding: 20px 16px 16px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
@@ -45,6 +49,12 @@
   cursor: pointer;
   box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(10px);
+}
+
+.panelBody {
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .panelToggle:hover {
@@ -83,6 +93,7 @@
 }
 
 .header {
+  flex-shrink: 0;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -771,6 +782,8 @@
 }
 
 .mapModal {
+  color: #f6f7fb;
+  overflow-y: auto;
   position: fixed;
   inset: 0;
   display: grid;

@@ -3,12 +3,13 @@ import math
 import os
 import re
 import time
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from pathlib import Path
 from typing import Any
 
 import httpx
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, Query, HTTPException
+from pydantic import BaseModel, Field, ConfigDict
 from app.services.sky_brightness_model.core.calculator import (
     prepare_pixel_geometry,
     run_pipeline,
@@ -16,6 +17,10 @@ from app.services.sky_brightness_model.core.calculator import (
 from app.services.sky_brightness_model.core.config import EnvironmentConfig
 from app.services.sky_brightness_model.core.data_loader import (
     environment_query,
+    environment_from_responses,
+    get_interp_indices,
+    interp_value,
+    shift_astro_time,
     load_pixel_data_from_h5,
 )
 
@@ -224,13 +229,16 @@ def get_int_env(name: str, default: int) -> int:
 
 def build_environment_config(feature_environment: dict[str, Any] | None):
     feature_environment = feature_environment or {}
+    def value_or_default(name: str, default: float) -> float:
+        value = finite_number(feature_environment.get(name))
+        return default if value is None else value
     return EnvironmentConfig(
-        aod=finite_number(feature_environment.get("aod")) or 0.3,
-        cloud_fraction=finite_number(feature_environment.get("cloudFraction")) or 0.0,
-        cloud_base_h=finite_number(feature_environment.get("cloudBaseKm")) or 30.0,
-        seeing=finite_number(feature_environment.get("seeingArcsec")) or 0.0,
-        moon_phase_angle_deg=finite_number(feature_environment.get("moonPhaseAngle")) or 180.0,
-        moon_cloud_transmission=finite_number(feature_environment.get("moonCloudTransmission")) or 1.0,
+        aod=value_or_default("aod", 0.3),
+        cloud_fraction=value_or_default("cloudFraction", 0.0),
+        cloud_base_h=value_or_default("cloudBaseKm", 30.0),
+        seeing=value_or_default("seeingArcsec", 0.0),
+        moon_phase_angle_deg=value_or_default("moonPhaseAngle", 180.0),
+        moon_cloud_transmission=value_or_default("moonCloudTransmission", 1.0),
     )
 
 
@@ -547,3 +555,118 @@ async def sky_brightness(
     }
     SKY_BRIGHTNESS_CACHE[cache_key] = (now + SKY_BRIGHTNESS_CACHE_SECONDS, result)
     return result
+
+
+class CachedLocation(BaseModel):
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
+
+
+class CachedWeatherRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+    location: CachedLocation
+    datetime: str = Field(max_length=64)
+    altitude: float | None = Field(default=None, ge=-90, le=90)
+    azimuth: float | None = Field(default=None, ge=0, le=360)
+    responses: dict[str, dict[str, Any]]
+
+
+def cached_block(response: dict[str, Any]) -> dict[str, Any]:
+    for name in ("gfsensemble_1h", "data_1h", "data_3h"):
+        if isinstance(response.get(name), dict):
+            return response[name]
+    return {}
+
+
+def cached_value(block: dict[str, Any], variable: str, target: str) -> float | None:
+    """Validate a variable at this time; never turn missing/sentinel values into zero."""
+    try:
+        indices = get_interp_indices(block, target)
+        if indices is None:
+            return None
+        series = block.get(variable, [])
+        if not isinstance(series, list):
+            return None
+        if series and isinstance(series[0], list):
+            values = [finite_number(interp_value(member, *indices, default=math.nan)) for member in series]
+            if not values or any(value is None or value < 0 for value in values):
+                return None
+            return sum(values) / len(values)
+        value = finite_number(interp_value(series, *indices, default=math.nan))
+        return value if value is not None and value >= 0 else None
+    except (TypeError, ValueError, IndexError, KeyError):
+        return None
+
+
+@router.post("/evaluate-cached")
+def evaluate_cached_weather(payload: CachedWeatherRequest):
+    """Compute using the caller's saved weather only. No Meteoblue key or I/O here.
+
+    This route deliberately bypasses the shared GET cache and environment_query,
+    so a direction/time change cannot issue a paid request or reuse another user's weather.
+    """
+    try:
+        target_time = parse_datetime(payload.datetime)
+    except ValueError:
+        raise HTTPException(status_code=422, detail="Invalid observation datetime")
+    target = target_time.astimezone(timezone(timedelta(hours=9))).strftime("%Y-%m-%d %H:%M")
+    responses = payload.responses
+    aod = cached_value(cached_block(responses.get("p2", {})), "aod550", target)
+    cloud = cached_value(cached_block(responses.get("p3", {})), "totalcloudcover", target)
+    pressure = cached_value(cached_block(responses.get("p4", {})), "convectivecloudbase_pressure", target)
+    if pressure is not None and pressure <= 0:
+        pressure = None
+    seeing = cached_value(cached_block(responses.get("p1", {})), "seeing_arcsec", target)
+    if seeing is not None and seeing <= 0:
+        seeing = None
+
+    latitude, longitude = payload.location.latitude, payload.location.longitude
+    base = sqm_from_bortle(estimate_bortle(latitude, longitude))
+    cloud_fraction = cloud / 100 if cloud is not None and cloud <= 100 else None
+    sqm = cloud_fraction_adjusted_sqm(base, cloud_fraction)
+    source = "cached-weather-fallback" if cloud_fraction is not None else "bortle-fallback"
+    environment = None
+    model = None
+    missing = []
+    if aod is None:
+        missing.append("aod550")
+    if cloud_fraction is None:
+        missing.append("totalcloudcover")
+    if pressure is None:
+        missing.append("convectivecloudbase_pressure")
+    if seeing is None:
+        missing.append("seeing_arcsec")
+
+    moon_block = cached_block(responses.get("p1", {}))
+    positions = moon_block.get("planet_positions", {})
+    moon = positions.get("moon", {}) if isinstance(positions, dict) else {}
+    moon_valid = False
+    try:
+        moon_indices = get_interp_indices(moon_block, shift_astro_time(target))
+        if moon_indices is not None and isinstance(moon, dict):
+            moon_alt = finite_number(interp_value(moon.get("alt", []), *moon_indices, default=math.nan))
+            moon_az = finite_number(interp_value(moon.get("az", []), *moon_indices, default=math.nan))
+            moon_valid = moon_alt is not None and -90 <= moon_alt <= 90 and moon_az is not None and 0 <= moon_az <= 360
+    except (TypeError, ValueError, IndexError):
+        pass
+    if not moon_valid:
+        missing.append("moon_position")
+
+    if aod is not None and cloud_fraction is not None:
+        parsed = environment_from_responses(target, responses)
+        environment = {
+            "aod": clamp(aod, 0, 5), "cloudFraction": cloud_fraction, "cloudBaseKm": parsed[2],
+            "seeingArcsec": seeing, "moonZenith": parsed[5][0] if moon_valid else None,
+            "moonAzimuth": parsed[5][1] if moon_valid else None,
+            "moonPhaseAngle": parsed[6], "moonCloudTransmission": parsed[7],
+        }
+        if not missing:
+            model = fetch_black_marble_dem_sqm(latitude, longitude, environment, payload.altitude, payload.azimuth)
+            if model:
+                sqm, source = model["sqm"], model["source"]
+    return {
+        "sqm": round(sqm, 3), "source": source, "seeingArcsec": seeing,
+        "environment": environment, "missing": missing,
+        "blackMarblePixelCount": (model or {}).get("blackMarblePixelCount"),
+    }

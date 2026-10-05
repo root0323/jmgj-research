@@ -420,6 +420,30 @@ def environment_query(time, lat, lon):
             print(f"API 요청 또는 캐시 저장 중 에러 발생: {e}")
             return aod, cloud_fraction, cloud_base_h, seeing, moonlight, (moon_zen, moon_az), moon_phase_angle, moon_cloud_transmission
 
+    return environment_from_responses(time, responses)
+
+
+def environment_from_responses(time, responses):
+    """Evaluate supplied forecasts without reading a key, disk cache, or network.
+
+    Keep the original research interpolation, including its lunar time convention.
+    Normalize the three-hour package blocks without changing the original payloads.
+    """
+    responses = {name: dict(value) for name, value in responses.items() if isinstance(value, dict)}
+    for name in ('p2', 'p3', 'p4'):
+        value = responses.get(name, {})
+        if 'data_1h' not in value and 'data_3h' in value:
+            value['data_1h'] = value['data_3h']
+    aod = 0.0
+    cloud_fraction = 0.0
+    cloud_base_h = 30.0
+    seeing = 0.0
+    moonlight = 0.0
+    moon_cloud_transmission = 1.0
+    moon_phase_angle = calculate_lunar_phase_angle_deg(time)
+    moon_zen = 90.0
+    moon_az = 0.0
+
     # 4. 데이터 파싱 및 가공 (기존 로직과 동일하나 responses 딕셔너리에서 가져옴)
     try:
         response1 = responses.get('p1', {})

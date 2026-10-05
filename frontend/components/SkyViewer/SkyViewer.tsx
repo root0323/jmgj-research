@@ -38,6 +38,9 @@ import {
 } from "./engineControls";
 import { ObjectInfoPanel } from "./ObjectInfoPanel";
 import { SkyViewerControls } from "./SkyViewerControls";
+import { PersonalWeatherPanel } from "./PersonalWeatherPanel";
+import { usePersonalWeather } from "./usePersonalWeather";
+import { evaluateWeather } from "@/lib/weather-evaluation";
 import { SkyViewerToolbar } from "./SkyViewerToolbar";
 import type { DisplayToggleName } from "./SkyViewerToolbar";
 import {
@@ -57,10 +60,7 @@ import {
   parseDateTimeLocalValue,
   toDateTimeLocalValue,
 } from "./timeUtils";
-import {
-  getFallbackSkyBrightness,
-  getSkyBrightnessDetails,
-} from "./difficulty";
+import { getFallbackSkyBrightness } from "./difficulty";
 import type { SkyBrightnessDirection } from "./difficulty";
 import type {
   EngineStatus,
@@ -614,7 +614,10 @@ export default function SkyViewer() {
     atmosphere: false,
     ground: true,
   });
-  const [isControlPanelOpen, setIsControlPanelOpen] = useState(false);
+  const [isControlPanelOpen, setIsControlPanelOpen] = useState(true);
+  const weather = usePersonalWeather(observerLocation);
+  const weatherSnapshot = weather.snapshot;
+  const [weatherModelSource, setWeatherModelSource] = useState("간이 추정 · 기상 자료 조회 전");
   const applySelectedInfo = useCallback((info: ObjectInfo | null) => {
     setSelectedInfo(info);
     setSkyBrightnessDirection((current) => {
@@ -1103,6 +1106,7 @@ export default function SkyViewer() {
   useEffect(() => {
     let disposed = false;
     const datetime = new Date(skyBrightnessTimeKey);
+    const controller = new AbortController();
     const locationKey = `${observerLocation.latitude.toFixed(
       6
     )},${observerLocation.longitude.toFixed(6)}`;
@@ -1113,18 +1117,21 @@ export default function SkyViewer() {
       : "none";
     const requestKey = `${locationKey}|${skyBrightnessTimeKey}|${directionKey}`;
     skyBrightnessRequestKeyRef.current = requestKey;
+    if (!weatherSnapshot) {
+      setSkyBrightness(getFallbackSkyBrightness(observerLocation.latitude, observerLocation.longitude));
+      setSeeingArcsec(null);
+      setWeatherModelSource("간이 추정 · 기상 자료 조회 전");
+      setIsSkyBrightnessLoading(false);
+      return;
+    }
     setIsSkyBrightnessLoading(true);
 
-    void getSkyBrightnessDetails(
-      observerLocation.latitude,
-      observerLocation.longitude,
-      datetime,
-      skyBrightnessDirection ?? undefined
-    )
+    void evaluateWeather(weatherSnapshot, datetime, skyBrightnessDirection, controller.signal)
       .then((details) => {
         if (!disposed && skyBrightnessRequestKeyRef.current === requestKey) {
           setSkyBrightness(details.sqm);
           setSeeingArcsec(details.seeingArcsec);
+          setWeatherModelSource(details.source);
         }
       })
       .finally(() => {
@@ -1138,12 +1145,14 @@ export default function SkyViewer() {
 
     return () => {
       disposed = true;
+      controller.abort();
     };
   }, [
     observerLocation.latitude,
     observerLocation.longitude,
     skyBrightnessDirection,
     skyBrightnessTimeKey,
+    weatherSnapshot,
   ]);
 
   const applyObservationTime = useCallback((value: string | Date) => {
@@ -1409,6 +1418,8 @@ export default function SkyViewer() {
 
       {isControlPanelOpen && (
         <SkyViewerControls
+          weatherPanel={<PersonalWeatherPanel weather={weather} location={observerLocation} locationName={locationQuery}
+            observationTime={new Date(skyBrightnessTimeKey)} modelSource={weatherModelSource} />}
           calendarDays={calendarDays}
           deepSkyMode={deepSkyMode}
           formatDisplayDateTime={formatDisplayDateTime}

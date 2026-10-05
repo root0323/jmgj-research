@@ -9,6 +9,7 @@ import {
   useState,
 } from "react";
 import { geocodeLocation, reverseGeocodeLocation } from "./geo";
+import { createPortal } from "react-dom";
 import styles from "./SkyViewer.module.css";
 import type { EngineStatus, LocationApplyState, ObserverLocation } from "./types";
 
@@ -386,7 +387,7 @@ export function LocationPicker({
         </div>
       </div>
 
-      {isMapOpen && (
+      {isMapOpen && createPortal(
         <section className={styles.mapModal} aria-label="지도에서 관측 위치 선택">
           <div className={styles.mapDialog}>
             <div className={styles.mapHeader}>
@@ -515,7 +516,7 @@ export function LocationPicker({
               </button>
             </div>
           </div>
-        </section>
+        </section>, document.body
       )}
     </>
   );

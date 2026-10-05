@@ -1,0 +1,33 @@
+.panel { margin: 16px 0; padding-top: 16px; border-top: 1px solid #314254; font-size: 13px; }
+.heading { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.heading h2 { margin: 0; font-size: 17px; font-weight: 650; }
+.badge, .connected { padding: 4px 7px; border-radius: 5px; background: #263245; color: #d1dae6; font-size: 11px; }
+.connected { background: #173f3d; color: #a6ece0; }
+.links { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0; }
+.panel a { color: #8dd1ff; text-decoration: underline; text-underline-offset: 3px; }
+.help { margin: 8px 0 12px; color: #b2bfd0; font-size: 12px; line-height: 1.6; }
+.keyForm { display: flex; gap: 6px; }
+.panel input, .panel select { width: 100%; min-width: 0; border: 1px solid #485466; border-radius: 6px; background: #111a29; color: #edf5ff; padding: 9px; font: inherit; color-scheme: dark; }
+.panel input:focus, .panel select:focus { outline: 2px solid #84cfff; outline-offset: 1px; }
+.panel button { padding: 9px 10px; border: 1px solid #48637d; border-radius: 6px; font: inherit; cursor: pointer; color: #e6f0ff; background: #23354d; white-space: nowrap; }
+.panel button:disabled { opacity: .45; cursor: default; }
+.keyForm input { flex: 1; }
+.field { display: grid; gap: 6px; margin-top: 12px; color: #c6d4e5; }
+.target { display: grid; gap: 3px; margin: 14px 0 10px; }
+.target span, .target small { color: #adbed2; font-size: 12px; }
+.panel .load { width: 100%; background: #23617c; border-color: #61a1bd; font-weight: 650; padding: 12px; }
+.usage { display: grid; gap: 7px; margin: 16px 0 12px; padding: 15px; border: 1px solid #3b516a; border-radius: 8px; background: #101d2d; }
+.usage > strong { font-size: 30px; letter-spacing: -.5px; color: #c4efff; }
+.usage > strong small { font-size: 18px; color: #8297b0; }
+.usage > span { color: #d0dbea; font-size: 12px; }
+.usage > small { font-size: 11px; line-height: 1.5; color: #a3b4c8; }
+.track { height: 5px; background: #27394e; border-radius: 5px; overflow: hidden; }
+.track > div { height: 100%; background: #6fc9d4; }
+.message { margin: 10px 0; color: #cce6f5; font-size: 12px; line-height: 1.6; overflow-wrap: anywhere; }
+.data { display: grid; gap: 7px; margin-top: 12px; padding: 12px; border: 1px solid #3b516a; border-radius: 7px; }
+.data small { font-size: 11px; color: #adbed2; line-height: 1.6; }
+.panel .warning { color: #f4c18a; font-size: 12px; line-height: 1.6; }
+.panel .secondary { background: transparent; width: 100%; font-size: 12px; margin-top: 5px; }
+.settings { margin-top: 14px; color: #adbed2; font-size: 12px; }
+.settings summary { cursor: pointer; padding: 5px 0; }
+.srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
