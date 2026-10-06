@@ -3,7 +3,7 @@ import { currentLocation } from "./geolocation";
 
 describe("current observer location", () => {
   it("uses normal accuracy first and applies actual browser coordinates", async () => {
-    const getCurrentPosition = vi.fn((success) => success({ coords: { latitude: 33.425814, longitude: 126.5308195 } }));
+    const getCurrentPosition = vi.fn<Geolocation["getCurrentPosition"]>((success) => success({ coords: { latitude: 33.425814, longitude: 126.5308195 } } as GeolocationPosition));
     expect(await currentLocation({ getCurrentPosition } as unknown as Geolocation)).toEqual({ latitude: 33.425814, longitude: 126.5308195 });
     expect(getCurrentPosition.mock.calls[0][2]).toMatchObject({ enableHighAccuracy: false });
   });

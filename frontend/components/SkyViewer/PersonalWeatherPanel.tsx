@@ -41,7 +41,7 @@ export function PersonalWeatherPanel({ weather, location, locationName, observat
           placeholder={connected ? "다른 API 키 입력" : "개인 API 키 입력"} onChange={(event) => weather.setKeyInput(event.target.value)} />
         <button type="submit" disabled={busy || !weather.keyInput.trim()}>키 적용</button>
       </form>
-      <p className={styles.help}>3시간 구성 · Meteoblue에서 AOD·구름량·운저를 조회합니다. 시상은 무료 7Timer 예보로 별도 제공합니다.</p>
+      <p className={styles.help}>3시간 구성 · Meteoblue에서 AOD·구름량·운저를 조회합니다. 시상은 무료 예보로 별도 제공합니다.</p>
       <div className={styles.target}>
         <span>선택한 한 장소</span><strong>{locationName}</strong>
         <small>{location.latitude.toFixed(4)}°, {location.longitude.toFixed(4)}°</small>
@@ -70,13 +70,11 @@ export function PersonalWeatherPanel({ weather, location, locationName, observat
           <div>AOD {values?.aod === null ? "자료 없음" : values?.aod.toFixed(3)}</div>
           {snapshot.results.filter((result) => result.error).map((result) => <small className={styles.warning} key={result.package}>{result.package}: {result.error}</small>)}
           <small>{modelSource}</small>
-          <small>출처: <a href="https://www.meteoblue.com/" target="_blank" rel="noopener noreferrer">meteoblue</a> · 발행 시각 등 원본 메타데이터도 저장합니다.</small>
           <button className={styles.secondary} type="button" disabled={busy || !connected} onClick={() => void weather.load(true)}>새 자료 요청 · 크레딧 사용</button>
         </div>
       )}
-      <div className={styles.data} aria-label="7Timer 시상 예보">
+      <div className={styles.data} aria-label="시상 예보">
         <strong>시상 {seeing ? seeing.label : "자료 없음"}</strong>
-        <small>7Timer ASTRO · 전 세계 약 20 km 격자 · 3시간 간격 예보</small>
         <button className={styles.secondary} type="button" disabled={busy} onClick={() => void weather.loadSeeing()}>
           {weather.seeingSnapshot && seeingFresh(weather.seeingSnapshot) ? "저장 시상 불러오기 · 무료" : "시상 불러오기 · 무료"}
         </button>
@@ -89,7 +87,6 @@ export function PersonalWeatherPanel({ weather, location, locationName, observat
           <button className={styles.secondary} type="button" disabled={busy} onClick={() => void weather.loadSeeing(true)}>시상 새 예보 요청 · 무료</button>
         </>}
         <small>범위로 제공되는 예측값이며 관측 실측값이 아닙니다. 현재 난이도 분류에는 시상 임계값을 적용하지 않습니다.</small>
-        <small>출처: <a href="https://www.7timer.info/doc.php?lang=en" target="_blank" rel="noopener noreferrer">7Timer! ASTRO</a></small>
       </div>
       {!snapshot && <p className={styles.help}>{modelSource}</p>}
       {weather.storageWarning && <p className={styles.warning}>브라우저 저장 공간을 사용할 수 없습니다. 현재 화면에서는 사용할 수 있지만, 창을 닫으면 저장 자료나 사용 기록이 사라질 수 있습니다.</p>}

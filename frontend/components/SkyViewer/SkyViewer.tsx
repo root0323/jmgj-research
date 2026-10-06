@@ -664,7 +664,7 @@ export default function SkyViewer() {
     return datetime.toISOString();
   }, [timeDraft]);
   const publicSeeing = seeingAt(weather.seeingSnapshot, new Date(skyBrightnessTimeKey));
-  const seeingLabel = publicSeeing ? `${publicSeeing.label} · 7Timer 예보` : undefined;
+  const seeingLabel = publicSeeing?.label;
 
   useEffect(() => {
     isSkyViewerMountedRef.current = true;

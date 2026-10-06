@@ -12,7 +12,7 @@ export function usePersonalWeather(location: WeatherLocation) {
   const [account, setAccount] = useState<{ key: string; fingerprint: string } | null>(null);
   const plan: WeatherPlan = "free3h";
   const [seeingStored, setSeeingStored] = useState<{ key: string; snapshot: SeeingSnapshot } | null>(null);
-  const [seeingMessage, setSeeingMessage] = useState("7Timer의 3시간 간격 시상 예보를 무료로 조회합니다.");
+  const [seeingMessage, setSeeingMessage] = useState("3시간 간격 시상 예보를 무료로 조회합니다.");
   const publicCacheKey = seeingCacheKey(location);
   const seeingSnapshot = seeingStored?.key === publicCacheKey ? seeingStored.snapshot : null;
   const [ledger, setLedger] = useState<CreditLedger>(newLedger);
@@ -56,13 +56,13 @@ export function usePersonalWeather(location: WeatherLocation) {
         setSeeingMessage("저장한 시상 예보를 재사용했습니다. 크레딧 차감 없음.");
         return;
       }
-      setSeeingMessage("7Timer 시상 예보를 불러오는 중입니다…");
+      setSeeingMessage("시상 예보를 불러오는 중입니다…");
       const response = await fetch("/api/seeing", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ location: capturedLocation }) });
       const value: unknown = await response.json();
       if (!response.ok || !validSeeing(value) || locationKey(value.location) !== locationKey(capturedLocation)) throw new Error("seeing unavailable");
       setSeeingStored({ key, snapshot: value });
       if (!await saveSeeing(key, value)) setStorageWarning(true);
-      setSeeingMessage("7Timer 시상 예보를 이 브라우저에 저장했습니다. Meteoblue 크레딧 차감 없음.");
+      setSeeingMessage("시상 예보를 이 브라우저에 저장했습니다. 크레딧 차감 없음.");
     } catch { setSeeingMessage("시상 예보를 받지 못했습니다. 저장 자료는 유지됩니다. 잠시 후 다시 시도하세요."); }
   }
 
