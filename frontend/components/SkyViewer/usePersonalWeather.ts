@@ -4,11 +4,17 @@ import {
   type CreditLedger, type WeatherLocation, type WeatherPlan, type WeatherSnapshot,
 } from "@/lib/meteoblue";
 import { keyFingerprint, readLedger, readWeather, saveLedger, saveWeather } from "@/lib/weather-storage";
+import { readSeeing, saveSeeing } from "@/lib/weather-storage";
+import { seeingCacheKey, seeingFresh, validSeeing, type SeeingSnapshot } from "@/lib/seeing";
 
 export function usePersonalWeather(location: WeatherLocation) {
   const [keyInput, setKeyInput] = useState("");
   const [account, setAccount] = useState<{ key: string; fingerprint: string } | null>(null);
-  const [plan, setPlan] = useState<WeatherPlan>("research");
+  const plan: WeatherPlan = "free3h";
+  const [seeingStored, setSeeingStored] = useState<{ key: string; snapshot: SeeingSnapshot } | null>(null);
+  const [seeingMessage, setSeeingMessage] = useState("7Timer의 3시간 간격 시상 예보를 무료로 조회합니다.");
+  const publicCacheKey = seeingCacheKey(location);
+  const seeingSnapshot = seeingStored?.key === publicCacheKey ? seeingStored.snapshot : null;
   const [ledger, setLedger] = useState<CreditLedger>(newLedger);
   const ledgerRef = useRef(ledger);
   const [stored, setStored] = useState<{ key: string; snapshot: WeatherSnapshot } | null>(null);
@@ -32,6 +38,40 @@ export function usePersonalWeather(location: WeatherLocation) {
     });
     return () => { cancelled = true; };
   }, [currentCacheKey]);
+
+  useEffect(() => {
+    let cancelled = false;
+    void readSeeing(publicCacheKey).then((value) => {
+      if (!cancelled) setSeeingStored(value ? { key: publicCacheKey, snapshot: value } : null);
+    });
+    return () => { cancelled = true; };
+  }, [publicCacheKey]);
+
+  async function requestSeeing(capturedLocation: WeatherLocation, force = false) {
+    const key = seeingCacheKey(capturedLocation);
+    try {
+      const cached = await readSeeing(key);
+      if (!force && cached && seeingFresh(cached)) {
+        setSeeingStored({ key, snapshot: cached });
+        setSeeingMessage("저장한 시상 예보를 재사용했습니다. 크레딧 차감 없음.");
+        return;
+      }
+      setSeeingMessage("7Timer 시상 예보를 불러오는 중입니다…");
+      const response = await fetch("/api/seeing", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ location: capturedLocation }) });
+      const value: unknown = await response.json();
+      if (!response.ok || !validSeeing(value) || locationKey(value.location) !== locationKey(capturedLocation)) throw new Error("seeing unavailable");
+      setSeeingStored({ key, snapshot: value });
+      if (!await saveSeeing(key, value)) setStorageWarning(true);
+      setSeeingMessage("7Timer 시상 예보를 이 브라우저에 저장했습니다. Meteoblue 크레딧 차감 없음.");
+    } catch { setSeeingMessage("시상 예보를 받지 못했습니다. 저장 자료는 유지됩니다. 잠시 후 다시 시도하세요."); }
+  }
+
+  async function loadSeeing(force = false) {
+    if (busyRef.current) return;
+    busyRef.current = true; setBusy(true);
+    try { await requestSeeing({ ...location }, force); }
+    finally { busyRef.current = false; setBusy(false); }
+  }
 
   async function applyKey() {
     if (busyRef.current) return;
@@ -90,7 +130,11 @@ export function usePersonalWeather(location: WeatherLocation) {
       }
     } catch {
       setMessage("요청 결과를 확인하지 못했습니다. 재요청 전 계정의 사용량을 확인하세요. 저장 자료는 유지됩니다.");
-    } finally { busyRef.current = false; setBusy(false); }
+    } finally {
+      // Public seeing data remains independent of Meteoblue permissions and credits.
+      await requestSeeing(capturedLocation, force);
+      busyRef.current = false; setBusy(false);
+    }
   }
 
   async function syncUsage() {
@@ -110,6 +154,6 @@ export function usePersonalWeather(location: WeatherLocation) {
   }
 
   return { keyInput, setKeyInput, connected: !!account, fingerprint: account?.fingerprint ?? null,
-    plan, setPlan, ledger, updateLedger, snapshot, busy, message, storageWarning,
-    applyKey, disconnect, load, syncUsage, locationKey: locationKey(location) };
+    plan, ledger, updateLedger, snapshot, seeingSnapshot, seeingMessage, busy, message, storageWarning,
+    applyKey, disconnect, load, loadSeeing, syncUsage, locationKey: locationKey(location) };
 }

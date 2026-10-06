@@ -1,6 +1,8 @@
 import { isObject, newLedger, type CreditLedger, type WeatherSnapshot } from "./meteoblue";
+import { validSeeing, type SeeingSnapshot } from "./seeing";
 
 const memory = new Map<string, WeatherSnapshot>();
+const seeingMemory = new Map<string, SeeingSnapshot>();
 const ledgerMemory = new Map<string, CreditLedger>();
 const LEDGER_PREFIX = "jmgj-weather-credits-v1:";
 
@@ -44,6 +46,39 @@ export async function saveWeather(key: string, snapshot: WeatherSnapshot): Promi
       transaction.oncomplete = () => resolve();
       transaction.onerror = () => reject(transaction.error);
       transaction.onabort = () => reject(transaction.error);
+    });
+    return true;
+  } catch { return false; }
+  finally { db?.close(); }
+}
+
+export async function readSeeing(key: string): Promise<SeeingSnapshot | null> {
+  if (seeingMemory.has(key)) return seeingMemory.get(key)!;
+  let db: IDBDatabase | undefined;
+  try {
+    db = await openCache();
+    const value: unknown = await new Promise((resolve, reject) => {
+      const request = db!.transaction("forecasts", "readonly").objectStore("forecasts").get(key);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    if (validSeeing(value)) { seeingMemory.set(key, value); return value; }
+  } catch { /* A cache read never starts an external request. */ }
+  finally { db?.close(); }
+  return null;
+}
+
+export async function saveSeeing(key: string, value: SeeingSnapshot): Promise<boolean> {
+  seeingMemory.set(key, value);
+  let db: IDBDatabase | undefined;
+  try {
+    db = await openCache();
+    await new Promise<void>((resolve, reject) => {
+      const tx = db!.transaction("forecasts", "readwrite");
+      tx.objectStore("forecasts").put(value, key);
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+      tx.onabort = () => reject(tx.error);
     });
     return true;
   } catch { return false; }

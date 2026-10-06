@@ -795,6 +795,8 @@
 }
 
 .mapDialog {
+  max-height: calc(100dvh - 104px);
+  overflow-y: auto;
   width: min(560px, calc(100vw - 32px));
   padding: 16px;
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -904,6 +906,7 @@
 }
 
 .mapTile {
+  pointer-events: none;
   position: absolute;
   width: 256px;
   height: 256px;
@@ -973,6 +976,16 @@
   gap: 8px;
   margin-bottom: 8px;
 }
+
+.mapCoords label { display: grid; gap: 4px; color: #dbeafe; font-size: 12px; }
+.mapCoords input { min-width: 0; width: 100%; padding: 8px; border: 1px solid #52617a; border-radius: 6px; color: #fff; background: #142039; color-scheme: dark; }
+.mapCoords button { grid-column: 1 / -1; }
+.placeResults { list-style: none; padding: 0; margin: 5px 0 10px; max-height: 150px; overflow: auto; border: 1px solid #485a74; border-radius: 6px; background: #101c30; }
+.placeResults li + li { border-top: 1px solid #314158; }
+.placeResults button { display: grid; gap: 3px; width: 100%; padding: 9px 10px; border: 0; border-radius: 0; background: transparent; color: #dbeafe; text-align: left; font: inherit; font-size: 12px; white-space: normal; }
+.placeResults button:hover, .placeResults button:focus-visible { background: #263b55; }
+.placeResults small { color: #9eb4cf; }
+.mapAttribution a { color: inherit; pointer-events: auto; }
 
 .mapActions {
   display: grid;
@@ -1127,10 +1140,32 @@
 }
 
 .infoHeader {
+  position: relative;
   display: grid;
   gap: 10px;
   margin-bottom: 12px;
 }
+.infoHeader h2 { padding-right: 28px; }
+
+.infoCloseButton {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #a9bdcf;
+  cursor: pointer;
+  font-size: 23px;
+  line-height: 1;
+}
+.infoCloseButton:hover { background: #263c51; color: #fff; }
+.infoCloseButton:focus-visible { outline: 2px solid #8dd1ff; outline-offset: 2px; }
 
 .calculationBox {
   display: grid;

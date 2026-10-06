@@ -49,7 +49,7 @@ function PlanetPhasePreview({ fraction }: { fraction: number }) {
   );
 }
 
-function ObjectInfoPanelContent({ info }: { info: ObjectInfo }) {
+function ObjectInfoPanelContent({ info, onClose }: { info: ObjectInfo; onClose: () => void }) {
   const [activeTab, setActiveTab] = useState<InfoTab>("position");
   const difficulty = info.calculationFields.find(
     ([label]) => label === "\uAD00\uCE21 \uB09C\uC774\uB3C4"
@@ -64,6 +64,7 @@ function ObjectInfoPanelContent({ info }: { info: ObjectInfo }) {
   return (
     <section className={styles.infoPanel} aria-label="\uC120\uD0DD\uD55C \uCC9C\uCCB4 \uC815\uBCF4">
       <div className={styles.infoHeader}>
+        <button type="button" className={styles.infoCloseButton} onClick={onClose} aria-label="천체 정보 닫기" title="천체 정보 닫기">×</button>
         <h2>
           <span>{info.name}</span>
           {difficulty && (
@@ -129,8 +130,8 @@ function ObjectInfoPanelContent({ info }: { info: ObjectInfo }) {
   );
 }
 
-export function ObjectInfoPanel({ info }: { info: ObjectInfo | null }) {
+export function ObjectInfoPanel({ info, onClose }: { info: ObjectInfo | null; onClose: () => void }) {
   if (!info) return null;
 
-  return <ObjectInfoPanelContent key={info.name} info={info} />;
+  return <ObjectInfoPanelContent key={info.name} info={info} onClose={onClose} />;
 }

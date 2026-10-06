@@ -8,10 +8,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { geocodeLocation, reverseGeocodeLocation } from "./geo";
+import { completePlaceQuery, geocodeLocations, reverseGeocodeLocation, suggestLocations } from "./geo";
+import { currentLocation } from "@/lib/geolocation";
 import { createPortal } from "react-dom";
 import styles from "./SkyViewer.module.css";
-import type { EngineStatus, LocationApplyState, ObserverLocation } from "./types";
+import type { EngineStatus, GeocodeResult, LocationApplyState, ObserverLocation } from "./types";
 
 const MAP_TILE_SIZE = 256;
 const MAP_WIDTH = 520;
@@ -31,19 +32,6 @@ type LocationPickerProps = {
   observerLocation: ObserverLocation;
   onApply: (location: ObserverLocation, name?: string) => boolean;
 };
-
-function getGeoLocationErrorMessage(error: GeolocationPositionError) {
-  if (error.code === error.PERMISSION_DENIED) {
-    return "위치 권한이 거부됐습니다.";
-  }
-  if (error.code === error.POSITION_UNAVAILABLE) {
-    return "현재 위치를 확인할 수 없습니다.";
-  }
-  if (error.code === error.TIMEOUT) {
-    return "현재 위치 확인 시간이 초과됐습니다.";
-  }
-  return "현재 위치를 가져오지 못했습니다.";
-}
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value));
@@ -89,7 +77,15 @@ export function LocationPicker({
 }: LocationPickerProps) {
   const mapCanvasRef = useRef<HTMLDivElement | null>(null);
   const mapMovedRef = useRef(false);
+  const selectionRequestRef = useRef(0);
+  const geoRequestRef = useRef(0);
+  const [mapSearchMessage, setMapSearchMessage] = useState<string | null>(null);
+  const [coordinateDraft, setCoordinateDraft] = useState({ latitude: observerLocation.latitude.toFixed(6), longitude: observerLocation.longitude.toFixed(6) });
   const [mapSearchQuery, setMapSearchQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState<{ query: string; results: GeocodeResult[] } | null>(null);
+  const [searchResults, setSearchResults] = useState<GeocodeResult[]>([]);
+  const completedQuery = completePlaceQuery(mapSearchQuery);
   const [mapSelectionName, setMapSelectionName] = useState(locationName);
   const [mapSearchState, setMapSearchState] =
     useState<LocationApplyState>("idle");
@@ -104,6 +100,30 @@ export function LocationPicker({
     useState<ObserverLocation>(observerLocation);
   const [mapZoom, setMapZoom] = useState(13);
   const [mapDrag, setMapDrag] = useState<MapDragState | null>(null);
+
+  useEffect(() => () => { selectionRequestRef.current += 1; geoRequestRef.current += 1; }, []);
+  function selectCoordinates(location: ObserverLocation) {
+    setMapSelection(location);
+    setCoordinateDraft({ latitude: location.latitude.toFixed(6), longitude: location.longitude.toFixed(6) });
+  }
+
+  function closeLocationMap() {
+    selectionRequestRef.current += 1;
+    geoRequestRef.current += 1;
+    setIsMapOpen(false);
+  }
+
+  useEffect(() => {
+    const term = mapSearchQuery.trim();
+    if (!isMapOpen || !showSuggestions || term.length < 3) return;
+    const controller = new AbortController();
+    const timer = window.setTimeout(() => {
+      void suggestLocations(term, controller.signal).then((results) => {
+        if (!controller.signal.aborted) setSuggestions({ query: term, results });
+      }).catch(() => { /* Full manual search remains available. */ });
+    }, 700);
+    return () => { window.clearTimeout(timer); controller.abort(); };
+  }, [isMapOpen, mapSearchQuery, showSuggestions]);
 
   const mapView = useMemo(() => {
     if (!isMapOpen) {
@@ -181,11 +201,15 @@ export function LocationPicker({
   }, [isMapOpen]);
 
   function openLocationMap() {
+    selectionRequestRef.current += 1;
     setMapCenter(observerLocation);
-    setMapSelection(observerLocation);
+    selectCoordinates(observerLocation);
     setMapSelectionName(locationName);
     setMapSearchQuery("");
+    setShowSuggestions(false);
+    setSearchResults([]);
     setMapSearchState("idle");
+    setMapSearchMessage(null);
     setGeoLocationState("idle");
     setGeoLocationMessage(null);
     setIsMapOpen(true);
@@ -195,11 +219,19 @@ export function LocationPicker({
     location: ObserverLocation,
     fallbackName?: string
   ) {
-    setMapSelection(location);
+    const request = ++selectionRequestRef.current;
+    geoRequestRef.current += 1;
+    setGeoLocationState("idle");
+    setGeoLocationMessage(null);
+    setMapSearchState("idle");
+    setMapSearchMessage(null);
+    setShowSuggestions(false);
+    setSearchResults([]);
+    selectCoordinates(location);
     setMapSelectionName(fallbackName ?? "주소 확인 중");
 
     const addressName = await reverseGeocodeLocation(location);
-    setMapSelectionName(addressName ?? fallbackName ?? "선택한 위치");
+    if (request === selectionRequestRef.current) setMapSelectionName(addressName ?? fallbackName ?? "선택한 위치");
   }
 
   function pickMapLocation(
@@ -278,29 +310,50 @@ export function LocationPicker({
 
   async function handleMapSearch(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    await searchMapPlace(mapSearchQuery.trim());
+  }
 
-    const term = mapSearchQuery.trim();
+  function chooseSearchResult(location: GeocodeResult) {
+    selectionRequestRef.current += 1;
+    geoRequestRef.current += 1;
+    setGeoLocationState("idle");
+    setGeoLocationMessage(null);
+    setMapCenter(location);
+    selectCoordinates(location);
+    setMapSelectionName(location.name);
+    setMapZoom((current) => Math.max(current, 15));
+    setShowSuggestions(false);
+    setMapSearchState("ok");
+    setMapSearchMessage(null);
+  }
+
+  async function searchMapPlace(term: string) {
+    if (geoLocationState === "loading") return;
     if (!term) {
       setMapSearchState("error");
       return;
     }
 
     setMapSearchState("loading");
-    const location = await geocodeLocation(term);
-    if (!location) {
-      setMapSelectionName("검색 결과 없음");
+    setShowSuggestions(false);
+    setMapSearchMessage("장소를 검색하는 중입니다…");
+    const request = ++selectionRequestRef.current;
+    try {
+      const results = await geocodeLocations(term);
+      if (request !== selectionRequestRef.current) return;
+      setSearchResults(results.slice(0, 8));
+      const location = results[0];
+      if (!location) { setMapSearchState("error"); setMapSearchMessage("검색 결과가 없습니다. 정식 장소명이나 주소를 입력하거나 지도·좌표로 선택하세요."); return; }
+      chooseSearchResult(location);
+    } catch (error) {
+      if (request !== selectionRequestRef.current) return;
       setMapSearchState("error");
-      return;
+      setMapSearchMessage(error instanceof Error && error.name !== "TimeoutError" ? error.message : "장소 검색 시간이 초과됐습니다. 다시 검색하거나 지도·좌표로 선택하세요.");
     }
-
-    setMapCenter(location);
-    setMapSelection(location);
-    setMapSelectionName(location.name);
-    setMapZoom((current) => Math.max(current, 15));
-    setMapSearchState("ok");
   }
 
   function handleMapSearchKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Escape") { setShowSuggestions(false); return; }
     if (event.key !== "Enter" || event.nativeEvent.isComposing) return;
 
     event.preventDefault();
@@ -310,54 +363,54 @@ export function LocationPicker({
   function applyMapLocation() {
     if (onApply(mapSelection, mapSelectionName)) {
       setMapSearchState("ok");
-      setIsMapOpen(false);
+      closeLocationMap();
     } else {
       setMapSearchState("error");
     }
   }
 
-  function handleCurrentLocation() {
-    if (!navigator.geolocation) {
-      setGeoLocationState("error");
-      setGeoLocationMessage("이 브라우저에서는 현재 위치를 사용할 수 없습니다.");
-      return;
-    }
-
+  async function handleCurrentLocation() {
+    const request = ++geoRequestRef.current;
+    selectionRequestRef.current += 1;
     setGeoLocationState("loading");
+    setShowSuggestions(false);
     setGeoLocationMessage("현재 위치를 확인하는 중입니다.");
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const nextLocation = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-        };
-
+    try {
+        const nextLocation = await currentLocation(navigator.geolocation, window.isSecureContext);
+        if (request !== geoRequestRef.current) return;
         setMapCenter(nextLocation);
-        setMapSelection(nextLocation);
+        selectCoordinates(nextLocation);
         setMapSelectionName("현재 위치");
         setMapZoom((current) => Math.max(current, 15));
 
         if (onApply(nextLocation, "현재 위치")) {
           setGeoLocationState("ok");
           setGeoLocationMessage("현재 위치를 관측 위치로 적용했습니다.");
-          setIsMapOpen(false);
+          closeLocationMap();
           return;
         }
 
         setGeoLocationState("error");
         setGeoLocationMessage("현재 위치를 엔진에 적용하지 못했습니다.");
-      },
-      (error) => {
+    } catch (error) {
+        if (request !== geoRequestRef.current) return;
         setGeoLocationState("error");
-        setGeoLocationMessage(getGeoLocationErrorMessage(error));
-      },
-      {
-        enableHighAccuracy: true,
-        maximumAge: 60_000,
-        timeout: 10_000,
-      }
-    );
+        setGeoLocationMessage(error instanceof Error ? error.message : "현재 위치를 확인하지 못했습니다. 지도·좌표로 선택하세요.");
+    }
+  }
+
+  function applyCoordinateDraft(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const latitude = Number(coordinateDraft.latitude);
+    const longitude = Number(coordinateDraft.longitude);
+    if (!coordinateDraft.latitude.trim() || !coordinateDraft.longitude.trim() || !Number.isFinite(latitude) || Math.abs(latitude) > 90 || !Number.isFinite(longitude) || Math.abs(longitude) > 180) {
+      setMapSearchState("error"); setMapSearchMessage("위도는 -90~90, 경도는 -180~180 범위로 입력하세요."); return;
+    }
+    const location = { latitude, longitude };
+    setMapCenter(location);
+    setMapSearchState("idle"); setMapSearchMessage(null);
+    void updateMapSelection(location, "입력한 좌표");
   }
 
   return (
@@ -398,7 +451,7 @@ export function LocationPicker({
               <button
                 type="button"
                 className={styles.iconButton}
-                onClick={() => setIsMapOpen(false)}
+                onClick={closeLocationMap}
                 aria-label="지도 닫기"
               >
                 ×
@@ -411,21 +464,37 @@ export function LocationPicker({
                 onChange={(event) => {
                   setMapSearchQuery(event.target.value);
                   setMapSearchState("idle");
+                  setMapSearchMessage(null);
+                  setShowSuggestions(true);
+                  setSearchResults([]);
                 }}
+                onFocus={() => setShowSuggestions(true)}
                 onKeyDown={handleMapSearchKeyDown}
                 placeholder="주소나 장소 검색"
                 aria-label="지도 위치 검색"
+                role="combobox"
+                aria-autocomplete="list"
+                aria-expanded={showSuggestions && (!!completedQuery || !!suggestions?.results.length && suggestions.query === mapSearchQuery.trim())}
+                aria-controls="place-suggestions"
               />
-              <button type="submit" disabled={mapSearchState === "loading"}>
+              <button type="submit" disabled={mapSearchState === "loading" || geoLocationState === "loading"}>
                 검색
               </button>
             </form>
+            {showSuggestions && (completedQuery || suggestions?.query === mapSearchQuery.trim() && suggestions.results.length > 0) && (
+              <ul id="place-suggestions" className={styles.placeResults} role="listbox" aria-label="장소 자동완성">
+                {completedQuery && <li role="presentation"><button type="button" role="option" aria-selected="false" onClick={() => { setMapSearchQuery(completedQuery); void searchMapPlace(completedQuery); }}><strong>{completedQuery}</strong><small>정식 학교명으로 검색</small></button></li>}
+                {suggestions?.query === mapSearchQuery.trim() && suggestions.results.map((location) => <li role="presentation" key={`${location.latitude},${location.longitude},${location.name}`}><button type="button" role="option" aria-selected="false" onClick={() => chooseSearchResult(location)}>{location.name}</button></li>)}
+              </ul>
+            )}
+            {!showSuggestions && searchResults.length > 0 && <ul className={styles.placeResults} aria-label="장소 검색 결과">{searchResults.map((location) => <li key={`${location.latitude},${location.longitude},${location.name}`}><button type="button" onClick={() => chooseSearchResult(location)}>{location.name}</button></li>)}</ul>}
+            {mapSearchMessage && <p className={mapSearchState === "error" ? styles.mapStatusError : styles.mapStatusMessage} role="status">{mapSearchMessage}</p>}
             <div className={styles.mapUtilityActions}>
               <button
                 type="button"
                 className={styles.currentLocationButton}
-                onClick={handleCurrentLocation}
-                disabled={geoLocationState === "loading"}
+                onClick={() => void handleCurrentLocation()}
+                disabled={geoLocationState === "loading" || mapSearchState === "loading"}
               >
                 {geoLocationState === "loading" ? "위치 확인 중" : "현재 위치"}
               </button>
@@ -501,17 +570,18 @@ export function LocationPicker({
                 </button>
               </div>
               <span className={styles.mapAttribution}>
-                © OpenStreetMap contributors
+                © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer" onPointerDown={(event) => event.stopPropagation()}>OpenStreetMap contributors</a>
               </span>
             </div>
 
             <p className={styles.mapAddress}>{mapSelectionName}</p>
-            <div className={styles.mapCoords}>
-              <span>위도 {mapSelection.latitude.toFixed(6)}</span>
-              <span>경도 {mapSelection.longitude.toFixed(6)}</span>
-            </div>
+            <form className={styles.mapCoords} onSubmit={applyCoordinateDraft}>
+              <label>위도<input type="number" step="any" min="-90" max="90" aria-label="관측 위도" value={coordinateDraft.latitude} onChange={(event) => setCoordinateDraft({ ...coordinateDraft, latitude: event.target.value })} required /></label>
+              <label>경도<input type="number" step="any" min="-180" max="180" aria-label="관측 경도" value={coordinateDraft.longitude} onChange={(event) => setCoordinateDraft({ ...coordinateDraft, longitude: event.target.value })} required /></label>
+              <button type="submit">입력 좌표 선택</button>
+            </form>
             <div className={styles.mapActions}>
-              <button type="button" onClick={applyMapLocation}>
+              <button type="button" disabled={mapSearchState === "loading" || geoLocationState === "loading"} onClick={applyMapLocation}>
                 이 위치 적용
               </button>
             </div>

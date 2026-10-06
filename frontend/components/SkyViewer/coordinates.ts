@@ -16,6 +16,7 @@ type ObjectInfoOptions = {
   skyBrightness?: number;
   telescopeApertureMm?: number;
   seeingArcsec?: number | null;
+  seeingLabel?: string;
   daylight?: boolean;
 };
 
@@ -1046,12 +1047,12 @@ export function getObjectInfo(
   const skyBrightnessText = `${difficulty.skyBrightness.toFixed(2)} mag/arcsec\u00B2`;
   const telescopeLimitText = `${difficulty.telescopeLimitMagnitude.toFixed(2)} mag`;
   const difficultyDisplayText = `${difficulty.difficulty}\uB2E8\uACC4`;
-  const seeingText =
+  const seeingText = options.seeingLabel ?? (
     options.seeingArcsec !== null &&
     options.seeingArcsec !== undefined &&
     Number.isFinite(options.seeingArcsec)
       ? `${options.seeingArcsec.toFixed(2)}"`
-      : "\uC815\uBCF4 \uC5C6\uC74C";
+      : "\uC815\uBCF4 \uC5C6\uC74C");
   const calculationFields: Array<[string, string]> = [
     ["\uAD00\uCE21 \uB09C\uC774\uB3C4", difficultyDisplayText],
     ["\uB09C\uC774\uB3C4 \uC124\uBA85", difficulty.description],

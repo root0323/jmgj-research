@@ -1,4 +1,5 @@
-import { isFresh, usageSummary, WEATHER_PLANS, type WeatherLocation, type WeatherPlan } from "@/lib/meteoblue";
+import { isFresh, usageSummary, WEATHER_PLANS, type WeatherLocation } from "@/lib/meteoblue";
+import { seeingAt, seeingFresh } from "@/lib/seeing";
 import { weatherAt } from "@/lib/weather-evaluation";
 import type { usePersonalWeather } from "./usePersonalWeather";
 import styles from "./PersonalWeatherPanel.module.css";
@@ -17,6 +18,7 @@ export function PersonalWeatherPanel({ weather, location, locationName, observat
   const { connected, busy, ledger, snapshot, plan } = weather;
   const usage = usageSummary(ledger, plan);
   const values = snapshot ? weatherAt(snapshot, observationTime) : null;
+  const seeing = seeingAt(weather.seeingSnapshot, observationTime);
   const modifyNumber = (field: "budget" | "usedBeforeApp", raw: string) => {
     const value = Number(raw);
     if (Number.isSafeInteger(value) && value >= 0) weather.updateLedger({ ...ledger, [field]: value, history: field === "usedBeforeApp" ? null : ledger.history });
@@ -39,13 +41,7 @@ export function PersonalWeatherPanel({ weather, location, locationName, observat
           placeholder={connected ? "다른 API 키 입력" : "개인 API 키 입력"} onChange={(event) => weather.setKeyInput(event.target.value)} />
         <button type="submit" disabled={busy || !weather.keyInput.trim()}>키 적용</button>
       </form>
-      <label className={styles.field}>
-        <span>조회할 자료</span>
-        <select value={plan} disabled={busy} onChange={(event) => weather.setPlan(event.target.value as WeatherPlan)}>
-          {Object.entries(WEATHER_PLANS).map(([id, value]) => <option key={id} value={id}>{value.label}</option>)}
-        </select>
-      </label>
-      <p className={styles.help}>{plan === "research" ? "연구 당시의 4개 패키지를 조회합니다. 현재 키의 시상·앙상블 사용 권한에 따라 일부 자료는 거절될 수 있습니다." : "AOD·구름량·운저 자료를 조회합니다. 이 구성은 시상을 제공하지 않아 시상에 따른 난이도를 계산할 수 없습니다."}</p>
+      <p className={styles.help}>3시간 구성 · Meteoblue에서 AOD·구름량·운저를 조회합니다. 시상은 무료 7Timer 예보로 별도 제공합니다.</p>
       <div className={styles.target}>
         <span>선택한 한 장소</span><strong>{locationName}</strong>
         <small>{location.latitude.toFixed(4)}°, {location.longitude.toFixed(4)}°</small>
@@ -70,7 +66,7 @@ export function PersonalWeatherPanel({ weather, location, locationName, observat
           <strong>{isFresh(snapshot) ? "저장 기상 자료" : "24시간이 지난 저장 자료"}</strong>
           <small>받은 시각: {new Date(snapshot.fetchedAt).toLocaleString("ko-KR")}</small>
           <small>관측 시각: {observationTime.toLocaleString("ko-KR")}</small>
-          <div>시상 {values?.seeingArcsec === null ? "자료 없음" : `${values?.seeingArcsec.toFixed(2)}″`} · 구름량 {values?.cloudCover === null ? "자료 없음" : `${values?.cloudCover.toFixed(0)}%`}</div>
+          <div>구름량 {values?.cloudCover === null ? "자료 없음" : `${values?.cloudCover.toFixed(0)}%`}</div>
           <div>AOD {values?.aod === null ? "자료 없음" : values?.aod.toFixed(3)}</div>
           {snapshot.results.filter((result) => result.error).map((result) => <small className={styles.warning} key={result.package}>{result.package}: {result.error}</small>)}
           <small>{modelSource}</small>
@@ -78,6 +74,23 @@ export function PersonalWeatherPanel({ weather, location, locationName, observat
           <button className={styles.secondary} type="button" disabled={busy || !connected} onClick={() => void weather.load(true)}>새 자료 요청 · 크레딧 사용</button>
         </div>
       )}
+      <div className={styles.data} aria-label="7Timer 시상 예보">
+        <strong>시상 {seeing ? seeing.label : "자료 없음"}</strong>
+        <small>7Timer ASTRO · 전 세계 약 20 km 격자 · 3시간 간격 예보</small>
+        <button className={styles.secondary} type="button" disabled={busy} onClick={() => void weather.loadSeeing()}>
+          {weather.seeingSnapshot && seeingFresh(weather.seeingSnapshot) ? "저장 시상 불러오기 · 무료" : "시상 불러오기 · 무료"}
+        </button>
+        <small role="status" aria-live="polite">{weather.seeingMessage}</small>
+        {weather.seeingSnapshot && <>
+          <small>{seeingFresh(weather.seeingSnapshot) ? "저장 시상 예보" : "24시간이 지난 저장 시상 예보"} · 받은 시각: {new Date(weather.seeingSnapshot.fetchedAt).toLocaleString("ko-KR")}</small>
+          <small>발행: {new Date(weather.seeingSnapshot.issuedAt).toLocaleString("ko-KR")}</small>
+          {seeing ? <small>적용 예보 시각: {new Date(seeing.at).toLocaleString("ko-KR")} · 등급 {seeing.grade}/8 (작을수록 안정적)</small>
+            : <small>관측 시각이 예보 범위 밖이거나 해당 구간이 누락됐습니다. 약 3일 범위의 예보입니다.</small>}
+          <button className={styles.secondary} type="button" disabled={busy} onClick={() => void weather.loadSeeing(true)}>시상 새 예보 요청 · 무료</button>
+        </>}
+        <small>범위로 제공되는 예측값이며 관측 실측값이 아닙니다. 현재 난이도 분류에는 시상 임계값을 적용하지 않습니다.</small>
+        <small>출처: <a href="https://www.7timer.info/doc.php?lang=en" target="_blank" rel="noopener noreferrer">7Timer! ASTRO</a></small>
+      </div>
       {!snapshot && <p className={styles.help}>{modelSource}</p>}
       {weather.storageWarning && <p className={styles.warning}>브라우저 저장 공간을 사용할 수 없습니다. 현재 화면에서는 사용할 수 있지만, 창을 닫으면 저장 자료나 사용 기록이 사라질 수 있습니다.</p>}
       <details className={styles.settings}>
@@ -86,7 +99,7 @@ export function PersonalWeatherPanel({ weather, location, locationName, observat
         <label className={styles.field}><span>이미 사용한 크레딧 (앱 사용 이전)</span><input type="number" min="0" step="1" disabled={busy} value={ledger.usedBeforeApp} onChange={(event) => modifyNumber("usedBeforeApp", event.target.value)} /></label>
         <label className={styles.field}><span>계정 사용 내역 조회 시작일</span><input type="date" disabled={busy} value={ledger.activationDate} onChange={(event) => weather.updateLedger({ ...ledger, activationDate: event.target.value, history: null })} /></label>
         <button className={styles.secondary} type="button" disabled={busy || !connected} onClick={() => void weather.syncUsage()}>전일까지 계정 사용량 동기화</button>
-        <p className={styles.help}>시작일을 API 활성화 날짜로 맞추세요. 동기화 후에는 ‘이미 사용한 크레딧’ 대신 계정 사용 내역을 반영합니다. 새 조회의 남은 횟수는 선택한 구성의 비용으로 환산한 예상치입니다.</p>
+        <p className={styles.help}>시작일을 API 활성화 날짜로 맞추세요. 동기화 후에는 ‘이미 사용한 크레딧’ 대신 계정 사용 내역을 반영합니다. 남은 횟수는 3시간 구성의 비용으로 환산한 예상치입니다.</p>
         {connected && <button className={styles.secondary} type="button" disabled={busy} onClick={weather.disconnect}>API 키 연결 해제</button>}
       </details>
     </section>

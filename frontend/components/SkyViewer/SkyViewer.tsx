@@ -41,6 +41,7 @@ import { SkyViewerControls } from "./SkyViewerControls";
 import { PersonalWeatherPanel } from "./PersonalWeatherPanel";
 import { usePersonalWeather } from "./usePersonalWeather";
 import { evaluateWeather } from "@/lib/weather-evaluation";
+import { seeingAt } from "@/lib/seeing";
 import { SkyViewerToolbar } from "./SkyViewerToolbar";
 import type { DisplayToggleName } from "./SkyViewerToolbar";
 import {
@@ -412,13 +413,15 @@ function getSafeObjectInfo(
   skyBrightness: number,
   telescopeApertureMm: number,
   seeingArcsec?: number | null,
-  daylight?: boolean
+  daylight?: boolean,
+  seeingLabel?: string
 ) {
   try {
     return getObjectInfo(engine, target, label, vector, {
       skyBrightness,
       telescopeApertureMm,
       seeingArcsec,
+      seeingLabel,
       daylight,
     });
   } catch (error) {
@@ -582,6 +585,7 @@ export default function SkyViewer() {
   const [query, setQuery] = useState("Saturn");
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
   const [selectedInfo, setSelectedInfo] = useState<ObjectInfo | null>(null);
+  const [isObjectInfoOpen, setIsObjectInfoOpen] = useState(true);
   const [timeDraft, setTimeDraft] = useState(DEFAULT_TIME);
   const [timePickerDraft, setTimePickerDraft] = useState(DEFAULT_TIME);
   const [isEditingTime, setIsEditingTime] = useState(false);
@@ -659,6 +663,8 @@ export default function SkyViewer() {
     datetime.setMinutes(0, 0, 0);
     return datetime.toISOString();
   }, [timeDraft]);
+  const publicSeeing = seeingAt(weather.seeingSnapshot, new Date(skyBrightnessTimeKey));
+  const seeingLabel = publicSeeing ? `${publicSeeing.label} · 7Timer 예보` : undefined;
 
   useEffect(() => {
     isSkyViewerMountedRef.current = true;
@@ -801,6 +807,7 @@ export default function SkyViewer() {
 
     const nextTarget = { label, obj: target, vector };
     selectedTargetRef.current = nextTarget;
+    setIsObjectInfoOpen(true);
     setEngineSelection(engine, target);
     trackingTargetRef.current = null;
     if (trackingActivationTimeoutRef.current !== null) {
@@ -817,7 +824,8 @@ export default function SkyViewer() {
         skyBrightness,
         telescopeSettings.apertureMm,
         seeingArcsec,
-        isSunAboveHorizon(engine)
+        isSunAboveHorizon(engine),
+        seeingLabel
       )
     );
     centerTargetOnce(engine, target, vector);
@@ -833,6 +841,7 @@ export default function SkyViewer() {
     if (!engine) return;
 
     selectedTargetRef.current = { label, obj: target, vector };
+    setIsObjectInfoOpen(true);
     setEngineSelection(engine, target);
     cancelTargetTracking();
     addPlanetSurveyIfNeeded(engine, label, loadedPlanetSurveysRef.current);
@@ -846,7 +855,8 @@ export default function SkyViewer() {
         skyBrightness,
         telescopeSettings.apertureMm,
         seeingArcsec,
-        isSunAboveHorizon(engine)
+        isSunAboveHorizon(engine),
+        seeingLabel
       )
     );
     setSuggestions([]);
@@ -1094,10 +1104,11 @@ export default function SkyViewer() {
         skyBrightness,
         telescopeSettings.apertureMm,
         seeingArcsec,
-        isSunAboveHorizon(engine)
+        isSunAboveHorizon(engine),
+        seeingLabel
       )
     );
-  }, [applySelectedInfo, seeingArcsec, skyBrightness, telescopeSettings.apertureMm]);
+  }, [applySelectedInfo, seeingArcsec, seeingLabel, skyBrightness, telescopeSettings.apertureMm]);
 
   useEffect(() => {
     updateSelectedInfo();
@@ -1386,7 +1397,8 @@ export default function SkyViewer() {
           skyBrightness,
           telescopeSettings.apertureMm,
           seeingArcsec,
-          isSunAboveHorizon(engine)
+          isSunAboveHorizon(engine),
+          undefined
         )
       );
     }
@@ -1469,7 +1481,7 @@ export default function SkyViewer() {
         fields={selectedInfo?.calculationFields ?? []}
         isSkyBrightnessLoading={isSkyBrightnessLoading}
       />
-      <ObjectInfoPanel info={selectedInfo} />
+      <ObjectInfoPanel info={isObjectInfoOpen ? selectedInfo : null} onClose={() => setIsObjectInfoOpen(false)} />
     </main>
   );
 }

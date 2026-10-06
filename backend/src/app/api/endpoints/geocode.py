@@ -2,12 +2,29 @@ import httpx
 import asyncio
 import os
 import time
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, HTTPException, Query
 
 router = APIRouter()
 
-GEOCODE_TIMEOUT = httpx.Timeout(2.2, connect=0.8)
-REVERSE_GEOCODE_TIMEOUT = httpx.Timeout(1.8, connect=0.8)
+GEOCODE_TIMEOUT = httpx.Timeout(7.0, connect=3.0)
+REVERSE_GEOCODE_TIMEOUT = httpx.Timeout(7.0, connect=3.0)
+NOMINATIM_BASE = os.getenv("NOMINATIM_BASE_URL", "https://nominatim.openstreetmap.org").rstrip("/")
+PHOTON_BASE = os.getenv("PHOTON_BASE_URL", "https://photon.komoot.io").rstrip("/")
+NOMINATIM_LOCK = asyncio.Lock()
+NOMINATIM_LAST_REQUEST = 0.0
+
+
+async def nominatim_get(client, path, **kwargs):
+    """Serialize the public service across search and reverse, at most 1/s per worker."""
+    global NOMINATIM_LAST_REQUEST
+    async with NOMINATIM_LOCK:
+        delay = 1.05 - (time.monotonic() - NOMINATIM_LAST_REQUEST)
+        if delay > 0:
+            await asyncio.sleep(delay)
+        NOMINATIM_LAST_REQUEST = time.monotonic()
+        return await client.get(f"{NOMINATIM_BASE}/{path}", **kwargs)
+
+
 VWORLD_TIMEOUT = httpx.Timeout(2.0, connect=0.8)
 KAKAO_TIMEOUT = httpx.Timeout(2.0, connect=0.8)
 GEOCODE_CACHE_SECONDS = 600
@@ -173,7 +190,8 @@ def build_query_variants(query: str) -> list[str]:
     variants.append(normalized)
 
     if (
-        not is_broad_admin_query(normalized)
+        is_korean_query(normalized)
+        and not is_broad_admin_query(normalized)
         and "대한민국" not in normalized
         and "한국" not in normalized
     ):
@@ -205,6 +223,8 @@ def get_cached(cache: dict, key: str):
 
 
 def set_cached(cache: dict, key: str, value):
+    if len(cache) >= 512:
+        cache.pop(next(iter(cache)))
     cache[key] = (time.monotonic() + GEOCODE_CACHE_SECONDS, value)
 
 
@@ -336,23 +356,22 @@ async def fetch_nominatim_results(
     query: str,
 ) -> list[dict]:
     try:
-        response = await client.get(
-            "https://nominatim.openstreetmap.org/search",
+        response = await nominatim_get(
+            client, "search",
             params={
                 "format": "json",
                 "addressdetails": 1,
-                "countrycodes": "kr",
                 "dedupe": 0,
                 "limit": 10,
                 "q": query,
             },
             headers=headers,
         )
-    except httpx.HTTPError:
-        return []
+    except httpx.HTTPError as error:
+        raise HTTPException(503, "Place search temporarily unavailable") from error
 
     if response.status_code != 200:
-        return []
+        raise HTTPException(503, "Place search temporarily unavailable")
 
     results = response.json()
     if not isinstance(results, list):
@@ -368,7 +387,7 @@ async def fetch_photon_results(
 ) -> list[dict]:
     try:
         response = await client.get(
-            "https://photon.komoot.io/api/",
+            f"{PHOTON_BASE}/api/",
             params={"q": query, "limit": 10},
             headers=headers,
         )
@@ -398,7 +417,7 @@ async def fetch_photon_results(
             continue
 
         country = str(properties.get("country") or "")
-        if country and country not in {"대한민국", "South Korea", "Republic of Korea"}:
+        if is_korean_query(query) and country and country not in {"대한민국", "South Korea", "Republic of Korea"}:
             continue
 
         name = str(properties.get("name") or query)
@@ -1043,16 +1062,35 @@ async def fetch_variant_results(
         nominatim_results = await fetch_nominatim_results(client, headers, variant)
         return index, [*photon_results, *nominatim_results]
 
-    photon_results, nominatim_results = await asyncio.gather(
-        fetch_photon_results(client, headers, variant),
-        fetch_nominatim_results(client, headers, variant),
-    )
+    photon_results = await fetch_photon_results(client, headers, variant)
+    matching = [result for result in photon_results if is_acceptable_result(result, query)
+                and normalize_place_key(variant) in normalize_place_key(str(result.get("name") or ""))]
+    if matching:
+        return index, matching
+    nominatim_results = await fetch_nominatim_results(client, headers, variant)
     return index, [*photon_results, *nominatim_results]
+
+
+@router.get("/suggest")
+async def suggest_places(query: str = Query(..., min_length=3, max_length=160)):
+    """Autocomplete uses Photon only. Public Nominatim forbids autocomplete."""
+    normalized = " ".join(query.split())
+    key = "suggest:" + normalize_place_key(normalized)
+    cached = get_cached(GEOCODE_CACHE, key)
+    if cached is not None:
+        return cached
+    expanded = build_school_query_variants(normalized)
+    headers = {"User-Agent": "JMGJ-research/1.0 (https://github.com/root0323/jmgj-research)", "Accept-Language": "ko,en"}
+    async with httpx.AsyncClient(timeout=GEOCODE_TIMEOUT) as client:
+        results = await fetch_photon_results(client, headers, expanded[0] if expanded else normalized)
+    if results:
+        set_cached(GEOCODE_CACHE, key, results[:5])
+    return results[:5]
 
 
 @router.get("/")
 async def geocode(
-    query: str = Query(..., min_length=2),
+    query: str = Query(..., min_length=2, max_length=160),
     debug: bool = False,
 ):
     normalized_query = " ".join(query.split())
@@ -1064,7 +1102,7 @@ async def geocode(
 
     headers = {
         "Accept-Language": "ko,en",
-        "User-Agent": "JMGJ-school-project/0.1",
+        "User-Agent": "JMGJ-research/1.0 (https://github.com/root0323/jmgj-research)",
     }
 
     collected: dict[str, tuple[dict, int]] = {}
@@ -1158,18 +1196,14 @@ async def geocode(
             return vworld_results
 
     async with httpx.AsyncClient(timeout=GEOCODE_TIMEOUT) as client:
-        variant_results = await asyncio.gather(
-            *[
-                fetch_variant_results(client, headers, normalized_query, variant, index)
-                for index, variant in enumerate(variants)
-            ]
-        )
-
-        for index, results in variant_results:
+        for index, variant in enumerate(variants):
+            _, results = await fetch_variant_results(client, headers, normalized_query, variant, index)
             for result in results:
                 key = result_key(result)
                 if key not in collected:
                     collected[key] = (result, index)
+            if any(is_acceptable_result(result, normalized_query) for result in results):
+                break
 
     ranked = sorted(
         collected.values(),
@@ -1197,7 +1231,7 @@ async def reverse_geocode(
 
     headers = {
         "Accept-Language": "ko,en",
-        "User-Agent": "JMGJ-school-project/0.1",
+        "User-Agent": "JMGJ-research/1.0 (https://github.com/root0323/jmgj-research)",
     }
     kakao_api_key = get_kakao_api_key()
     vworld_api_key = get_vworld_api_key()
@@ -1222,8 +1256,8 @@ async def reverse_geocode(
 
     async with httpx.AsyncClient(timeout=REVERSE_GEOCODE_TIMEOUT) as client:
         try:
-            response = await client.get(
-                "https://nominatim.openstreetmap.org/reverse",
+            response = await nominatim_get(
+                client, "reverse",
                 params={
                     "format": "json",
                     "addressdetails": 1,
