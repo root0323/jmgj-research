@@ -41,7 +41,7 @@ import { SkyViewerControls } from "./SkyViewerControls";
 import { PersonalWeatherPanel } from "./PersonalWeatherPanel";
 import { usePersonalWeather } from "./usePersonalWeather";
 import { evaluateWeather } from "@/lib/weather-evaluation";
-import { seeingAt } from "@/lib/seeing";
+import { useAutomaticSeeing } from "./useAutomaticSeeing";
 import { SkyViewerToolbar } from "./SkyViewerToolbar";
 import type { DisplayToggleName } from "./SkyViewerToolbar";
 import {
@@ -663,8 +663,8 @@ export default function SkyViewer() {
     datetime.setMinutes(0, 0, 0);
     return datetime.toISOString();
   }, [timeDraft]);
-  const publicSeeing = seeingAt(weather.seeingSnapshot, new Date(skyBrightnessTimeKey));
-  const seeingLabel = publicSeeing?.label;
+  const automaticSeeing = useAutomaticSeeing(observerLocation, parseDateTimeLocalValue(timeDraft));
+  const seeingLabel = automaticSeeing.label ?? "정보 없음";
 
   useEffect(() => {
     isSkyViewerMountedRef.current = true;
@@ -1430,7 +1430,7 @@ export default function SkyViewer() {
 
       {isControlPanelOpen && (
         <SkyViewerControls
-          weatherPanel={<PersonalWeatherPanel weather={weather} location={observerLocation} locationName={locationQuery}
+          weatherPanel={<PersonalWeatherPanel weather={weather} seeing={automaticSeeing} location={observerLocation} locationName={locationQuery}
             observationTime={new Date(skyBrightnessTimeKey)} modelSource={weatherModelSource} />}
           calendarDays={calendarDays}
           deepSkyMode={deepSkyMode}

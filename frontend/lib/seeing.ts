@@ -1,4 +1,4 @@
-import { CACHE_LIFETIME_MS, isObject, locationKey, validLocation, type WeatherLocation } from "./meteoblue";
+import { isObject, locationKey, validLocation, type WeatherLocation } from "./meteoblue";
 
 export type SeeingSnapshot = {
   source: "7timer-astro";
@@ -14,8 +14,20 @@ export const SEEING_RANGES = [
   "1.25–1.5″", "1.5–2.0″", "2.0–2.5″", "> 2.5″",
 ] as const;
 
-export function seeingCacheKey(location: WeatherLocation) {
-  return `7timer:v1:${locationKey(location)}`;
+const SEEING_INTERVAL_MS = 3 * 60 * 60_000;
+export const SEEING_CACHE_LIFETIME_MS = SEEING_INTERVAL_MS;
+
+// Nearest UTC three-hour forecast point; an exact midpoint uses the earlier one.
+export function seeingTimeSlot(time: Date): string | null {
+  const timestamp = time.getTime();
+  if (!Number.isFinite(timestamp)) return null;
+  return new Date(Math.ceil((timestamp - SEEING_INTERVAL_MS / 2) / SEEING_INTERVAL_MS) * SEEING_INTERVAL_MS).toISOString();
+}
+
+export function seeingCacheKey(location: WeatherLocation, time: Date) {
+  const slot = seeingTimeSlot(time);
+  if (!slot) throw new Error("invalid seeing time");
+  return `7timer:v2:${locationKey(location)}:${slot}`;
 }
 
 export function parseSeeing(raw: unknown, location: WeatherLocation, now = new Date()): SeeingSnapshot {
@@ -47,7 +59,7 @@ export function validSeeing(value: unknown): value is SeeingSnapshot {
 
 export function seeingFresh(snapshot: SeeingSnapshot, now = Date.now()) {
   const age = now - Date.parse(snapshot.fetchedAt);
-  return age >= 0 && age < CACHE_LIFETIME_MS;
+  return age >= 0 && age < SEEING_CACHE_LIFETIME_MS;
 }
 
 export function seeingAt(snapshot: SeeingSnapshot | null, time: Date) {
@@ -55,8 +67,9 @@ export function seeingAt(snapshot: SeeingSnapshot | null, time: Date) {
   const points = [...snapshot.points].sort((a, b) => Date.parse(a.at) - Date.parse(b.at));
   const timestamp = time.getTime();
   if (!Number.isFinite(timestamp) || timestamp < Date.parse(points[0].at) || timestamp > Date.parse(points.at(-1)!.at)) return null;
-  const closest = points.reduce((best, point) => Math.abs(Date.parse(point.at) - timestamp) < Math.abs(Date.parse(best.at) - timestamp) ? point : best);
-  // A missing slot must not be filled by a remote time or interpolated category.
-  if (Math.abs(Date.parse(closest.at) - timestamp) > 90 * 60_000) return null;
-  return { ...closest, label: SEEING_RANGES[closest.grade - 1] };
+  const slot = seeingTimeSlot(time);
+  // Never substitute an adjacent forecast when the selected slot is missing,
+  // including its midpoint boundaries.
+  const point = points.find((value) => Date.parse(value.at) === Date.parse(slot!));
+  return point ? { ...point, label: SEEING_RANGES[point.grade - 1] } : null;
 }
