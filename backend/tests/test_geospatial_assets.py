@@ -77,17 +77,35 @@ class GeospatialTests(unittest.TestCase):
             self.assertEqual(pixels[0]["radiance"], 10)
             self.assertEqual(pixels[0]["coord"], (37.4, 127))
 
-    def test_redirect_never_sends_nasa_token_to_s3(self):
-        redirect = Mock(status_code=302, is_redirect=True, headers={"Location": "https://example.s3.amazonaws.com/object?signature=test"})
-        final = Mock(status_code=200, is_redirect=False)
-        final.iter_content.return_value = [b"123456789"]
-        for response in (redirect, final):
-            response.__enter__ = Mock(return_value=response)
-            response.__exit__ = Mock(return_value=False)
-        with tempfile.TemporaryDirectory() as folder, patch.object(assets.requests, "get", side_effect=[redirect, final]) as get:
-            assets.download("https://data.laadsdaac.earthdatacloud.nasa.gov/file.h5", Path(folder) / "file.h5", "test-token")
-            self.assertEqual(get.call_args_list[0].kwargs["headers"]["Authorization"], "Bearer test-token")
-            self.assertEqual(get.call_args_list[1].kwargs["headers"], {})
+    def test_redirect_never_sends_nasa_token_to_s3_or_verified_cdn(self):
+        for host in ("example.s3.amazonaws.com", "d13j1jds5ybppo.cloudfront.net"):
+            redirect = Mock(status_code=302, is_redirect=True, headers={"Location": f"https://{host}/object?signature=test"})
+            final = Mock(status_code=200, is_redirect=False)
+            final.iter_content.return_value = [b"123456789"]
+            for response in (redirect, final):
+                response.__enter__ = Mock(return_value=response)
+                response.__exit__ = Mock(return_value=False)
+            with tempfile.TemporaryDirectory() as folder, patch.object(assets.requests, "get", side_effect=[redirect, final]) as get:
+                output = Path(folder) / "file.h5"
+                assets.download("https://data.laadsdaac.earthdatacloud.nasa.gov/file.h5", output, "test-token")
+                self.assertEqual(get.call_args_list[0].kwargs["headers"]["Authorization"], "Bearer test-token")
+                self.assertEqual(get.call_args_list[1].kwargs["headers"], {})
+                self.assertEqual(output.read_bytes(), b"123456789")
+
+    def test_blocked_redirect_reports_only_host_without_credentials(self):
+        for target in ("https://unsupported.example/private/test-token?signature=private-signature",
+                       "https://unverified.cloudfront.net/private?signature=private-signature",
+                       "http://example.s3.amazonaws.com/private?signature=private-signature"):
+            redirect = Mock(status_code=302, is_redirect=True, headers={"Location": target})
+            redirect.__enter__ = Mock(return_value=redirect)
+            redirect.__exit__ = Mock(return_value=False)
+            with tempfile.TemporaryDirectory() as folder, patch.object(assets.requests, "get", return_value=redirect) as get:
+                with self.assertRaises(assets.AssetError) as error:
+                    assets.download("https://data.laadsdaac.earthdatacloud.nasa.gov/file.h5", Path(folder) / "file.h5", "test-token")
+                self.assertNotIn("test-token", str(error.exception))
+                self.assertNotIn("private", str(error.exception))
+                self.assertEqual(get.call_count, 1)
+                self.assertFalse((Path(folder) / "file.h5").exists())
 
     def test_settings_reload_and_environment_priority(self):
         with tempfile.TemporaryDirectory() as folder, patch.object(local_config, "ENV_PATH", Path(folder) / ".env"), patch.dict(local_config.os.environ, {}, clear=True):

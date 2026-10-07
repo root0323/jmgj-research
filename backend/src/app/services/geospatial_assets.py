@@ -18,6 +18,9 @@ from app.local_config import setting
 
 DEFAULT_ROOT = Path(__file__).resolve().parents[4] / ".local-data"
 NASA_HOSTS = {"data.laadsdaac.earthdatacloud.nasa.gov", "ladsweb.modaps.eosdis.nasa.gov"}
+# Observed in the authenticated LAADS HTTPS redirect on 2026-10-07.
+# This CDN receives only its signed URL, never the Earthdata bearer token.
+NASA_CDN_HOSTS = {"d13j1jds5ybppo.cloudfront.net"}
 CMR = "https://cmr.earthdata.nasa.gov/search"
 DEM_BASE = "https://copernicus-dem-90m.s3.amazonaws.com"
 FIELD = "HDFEOS/GRIDS/VIIRS_Grid_DNB_2d/Data Fields/"
@@ -61,9 +64,14 @@ def download(url: str, destination: Path, token: str = "", max_bytes: int = 300_
     temporary = destination.with_suffix(destination.suffix + ".part")
     try:
         for _ in range(6):
-            host = urlparse(url).hostname or ""
-            if urlparse(url).scheme != "https" or not (host in NASA_HOSTS or host == "copernicus-dem-90m.s3.amazonaws.com" or host.endswith(".amazonaws.com")):
-                raise AssetError("공식 자료 서버의 HTTPS 주소만 지원합니다.")
+            parsed = urlparse(url)
+            host = parsed.hostname or ""
+            if parsed.scheme != "https" or not (host in NASA_HOSTS | NASA_CDN_HOSTS or host == "copernicus-dem-90m.s3.amazonaws.com" or host.endswith(".amazonaws.com")):
+                # Show only a normal server name: signed paths, queries and
+                # credentials must never reach the screen or diagnostics.
+                server = host if re.fullmatch(r"(?:[a-z0-9-]{1,63}\.)+[a-z]{2,24}", host) and len(host) <= 253 else "확인 불가"
+                protocol = "HTTPS" if parsed.scheme == "https" else "HTTPS 아님"
+                raise AssetError(f"지원하지 않는 자료 연결 주소로 중단했습니다. 서버: {server} · {protocol}. 기존 파일은 유지됩니다.")
             headers = {"Authorization": f"Bearer {token}"} if token and host in NASA_HOSTS else {}
             with requests.get(url, headers=headers, stream=True, timeout=(15, 90), allow_redirects=False) as response:
                 if response.is_redirect:
