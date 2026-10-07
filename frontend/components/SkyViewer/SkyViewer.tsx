@@ -44,6 +44,7 @@ import { SkyViewerControls } from "./SkyViewerControls";
 import { PersonalWeatherPanel } from "./PersonalWeatherPanel";
 import { usePersonalWeather } from "./usePersonalWeather";
 import { evaluateWeather } from "@/lib/weather-evaluation";
+import { getLunarContext } from "./coordinates";
 import { useAutomaticSeeing } from "./useAutomaticSeeing";
 import { SkyViewerToolbar } from "./SkyViewerToolbar";
 import type { DisplayToggleName, DisplayToggles } from "./SkyViewerToolbar";
@@ -1199,7 +1200,8 @@ export default function SkyViewer() {
     }
     setIsSkyBrightnessLoading(true);
 
-    void evaluateWeather(weatherSnapshot, datetime, skyBrightnessDirection, controller.signal)
+    const astronomy = engineRef.current ? getLunarContext(engineRef.current, datetime, weatherSnapshot.location) : null;
+    void evaluateWeather(weatherSnapshot, datetime, skyBrightnessDirection, controller.signal, astronomy)
       .then((details) => {
         if (!disposed && skyBrightnessRequestKeyRef.current === requestKey) {
           setSkyBrightness(details.sqm);

@@ -49,6 +49,27 @@ class GeocodeTests(unittest.IsolatedAsyncioTestCase):
             self.assertAlmostEqual(sleep.await_args.args[0], .55)
             self.assertEqual(geo.NOMINATIM_LAST_REQUEST, 11.05)
 
+    async def test_saved_keys_enable_autocomplete_without_public_fallback(self):
+        for provider in ("kakao", "vworld"):
+            geo.GEOCODE_CACHE.clear()
+            with patch.object(geo, "get_kakao_api_key", return_value="test" if provider == "kakao" else None), \
+                 patch.object(geo, "get_vworld_api_key", return_value="test" if provider == "vworld" else None), \
+                 patch.object(geo, f"fetch_{provider}_results", AsyncMock(return_value=[{"name": "제주과학고등학교"}])) as search, \
+                 patch.object(geo, "fetch_photon_results", AsyncMock()) as photon:
+                result = await geo.suggest_places("제주과학고")
+                self.assertEqual(result[0]["name"], "제주과학고등학교")
+                self.assertEqual(search.await_args.args[1], "제주과학고등학교")
+                photon.assert_not_awaited()
+
+    async def test_provider_diagnostics_use_https_and_do_not_echo_credentials(self):
+        client = AsyncMock()
+        response = httpx.Response(403, json={"response": {"status": "ERROR", "error": {"text": "test-secret"}}})
+        client.get.return_value = response
+        result = await geo.fetch_vworld_debug(client, "서울시청", "test-secret")
+        self.assertTrue(client.get.await_args_list)
+        self.assertTrue(all(call.args[0].startswith("https://") for call in client.get.await_args_list))
+        self.assertNotIn("test-secret", str(result))
+
 
 if __name__ == "__main__":
     unittest.main()

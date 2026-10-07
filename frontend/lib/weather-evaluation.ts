@@ -1,5 +1,6 @@
 import { getFallbackSkyBrightness, type SkyBrightnessDirection } from "@/components/SkyViewer/difficulty";
 import { isObject, modelResponses, type JsonObject, type WeatherSnapshot } from "./meteoblue";
+import type { getLunarContext } from "@/components/SkyViewer/coordinates";
 
 function parseTime(value: unknown): number {
   if (typeof value === "number") return value * 1000;
@@ -51,7 +52,7 @@ export function weatherAt(snapshot: WeatherSnapshot, time: Date) {
     cloudCover: cloud !== null && cloud >= 0 && cloud <= 100 ? cloud : null, cloudBasePressure: pressure };
 }
 
-export async function evaluateWeather(snapshot: WeatherSnapshot, time: Date, direction: SkyBrightnessDirection | null, signal: AbortSignal) {
+export async function evaluateWeather(snapshot: WeatherSnapshot, time: Date, direction: SkyBrightnessDirection | null, signal: AbortSignal, astronomy: ReturnType<typeof getLunarContext> = null) {
   const values = weatherAt(snapshot, time);
   const base = getFallbackSkyBrightness(snapshot.location.latitude, snapshot.location.longitude);
   const cloudFraction = (values.cloudCover ?? 0) / 100;
@@ -66,7 +67,7 @@ export async function evaluateWeather(snapshot: WeatherSnapshot, time: Date, dir
     const response = await fetch("/api/research/evaluate", {
       method: "POST", headers: { "Content-Type": "application/json" }, signal,
       body: JSON.stringify({ location: snapshot.location, datetime: time.toISOString(),
-        altitude: direction?.altitude, azimuth: direction?.azimuth, responses: modelResponses(snapshot) }),
+        altitude: direction?.altitude, azimuth: direction?.azimuth, responses: modelResponses(snapshot), astronomy }),
     });
     if (response.ok) {
       const data = await response.json();

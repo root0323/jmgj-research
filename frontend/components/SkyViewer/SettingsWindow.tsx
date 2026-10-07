@@ -134,6 +134,11 @@ export function SettingsWindow({
             <h3>{tab.label}</h3>
             {tab.id === "sources" && (
               <div className={styles.sourceGroups}>
+                {typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname) && (
+                  <a href="http://127.0.0.1:3004/" target="_blank" rel="noopener noreferrer">
+                    로컬 API·연구 자료 연결 설정 ↗
+                  </a>
+                )}
                 {DATA_SOURCE_GROUPS.map((group) => (
                   <section key={group.title} className={styles.sourceGroup}>
                     <h4>{group.title}</h4>
@@ -144,6 +149,7 @@ export function SettingsWindow({
                             {source.name} <span aria-hidden="true">↗</span>
                           </a>
                           <p>{source.description}</p>
+                          {source.credit && <p>{source.credit}</p>}
                           {source.notice && (
                             <a className={styles.sourceNotice} href={source.notice.url} target="_blank" rel="noopener noreferrer">
                               {source.notice.label}

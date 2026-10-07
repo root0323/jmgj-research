@@ -11,6 +11,10 @@ export type SweObj = {
   data?: Record<string, unknown>;
   remove?: (obj: SweObj) => void;
   destroy?: () => void;
+  clone?: () => SweObj;
+  utc?: number;
+  latitude?: number;
+  longitude?: number;
   addDataSource?: (args: { url: string; key?: string }) => void;
   designations?: () => string[];
   getInfo?: (format?: string, observer?: SweObj) => unknown;

@@ -2,6 +2,7 @@ type DataSource = {
   name: string;
   url: string;
   description: string;
+  credit?: string;
   notice?: { label: string; url: string };
 };
 
@@ -35,6 +36,14 @@ export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
       { name: "Nominatim", url: "https://nominatim.org/", description: "OpenStreetMap 기반 장소·주소 검색과 좌표의 주소 변환" },
       { name: "Kakao Local API", url: "https://developers.kakao.com/docs/ko/local/dev-guide", description: "장소·주소 검색과 좌표의 주소 변환. 서버에 API 키가 설정된 경우 사용" },
       { name: "VWorld", url: "https://www.vworld.kr/", description: "국내 주소·장소 검색과 좌표의 주소 변환. 서버에 API 키가 설정된 경우 사용" },
+    ],
+  },
+  {
+    title: "지형·야간 인공광",
+    sources: [
+      { name: "Copernicus DEM · GLO-90", url: "https://registry.opendata.aws/copernicus-dem/", description: "관측 장소 주변에 내려받아 사용하는 약 90m 간격의 지표면 높이(DSM). 건물·식생 포함. 기존 연구 DEM 파일과 다른 자료이므로 지형 차폐 결과 재검증 필요", credit: "produced using Copernicus WorldDEM-90 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved", notice: { label: "공개 자료·라이선스 안내", url: "https://dataspace.copernicus.eu/explore-data/data-collections/copernicus-contributing-missions/collections-description/COP-DEM" } },
+      { name: "NASA Black Marble · VNP46A3 V2", url: "https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/VNP46A3/", description: "NASA/VIIRS 월별 야간 인공광 합성 자료. NASA 다운로드 인증 후 장소 주변 자료를 로컬에 저장한 경우 연구 모델에서 사용. 실시간 광공해 측정값이 아님", notice: { label: "자료 인용·DOI", url: "https://doi.org/10.5067/VIIRS/VNP46A3.002" } },
+      { name: "NASA Earthdata CMR", url: "https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html", description: "장소와 기준 월에 맞는 Black Marble 공식 파일 메타데이터 검색" },
     ],
   },
   {

@@ -870,6 +870,38 @@ function buildPhysicalFields({
 
   return fields;
 }
+export function getLunarContext(engine: StellariumEngine, time: Date, location: { latitude: number; longitude: number }) {
+  const original = getObserver(engine);
+  const observer = original?.clone?.();
+  if (!observer) return null;
+  try {
+    const utc = engine.date2MJD?.(time.getTime());
+    if (typeof utc !== "number" || !Number.isFinite(utc) || !engine.convertFrame) return null;
+    observer.utc = utc;
+    observer.latitude = location.latitude * Math.PI / 180;
+    observer.longitude = location.longitude * Math.PI / 180;
+    engine._observer_update?.(observer.v, false);
+    const moon = engine.getObj?.("NAME Moon");
+    if (!moon) return null;
+    // Preserve the homogeneous distance flag (fourth component). Treating this
+    // finite-distance lunar position as an infinite-distance star changes altitude.
+    const raw = moon.getInfo?.("radec", observer);
+    if (!Array.isArray(raw) || raw.length < 4) return null;
+    const vector = raw.slice(0, 4).map(Number);
+    if (!vector.every(Number.isFinite)) return null;
+    const horizontal = vectorToSpherical(engine.convertFrame(observer, "ICRF", "OBSERVED", vector));
+    const illumination = normalizePhaseFraction(readNumber(moon.getInfo?.("phase", observer)));
+    if (!horizontal || illumination === null) return null;
+    return { source: "stellarium" as const, datetime: time.toISOString(), location,
+      altitude: horizontal.latitude, azimuth: horizontal.longitude,
+      phaseAngle: Math.acos(Math.max(-1, Math.min(1, 2 * illumination - 1))) * 180 / Math.PI };
+  } catch {
+    return null;
+  } finally {
+    observer.destroy?.();
+  }
+}
+
 export function getObjectInfo(
   engine: StellariumEngine,
   target: SweObj,

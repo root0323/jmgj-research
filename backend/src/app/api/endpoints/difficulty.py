@@ -1,6 +1,5 @@
 import json
 import math
-import os
 import re
 import time
 from datetime import datetime, timezone, timedelta
@@ -10,6 +9,8 @@ from typing import Any
 import httpx
 from fastapi import APIRouter, Query, HTTPException
 from pydantic import BaseModel, Field, ConfigDict
+from app.local_config import setting
+from app.services.geospatial_assets import cached_region, region_bounds
 from app.services.sky_brightness_model.core.calculator import (
     prepare_pixel_geometry,
     run_pipeline,
@@ -198,7 +199,7 @@ def format_feature_model_time(target_time: datetime) -> str:
 
 def get_existing_asset_path(*env_names: str) -> Path | None:
     for env_name in env_names:
-        raw_path = os.getenv(env_name, "").strip().strip('"').strip("'")
+        raw_path = setting(env_name).strip().strip('"').strip("'")
         if not raw_path:
             continue
         candidate = Path(raw_path)
@@ -218,12 +219,12 @@ def radiance_to_sqm(radiance: float) -> float | None:
 
 
 def get_float_env(name: str, default: float) -> float:
-    value = finite_number(os.getenv(name))
+    value = finite_number(setting(name))
     return default if value is None else value
 
 
 def get_int_env(name: str, default: int) -> int:
-    value = finite_number(os.getenv(name))
+    value = finite_number(setting(name))
     return default if value is None else max(1, int(value))
 
 
@@ -255,9 +256,17 @@ def fetch_black_marble_dem_sqm(
     altitude: float | None,
     azimuth: float | None,
 ) -> dict[str, Any] | None:
+    radius_km = max(1.0, get_float_env("SKY_BRIGHTNESS_RADIUS_KM", 30.0))
+    try:
+        region = cached_region(latitude, longitude, radius_km)
+    except ValueError:
+        region = None
     h5_path = get_existing_asset_path("BLACK_MARBLE_H5_PATH", "BLACK_MARBLE_PATH")
     dem_path = get_existing_asset_path("DEM_RASTER_PATH", "DEM_PATH")
-    if h5_path is None or dem_path is None:
+    h5_paths = [Path(p) for p in region["blackMarble"]] if region else ([h5_path] if h5_path else [])
+    if region:
+        dem_path = Path(region["dem"])
+    if not h5_paths or dem_path is None:
         return None
 
     try:
@@ -265,21 +274,35 @@ def fetch_black_marble_dem_sqm(
     except Exception:
         return None
 
-    radius_km = max(1.0, get_float_env("SKY_BRIGHTNESS_RADIUS_KM", 30.0))
     max_pixels = get_int_env("SKY_BRIGHTNESS_MAX_PIXELS", 1000)
     min_pixels = min(max_pixels, get_int_env("SKY_BRIGHTNESS_MIN_PIXELS", 50))
     keep_fraction = clamp(get_float_env("SKY_BRIGHTNESS_KEEP_RADIANCE_FRACTION", 0.99), 0.0, 1.0)
-    cache_key = f"{h5_path}|{dem_path}|{latitude:.4f}|{longitude:.4f}|{radius_km:.1f}|{max_pixels}|{keep_fraction:.3f}"
+    fingerprints = [(str(p), p.stat().st_size, p.stat().st_mtime_ns) for p in [*h5_paths, dem_path]]
+    cache_key = f"{fingerprints}|{latitude:.4f}|{longitude:.4f}|{radius_km:.1f}|{max_pixels}|{keep_fraction:.3f}"
     cached = BLACK_MARBLE_GEOMETRY_CACHE.get(cache_key)
 
     if cached is None:
-        raw_pixels = load_pixel_data_from_h5(str(h5_path), (latitude, longitude), max_radius_km=radius_km)
+        raw_pixels = [pixel for path in h5_paths for pixel in load_pixel_data_from_h5(str(path), (latitude, longitude), max_radius_km=radius_km)]
         if not raw_pixels:
             return None
 
         try:
             with rasterio.open(str(dem_path)) as src:
-                dem_data = (src.read(1), src.transform)
+                from rasterio.windows import from_bounds, Window
+                import numpy as np
+                if src.crs != rasterio.crs.CRS.from_epsg(4326):
+                    return None
+                wanted = region_bounds(latitude, longitude, max(1, radius_km - 1))
+                b = src.bounds
+                if not (b.left <= wanted[0] and b.bottom <= wanted[1] and b.right >= wanted[2] and b.top >= wanted[3]):
+                    return None
+                w = from_bounds(*wanted, transform=src.transform)
+                col, row = math.floor(w.col_off), math.floor(w.row_off)
+                window = Window(col, row, math.ceil(w.col_off + w.width) - col, math.ceil(w.row_off + w.height) - row)
+                terrain = src.read(1, window=window, masked=True)
+                if np.ma.getmaskarray(terrain).any() or not np.isfinite(terrain).all() or (terrain < -500).any():
+                    return None
+                dem_data = (np.asarray(terrain), src.window_transform(window))
                 prepared_pixels = prepare_pixel_geometry(
                     raw_pixels,
                     (latitude, longitude),
@@ -295,7 +318,9 @@ def fetch_black_marble_dem_sqm(
         if not prepared_pixels:
             return None
 
-        cached = {"pixels": prepared_pixels, "pixelCount": len(prepared_pixels)}
+        cached = {"pixels": prepared_pixels, "pixelCount": len(prepared_pixels), "dem": dem_data}
+        if len(BLACK_MARBLE_GEOMETRY_CACHE) >= 4:
+            BLACK_MARBLE_GEOMETRY_CACHE.pop(next(iter(BLACK_MARBLE_GEOMETRY_CACHE)))
         BLACK_MARBLE_GEOMETRY_CACHE[cache_key] = cached
 
     moon_zenith = finite_number((feature_environment or {}).get("moonZenith"))
@@ -310,7 +335,7 @@ def fetch_black_marble_dem_sqm(
             moon_angles=moon_angles,
             pixel_data=cached["pixels"],
             config=build_environment_config(feature_environment),
-            precalc_moon_shield=0.0,
+            dem_data=cached["dem"],
             max_radius_km=radius_km,
         )
     except Exception:
@@ -325,6 +350,7 @@ def fetch_black_marble_dem_sqm(
         "source": "black-marble-dem",
         "blackMarblePixelCount": cached["pixelCount"],
         "radiusKm": radius_km,
+        "blackMarbleMonth": region["month"] if region else None,
     }
 
 def fetch_feature_environment(
@@ -380,13 +406,13 @@ async def fetch_meteoblue(
     target_time: datetime,
     package_name: str | None = None,
 ) -> dict[str, Any] | None:
-    api_key = os.getenv("METEOBLUE_API_KEY", "").strip()
+    api_key = setting("METEOBLUE_API_KEY").strip()
     if not api_key:
         return None
 
     package = (
         package_name
-        or os.getenv("METEOBLUE_SKY_PACKAGE", "basic-1h").strip()
+        or setting("METEOBLUE_SKY_PACKAGE", "basic-1h").strip()
         or "basic-1h"
     )
     url = f"https://my.meteoblue.com/packages/{package}"
@@ -563,6 +589,16 @@ class CachedLocation(BaseModel):
     longitude: float = Field(ge=-180, le=180)
 
 
+class LunarContext(BaseModel):
+    model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
+    source: str = Field(pattern="^stellarium$")
+    datetime: str = Field(max_length=64)
+    location: CachedLocation
+    altitude: float = Field(ge=-90, le=90)
+    azimuth: float = Field(ge=0, le=360)
+    phaseAngle: float = Field(ge=0, le=180)
+
+
 class CachedWeatherRequest(BaseModel):
     model_config = ConfigDict(extra="forbid", allow_inf_nan=False)
     location: CachedLocation
@@ -570,6 +606,7 @@ class CachedWeatherRequest(BaseModel):
     altitude: float | None = Field(default=None, ge=-90, le=90)
     azimuth: float | None = Field(default=None, ge=0, le=360)
     responses: dict[str, dict[str, Any]]
+    astronomy: LunarContext | None = None
 
 
 def cached_block(response: dict[str, Any]) -> dict[str, Any]:
@@ -635,8 +672,8 @@ def evaluate_cached_weather(payload: CachedWeatherRequest):
         missing.append("totalcloudcover")
     if pressure is None:
         missing.append("convectivecloudbase_pressure")
-    if seeing is None:
-        missing.append("seeing_arcsec")
+    # Seeing does not enter the radiative brightness model. Keep it optional;
+    # never invent an arcsecond value from wind/clouds to satisfy this route.
 
     moon_block = cached_block(responses.get("p1", {}))
     positions = moon_block.get("planet_positions", {})
@@ -650,6 +687,16 @@ def evaluate_cached_weather(payload: CachedWeatherRequest):
             moon_valid = moon_alt is not None and -90 <= moon_alt <= 90 and moon_az is not None and 0 <= moon_az <= 360
     except (TypeError, ValueError, IndexError):
         pass
+    astronomy = payload.astronomy
+    if astronomy:
+        try:
+            same_time = abs((parse_datetime(astronomy.datetime) - target_time).total_seconds()) < 1
+        except ValueError:
+            same_time = False
+        same_location = abs(astronomy.location.latitude - latitude) < 0.00001 and abs(astronomy.location.longitude - longitude) < 0.00001
+        if not same_time or not same_location:
+            raise HTTPException(status_code=422, detail="Moon context must match the observation time and location")
+        moon_valid = True
     if not moon_valid:
         missing.append("moon_position")
 
@@ -661,6 +708,9 @@ def evaluate_cached_weather(payload: CachedWeatherRequest):
             "moonAzimuth": parsed[5][1] if moon_valid else None,
             "moonPhaseAngle": parsed[6], "moonCloudTransmission": parsed[7],
         }
+        if astronomy:
+            environment.update(moonZenith=90 - astronomy.altitude, moonAzimuth=astronomy.azimuth,
+                               moonPhaseAngle=astronomy.phaseAngle)
         if not missing:
             model = fetch_black_marble_dem_sqm(latitude, longitude, environment, payload.altitude, payload.azimuth)
             if model:
@@ -669,4 +719,6 @@ def evaluate_cached_weather(payload: CachedWeatherRequest):
         "sqm": round(sqm, 3), "source": source, "seeingArcsec": seeing,
         "environment": environment, "missing": missing,
         "blackMarblePixelCount": (model or {}).get("blackMarblePixelCount"),
+        "blackMarbleMonth": (model or {}).get("blackMarbleMonth"),
+        "assetsReady": model is not None,
     }

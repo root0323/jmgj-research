@@ -93,6 +93,21 @@ class CachedWeatherTests(unittest.TestCase):
         self.assertEqual(config.moon_phase_angle_deg, 0)
         self.assertEqual(config.moon_cloud_transmission, 0)
 
+    def test_free_weather_uses_matching_native_moon_without_inventing_seeing(self):
+        data = payload()
+        data["responses"]["p1"] = {}
+        data["astronomy"] = {"source": "stellarium", "datetime": data["datetime"], "location": data["location"],
+                             "altitude": -10, "azimuth": 250, "phaseAngle": 0}
+        with patch("app.api.endpoints.difficulty.fetch_black_marble_dem_sqm", return_value={"sqm": 20.5, "source": "black-marble-dem"}) as model:
+            result = self.client.post("/api/difficulty/evaluate-cached", json=data)
+            self.assertEqual(result.status_code, 200)
+            self.assertIsNone(result.json()["seeingArcsec"])
+            self.assertEqual(result.json()["source"], "black-marble-dem")
+            self.assertEqual(model.call_args.args[2]["moonZenith"], 100)
+            self.assertEqual(model.call_args.args[2]["moonPhaseAngle"], 0)
+            data["astronomy"]["datetime"] = "2026-10-06T10:30:00Z"
+            self.assertEqual(self.client.post("/api/difficulty/evaluate-cached", json=data).status_code, 422)
+
     def test_invalid_location_datetime_and_key_fields_are_rejected(self):
         for field, value in (("datetime", "bad"), ("location", {"latitude": 100, "longitude": 0}), ("apiKey", "secret")):
             data = payload()

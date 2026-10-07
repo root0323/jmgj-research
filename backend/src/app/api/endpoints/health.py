@@ -1,16 +1,17 @@
-import os
 from pathlib import Path
 from typing import Any
 
 from fastapi import APIRouter
+from app.local_config import setting
+from app.services.geospatial_assets import cached_status
 
 
 router = APIRouter()
 
 
 def get_asset_status(path_env: str, url_env: str) -> dict[str, Any]:
-    path_value = os.getenv(path_env, "").strip()
-    url_configured = bool(os.getenv(url_env, "").strip())
+    path_value = setting(path_env).strip()
+    url_configured = bool(setting(url_env).strip())
 
     if not path_value:
         return {
@@ -34,6 +35,9 @@ def get_asset_status(path_env: str, url_env: str) -> dict[str, Any]:
 async def health() -> dict[str, Any]:
     return {
         "ok": True,
+        "providers": {"kakaoKeyConfigured": bool(setting("KAKAO_REST_API_KEY")),
+                      "vworldKeyConfigured": bool(setting("VWORLD_API_KEY"))},
+        "cachedGeospatial": cached_status(),
         "assets": {
             "blackMarble": get_asset_status(
                 "BLACK_MARBLE_H5_PATH",

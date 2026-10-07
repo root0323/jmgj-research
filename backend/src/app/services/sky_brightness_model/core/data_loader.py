@@ -283,36 +283,43 @@ def load_pixel_data_from_h5(filepath: str, obs_coord: tuple, max_radius_km: floa
             base_path = 'HDFEOS/GRIDS/VIIRS_Grid_DNB_2d/Data Fields/'
 
             radiance_sds = f[base_path + BLACK_MARBLE_RADIANCE_SDS]
-            radiance_data = radiance_sds[:].astype(np.float64)
+            lat_raw = f[base_path + 'lat'][:]
+            lon_raw = f[base_path + 'lon'][:]
+            lat_offset = max_radius_km / 110.5
+            lon_offset = lat_offset / max(0.01, np.cos(np.radians(obs_lat)))
+            lat_min, lat_max = obs_lat - lat_offset, obs_lat + lat_offset
+            lon_min, lon_max = obs_lon - lon_offset, obs_lon + lon_offset
+            window = (slice(None), slice(None))
+            if lat_raw.ndim == 1 and lon_raw.ndim == 1:
+                rows = np.flatnonzero((lat_raw >= lat_min) & (lat_raw <= lat_max))
+                cols = np.flatnonzero((lon_raw >= lon_min) & (lon_raw <= lon_max))
+                if not rows.size or not cols.size:
+                    return []
+                window = (slice(rows[0], rows[-1] + 1), slice(cols[0], cols[-1] + 1))
+                lat_raw, lon_raw = lat_raw[window[0]], lon_raw[window[1]]
+            else:
+                lat_raw, lon_raw = lat_raw[window], lon_raw[window]
+            raw_radiance = radiance_sds[window].astype(np.float64)
             scale_factor = float(np.asarray(radiance_sds.attrs.get("scale_factor", 1.0)).squeeze())
             offset = float(np.asarray(radiance_sds.attrs.get("offset", 0.0)).squeeze())
             fill_value = float(np.asarray(radiance_sds.attrs.get("_FillValue", -999.9)).squeeze())
-            radiance_data = radiance_data * scale_factor + offset
+            radiance_data = raw_radiance * scale_factor + offset
 
             quality_data = None
             quality_path = base_path + BLACK_MARBLE_QUALITY_SDS
             if quality_path in f:
-                quality_data = f[quality_path][:]
+                quality_data = f[quality_path][window]
 
-            lat_raw = f[base_path + 'lat'][:]
-            lon_raw = f[base_path + 'lon'][:]
-            
             if lat_raw.ndim == 1 and lon_raw.ndim == 1:
                 lon_data, lat_data = np.meshgrid(lon_raw, lat_raw)
             else:
                 lat_data = lat_raw
                 lon_data = lon_raw
 
-            lat_offset = max_radius_km / 111.0
-            lon_offset = lat_offset / max(0.1, np.cos(np.radians(obs_lat)))
-            
-            lat_min, lat_max = obs_lat - lat_offset, obs_lat + lat_offset
-            lon_min, lon_max = obs_lon - lon_offset, obs_lon + lon_offset
-
             valid_mask = (
                 (radiance_data > 0)
                 & np.isfinite(radiance_data)
-                & (radiance_data != fill_value)
+                & (raw_radiance != fill_value)
             )
             if quality_data is not None:
                 quality_mask = np.isin(quality_data, list(BLACK_MARBLE_ALLOWED_QUALITY))

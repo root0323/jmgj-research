@@ -56,6 +56,7 @@ venv/
 
 # local geospatial/model assets
 /.verification/
+/.local-data/
 *.h5
 *.hdf5
 *.img

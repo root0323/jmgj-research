@@ -1,15 +1,16 @@
 import httpx
 import asyncio
-import os
 import time
+import hashlib
+from app.local_config import setting
 from fastapi import APIRouter, HTTPException, Query
 
 router = APIRouter()
 
 GEOCODE_TIMEOUT = httpx.Timeout(7.0, connect=3.0)
 REVERSE_GEOCODE_TIMEOUT = httpx.Timeout(7.0, connect=3.0)
-NOMINATIM_BASE = os.getenv("NOMINATIM_BASE_URL", "https://nominatim.openstreetmap.org").rstrip("/")
-PHOTON_BASE = os.getenv("PHOTON_BASE_URL", "https://photon.komoot.io").rstrip("/")
+NOMINATIM_BASE = setting("NOMINATIM_BASE_URL", "https://nominatim.openstreetmap.org").rstrip("/")
+PHOTON_BASE = setting("PHOTON_BASE_URL", "https://photon.komoot.io").rstrip("/")
 NOMINATIM_LOCK = asyncio.Lock()
 NOMINATIM_LAST_REQUEST = 0.0
 
@@ -35,11 +36,9 @@ KAKAO_ADDRESS_URL = "https://dapi.kakao.com/v2/local/search/address.json"
 KAKAO_KEYWORD_URL = "https://dapi.kakao.com/v2/local/search/keyword.json"
 KAKAO_REVERSE_URL = "https://dapi.kakao.com/v2/local/geo/coord2address.json"
 VWORLD_ADDRESS_URLS = [
-    "http://api.vworld.kr/req/address",
     "https://api.vworld.kr/req/address",
 ]
 VWORLD_SEARCH_URLS = [
-    "http://api.vworld.kr/req/search",
     "https://api.vworld.kr/req/search",
 ]
 
@@ -229,7 +228,7 @@ def set_cached(cache: dict, key: str, value):
 
 
 def get_vworld_api_key() -> str | None:
-    value = os.getenv("VWORLD_API_KEY", "").strip()
+    value = setting("VWORLD_API_KEY").strip()
     if not value or value == "your-vworld-api-key":
         return None
     return value
@@ -240,14 +239,14 @@ def get_vworld_headers() -> dict[str, str]:
         "Accept": "application/json,text/plain,*/*",
         "User-Agent": "JMGJ-school-project/0.1",
     }
-    referer = os.getenv("VWORLD_API_REFERER", "").strip()
+    referer = setting("VWORLD_API_REFERER").strip()
     if referer:
         headers["Referer"] = referer
     return headers
 
 
 def get_kakao_api_key() -> str | None:
-    value = os.getenv("KAKAO_REST_API_KEY", "").strip()
+    value = setting("KAKAO_REST_API_KEY").strip()
     if not value or value == "your-kakao-rest-api-key":
         return None
     return value
@@ -612,7 +611,7 @@ async def fetch_kakao_debug(
                     "http_status": response.status_code,
                     "document_count": len(documents) if isinstance(documents, list) else None,
                     "total_count": meta.get("total_count") if isinstance(meta, dict) else None,
-                    "body": None if data else text_snippet(response),
+                    "body": None,
                     "params": params,
                 }
             )
@@ -897,6 +896,8 @@ async def fetch_vworld_debug(
     diagnostics: list[dict] = []
 
     for name, url, params in checks:
+        if not url.startswith("https://"):
+            continue
         safe_params = {key: value for key, value in params.items() if key != "key"}
         try:
             response = await client.get(
@@ -911,7 +912,7 @@ async def fetch_vworld_debug(
                         "name": name,
                         "http_status": response.status_code,
                         "content_type": response.headers.get("content-type"),
-                        "body": text_snippet(response),
+                        "body": None,
                         "params": safe_params,
                     }
                 )
@@ -925,7 +926,7 @@ async def fetch_vworld_debug(
                     "name": name,
                     "http_status": response.status_code,
                     "vworld_status": envelope.get("status") if isinstance(envelope, dict) else None,
-                    "error": envelope.get("error") if isinstance(envelope, dict) else None,
+                    "error": bool(envelope.get("error")) if isinstance(envelope, dict) else None,
                     "has_result": bool(result),
                     "item_count": len(items) if isinstance(items, list) else None,
                     "params": safe_params,
@@ -1073,16 +1074,24 @@ async def fetch_variant_results(
 
 @router.get("/suggest")
 async def suggest_places(query: str = Query(..., min_length=3, max_length=160)):
-    """Autocomplete uses Photon only. Public Nominatim forbids autocomplete."""
+    """Use configured place APIs, then Photon. Never autocomplete Nominatim."""
     normalized = " ".join(query.split())
-    key = "suggest:" + normalize_place_key(normalized)
+    kakao_key, vworld_key = get_kakao_api_key(), get_vworld_api_key()
+    # A newly saved provider must bypass old public-fallback cache entries.
+    provider_version = hashlib.sha256(f"{kakao_key}|{vworld_key}|{setting('VWORLD_API_REFERER')}".encode()).hexdigest()[:16]
+    key = f"suggest:{provider_version}:" + normalize_place_key(normalized)
     cached = get_cached(GEOCODE_CACHE, key)
     if cached is not None:
         return cached
     expanded = build_school_query_variants(normalized)
     headers = {"User-Agent": "JMGJ-research/1.0 (https://github.com/root0323/jmgj-research)", "Accept-Language": "ko,en"}
     async with httpx.AsyncClient(timeout=GEOCODE_TIMEOUT) as client:
-        results = await fetch_photon_results(client, headers, expanded[0] if expanded else normalized)
+        query_text = expanded[0] if expanded else normalized
+        results = await fetch_kakao_results(client, query_text, kakao_key) if kakao_key else []
+        if not results and vworld_key:
+            results = await fetch_vworld_results(client, query_text, vworld_key)
+        if not results:
+            results = await fetch_photon_results(client, headers, query_text)
     if results:
         set_cached(GEOCODE_CACHE, key, results[:5])
     return results[:5]
@@ -1094,7 +1103,8 @@ async def geocode(
     debug: bool = False,
 ):
     normalized_query = " ".join(query.split())
-    cache_key = normalize_place_key(normalized_query)
+    provider_version = hashlib.sha256(f"{get_kakao_api_key()}|{get_vworld_api_key()}|{setting('VWORLD_API_REFERER')}".encode()).hexdigest()[:16]
+    cache_key = provider_version + ":" + normalize_place_key(normalized_query)
     if not debug:
         cached = get_cached(GEOCODE_CACHE, cache_key)
         if cached is not None:
@@ -1133,7 +1143,7 @@ async def geocode(
             "kakao_key_present": bool(kakao_api_key),
             "kakao": kakao_diagnostics,
             "vworld_key_present": bool(vworld_api_key),
-            "vworld_referer": os.getenv("VWORLD_API_REFERER", "").strip() or None,
+            "vworld_referer": setting("VWORLD_API_REFERER").strip() or None,
             "vworld": vworld_diagnostics,
         }
 
@@ -1224,7 +1234,8 @@ async def reverse_geocode(
     lat: float = Query(..., ge=-90, le=90),
     lon: float = Query(..., ge=-180, le=180),
 ):
-    cache_key = f"{lat:.5f},{lon:.5f}"
+    provider_version = hashlib.sha256(f"{get_kakao_api_key()}|{get_vworld_api_key()}|{setting('VWORLD_API_REFERER')}".encode()).hexdigest()[:16]
+    cache_key = f"{provider_version}:{lat:.5f},{lon:.5f}"
     cached = get_cached(REVERSE_GEOCODE_CACHE, cache_key)
     if cached is not None:
         return cached
