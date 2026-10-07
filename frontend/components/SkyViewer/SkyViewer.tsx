@@ -26,6 +26,7 @@ import {
   configureEngineLandscape,
   configureEngineMilkyWay,
   createConstellationLineObjects,
+  createMilkyWayOutlineObjects,
   ensureDssDataSource,
   focusEngineMilkyWay,
   getEngineModule,
@@ -571,6 +572,8 @@ export default function SkyViewer() {
   const trackingActivationTimeoutRef = useRef<number | null>(null);
   const constellationLineObjectsRef = useRef<SweObj[]>([]);
   const isConstellationLineObjectAddedRef = useRef(false);
+  const milkyWayOutlineRef = useRef<SweObj[]>([]);
+  const isMilkyWayOutlineAddedRef = useRef(false);
   const loadedPlanetSurveysRef = useRef(new Set<string>());
   const simulatedTimeRef = useRef(new Date());
   const lastTickRef = useRef<number | null>(null);
@@ -767,6 +770,14 @@ export default function SkyViewer() {
 
     return () => {
       disposed = true;
+      for (const outline of milkyWayOutlineRef.current) {
+        if (isMilkyWayOutlineAddedRef.current) {
+          (engineRef.current?.core as SweObj | undefined)?.remove?.(outline);
+        }
+        outline.destroy?.();
+      }
+      milkyWayOutlineRef.current = [];
+      isMilkyWayOutlineAddedRef.current = false;
       engineRef.current = null;
       catalogSearch.clear();
       searchSuggestionsRef.current = [];
@@ -819,10 +830,28 @@ export default function SkyViewer() {
     );
   }
 
+  function setMilkyWayOutlineVisible(visible: boolean) {
+    const engine = engineRef.current;
+    const core = engine?.core as SweObj | undefined;
+    if (!engine || !core) return;
+    if (visible && milkyWayOutlineRef.current.length === 0) {
+      milkyWayOutlineRef.current = createMilkyWayOutlineObjects(engine);
+    }
+    if (milkyWayOutlineRef.current.length === 0 || isMilkyWayOutlineAddedRef.current === visible) return;
+    for (const outline of milkyWayOutlineRef.current) {
+      if (visible) core.add?.(outline);
+      else core.remove?.(outline);
+    }
+    isMilkyWayOutlineAddedRef.current = visible;
+    core.update?.();
+    engine._core_update?.();
+  }
+
   function focusTarget(target: SweObj, label: string, vector?: number[]) {
     const engine = engineRef.current;
     if (!engine) return;
 
+    setMilkyWayOutlineVisible(false);
     const nextTarget = { label, obj: target, vector };
     selectedTargetRef.current = nextTarget;
     setIsObjectInfoOpen(true);
@@ -858,6 +887,7 @@ export default function SkyViewer() {
     const engine = engineRef.current;
     if (!engine) return;
 
+    setMilkyWayOutlineVisible(false);
     selectedTargetRef.current = { label, obj: target, vector };
     setIsObjectInfoOpen(true);
     setEngineSelection(engine, target);
@@ -882,6 +912,7 @@ export default function SkyViewer() {
 
   function clearSelectedTarget() {
     const engine = engineRef.current;
+    setMilkyWayOutlineVisible(false);
     selectedTargetRef.current = null;
     applySelectedInfo(null);
     cancelTargetTracking();
@@ -899,6 +930,7 @@ export default function SkyViewer() {
       setIsObjectInfoOpen(false);
       setQuery(item.label);
       focusEngineMilkyWay(engine);
+      setMilkyWayOutlineVisible(true);
       return;
     }
     setQuery(item.label);

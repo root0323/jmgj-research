@@ -41,7 +41,7 @@ export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
     title: "천체·사진",
     sources: [
       { name: "Stellarium Web Engine", url: "https://github.com/Stellarium/stellarium-web-engine", description: "천구 표시 엔진과 Stellarium의 별·별자리·태양계·딥스카이 자료" },
-      { name: "Stellarium 은하수 자료", url: "https://github.com/Stellarium/stellarium-web-engine/tree/master/apps/test-skydata/surveys/milkyway", description: "Stellarium 은하수 텍스처 기반 HiPS 이미지. 공식 예제의 기본 해상도 자료를 앱에 포함해 표시", notice: { label: "Stellarium Web Engine 라이선스", url: "https://github.com/Stellarium/stellarium-web-engine/blob/master/LICENSE-AGPL-3.0.txt" } },
+      { name: "Stellarium 은하수 자료", url: "https://github.com/Stellarium/stellarium-web-engine/tree/master/apps/test-skydata/surveys/milkyway", description: "Stellarium 은하수 텍스처 기반 HiPS 이미지와 이 이미지에서 추출한 윤곽선. 윤곽선은 화면 표시용이며 은하의 물리적 경계를 뜻하지 않음", notice: { label: "Stellarium Web Engine 라이선스", url: "https://github.com/Stellarium/stellarium-web-engine/blob/master/LICENSE-AGPL-3.0.txt" } },
       { name: "ERFA · IAU SOFA", url: "https://github.com/liberfa/erfa/blob/master/src/g2icrs.c", description: "은하수 검색 시 현재 하늘의 은하면 방향을 찾는 은하좌표 변환 기준" },
       { name: "DSS · CDS HiPS", url: "https://aladin.cds.unistra.fr/hips/", description: "천체 사진. STScI의 Digitized Sky Survey를 CDS HiPS 서비스로 표시", notice: { label: "DSS 원자료·크레딧", url: "https://archive.stsci.edu/dss/acknowledging.html" } },
       { name: "HYG Database v4.1 · David Nash", url: "https://github.com/astronexus/HYG-Database", description: "별의 이름·위치·등급 등. 원자료를 선별하고 앱 형식으로 변환해 사용", notice: { label: "CC BY-SA 4.0", url: "https://creativecommons.org/licenses/by-sa/4.0/" } },

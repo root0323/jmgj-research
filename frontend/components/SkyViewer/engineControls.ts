@@ -1,5 +1,6 @@
 import { loadWesternConstellationGeoJson } from "./skyCatalog";
 import type { StellariumEngine, StellariumFactory, SweObj } from "./types";
+import milkyWayOutline from "@/data/milkyway-outline.json";
 
 declare global {
   interface Window {
@@ -253,6 +254,38 @@ export function focusEngineMilkyWay(engine: StellariumEngine) {
   trySetValue(engine, ["milkyway.visible"], true);
   engine.lookAt?.(observed.slice(0, 3) as [number, number, number], 1.2);
   engine.zoomTo?.(90 * DEG_TO_RAD, 1.2);
+}
+
+export function createMilkyWayOutlineObjects(engine: StellariumEngine) {
+  const objects: SweObj[] = [];
+  // Short spherical arcs have local bounding caps, so the engine can clip
+  // each visible section correctly across the horizon and the RA=0 seam.
+  // Separate objects also keep JSON calls below this WASM build's stack limit.
+  for (const boundary of milkyWayOutline.boundaries) {
+    for (let start = 0; start < boundary.length - 1; start += 15) {
+      const outline = engine.createObj?.("geojson", {});
+      if (!outline) continue;
+      const feature = {
+        type: "Feature",
+        properties: {
+          stroke: "#a6cfff",
+          "stroke-opacity": 0.75,
+          "stroke-width": 1.2,
+          "stroke-glow": false,
+          fill: "#000000",
+          "fill-opacity": 0,
+        },
+        geometry: {
+          type: "LineString",
+          coordinates: boundary.slice(start, start + 16),
+        },
+      };
+      outline.data = { type: "FeatureCollection", features: [feature] };
+      outline.z = 16;
+      objects.push(outline);
+    }
+  }
+  return objects;
 }
 
 export function setInitialHorizonView(engine: StellariumEngine) {
