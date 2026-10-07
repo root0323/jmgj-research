@@ -43,7 +43,7 @@ import { usePersonalWeather } from "./usePersonalWeather";
 import { evaluateWeather } from "@/lib/weather-evaluation";
 import { useAutomaticSeeing } from "./useAutomaticSeeing";
 import { SkyViewerToolbar } from "./SkyViewerToolbar";
-import type { DisplayToggleName } from "./SkyViewerToolbar";
+import type { DisplayToggleName, DisplayToggles } from "./SkyViewerToolbar";
 import {
   FEATURED_STAR_NAMES,
   getDeepSkySearchCandidates,
@@ -612,9 +612,12 @@ export default function SkyViewer() {
       latitude: SEOUL.latitude,
       longitude: SEOUL.longitude,
     });
-  const [toggles, setToggles] = useState({
+  const [toggles, setToggles] = useState<DisplayToggles>({
     horizontalCoordinates: false,
+    equatorialCoordinates: false,
     constellationLines: false,
+    equator: false,
+    ecliptic: false,
     atmosphere: false,
     ground: true,
   });
@@ -1305,12 +1308,11 @@ export default function SkyViewer() {
     applyObservationTime(now);
   }
 
-  async function handleToggle(name: DisplayToggleName) {
+  async function handleToggle(name: DisplayToggleName, enabled?: boolean) {
     const engine = engineRef.current;
-    const nextValue = !toggles[name];
-    setToggles((current) => ({ ...current, [name]: nextValue }));
-
     if (!engine) return;
+    const nextValue = enabled ?? !toggles[name];
+    setToggles((current) => ({ ...current, [name]: nextValue }));
 
     trySetAllValues(engine, TOGGLE_PATHS[name], nextValue);
     if (name === "constellationLines") {
@@ -1469,6 +1471,7 @@ export default function SkyViewer() {
 
       <SkyViewerToolbar
         deepSkyMode={deepSkyMode}
+        isEngineReady={status === "ready"}
         telescopeSettings={telescopeSettings}
         toggles={toggles}
         onDeepSkyModeToggle={handleDeepSkyModeToggle}

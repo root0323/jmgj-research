@@ -12,6 +12,9 @@ const DSS_SURVEY_URL = "https://alasky.cds.unistra.fr/DSS/DSSColor";
 
 export const TOGGLE_PATHS = {
   horizontalCoordinates: ["lines.azimuthal.visible"],
+  equatorialCoordinates: ["lines.equatorial_jnow.visible"],
+  equator: ["lines.equator_line.visible"],
+  ecliptic: ["lines.ecliptic.visible"],
   constellationLines: [
     "constellations.lines_visible",
     "constellations.visible",
@@ -336,6 +339,20 @@ export function applyNightSkyDefaults(engine: StellariumEngine) {
   trySetValue(engine, ["stars.visible"], true);
   trySetValue(engine, ["planets.visible"], true);
   trySetAllValues(engine, TOGGLE_PATHS.horizontalCoordinates, false);
+  trySetAllValues(engine, TOGGLE_PATHS.equatorialCoordinates, false);
+  trySetAllValues(engine, TOGGLE_PATHS.equator, false);
+  trySetAllValues(engine, TOGGLE_PATHS.ecliptic, false);
+  // Use the native grid renderer and the horizontal grid's existing colour.
+  // The equatorial grid and equator both use the equator of the selected date.
+  const lines = engine.core?.lines as
+    | Record<string, { color?: number[] }>
+    | undefined;
+  const gridColor = lines?.azimuthal?.color;
+  if (gridColor?.length === 4) {
+    for (const line of ["equatorial_jnow", "equator_line", "ecliptic"]) {
+      trySetValue(engine, [`lines.${line}.color`], [...gridColor]);
+    }
+  }
   trySetAllValues(engine, TOGGLE_PATHS.constellationLines, false);
   trySetValue(engine, ["constellations.show_only_pointed"], false);
   trySetValue(engine, ["constellations.labels_visible"], false);

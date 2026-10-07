@@ -309,6 +309,57 @@
   padding: 0;
 }
 
+.toolbarLineMenu {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 10px);
+  z-index: 8;
+  display: grid;
+  width: 154px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(8, 12, 24, 0.94);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(14px);
+}
+
+.toolbarLineMenu label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  padding: 7px 10px;
+  border-radius: 4px;
+  color: #e2e8f0;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.toolbarLineMenu label:hover {
+  background: rgba(125, 211, 252, 0.1);
+}
+
+.toolbarLineMenu input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: #7dd3fc;
+  cursor: pointer;
+}
+
+.toolbarLineMenu label:has(input:disabled) {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.bottomToolbar button:focus-visible,
+.toolbarLineMenu input:focus-visible {
+  outline: 2px solid #7dd3fc;
+  outline-offset: -2px;
+}
+
 .toolbarSettingsPanel,
 .toolbarDifficultyPanel {
   position: absolute;
@@ -445,6 +496,12 @@
 .bottomToolbar circle {
   fill: currentColor;
   stroke: none;
+}
+
+.bottomToolbar .coordinateToolbarIcon circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
 }
 
 .bottomToolbar button:nth-child(3) path,

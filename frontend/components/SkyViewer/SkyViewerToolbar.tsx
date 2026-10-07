@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
 import styles from "./SkyViewer.module.css";
 import type { TelescopeSettings } from "./types";
 
 export type DisplayToggleName =
   | "horizontalCoordinates"
+  | "equatorialCoordinates"
   | "constellationLines"
+  | "equator"
+  | "ecliptic"
   | "atmosphere"
   | "ground";
 
@@ -23,11 +26,112 @@ type SkyViewerToolbarProps = {
   deepSkyMode: boolean;
   telescopeSettings: TelescopeSettings;
   toggles: DisplayToggles;
+  isEngineReady: boolean;
   onDeepSkyModeToggle: () => void;
   onTelescopeSettingsSave: () => void;
   onTelescopeSettingsChange: (settings: TelescopeSettings) => void;
-  onToggle: (name: DisplayToggleName) => void;
+  onToggle: (name: DisplayToggleName, enabled?: boolean) => void;
 };
+
+const COORDINATE_OPTIONS: { name: DisplayToggleName; label: string }[] = [
+  { name: "horizontalCoordinates", label: "지평좌표" },
+  { name: "equatorialCoordinates", label: "적도좌표" },
+];
+
+const LINE_OPTIONS: { name: DisplayToggleName; label: string }[] = [
+  { name: "constellationLines", label: "별자리선" },
+  { name: "equator", label: "적도" },
+  { name: "ecliptic", label: "황도" },
+];
+
+function DisplayOptionsMenu({
+  label,
+  icon,
+  options,
+  toggles,
+  isOpen,
+  isEngineReady,
+  onOpenToggle,
+  onClose,
+  onToggle,
+}: {
+  label: string;
+  icon: ToolbarIconName;
+  options: { name: DisplayToggleName; label: string }[];
+  toggles: DisplayToggles;
+  isOpen: boolean;
+  isEngineReady: boolean;
+  onOpenToggle: () => void;
+  onClose: () => void;
+  onToggle: SkyViewerToolbarProps["onToggle"];
+}) {
+  const menuId = useId();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const isActive = options.some((option) => toggles[option.name]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handlePointerDown(event: PointerEvent) {
+      if (event.target instanceof Node && !wrapperRef.current?.contains(event.target)) {
+        onClose();
+      }
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      onClose();
+      buttonRef.current?.focus();
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  return (
+    <div
+      className={styles.toolbarSettingsWrapper}
+      ref={wrapperRef}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) onClose();
+      }}
+    >
+      <button
+        ref={buttonRef}
+        type="button"
+        className={isActive || isOpen ? styles.active : ""}
+        onClick={onOpenToggle}
+        aria-label={label}
+        aria-expanded={isOpen}
+        aria-controls={isOpen ? menuId : undefined}
+        title={label}
+      >
+        <ToolbarIcon name={icon} />
+      </button>
+      {isOpen && (
+        <section id={menuId} className={styles.toolbarLineMenu} aria-label={label}>
+          {options.map((option) => (
+            <label key={option.name}>
+              <input
+                type="checkbox"
+                checked={toggles[option.name]}
+                disabled={!isEngineReady}
+                onChange={(event) => onToggle(option.name, event.target.checked)}
+              />
+              <span>{option.label}</span>
+            </label>
+          ))}
+        </section>
+      )}
+    </div>
+  );
+}
 
 function ToolbarIcon({ name }: { name: ToolbarIconName }) {
   if (name === "constellation") {
@@ -45,7 +149,7 @@ function ToolbarIcon({ name }: { name: ToolbarIconName }) {
 
   if (name === "horizontal") {
     return (
-      <svg viewBox="0 0 48 48" aria-hidden="true">
+      <svg className={styles.coordinateToolbarIcon} viewBox="0 0 48 48" aria-hidden="true">
         <circle cx="24" cy="24" r="18" />
         <path d="M6 24h36M24 6c5 5 7.5 11 7.5 18S29 37 24 42M24 6c-5 5-7.5 11-7.5 18S19 37 24 42M10.5 14.5h27M10.5 33.5h27" />
       </svg>
@@ -100,6 +204,7 @@ export function SkyViewerToolbar({
   deepSkyMode,
   telescopeSettings,
   toggles,
+  isEngineReady,
   onDeepSkyModeToggle,
   onTelescopeSettingsSave,
   onTelescopeSettingsChange,
@@ -107,6 +212,8 @@ export function SkyViewerToolbar({
 }: SkyViewerToolbarProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isDifficultyInfoOpen, setIsDifficultyInfoOpen] = useState(false);
+  const [openLineMenu, setOpenLineMenu] = useState<"coordinates" | "lines" | null>(null);
+  const closeLineMenu = useCallback(() => setOpenLineMenu(null), []);
   const [saveState, setSaveState] = useState<"idle" | "saved">("idle");
 
   function updateTelescopeSetting(
@@ -128,26 +235,28 @@ export function SkyViewerToolbar({
 
   return (
     <div className={styles.bottomToolbar} aria-label="표시 옵션">
-      <button
-        type="button"
-        className={toggles.constellationLines ? styles.active : ""}
-        onClick={() => onToggle("constellationLines")}
-        aria-label={`별자리선 ${toggles.constellationLines ? "끄기" : "켜기"}`}
-        aria-pressed={toggles.constellationLines}
-        title={`별자리선 ${toggles.constellationLines ? "끄기" : "켜기"}`}
-      >
-        <ToolbarIcon name="constellation" />
-      </button>
-      <button
-        type="button"
-        className={toggles.horizontalCoordinates ? styles.active : ""}
-        onClick={() => onToggle("horizontalCoordinates")}
-        aria-label={`지평좌표 ${toggles.horizontalCoordinates ? "끄기" : "켜기"}`}
-        aria-pressed={toggles.horizontalCoordinates}
-        title={`지평좌표 ${toggles.horizontalCoordinates ? "끄기" : "켜기"}`}
-      >
-        <ToolbarIcon name="horizontal" />
-      </button>
+      <DisplayOptionsMenu
+        label="별자리선"
+        icon="constellation"
+        options={LINE_OPTIONS}
+        toggles={toggles}
+        isOpen={openLineMenu === "lines"}
+        isEngineReady={isEngineReady}
+        onOpenToggle={() => setOpenLineMenu((current) => current === "lines" ? null : "lines")}
+        onClose={closeLineMenu}
+        onToggle={onToggle}
+      />
+      <DisplayOptionsMenu
+        label="좌표계"
+        icon="horizontal"
+        options={COORDINATE_OPTIONS}
+        toggles={toggles}
+        isOpen={openLineMenu === "coordinates"}
+        isEngineReady={isEngineReady}
+        onOpenToggle={() => setOpenLineMenu((current) => current === "coordinates" ? null : "coordinates")}
+        onClose={closeLineMenu}
+        onToggle={onToggle}
+      />
       <button
         type="button"
         className={toggles.atmosphere ? styles.active : ""}
