@@ -334,13 +334,13 @@ def cached_world_dem(bounds):
     known = global_dem_names()
     if known is None:
         return None
-    west, south, east, north = bounds
+    from app.services.geospatial_assets import prepare_dem, dem_mosaic_bounds
+    west, south, east, north = dem_mosaic_bounds(bounds)
     for lat in range(math.floor(south), math.ceil(north)):
         for lon in range(math.floor(west), math.ceil(east)):
             name = dem_tile(lat, lon)
             if name in known and cached_dem_tile(name) is None:
                 return None
-    from app.services.geospatial_assets import prepare_dem
     try:
         with MOSAIC_LOCK:
             return prepare_dem(bounds, world_dem_root() / "regions", allow_download=False)

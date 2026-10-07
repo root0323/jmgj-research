@@ -7,6 +7,8 @@ from unittest.mock import patch, Mock
 
 import h5py
 import numpy as np
+import rasterio
+from rasterio.transform import from_origin
 
 from app import local_config
 from app.services import geospatial_assets as assets
@@ -17,6 +19,59 @@ import requests
 
 
 class GeospatialTests(unittest.TestCase):
+    def test_point_grid_mosaics_cover_fractional_windows_without_false_nodata_edges(self):
+        # Real-world failing extents: north/south tile seam, west/east seam,
+        # southern hemisphere, and a high-latitude tile with wider columns.
+        for latitude, longitude, width in ((38.119, 128.465, 1200),
+                                           (-33.4489, -70.6693, 1200),
+                                           (69.6492, 18.9553, 600)):
+            with self.subTest(latitude=latitude), tempfile.TemporaryDirectory() as folder:
+                root = Path(folder)
+                bounds = assets.region_bounds(latitude, longitude)
+                aligned = assets.dem_mosaic_bounds(bounds)
+                self.assertEqual(aligned, assets.dem_mosaic_bounds(aligned))
+                import math
+                paths = {}
+                for lat in range(math.floor(aligned[1]), math.ceil(aligned[3])):
+                    for lon in range(math.floor(aligned[0]), math.ceil(aligned[2])):
+                        name = assets.dem_tile(lat, lon)
+                        path = root / (name + '.tif')
+                        with rasterio.open(path, 'w', driver='GTiff', count=1, width=width,
+                                           height=1200, dtype='float32', crs='EPSG:4326',
+                                           transform=from_origin(lon - 1/(2*width), lat+1+1/2400, 1/width, 1/1200),
+                                           nodata=-9999, compress='deflate') as dst:
+                            dst.write(np.full((1,1200,width), 100 + lat, dtype='float32'))
+                        paths[name] = path
+                before = {name: path.read_bytes() for name, path in paths.items()}
+                with patch('app.services.world_dem.global_dem_names', return_value=set(paths)), \
+                     patch('app.services.world_dem.cached_dem_tile', side_effect=paths.get), \
+                     patch('requests.get', side_effect=AssertionError('network')):
+                    output = assets.prepare_dem(bounds, root / 'region', allow_download=False)
+                with rasterio.open(output) as src:
+                    array = src.read(1, masked=True)
+                    self.assertFalse(np.ma.getmaskarray(array).any())
+                    self.assertTrue(set(np.unique(array)).issubset({100+int(name.split('_')[4][1:]) * (-1 if '_S' in name else 1) for name in paths}))
+                    self.assertLessEqual(src.bounds.left, bounds[0])
+                    self.assertLessEqual(src.bounds.bottom, bounds[1])
+                    self.assertGreaterEqual(src.bounds.right + 1e-10, bounds[2])
+                    self.assertGreaterEqual(src.bounds.top + 1e-10, bounds[3])
+                self.assertEqual(before, {name: path.read_bytes() for name, path in paths.items()})
+
+    def test_actual_dem_nodata_is_rejected_instead_of_filled(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            path = root / 'source.tif'
+            with rasterio.open(path, 'w', driver='GTiff', count=1, width=1200, height=1200,
+                               dtype='float32', crs='EPSG:4326',
+                               transform=from_origin(6-1/2400, 1+1/2400, 1/1200, 1/1200), nodata=-9999) as dst:
+                array = np.full((1,1200,1200),100,dtype='float32')
+                array[0,600,600] = -9999
+                dst.write(array)
+            with patch('app.services.world_dem.global_dem_names', return_value={assets.dem_tile(0,6)}), \
+                 patch('app.services.world_dem.cached_dem_tile', return_value=path):
+                with self.assertRaises(assets.AssetError):
+                    assets.prepare_dem((6.2,.2,6.8,.8), root / 'region', allow_download=False)
+
     def test_local_setup_requires_origin_csrf_and_does_not_echo_keys(self):
         server = ThreadingHTTPServer(("127.0.0.1", 0), local_setup.Handler)
         port = server.server_address[1]

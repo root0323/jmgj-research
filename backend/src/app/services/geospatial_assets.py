@@ -101,6 +101,21 @@ def download(url: str, destination: Path, token: str = "", max_bytes: int = 300_
         temporary.unlink(missing_ok=True)
 
 
+def dem_mosaic_bounds(bounds):
+    """Cover the request on the GLO-90 point grid, including whole edge pixels.
+
+    Arbitrary fractional merge windows can leave a nodata row/column after
+    Rasterio rounds source windows. GLO-90 samples are centered on multiples
+    of 1/1200 degree; align cell edges half a sample away from those centers.
+    The tiny tolerance makes an already aligned boundary idempotent.
+    """
+    step = 1 / 1200
+    west, south, east, north = bounds
+    lower = lambda value: (math.floor(value / step + .5 + 1e-8) - .5) * step
+    upper = lambda value: (math.ceil(value / step + .5 - 1e-8) - .5) * step
+    return lower(west), lower(south), upper(east), upper(north)
+
+
 def prepare_dem(bounds, root: Path, progress=lambda message: None, *, allow_download: bool = True) -> Path:
     import numpy as np
     import rasterio
@@ -117,8 +132,9 @@ def prepare_dem(bounds, root: Path, progress=lambda message: None, *, allow_down
                 raise AssetError("로컬에 DEM 전체 목록이 없습니다.")
             download(f"{DEM_BASE}/tileList.txt", manifest, max_bytes=5_000_000)
         known = set(manifest.read_text().splitlines())
+    bounds = dem_mosaic_bounds(bounds)
     west, south, east, north = bounds
-    identity = hashlib.sha256(json.dumps(bounds).encode()).hexdigest()[:16]
+    identity = hashlib.sha256(json.dumps({"bounds": bounds, "grid": "point-1200-v1"}).encode()).hexdigest()[:16]
     output_path = root / f"terrain-{identity}.tif"
     if output_path.exists():
         return output_path
@@ -141,7 +157,7 @@ def prepare_dem(bounds, root: Path, progress=lambda message: None, *, allow_down
                 else:
                     # Only official manifest absence is ocean; HTTP failures never become sea level.
                     mem = stack.enter_context(MemoryFile())
-                    src = stack.enter_context(mem.open(driver="GTiff", height=1200, width=1200, count=1, dtype="float32", crs="EPSG:4326", transform=from_origin(lon, lat + 1, 1 / 1200, 1 / 1200)))
+                    src = stack.enter_context(mem.open(driver="GTiff", height=1200, width=1200, count=1, dtype="float32", crs="EPSG:4326", transform=from_origin(lon - 1 / 2400, lat + 1 + 1 / 2400, 1 / 1200, 1 / 1200)))
                     src.write(np.zeros((1, 1200, 1200), dtype="float32"))
                     sources.append(src)
         terrain, transform = merge(sources, bounds=bounds, res=1 / 1200, nodata=-9999)
