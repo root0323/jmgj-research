@@ -360,7 +360,6 @@
   outline-offset: -2px;
 }
 
-.toolbarSettingsPanel,
 .toolbarDifficultyPanel {
   position: absolute;
   right: 0;
@@ -378,7 +377,6 @@
   transform-origin: right bottom;
 }
 
-.toolbarSettingsPanel h2,
 .toolbarDifficultyPanel h2 {
   margin: 0;
   color: #ffffff;
@@ -417,51 +415,6 @@
 .toolbarDifficultyPanel li span {
   color: #f8fafc;
   font-size: 12px;
-}
-
-.toolbarSettingsPanel label {
-  display: grid;
-  gap: 6px;
-}
-
-.toolbarSettingsPanel span {
-  color: #cbd5e1;
-  font-size: 12px;
-}
-
-.toolbarSettingsPanel input {
-  width: 100%;
-  min-width: 0;
-  height: 36px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.09);
-  color: #ffffff;
-  font: inherit;
-  outline: none;
-  padding: 0 10px;
-}
-
-.toolbarSettingsPanel input:focus {
-  border-color: #7dd3fc;
-}
-
-.toolbarSaveButton {
-  width: 100%;
-  height: 36px;
-  border: 1px solid rgba(74, 222, 128, 0.34);
-  border-radius: 6px;
-  background: rgba(22, 101, 52, 0.45);
-  color: #dcfce7;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.toolbarSaveButton:hover {
-  background: rgba(22, 101, 52, 0.62);
-  color: #ffffff;
 }
 
 .bottomToolbar button:hover {
