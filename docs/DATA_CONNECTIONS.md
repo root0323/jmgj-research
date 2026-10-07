@@ -34,12 +34,37 @@ $env:PYTHONPATH = Join-Path (Get-Location) 'backend/src'
 
 원본 연구 자료가 없으므로 새로운 공개 자료를 사용한 결과의 과학적 타당성은 기존 관측 CSV 등과 별도로 검증해야 한다. 모델 계수의 재보정은 이번 연결 작업의 범위에 포함하지 않는다.
 
+## 연별 Black Marble의 원본 해상도 유지·용량 축소
+
+앱의 정적인 야간광 기준 자료는 NOAA-20 **VJ146A4 Version 2 연별 합성 자료**를 사용한다. 현재 3004 설정 화면의 자동 다운로드는 기존 VNP46A3 월별 경로다. 연별 자료의 자동 다운로드·지역 패키지 배포는 아직 구현하지 않았으며, 먼저 사용자가 내려받은 H5 파일로 아래 변환과 로컬 연결을 검증한다.
+
+저장소 루트에서 실행:
+
+```powershell
+$env:PYTHONPATH = Join-Path (Get-Location) 'backend/src'
+.venv/Scripts/python.exe -m app.scripts.compact_black_marble `
+  'C:\data\VJ146A4.A2025001.h30v05.002.2026072180152.h5' `
+  '.local-data\black-marble\compact\VJ146A4.A2025001.h30v05.002.2026072180152.h5' `
+  --report '.local-data\black-marble\compact\h30v05-2025.report.json'
+```
+
+- `AllAngle_Composite_Snow_Free`, `AllAngle_Composite_Snow_Free_Quality`, `lat`, `lon`만 남긴다. 모든 픽셀의 원본 값·자료형·해상도와 데이터셋 속성(단위, scale/offset, 결측값 등), 원본 전역 속성을 보존한다. 재표본화·반올림·품질 마스크 변경을 하지 않는다.
+- gzip+shuffle로 압축하며, 저장 완료 전에 남긴 데이터 **전체를 비트 단위로 비교**한다. 원본 파일은 읽기 전용으로 열고 기존 출력 파일은 덮어쓰지 않는다. 보고서에 원본·결과 파일 SHA-256, 각 데이터셋 해시와 바이트 수를 기록한다.
+- 결과는 기존 앱 읽기 함수가 사용하는 경로를 유지한 **앱용 HDF5 부분 자료**다. 원본 NASA HDF-EOS 제품 전체를 대체하지 않는다. 다른 관측각·눈 덮임·관측 횟수·표준편차를 이용하는 후속 연구를 위해 원본을 별도로 보관한다.
+- 변환 결과의 절대 경로를 로컬 `.env`의 `BLACK_MARBLE_H5_PATH`로 연결할 수 있다. 실제 하늘 밝기 계산에는 해당 관측 장소를 덮는 DEM과 기상·달 정보도 필요하다. 한 타일만 연결한 상태는 전 세계 지원 완료를 뜻하지 않는다.
+- 배포 목표는 필요한 지역 패키지만 다운로드해 앱 저장공간에서 재사용하는 방식이다. 현재 변환 도구는 한 파일씩 처리한다. 전 세계 패키지 다운로드·색인·갱신·디스크 관리와 Windows 앱 패키징은 추후 구현한다.
+
+2026-10-07 실파일 검증: 2025년 h30v05 타일(서울·제주 포함)의 원본 **102,997,018 bytes → 3,551,132 bytes**. 2400×2400 밝기·품질 배열과 2400개씩의 위도·경도 값이 일치했다. 이 한 타일의 압축률을 전 세계 자료의 확정 용량으로 사용하지 않는다. 앞서 계산한 약 15.6GB는 전 세계 540개 타일의 밝기+품질 배열을 모두 무압축으로 보관했을 때의 값이며, 실제 압축 후 다운로드 용량과 다르다.
+
+앱 읽기 함수로 서울 21,419개·제주 11,483개의 유효 픽셀 레코드를 비교해 동일함을 확인했다. 서울의 기존 로컬 DEM과 **합성 시험 기상값**을 넣은 `POST /api/difficulty/evaluate-cached` 통합 검증에서도 두 파일의 전체 응답이 같았고 `source=black-marble-dem`이었다. 이는 압축 전후의 동작 동일성 확인이며 실제 기상 조회나 모델의 과학적 정확도 검증이 아니다. 로컬 앱에는 압축 파일과 서울 DEM을 연결했다. 제주를 포함한 다른 장소의 모델 계산에는 해당 지역 DEM도 필요하다.
+
 ## 출처
 
 새 제공자는 웹의 설정 → 출처에 함께 기록한다. 공식 링크:
 
 - [Copernicus DEM 공개 자료와 라이선스](https://copernicus-dem-90m.s3.amazonaws.com/readme.html)
 - [NASA Black Marble VNP46A3](https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/VNP46A3/)
+- [NASA Black Marble VJ146A4 연별 자료](https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/VJ146A4/)
 - [NASA CMR API](https://cmr.earthdata.nasa.gov/search/site/docs/search/api.html)
 - [KakaoMap 개발자 문서](https://developers.kakao.com/docs/ko/kakaomap/common)
 - [VWorld](https://www.vworld.kr/)
