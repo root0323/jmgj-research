@@ -180,8 +180,59 @@
   background: rgba(125, 211, 252, 0.17);
 }
 
+.sourceGroups {
+  display: grid;
+  gap: 28px;
+}
+
+.sourceGroup h4 {
+  margin: 0 0 10px;
+  color: #cbd5e1;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.sourceGroup ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sourceGroup li {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.sourceGroup a {
+  color: #bae6fd;
+  font-size: 13px;
+  line-height: 1.6;
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.sourceGroup a:hover {
+  text-decoration: underline;
+}
+
+.sourceGroup p {
+  margin: 4px 0 0;
+  color: #94a3b8;
+  font-size: 12px;
+  line-height: 1.7;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.sourceGroup .sourceNotice {
+  display: inline-block;
+  margin-top: 4px;
+  font-size: 11px;
+}
+
 .window button:focus-visible,
 .window input:focus-visible,
+.window a:focus-visible,
 .content:focus-visible {
   outline: 2px solid #7dd3fc;
   outline-offset: 2px;

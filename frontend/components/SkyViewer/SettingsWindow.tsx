@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import type { TelescopeSettings } from "./types";
+import { DATA_SOURCE_GROUPS } from "./dataSources";
 import styles from "./SettingsWindow.module.css";
 
 const SETTINGS_TABS = [
@@ -131,6 +132,30 @@ export function SettingsWindow({
             className={styles.content}
           >
             <h3>{tab.label}</h3>
+            {tab.id === "sources" && (
+              <div className={styles.sourceGroups}>
+                {DATA_SOURCE_GROUPS.map((group) => (
+                  <section key={group.title} className={styles.sourceGroup}>
+                    <h4>{group.title}</h4>
+                    <ul>
+                      {group.sources.map((source) => (
+                        <li key={source.url}>
+                          <a href={source.url} target="_blank" rel="noopener noreferrer">
+                            {source.name} <span aria-hidden="true">↗</span>
+                          </a>
+                          <p>{source.description}</p>
+                          {source.notice && (
+                            <a className={styles.sourceNotice} href={source.notice.url} target="_blank" rel="noopener noreferrer">
+                              {source.notice.label}
+                            </a>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  </section>
+                ))}
+              </div>
+            )}
             {tab.id === "telescope" && (
               <div className={styles.telescopeSettings}>
                 <div className={styles.fields}>
