@@ -120,6 +120,7 @@ export type BrightStarCatalog = {
 };
 
 export type SearchSuggestion = {
+  kind?: "milkyWay";
   key: string;
   label: string;
   obj: SweObj;

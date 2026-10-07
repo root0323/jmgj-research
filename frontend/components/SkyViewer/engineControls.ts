@@ -225,6 +225,36 @@ export function configureEngineLandscape(engine: StellariumEngine) {
   landscapes.update?.();
 }
 
+export function configureEngineMilkyWay(engine: StellariumEngine) {
+  const milkyway = getEngineModule(engine, "milkyway");
+  if (!milkyway) return;
+
+  addDataSource(milkyway, "/stellarium/skydata/surveys/milkyway", "milkyway");
+}
+
+export function focusEngineMilkyWay(engine: StellariumEngine) {
+  const observer = engine.observer ?? (engine.core?.observer as SweObj | undefined);
+  if (!observer || !engine.convertFrame) return;
+
+  // Project the local zenith onto the galactic plane to show its highest
+  // visible part, instead of pointing below the horizon at the galactic centre.
+  const zenith = engine.convertFrame(observer, "OBSERVED", "ICRF", [0, 0, 1]);
+  if (zenith.length < 3 || !zenith.slice(0, 3).every(Number.isFinite)) return;
+  // ICRS north galactic pole: third row of ERFA/SOFA's equatorial-to-galactic matrix.
+  const pole = [-0.8676661490190047, -0.1980763734312015, 0.4559837761750669];
+  const dot = zenith.slice(0, 3).reduce((sum, value, index) => sum + value * pole[index], 0);
+  const projected = zenith.slice(0, 3).map((value, index) => value - dot * pole[index]);
+  const length = Math.hypot(...projected);
+  if (length < 1e-8) return;
+  const direction = projected.map((value) => value / length);
+  const observed = engine.convertFrame(observer, "ICRF", "OBSERVED", direction);
+  if (observed.length < 3 || !observed.slice(0, 3).every(Number.isFinite)) return;
+
+  trySetValue(engine, ["milkyway.visible"], true);
+  engine.lookAt?.(observed.slice(0, 3) as [number, number, number], 1.2);
+  engine.zoomTo?.(90 * DEG_TO_RAD, 1.2);
+}
+
 export function setInitialHorizonView(engine: StellariumEngine) {
   const altitude = 18 * DEG_TO_RAD;
   const lookVector: [number, number, number] = [
@@ -360,6 +390,7 @@ export function applyNightSkyDefaults(engine: StellariumEngine) {
   trySetValue(engine, ["constellations.bounds_visible"], false);
   trySetValue(engine, TOGGLE_PATHS.atmosphere, false);
   trySetValue(engine, TOGGLE_PATHS.ground, true);
+  trySetValue(engine, ["milkyway.visible"], true);
   trySetValue(engine, ["planets.scale_moon"], false);
   trySetValue(
     engine,

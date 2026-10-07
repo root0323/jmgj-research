@@ -24,8 +24,10 @@ import {
   applyDeepSkyMode,
   applyNightSkyDefaults,
   configureEngineLandscape,
+  configureEngineMilkyWay,
   createConstellationLineObjects,
   ensureDssDataSource,
+  focusEngineMilkyWay,
   getEngineModule,
   loadStellariumScript,
   patchWasmMemoryHelpers,
@@ -709,6 +711,19 @@ export default function SkyViewer() {
         patchWasmMemoryHelpers(engine);
         addOfficialPlanetDataSources(engine);
         configureEngineLandscape(engine);
+        configureEngineMilkyWay(engine);
+        const milkyway = getEngineModule(engine, "milkyway");
+        if (milkyway) {
+          for (const alias of ["은하수", "Milky Way", "MilkyWay", "은하수 (Milky Way)"]) {
+            searchSuggestionsRef.current.push({
+              kind: "milkyWay",
+              key: normalizeSearchKey(alias),
+              label: "은하수 (Milky Way)",
+              obj: milkyway,
+              priority: 90,
+            });
+          }
+        }
         setObserverLocation(
           engine,
           SEOUL.latitude,
@@ -879,6 +894,13 @@ export default function SkyViewer() {
   function focusSuggestion(item: SearchSuggestion) {
     const engine = engineRef.current;
     if (!engine) return;
+    if (item.kind === "milkyWay") {
+      clearSelectedTarget();
+      setIsObjectInfoOpen(false);
+      setQuery(item.label);
+      focusEngineMilkyWay(engine);
+      return;
+    }
     setQuery(item.label);
     focusTarget(item.obj, item.label, item.vector);
   }
@@ -1041,6 +1063,11 @@ export default function SkyViewer() {
       const exactSuggestion =
         suggestions.find((item) => item.key === normalizedTerm) ??
         searchSuggestionsRef.current.find((item) => item.key === normalizedTerm);
+      const milkyWaySuggestion = exactSuggestion ?? suggestions[0];
+      if (milkyWaySuggestion?.kind === "milkyWay") {
+        focusSuggestion(milkyWaySuggestion);
+        return;
+      }
       const engineTarget = findEngineObject(engine, term);
       const catalogTarget = catalogSearchRef.current.get(normalizedTerm);
       const target =
