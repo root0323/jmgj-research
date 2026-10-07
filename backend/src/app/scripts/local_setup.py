@@ -38,7 +38,7 @@ HTML = """<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewp
 <label for="token">NASA Earthdata 다운로드 토큰</label><input id="token" name="token" type="password" autocomplete="off">
 <small>토큰은 이번 다운로드에만 사용하고 파일에 저장하지 않습니다. Black Marble은 실시간 관측값이 아닌 월별 위성 합성 자료입니다. 지형만 준비할 때는 토큰이 필요 없습니다.</small><br>
 <button type="submit">두 자료 준비</button><button type="button" id="terrain">지형만 준비</button></form><p id="status" role="status"></p></section>
-<section><h2>현재 연결 상태</h2><div id="connections"></div><p><a href="http://127.0.0.1:3001/">연구 웹 열기</a> · <a href="http://127.0.0.1:3005/">전 세계 연별 Black Marble 다운로드</a></p><small>자료와 키가 아직 없는 항목은 준비 완료로 표시하지 않습니다. 자료의 출처·크레딧은 연구 웹의 설정 → 출처에서 확인할 수 있습니다.</small></section>
+<section><h2>현재 연결 상태</h2><div id="connections"></div><p><a href="http://127.0.0.1:3001/">연구 웹 열기</a> · <a href="http://127.0.0.1:3005/">전 세계 연별 Black Marble 다운로드</a> · <a href="http://127.0.0.1:3006/">전 세계 DEM 다운로드</a></p><small>자료와 키가 아직 없는 항목은 준비 완료로 표시하지 않습니다. 자료의 출처·크레딧은 연구 웹의 설정 → 출처에서 확인할 수 있습니다.</small></section>
 </main><script>
 const csrf='__CSRF__';
 async function send(path,data){const r=await fetch(path,{method:'POST',headers:{'Content-Type':'application/json','X-Setup-CSRF':csrf},body:JSON.stringify(data)});const body=await r.json();if(!r.ok)throw Error(body.message);return body}

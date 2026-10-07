@@ -101,17 +101,22 @@ def download(url: str, destination: Path, token: str = "", max_bytes: int = 300_
         temporary.unlink(missing_ok=True)
 
 
-def prepare_dem(bounds, root: Path, progress=lambda message: None) -> Path:
+def prepare_dem(bounds, root: Path, progress=lambda message: None, *, allow_download: bool = True) -> Path:
     import numpy as np
     import rasterio
     from rasterio.merge import merge
     from rasterio.io import MemoryFile
     from rasterio.transform import from_origin
+    from app.services.world_dem import global_dem_names, cached_dem_tile
     root.mkdir(parents=True, exist_ok=True)
     manifest = root / "tileList.txt"
-    if not manifest.exists():
-        download(f"{DEM_BASE}/tileList.txt", manifest, max_bytes=5_000_000)
-    known = set(manifest.read_text().splitlines())
+    known = global_dem_names()
+    if known is None:
+        if not manifest.exists():
+            if not allow_download:
+                raise AssetError("로컬에 DEM 전체 목록이 없습니다.")
+            download(f"{DEM_BASE}/tileList.txt", manifest, max_bytes=5_000_000)
+        known = set(manifest.read_text().splitlines())
     west, south, east, north = bounds
     identity = hashlib.sha256(json.dumps(bounds).encode()).hexdigest()[:16]
     output_path = root / f"terrain-{identity}.tif"
@@ -123,8 +128,10 @@ def prepare_dem(bounds, root: Path, progress=lambda message: None) -> Path:
             for lon in range(math.floor(west), math.ceil(east)):
                 tile = dem_tile(lat, lon)
                 if tile in known:
-                    path = root / f"{tile}.tif"
+                    path = cached_dem_tile(tile) or root / f"{tile}.tif"
                     if not path.exists():
+                        if not allow_download:
+                            raise AssetError("필요한 DEM 타일이 아직 저장되지 않았습니다.")
                         progress(f"지형 자료 다운로드: {lat}°, {lon}°")
                         download(f"{DEM_BASE}/{tile}/{tile}.tif", path)
                     src = stack.enter_context(rasterio.open(path))
@@ -228,6 +235,12 @@ def cached_region(latitude: float, longitude: float, radius_km: float = 30) -> d
                     return region
         except (OSError, ValueError, KeyError, TypeError):
             continue
+    if annual:
+        from app.services.world_dem import cached_world_dem
+        bounds = region_bounds(latitude, longitude, radius_km)
+        dem = cached_world_dem(bounds)
+        if dem:
+            return {"bounds": bounds, "dem": str(dem), "radiusKm": radius_km, **annual}
     return None
 
 
