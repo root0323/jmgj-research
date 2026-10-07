@@ -1,4 +1,4 @@
-"""Verified, resumable copies of the public native Copernicus GLO-90 COGs.
+"""Verified, resumable, losslessly packed native Copernicus GLO-90 tiles.
 
 Keep tiles separately; never build a global raster in memory. The public S3
 listing freezes object lengths and ETags. No account or token is used.
@@ -24,6 +24,7 @@ import requests
 
 from app.local_config import setting
 from app.services.geospatial_assets import AssetError, DEM_BASE, DEM_CREDIT, asset_root, dem_tile, download
+from app.services.dem_storage import PACKED, ORIGINAL, file_hash, pack_tile, verify_storage
 
 PRODUCT = "Copernicus-GLO-90"
 NAME = re.compile(r"Copernicus_DSM_COG_30_([NS])(\d{2})_00_([EW])(\d{3})_00_DEM")
@@ -167,20 +168,38 @@ class WorldDEM:
         self.database = self.root / "index.sqlite"
         with closing(sqlite3.connect(self.database)) as database:
             database.execute("CREATE TABLE IF NOT EXISTS tiles (name TEXT PRIMARY KEY, bytes INTEGER NOT NULL, etag TEXT NOT NULL, sha256 TEXT NOT NULL, verified_at TEXT NOT NULL)")
+            database.execute("CREATE TABLE IF NOT EXISTS storage (name TEXT PRIMARY KEY, format TEXT NOT NULL, bytes INTEGER NOT NULL, sha256 TEXT NOT NULL, source_sha256 TEXT NOT NULL, array_sha256 TEXT NOT NULL, verified_at TEXT NOT NULL)")
             database.commit()
 
     def status(self):
         with closing(sqlite3.connect(self.database)) as database:
             count, size = database.execute("SELECT COUNT(*),COALESCE(SUM(bytes),0) FROM tiles").fetchone()
+            optimized, compressed, saved = database.execute(
+                "SELECT COUNT(*),COALESCE(SUM(s.format=?),0),COALESCE(SUM(t.bytes-s.bytes),0) "
+                "FROM storage s JOIN tiles t ON t.name=s.name", (PACKED,)).fetchone()
         total = sum(r["bytes"] for r in self.records)
         return {"product": PRODUCT, "total": len(self.records), "completed": count, "sourceBytes": total,
-                "completedBytes": size, "remainingSourceBytes": total-size,
+                "completedBytes": size-saved, "completedSourceBytes": size, "remainingSourceBytes": total-size,
+                "optimized": optimized, "compressed": compressed, "savedBytes": saved,
                 "freeBytes": shutil.disk_usage(self.root).free, "directory": str(self.root)}
 
     def _process(self, record, database, progress):
         name = record["name"]
         path = self.root / "tiles" / (name + ".tif")
+        compact = self.root / "compact" / (name + ".tif")
         saved = database.execute("SELECT bytes,etag,sha256 FROM tiles WHERE name=?", (name,)).fetchone()
+        stored = database.execute("SELECT format,bytes,sha256,source_sha256,array_sha256 FROM storage WHERE name=?", (name,)).fetchone()
+        if stored:
+            progress(f"저장된 압축 DEM 확인: {name}")
+            if not saved or saved != (record["bytes"], record["etag"], stored[3]):
+                raise AssetError("DEM 압축본과 원본 색인이 다릅니다.")
+            verify_storage(compact if stored[0] == PACKED else path, record, stored, verify_tile)
+            # A crash after the database commit can leave this owned duplicate.
+            if stored[0] == PACKED and path.exists():
+                if verify_tile(path, record) != stored[3]:
+                    raise AssetError("DEM 원본 해시가 다릅니다. 중복 원본을 유지합니다.")
+                path.unlink()
+            return
         if path.exists():
             progress(f"저장된 DEM 확인: {name}")
             sha = verify_tile(path, record)
@@ -214,9 +233,26 @@ class WorldDEM:
                 staging.rename(path)
             finally:
                 staging.unlink(missing_ok=True)
-        database.execute("INSERT OR REPLACE INTO tiles VALUES (?,?,?,?,?)",
-                         (name, record["bytes"], record["etag"], sha, datetime.now(timezone.utc).isoformat()))
-        database.commit()
+        progress(f"DEM 무손실 압축·전체 값 비교: {name}")
+        candidate = compact.with_suffix(".compact.tmp.tif")
+        try:
+            format_name, stored_bytes, stored_sha, digest = pack_tile(path, candidate, record, sha)
+            if file_hash(path) != sha:
+                raise AssetError("DEM 변환 중 원본 해시가 달라 중단했습니다. 원본을 유지합니다.")
+            if format_name == PACKED:
+                candidate.replace(compact)
+            timestamp = datetime.now(timezone.utc).isoformat()
+            # Readers switch to the verified compact file at the commit. The
+            # source is removed only afterward, never before full comparison.
+            with database:
+                database.execute("INSERT OR REPLACE INTO tiles VALUES (?,?,?,?,?)",
+                                 (name, record["bytes"], record["etag"], sha, timestamp))
+                database.execute("INSERT OR REPLACE INTO storage VALUES (?,?,?,?,?,?,?)",
+                                 (name, format_name, stored_bytes, stored_sha, sha, digest, timestamp))
+            if format_name == PACKED:
+                path.unlink()
+        finally:
+            candidate.unlink(missing_ok=True)
 
     def run(self, stopped, progress=lambda message: None):
         state = self.status()
@@ -234,7 +270,10 @@ class WorldDEM:
             with closing(sqlite3.connect(self.database, timeout=30)) as database:
                 self._process(record, database, progress)
 
-        records = iter(self.records)
+        # Convert already downloaded originals first, then receive new tiles.
+        with closing(sqlite3.connect(self.database)) as database:
+            ready = {row[0] for row in database.execute("SELECT name FROM tiles")}
+        records = iter(sorted(self.records, key=lambda record: record["name"] not in ready))
         with ThreadPoolExecutor(max_workers=4) as executor:
             pending = {executor.submit(process, record) for record in [next(records, None) for _ in range(8)] if record}
             try:
@@ -274,7 +313,17 @@ def cached_dem_tile(name):
     path = root / "tiles" / (name + ".tif")
     try:
         with closing(sqlite3.connect((root / "index.sqlite").as_uri() + "?mode=ro", uri=True)) as database:
-            row = database.execute("SELECT bytes FROM tiles WHERE name=?", (name,)).fetchone()
+            row = database.execute("SELECT bytes,sha256 FROM tiles WHERE name=?", (name,)).fetchone()
+            try:
+                stored = database.execute("SELECT format,bytes,source_sha256 FROM storage WHERE name=?", (name,)).fetchone()
+            except sqlite3.OperationalError:  # Previous native-copy index.
+                stored = None
+        if row and stored:
+            if stored[2] != row[1] or stored[0] not in (PACKED, ORIGINAL):
+                return None
+            if stored[0] == PACKED:
+                path = root / "compact" / (name + ".tif")
+            return path if path.stat().st_size == stored[1] else None
         return path if row and path.stat().st_size == row[0] else None
     except (OSError, sqlite3.Error):
         return None

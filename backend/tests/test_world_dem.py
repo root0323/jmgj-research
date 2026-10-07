@@ -17,6 +17,7 @@ import requests
 
 from app.scripts import download_world_dem as screen
 from app.services import world_dem as dem
+from app.services import dem_storage as storage
 
 
 def raw_tile(path, name, height=1200):
@@ -86,8 +87,121 @@ class WorldDEMTests(unittest.TestCase):
                 self.assertTrue(dem.WorldDEM(world.root).run(stopped))
             self.assertEqual(len(downloads),8)
             self.assertEqual(world.status()['completed'],8)
-            for name,source in sources.items():
-                self.assertEqual(source.read_bytes(),(world.root/'tiles'/(name+'.tif')).read_bytes())
+            self.assertEqual(world.status()['optimized'],8)
+            with patch.object(dem,'world_dem_root',return_value=world.root):
+                for name,source in sources.items():
+                    with rasterio.open(source) as original,rasterio.open(dem.cached_dem_tile(name)) as result:
+                        self.assertTrue(np.array_equal(original.read().view('uint32'),result.read().view('uint32')))
+                    self.assertFalse((world.root/'tiles'/(name+'.tif')).exists())
+
+    def test_legacy_raw_tiles_migrate_without_download_and_reduce_actual_bytes(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            world,sources=make_world(root)
+            record=world.records[0]
+            source=sources[record['name']]
+            original_bytes=source.read_bytes()
+            raw=world.root/'tiles'/source.name
+            raw.parent.mkdir()
+            shutil.copyfile(source,raw)
+            with closing(sqlite3.connect(world.database)) as database:
+                database.execute('INSERT INTO tiles VALUES (?,?,?,?,?)',(record['name'],record['bytes'],record['etag'],storage.file_hash(source),'before'))
+                database.commit()
+                database.execute('DROP TABLE storage')
+                database.commit()
+            world=dem.WorldDEM(world.root)
+            with patch.object(dem,'download',side_effect=AssertionError('redownload')):
+                self.assertTrue(world.run(threading.Event()))
+                self.assertTrue(world.run(threading.Event()))
+            state=world.status()
+            self.assertEqual(state['optimized'],1)
+            self.assertGreater(state['savedBytes'],0)
+            self.assertEqual(state['completedSourceBytes'],record['bytes'])
+            self.assertEqual(state['completedBytes']+state['savedBytes'],record['bytes'])
+            self.assertFalse(raw.exists())
+            compact=world.root/'compact'/source.name
+            self.assertEqual(compact.stat().st_size,state['completedBytes'])
+            self.assertEqual(source.read_bytes(),original_bytes)
+
+    def test_failed_conversion_keeps_owned_raw_and_ready_index(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            world,sources=make_world(root)
+            record=world.records[0]
+            raw=world.root/'tiles'/(record['name']+'.tif')
+            raw.parent.mkdir()
+            shutil.copyfile(sources[record['name']],raw)
+            with closing(sqlite3.connect(world.database)) as database:
+                database.execute('INSERT INTO tiles VALUES (?,?,?,?,?)',(record['name'],record['bytes'],record['etag'],storage.file_hash(raw),'before'))
+                database.commit()
+                with patch.object(dem,'pack_tile',side_effect=dem.AssetError('conversion failed')):
+                    with self.assertRaisesRegex(dem.AssetError,'conversion failed'):
+                        world._process(record,database,lambda message:None)
+            self.assertEqual(world.status()['optimized'],0)
+            self.assertEqual(raw.read_bytes(),sources[record['name']].read_bytes())
+            with patch.object(dem,'world_dem_root',return_value=world.root):
+                self.assertEqual(dem.cached_dem_tile(record['name']),raw)
+
+    def test_cleanup_interruption_resumes_from_registered_compact_file(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            world,sources=make_world(root)
+            record=world.records[0]
+            raw=world.root/'tiles'/(record['name']+'.tif')
+            raw.parent.mkdir()
+            shutil.copyfile(sources[record['name']],raw)
+            unlink=Path.unlink
+            def interrupted(path,*args,**kwargs):
+                if path==raw:raise PermissionError('interrupted after commit')
+                return unlink(path,*args,**kwargs)
+            with closing(sqlite3.connect(world.database)) as database,patch.object(Path,'unlink',interrupted):
+                with self.assertRaises(PermissionError):world._process(record,database,lambda message:None)
+            self.assertTrue(raw.exists())
+            self.assertEqual(world.status()['optimized'],1)
+            with patch.object(dem,'world_dem_root',return_value=world.root):
+                self.assertEqual(dem.cached_dem_tile(record['name']).parent.name,'compact')
+            with patch.object(dem,'download',side_effect=AssertionError('redownload')):
+                self.assertTrue(world.run(threading.Event()))
+            self.assertFalse(raw.exists())
+
+    def test_corrupt_compact_file_is_rejected_on_resume(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            world,sources=make_world(root)
+            with patch.object(dem,'download',side_effect=lambda url,path,**kwargs:shutil.copyfile(sources[Path(url).stem],path)),patch.object(dem,'asset_root',return_value=root/'empty'):
+                self.assertTrue(world.run(threading.Event()))
+            compact=next((world.root/'compact').glob('*.tif'))
+            data=bytearray(compact.read_bytes());data[-1]^=1;compact.write_bytes(data)
+            with self.assertRaisesRegex(dem.AssetError,'해시'):
+                world.run(threading.Event())
+
+    def test_lossless_high_latitude_float_bits_masks_and_metadata(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root=Path(folder)
+            name=dem.dem_tile(80,12)
+            raw=root/'high-latitude.tif'
+            values=np.random.default_rng(23).uniform(-10,2000,(1,1200,240)).astype('float32')
+            values[0,0,:3]=[-0.0,0.0,-9999]
+            with rasterio.open(raw,'w',driver='GTiff',width=240,height=1200,count=1,
+                               dtype='float32',crs='EPSG:4326',transform=from_origin(12,81,1/240,1/1200),nodata=-9999) as output:
+                output.write(values)
+                output.update_tags(AREA_OR_POINT='Point',TIFFTAG_COPYRIGHT='test credit')
+                output.update_tags(1,description='native elevation')
+                output.units=('m',);output.scales=(1.0,);output.offsets=(0.0,)
+            record=dict(name=name,bytes=raw.stat().st_size,etag=hashlib.md5(raw.read_bytes(),usedforsecurity=False).hexdigest())
+            sha=dem.verify_tile(raw,record)
+            candidate=root/'packed.tif'
+            format_name,size,stored_sha,digest=storage.pack_tile(raw,candidate,record,sha)
+            self.assertEqual(format_name,storage.PACKED)
+            storage.verify_storage(candidate,record,(format_name,size,stored_sha,sha,digest),dem.verify_tile)
+            self.assertEqual(storage.file_hash(raw),sha)
+            with rasterio.open(candidate) as result:
+                self.assertTrue(np.array_equal(result.read().view('uint32'),values.view('uint32')))
+                self.assertEqual(result.read_masks()[0,0,2],0)
+                self.assertEqual(result.transform.a,1/240)
+                self.assertEqual(result.tags()['TIFFTAG_COPYRIGHT'],'test credit')
+                self.assertEqual(result.units,('m',))
+                self.assertFalse(result.overviews(1))
 
     def test_bad_download_never_becomes_app_visible(self):
         with tempfile.TemporaryDirectory() as folder:

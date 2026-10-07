@@ -87,6 +87,19 @@ class Handler(BaseHTTPRequestHandler):
         if (not self.valid_host() or self.headers.get("Origin") != ORIGIN or
                 not hmac.compare_digest(self.headers.get("X-Download-CSRF", ""), CSRF) or
                 self.headers.get("Content-Type") != "application/json"):
+            # Drain only a bounded body before closing. On Windows closing
+            # with unread POST bytes can reset the socket instead of returning
+            # the intended 403 response. No rejected input is used or logged.
+            timeout = self.connection.gettimeout()
+            try:
+                length = int(self.headers.get("Content-Length", "0"))
+                if 0 < length <= 16384:
+                    self.connection.settimeout(1)
+                    self.rfile.read(length)
+            except (ValueError, OSError):
+                pass
+            finally:
+                self.connection.settimeout(timeout)
             return self.respond(403, {"message": "로컬 다운로드 화면에서 다시 시도해 주세요."})
         try:
             length = int(self.headers.get("Content-Length", "0"))
