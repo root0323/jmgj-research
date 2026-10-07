@@ -93,6 +93,26 @@ class CachedWeatherTests(unittest.TestCase):
         self.assertEqual(config.moon_phase_angle_deg, 0)
         self.assertEqual(config.moon_cloud_transmission, 0)
 
+    def test_only_known_zero_cloud_cover_can_omit_cloud_base(self):
+        for cloud in (0, .01, 20, None):
+            with self.subTest(cloud=cloud):
+                data = payload()
+                data['responses']['p3'] = {'data_3h': {'time': fixture()['p2']['data_1h']['time'],
+                                                       'totalcloudcover': [cloud] * 24}}
+                data['responses']['p4'] = {}
+                with patch('app.api.endpoints.difficulty.fetch_black_marble_dem_sqm',
+                           return_value={'sqm': 20.5, 'source': 'black-marble-dem'}) as model, \
+                     patch('requests.get', side_effect=AssertionError('network')):
+                    result = self.client.post('/api/difficulty/evaluate-cached', json=data).json()
+                if cloud == 0:
+                    self.assertEqual(result['missing'], [])
+                    self.assertEqual(result['source'], 'black-marble-dem')
+                    self.assertEqual(model.call_args.args[2]['cloudFraction'], 0)
+                    self.assertEqual(model.call_args.args[2]['cloudBaseKm'], 30)
+                else:
+                    self.assertIn('convectivecloudbase_pressure', result['missing'])
+                    self.assertFalse(model.called)
+
     def test_free_weather_uses_matching_native_moon_without_inventing_seeing(self):
         data = payload()
         data["responses"]["p1"] = {}

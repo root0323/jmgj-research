@@ -671,7 +671,9 @@ def evaluate_cached_weather(payload: CachedWeatherRequest):
         missing.append("aod550")
     if cloud_fraction is None:
         missing.append("totalcloudcover")
-    if pressure is None:
+    # A measured zero cloud cover needs no cloud-base input. Keep missing
+    # pressure blocking cloudy/unknown skies; do not fabricate a cloud height.
+    if pressure is None and cloud_fraction != 0:
         missing.append("convectivecloudbase_pressure")
     # Seeing does not enter the radiative brightness model. Keep it optional;
     # never invent an arcsecond value from wind/clouds to satisfy this route.

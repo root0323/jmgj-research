@@ -1,4 +1,4 @@
-import { isObject, newLedger, type CreditLedger, type WeatherSnapshot } from "./meteoblue";
+import { isObject, newLedger, locationKey, type CreditLedger, type WeatherLocation, type WeatherSnapshot } from "./meteoblue";
 import { validSeeing, type SeeingSnapshot } from "./seeing";
 
 const memory = new Map<string, WeatherSnapshot>();
@@ -33,6 +33,32 @@ export async function readWeather(key: string): Promise<WeatherSnapshot | null> 
   } catch { /* Cache failure must not trigger a paid request automatically. */ }
   finally { db?.close(); }
   return null;
+}
+
+/** Local research replay only: latest saved free3h snapshot at an explicit site.
+ * Never reads an API key, changes a ledger, or falls back to a network request.
+ */
+export async function readLatestWeather(location: WeatherLocation): Promise<WeatherSnapshot | null> {
+  let db: IDBDatabase | undefined;
+  const candidates = [...memory.values()];
+  try {
+    db = await openCache();
+    const values = await new Promise<unknown[]>((resolve, reject) => {
+      const request = db!.transaction("forecasts", "readonly").objectStore("forecasts").getAll();
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = () => reject(request.error);
+    });
+    for (const value of values) {
+      if (isObject(value) && value.plan === "free3h" && isObject(value.location) &&
+          typeof value.location.latitude === "number" && typeof value.location.longitude === "number" &&
+          typeof value.fetchedAt === "string" && typeof value.id === "string" && Array.isArray(value.results)) {
+        candidates.push(value as WeatherSnapshot);
+      }
+    }
+  } catch { /* Memory cache remains available. Never issue a weather request here. */ }
+  finally { db?.close(); }
+  return candidates.filter((item) => item.plan === "free3h" && locationKey(item.location) === locationKey(location) &&
+    Number.isFinite(Date.parse(item.fetchedAt))).sort((a, b) => Date.parse(b.fetchedAt) - Date.parse(a.fetchedAt))[0] ?? null;
 }
 
 export async function saveWeather(key: string, snapshot: WeatherSnapshot): Promise<boolean> {

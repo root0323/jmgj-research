@@ -6,7 +6,7 @@ import { getLunarContext } from "@/components/SkyViewer/coordinates";
 import { addDataSource, getEngineModule, loadStellariumScript, patchWasmMemoryHelpers } from "@/components/SkyViewer/engineControls";
 import type { StellariumEngine } from "@/components/SkyViewer/types";
 import { accountedCredits, cacheKey, isFresh, modelResponses, recordSnapshot, validKey, type WeatherSnapshot } from "@/lib/meteoblue";
-import { keyFingerprint, readLedger, readWeather, saveLedger, saveWeather } from "@/lib/weather-storage";
+import { keyFingerprint, readLedger, readLatestWeather, readWeather, saveLedger, saveWeather } from "@/lib/weather-storage";
 
 // This research tool is available only on a local development server.
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
@@ -25,7 +25,7 @@ const SITES = [
 ];
 type Site = typeof SITES[number];
 type Sample = { datetime: string; moonAltitude: number; moonAzimuth: number; moonPhaseAngle: number; result: Record<string, unknown> };
-type Row = { site: Site; cache: boolean; credits: number; estimated: boolean; cacheSaved: boolean; packages: string[]; samples: Sample[]; error?: string };
+type Row = { site: Site; cache: boolean; credits: number; estimated: boolean; cacheSaved: boolean; packages: string[]; samples: Sample[]; weatherId?: string; weatherFetchedAt?: string; error?: string };
 
 function nightTimes(date: string, longitude: number) {
   // Approximate local solar 21:00, 00:00 and 03:00. Explicit UTC times are
@@ -44,6 +44,7 @@ export default function ModelValidation() {
   const canvas = useRef<HTMLCanvasElement>(null);
   const engine = useRef<StellariumEngine | null>(null);
   const accountKey = useRef("");
+  const snapshots = useRef(new Map<string, WeatherSnapshot>());
   const [key, setKey] = useState("");
   const [hasKey, setHasKey] = useState(false);
   const [engineReady, setEngineReady] = useState(false);
@@ -53,10 +54,11 @@ export default function ModelValidation() {
   const [status, setStatus] = useState("달 위치 계산 엔진 준비 중…");
   const [rows, setRows] = useState<Row[]>([]);
   const [finishedAt, setFinishedAt] = useState<string | null>(null);
+  const [reportJson, setReportJson] = useState("");
 
   useEffect(() => {
     let active = true;
-    setDate(new Date().toISOString().slice(0, 10));
+    setDate((previous) => previous || new Date().toLocaleDateString("sv-SE"));
     void (async () => {
       try {
         await loadStellariumScript();
@@ -78,28 +80,33 @@ export default function ModelValidation() {
     return () => { active = false; accountKey.current = ""; };
   }, []);
 
-  async function run() {
+  async function run(cacheOnly = false) {
     const apiKey = key.trim() || accountKey.current;
-    if (running || !engine.current || !validKey(apiKey) || !date) return;
-    accountKey.current = apiKey;
-    setHasKey(true);
-    setKey("");
+    if (running || !engine.current || (!cacheOnly && !validKey(apiKey)) || !date) return;
+    if (!cacheOnly) {
+      accountKey.current = apiKey;
+      setHasKey(true);
+      setKey("");
+    }
     setRunning(true);
     setRows([]);
     setFinishedAt(null);
+    setReportJson("");
+    snapshots.current.clear();
     const results: Row[] = [];
     try {
-      const fingerprint = await keyFingerprint(apiKey);
+      const fingerprint = cacheOnly ? "" : await keyFingerprint(apiKey);
       for (const [index, site] of SITES.entries()) {
         if (!selected[index]) continue;
         setStatus(`${site.name} · 저장 기상 확인 중…`);
         const location = { latitude: site.latitude, longitude: site.longitude };
         const storageKey = cacheKey(fingerprint, "free3h", location);
-        const cached = await readWeather(storageKey);
+        const cached = cacheOnly ? await readLatestWeather(location) : await readWeather(storageKey);
         const fromCache = !!cached && isFresh(cached);
         let snapshot: WeatherSnapshot;
         if (fromCache) snapshot = cached!;
         else {
+          if (cacheOnly) throw new Error(`${site.name} · 24시간 이내 저장 기상이 없습니다. 새 기상 조회는 하지 않았습니다.`);
           setStatus(`${site.name} · 기상 3개 패키지 조회 중…`);
           const response = await fetch("/api/meteoblue/weather", {
             method: "POST", headers: { "Content-Type": "application/json" },
@@ -109,7 +116,9 @@ export default function ModelValidation() {
           snapshot = await response.json() as WeatherSnapshot;
           saveLedger(fingerprint, recordSnapshot(readLedger(fingerprint), snapshot));
         }
+        snapshots.current.set(site.name, snapshot);
         const row: Row = { site, cache: fromCache, credits: fromCache ? 0 : accountedCredits(snapshot.results),
+          weatherId: snapshot.id, weatherFetchedAt: snapshot.fetchedAt,
           estimated: !fromCache && snapshot.results.some((item) => item.creditSource !== "header"),
           cacheSaved: fromCache || await saveWeather(storageKey, snapshot),
           packages: snapshot.results.map((item) => `${item.package}: ${item.error || "수신 완료"}`), samples: [] };
@@ -143,11 +152,15 @@ export default function ModelValidation() {
     } finally { setRunning(false); }
   }
 
-  function downloadReport() {
-    const report = { kind: "actual-forecast-integration", finishedAt, observationDate: date,
+  function buildReport() {
+    return { kind: "actual-forecast-integration", finishedAt, observationDate: date,
       direction: { altitude: 45, azimuth: 180 }, rows,
+      weather: Object.fromEntries(snapshots.current),
       limitations: "예보·저장 자료·달 위치 연결 검증입니다. 현장 측정에 대한 정확도 검증이 아닙니다." };
-    const url = URL.createObjectURL(new Blob([JSON.stringify(report, null, 2)], { type: "application/json" }));
+  }
+
+  function downloadReport() {
+    const url = URL.createObjectURL(new Blob([JSON.stringify(buildReport(), null, 2)], { type: "application/json" }));
     const link = document.createElement("a");
     link.href = url; link.download = `model-validation-${date}.json`; link.click();
     URL.revokeObjectURL(url);
@@ -169,11 +182,14 @@ export default function ModelValidation() {
           <input type="checkbox" checked={selected[index]} onChange={(event) => setSelected((previous) => previous.map((item, i) => i === index ? event.target.checked : item))} />{site.name}
         </label>)}</fieldset>
         <p className="note">24시간 이내 저장 기상을 우선 사용합니다. 새 조회는 장소당 3개 패키지이며,
-          선택한 {siteCount}개 장소의 예상 차감 상한은 {(siteCount * 24_000).toLocaleString()} 크레딧입니다(현재 단가 추정).
+          선택한 {siteCount}개 장소의 예상 차감은 {(siteCount * 24_000).toLocaleString()} 크레딧입니다(현재 단가 추정).
           시간별 계산은 추가 기상 조회를 하지 않습니다. 키는 이 화면의 메모리에만 유지됩니다.</p>
-        <div className="actions"><button onClick={run} disabled={running || !engineReady || !(validKey(key.trim()) || hasKey) || !siteCount || !date}>
+        <div className="actions"><button onClick={() => run()} disabled={running || !engineReady || !(validKey(key.trim()) || hasKey) || !siteCount || !date}>
           {running ? "검증 중…" : "선택한 지역 검증 시작"}</button>
+          <button className="secondary" onClick={() => run(true)} disabled={running || !engineReady || !siteCount || !date}>저장 기상만 재검증 · 차감 없음</button>
+          <button className="secondary" onClick={() => setReportJson(JSON.stringify(buildReport(), null, 2))} disabled={running || !samples.length}>결과 JSON 보기</button>
           <button className="secondary" onClick={downloadReport} disabled={running || !samples.length}>결과 JSON 저장</button></div>
+        <p className="note">저장 기상만 재검증할 때는 키 없이 이 기기에 가장 최근 저장된 장소별 기상을 사용합니다. 결과 JSON에는 재현용 기상 원자료도 포함됩니다.</p>
         <p role="status" className="status">{status}</p>
         <canvas ref={canvas} width={32} height={32} className="engine" aria-hidden="true" />
       </section>
@@ -196,6 +212,8 @@ export default function ModelValidation() {
           <details><summary>응답 상세</summary><pre>{JSON.stringify(row, null, 2)}</pre></details>
         </article>)}
       </section>}
+      {!!reportJson && <section><h2>재현 자료 JSON</h2><p className="note">다운로드를 지원하지 않는 브라우저에서는 이 내용을 복사해 로컬에 저장할 수 있습니다.</p>
+        <pre data-testid="validation-report-json">{reportJson}</pre></section>}
       <footer>시험 좌표는 지역 비교용입니다. 예보와 저장 자료의 연결을 확인하며, 현장 측정에 대한 모델 정확도를 보증하지 않습니다.</footer>
     </main>
     <style jsx>{`
