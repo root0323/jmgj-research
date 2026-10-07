@@ -46,7 +46,8 @@ class GeospatialTests(unittest.TestCase):
                 assets.region_bounds(*coords)
 
     def test_manifest_only_matches_covered_location_and_complete_files(self):
-        with tempfile.TemporaryDirectory() as folder, patch.object(assets, "asset_root", return_value=Path(folder)):
+        with tempfile.TemporaryDirectory() as folder, patch.object(assets, "asset_root", return_value=Path(folder)), \
+             patch("app.services.annual_black_marble.cached_annual_tiles", return_value=None):
             root = Path(folder)
             (root / "regions").mkdir()
             (root / "dem.tif").touch()

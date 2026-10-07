@@ -351,6 +351,7 @@ def fetch_black_marble_dem_sqm(
         "blackMarblePixelCount": cached["pixelCount"],
         "radiusKm": radius_km,
         "blackMarbleMonth": region["month"] if region else None,
+        "blackMarbleYear": region.get("year") if region else None,
     }
 
 def fetch_feature_environment(
@@ -720,5 +721,6 @@ def evaluate_cached_weather(payload: CachedWeatherRequest):
         "environment": environment, "missing": missing,
         "blackMarblePixelCount": (model or {}).get("blackMarblePixelCount"),
         "blackMarbleMonth": (model or {}).get("blackMarbleMonth"),
+        "blackMarbleYear": (model or {}).get("blackMarbleYear"),
         "assetsReady": model is not None,
     }

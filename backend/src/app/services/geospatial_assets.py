@@ -69,10 +69,10 @@ def download(url: str, destination: Path, token: str = "", max_bytes: int = 300_
                 if response.is_redirect:
                     url = urljoin(url, response.headers.get("Location", ""))
                     if urlparse(url).hostname == "urs.earthdata.nasa.gov":
-                        raise AssetError("NASA 인증이 필요합니다. LAADS 다운로드 토큰과 계정 권한을 확인해 주세요.")
+                        raise AssetError("NASA 인증이 필요합니다. Earthdata 다운로드 토큰과 계정 권한을 확인해 주세요.")
                     continue
                 if response.status_code in (401, 403):
-                    raise AssetError("NASA 다운로드 인증에 실패했습니다. LAADS 다운로드 토큰과 계정 권한을 확인해 주세요.")
+                    raise AssetError("NASA 다운로드 인증에 실패했습니다. Earthdata 다운로드 토큰과 계정 권한을 확인해 주세요.")
                 if response.status_code != 200:
                     raise AssetError(f"공식 자료 다운로드 실패 (HTTP {response.status_code}). 잠시 후 다시 시도해 주세요.")
                 count = 0
@@ -183,7 +183,7 @@ def prepare_region(latitude: float, longitude: float, token: str = "", month: st
             path = root / "black-marble" / asset["name"]
             if not path.exists():
                 if not token:
-                    raise AssetError("Black Marble 다운로드에는 NASA LAADS 다운로드 토큰이 필요합니다. 지형 자료는 저장되었습니다.")
+                    raise AssetError("Black Marble 다운로드에는 NASA Earthdata 다운로드 토큰이 필요합니다. 지형 자료는 저장되었습니다.")
                 progress(f"Black Marble 다운로드: {tile} · {asset['month']}")
                 download(asset["url"], path, token)
             try:
@@ -207,24 +207,32 @@ def prepare_region(latitude: float, longitude: float, token: str = "", month: st
 
 def cached_region(latitude: float, longitude: float, radius_km: float = 30) -> dict | None:
     wanted = region_bounds(latitude, longitude, max(1, radius_km - 1))
+    from app.services.annual_black_marble import cached_annual_tiles
+    annual = cached_annual_tiles(region_bounds(latitude, longitude, radius_km))
     for path in sorted((asset_root() / "regions").glob("*.json"), key=lambda p: p.stat().st_mtime, reverse=True):
         try:
             region = json.loads(path.read_text(encoding="utf-8"))
             west, south, east, north = region["bounds"]
-            if west <= wanted[0] and south <= wanted[1] and east >= wanted[2] and north >= wanted[3] and Path(region["dem"]).is_file() and region["blackMarble"] and all(Path(p).is_file() for p in region["blackMarble"]):
-                return region
+            if west <= wanted[0] and south <= wanted[1] and east >= wanted[2] and north >= wanted[3] and Path(region["dem"]).is_file():
+                if annual:
+                    return {**region, **annual}
+                if region["blackMarble"] and all(Path(p).is_file() for p in region["blackMarble"]):
+                    return region
         except (OSError, ValueError, KeyError, TypeError):
             continue
     return None
 
 
 def cached_status() -> dict:
+    from app.services.annual_black_marble import cached_annual_tiles
     regions = []
     for path in (asset_root() / "regions").glob("*.json"):
         try:
             data = json.loads(path.read_text(encoding="utf-8"))
-            regions.append({"bounds": data["bounds"], "month": data["month"], "dem": Path(data["dem"]).is_file(),
-                            "blackMarble": bool(data["blackMarble"]) and all(Path(p).is_file() for p in data["blackMarble"])})
+            annual = cached_annual_tiles(data["bounds"])
+            regions.append({"bounds": data["bounds"], "month": None if annual else data["month"],
+                            "year": annual["year"] if annual else None, "dem": Path(data["dem"]).is_file(),
+                            "blackMarble": bool(annual) or (bool(data["blackMarble"]) and all(Path(p).is_file() for p in data["blackMarble"]))})
         except (OSError, ValueError, KeyError, TypeError):
             continue
     return {"regions": regions}
