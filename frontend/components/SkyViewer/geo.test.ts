@@ -44,3 +44,18 @@ it("keeps coordinates usable when reverse lookup fails and allows a retry", asyn
   expect(await reverseGeocodeLocation({ latitude: 0, longitude: 0 })).toBeNull();
   expect(await reverseGeocodeLocation({ latitude: 0, longitude: 0 })).toBe("입력한 장소");
 });
+
+it("uses Kakao responses live on repeated search, autocomplete and reverse requests", async () => {
+  const fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => [{ lat: "33.4258", lon: "126.5308", display_name: "학교", source: "kakao_keyword" }] });
+  vi.stubGlobal("fetch", fetch);
+  for (let index = 0; index < 2; index++) {
+    await geocodeLocation("카카오 실시간 시험 학교");
+    await suggestLocations("카카오 실시간 시험 학교", new AbortController().signal);
+  }
+  expect(fetch).toHaveBeenCalledTimes(4);
+  fetch.mockResolvedValue({ ok: true, json: async () => ({ display_name: "학교 주소", source: "kakao" }) });
+  await reverseGeocodeLocation({ latitude: 33.4258, longitude: 126.5308 });
+  await reverseGeocodeLocation({ latitude: 33.4258, longitude: 126.5308 });
+  expect(fetch).toHaveBeenCalledTimes(6);
+  expect(fetch.mock.calls.every((call) => call[1].cache === "no-store")).toBe(true);
+});

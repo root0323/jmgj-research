@@ -4,6 +4,7 @@ from typing import Any
 from fastapi import APIRouter
 from app.local_config import setting
 from app.services.geospatial_assets import cached_status
+from app.api.endpoints.geocode import get_kakao_proxy_base
 
 
 router = APIRouter()
@@ -36,6 +37,7 @@ async def health() -> dict[str, Any]:
     return {
         "ok": True,
         "providers": {"kakaoKeyConfigured": bool(setting("KAKAO_REST_API_KEY")),
+                      "kakaoProxyConfigured": bool(get_kakao_proxy_base()),
                       "vworldKeyConfigured": bool(setting("VWORLD_API_KEY"))},
         "cachedGeospatial": cached_status(),
         "assets": {

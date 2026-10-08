@@ -5,6 +5,7 @@ const crypto = require('node:crypto');
 const { spawn } = require('node:child_process');
 const { safeExternal, freePort, loadConfig, saveConfig, waitReady } = require('./runtime.cjs');
 const { createUpdateController, isInstalled } = require('./updates.cjs');
+const publicServices = require('./public-services.json');
 
 const localRoot = process.env.JMGJ_DESKTOP_PROFILE || path.join(process.env.LOCALAPPDATA || app.getPath('appData'), 'jmgj-research', 'desktop');
 app.setPath('userData', localRoot);
@@ -108,7 +109,7 @@ function menu() {
       { id: 'check-for-updates', label: '업데이트 확인…', click: () => void updates?.check() },
       { label: '연구 GitHub', click: () => shell.openExternal('https://github.com/root0323/jmgj-research') },
       { label: '앱 정보', click: () => dialog.showMessageBox(win, { title: 'JMGJ Research',
-        message: `JMGJ Research ${app.getVersion()}`, detail: '개인 연구용 Windows 미리보기\n기상·천체 사진·장소 검색은 인터넷이 필요합니다.\nAPI 키는 앱 화면의 메모리에만 유지됩니다.' }) } ] },
+        message: `JMGJ Research ${app.getVersion()}`, detail: '개인 연구용 Windows 미리보기\n기상·천체 사진·장소 검색은 인터넷이 필요합니다.\n개인 기상 API 키는 앱 화면의 메모리에만 유지됩니다.' }) } ] },
   ]));
 }
 
@@ -125,6 +126,7 @@ async function start() {
   const env = { ...process.env, JMGJ_DESKTOP_TOKEN: token, JMGJ_DESKTOP_ORIGIN: origin,
     JMGJ_BACKEND_PORT: String(backendPort), PYTHONUTF8: '1',
     JMGJ_SETTINGS_FILE: path.join(localRoot, 'operator.env'),
+    KAKAO_PROXY_URL: publicServices.kakaoProxyUrl || process.env.KAKAO_PROXY_URL || '',
     RESEARCH_ASSET_DIR: config.assetRoot || path.join(config.dataRoot, 'assets'),
     BLACK_MARBLE_GLOBAL_DIR: path.join(config.dataRoot, 'black-marble', 'VJ146A4-2025'),
     BLACK_MARBLE_BUNDLED_DIR: path.join(resources, 'data', 'black-marble', 'VJ146A4-2025'),

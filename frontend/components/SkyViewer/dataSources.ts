@@ -34,7 +34,7 @@ export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
       { name: "OpenStreetMap", url: "https://www.openstreetmap.org/copyright", description: "위치 선택 지도와 공개 지리 데이터 · © OpenStreetMap contributors", notice: { label: "ODbL", url: "https://www.openstreetmap.org/copyright" } },
       { name: "Photon · komoot", url: "https://github.com/komoot/photon", description: "OpenStreetMap 기반 장소 자동완성과 검색" },
       { name: "Nominatim", url: "https://nominatim.org/", description: "OpenStreetMap 기반 장소·주소 검색과 좌표의 주소 변환" },
-      { name: "Kakao Local API", url: "https://developers.kakao.com/docs/ko/local/dev-guide", description: "장소·주소 검색과 좌표의 주소 변환. 서버에 API 키가 설정된 경우 사용" },
+      { name: "카카오맵 · Local API", url: "https://developers.kakao.com/docs/ko/local/dev-guide", description: "국내 장소·주소 검색과 좌표의 주소 변환. 운영자 공용 검색 서버 또는 로컬 운영자 키가 연결된 경우 사용" },
       { name: "VWorld", url: "https://www.vworld.kr/", description: "국내 주소·장소 검색과 좌표의 주소 변환. 서버에 API 키가 설정된 경우 사용" },
     ],
   },

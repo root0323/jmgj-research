@@ -1,5 +1,11 @@
 # 외부 자료 연결
 
+## 공용 카카오 장소 검색
+
+설치 사용자가 카카오 계정이나 키를 입력하지 않도록 `services/kakao-search/`에 Cloudflare Worker를 배포했다. 앱은 공개 서버 주소로만 요청하고, 운영자의 REST API 키는 Worker Secret에 보관한다. 검색·주소·역지오코딩만 지원하며 사용자별 호출 인증은 필요 없다. 공용 서버의 무료 한도는 모든 사용자가 공유한다.
+
+`desktop/public-services.json`의 `kakaoProxyUrl`에 검증된 공개 주소를 넣어 설치 파일을 빌드한다. 개발 웹은 로컬 운영자 설정 `KAKAO_PROXY_URL`로 연결한다. 공용 주소를 설정하면 로컬 카카오 키가 있어도 그 키를 공용 서버에 보내지 않는다. 주소가 비어 있으면 공용 연결이 완료된 상태가 아니다. 2026-10-08 운영자 이메일 인증·카카오맵 활성화·Worker Secret 등록을 완료했다. 공개 주소 `https://jmgj-kakao-search.jmgj-kakao-search.workers.dev`에서 키 없는 학교명·주소·역지오코딩을 확인했고, 앱 백엔드에서도 개인 카카오·VWorld 키 없이 국내 검색과 해외 Mauna Kea 검색을 확인했다. 국내 검색은 카카오, 결과가 없는 해외 검색은 기존 Photon 경로를 사용한다. 카카오 응답은 검색 캐시에 저장하지 않고 실시간으로 사용한다. 배포 절차·제한은 [검색 서버 안내](../services/kakao-search/README.md)를 참고한다.
+
 ## 로컬 준비
 
 저장소 루트에서 Python 환경에 `backend/src/app/requirements.txt`를 설치한 뒤 실행한다.

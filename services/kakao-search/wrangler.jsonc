@@ -1,0 +1,16 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "jmgj-kakao-search",
+  "main": "src/worker.mjs",
+  "compatibility_date": "2026-10-08",
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": false },
+  "ratelimits": [
+    {
+      "name": "SEARCH_RATE_LIMITER",
+      "namespace_id": "1032301",
+      "simple": { "limit": 120, "period": 60 }
+    }
+  ]
+}

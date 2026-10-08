@@ -1,6 +1,6 @@
 {
   "name": "jmgj-research-desktop",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "description": "JMGJ astronomy research desktop app",
   "author": "root0323",
@@ -28,6 +28,7 @@
       "main.cjs",
       "runtime.cjs",
       "updates.cjs",
+      "public-services.json",
       "package.json"
     ],
     "afterPack": "scripts/verify-package.cjs",

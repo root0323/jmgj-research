@@ -10,6 +10,10 @@ class GeocodeTests(unittest.IsolatedAsyncioTestCase):
     def setUp(self):
         geo.GEOCODE_CACHE.clear()
         geo.NOMINATIM_LOCK = asyncio.Lock()
+        # Unit tests must not use the developer's live keys or public proxy.
+        settings = patch.object(geo, "setting", side_effect=lambda name, default="": default)
+        settings.start()
+        self.addCleanup(settings.stop)
 
     def test_school_expansion_and_world_queries(self):
         self.assertEqual(geo.build_query_variants("제주과학고")[0], "제주과학고등학교")

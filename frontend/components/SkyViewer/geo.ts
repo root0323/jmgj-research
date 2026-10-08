@@ -7,7 +7,7 @@ const addresses = new Map<string, { at: number; value: string }>();
 
 async function request(path: string, signal?: AbortSignal) {
   const timeout = AbortSignal.timeout(30_000);
-  const response = await fetch(`/api/location/${path}`, { signal: signal ? AbortSignal.any([signal, timeout]) : timeout });
+  const response = await fetch(`/api/location/${path}`, { cache: "no-store", signal: signal ? AbortSignal.any([signal, timeout]) : timeout });
   if (!response.ok) throw new Error("장소 검색 서버에 연결하지 못했습니다. 잠시 후 다시 시도하거나 지도·좌표로 선택하세요.");
   return response.json();
 }
@@ -26,6 +26,11 @@ function parsePlaces(results: unknown, query: string): GeocodeResult[] {
     });
 }
 
+function containsKakao(results: unknown): boolean {
+  const items = Array.isArray(results) ? results : [results];
+  return items.some((item) => item && typeof item.source === "string" && item.source.startsWith("kakao"));
+}
+
 export function completePlaceQuery(query: string): string | null {
   const term = query.trim();
   if (!/[가-힣]/.test(term) || /학교$/.test(term)) return null;
@@ -39,9 +44,10 @@ export async function geocodeLocations(query: string): Promise<GeocodeResult[]> 
   const key = query.trim().toLowerCase();
   const cached = places.get(key);
   if (cached && Date.now() - cached.at < CACHE_MS) return cached.value;
-  const value = parsePlaces(await request(`search?query=${encodeURIComponent(query.trim())}`), query);
+  const results = await request(`search?query=${encodeURIComponent(query.trim())}`);
+  const value = parsePlaces(results, query);
   // Only a successful response can establish that a place was not found.
-  places.set(key, { at: Date.now(), value });
+  if (!containsKakao(results)) places.set(key, { at: Date.now(), value });
   return value;
 }
 
@@ -53,8 +59,9 @@ export async function suggestLocations(query: string, signal: AbortSignal): Prom
   const key = query.trim().toLowerCase();
   const cached = suggestions.get(key);
   if (cached && Date.now() - cached.at < CACHE_MS) return cached.value;
-  const value = parsePlaces(await request(`suggest?query=${encodeURIComponent(query.trim())}`, signal), query);
-  suggestions.set(key, { at: Date.now(), value });
+  const results = await request(`suggest?query=${encodeURIComponent(query.trim())}`, signal);
+  const value = parsePlaces(results, query);
+  if (!containsKakao(results)) suggestions.set(key, { at: Date.now(), value });
   return value;
 }
 
@@ -65,7 +72,10 @@ export async function reverseGeocodeLocation(location: ObserverLocation): Promis
   try {
     const result = await request(`reverse?${new URLSearchParams({ lat: String(location.latitude), lon: String(location.longitude) })}`);
     const value = result.display_name ?? result.name;
-    if (typeof value === "string" && value) { addresses.set(key, { at: Date.now(), value }); return value; }
+    if (typeof value === "string" && value) {
+      if (!containsKakao(result)) addresses.set(key, { at: Date.now(), value });
+      return value;
+    }
   } catch { /* Coordinates remain usable when address lookup is unavailable. */ }
   return null;
 }
