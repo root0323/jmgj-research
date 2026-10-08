@@ -1,0 +1,41 @@
+JMGJ Research geographic datasets
+
+NASA Black Marble: VJ146A4 Version 2, annual composite for 2025, NOAA-20 VIIRS.
+NASA VIIRS Land Science Investigator-led Processing System. (2025).
+VIIRS/JPSS1 Lunar BRDF-Adjusted Nighttime Lights Yearly L3 Global 15 arc second
+Linear Lat Lon Grid [Dataset]. NASA LAADS DAAC.
+DOI: https://doi.org/10.5067/VIIRS/VJ146A4.002
+https://ladsweb.modaps.eosdis.nasa.gov/missions-and-measurements/products/VJ146A4/
+https://www.earthdata.nasa.gov/engage/open-data-services-software/data-use-policy
+
+The app subsets retain AllAngle_Composite_Snow_Free, its quality field, lat/lon
+and source attributes with native resolution, value types and lossless compression.
+Other original layers are excluded. These derived files are not the complete NASA
+product and do not imply NASA approval or endorsement of this app or its model.
+
+Copernicus GLO-90 DEM / DSM (downloaded as needed)
+Source: https://registry.opendata.aws/copernicus-dem/
+Licence for COP-DEM-GLO-90-F Global 90m Full, Free & Open:
+https://dataspace.copernicus.eu/sites/default/files/media/files/2025-06/copernicus_contributing_mission_data_access_v2_cop_dem_licenses.pdf
+
+The source licence grants free worldwide rights of reproduction, distribution,
+communication to the public, adaptation, modification and combination with other
+data. The licence and its obligations apply to subsequent recipients as well.
+The original data remain protected by their owners' intellectual property rights.
+
+Original data credit:
+© DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.
+
+Modified / derived data credit (regional mosaics and terrain calculations):
+produced using Copernicus WorldDEM-90 © DLR e.V. 2010-2014 and © Airbus Defence and Space GmbH 2014-2018 provided under COPERNICUS by the European Union and ESA; all rights reserved.
+
+The organisations in charge of the Copernicus programme by law or by delegation
+do not incur any liability for any use of the Copernicus WorldDEM-90.
+Copernicus 자료 제공기관은 이 자료의 사용에 관하여 책임을 부담하지 않습니다.
+This app is not officially endorsed by the provider, the licensor, the EU or ESA.
+
+DSS images (internet connection required):
+Digitized Sky Survey images from STScI and CDS HiPS.
+https://archive.stsci.edu/dss/acknowledging.html
+https://aladin.cds.unistra.fr/hips/
+Image credits and source links are also available in Settings > Sources.

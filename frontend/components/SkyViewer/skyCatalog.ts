@@ -5,6 +5,7 @@ import type {
   StellariumEngine,
   SweObj,
 } from "./types";
+import { namedDeepSky } from "./deepSkyNames";
 
 const DEG_TO_RAD = Math.PI / 180;
 const DEFAULT_RENDERED_STAR_MAG = 5.3;
@@ -193,7 +194,7 @@ export function normalizeSearchKey(value: string) {
 }
 
 export function getDeepSkySearchCandidates(term: string) {
-  const normalized = term.trim();
+  const normalized = namedDeepSky(term)?.id ?? term.trim();
   const match = normalized.match(/^(m|messier|ngc|ic)\s*0*([0-9]+)$/i);
   if (!match) return [];
 

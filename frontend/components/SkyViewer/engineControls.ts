@@ -151,9 +151,12 @@ export function addDataSource(
   key: string
 ) {
   try {
-    module?.addDataSource?.({ url, key });
+    if (!module?.addDataSource) return false;
+    module.addDataSource({ url, key });
+    return true;
   } catch (error) {
     console.warn(`Could not add Stellarium data source: ${key}`, error);
+    return false;
   }
 }
 
@@ -208,7 +211,7 @@ export function ensureDssDataSource(
   const dss = getEngineModule(engine, "dss");
   if (!dss) return false;
 
-  addDataSource(dss, DSS_SURVEY_URL, "dss");
+  if (!addDataSource(dss, DSS_SURVEY_URL, "dss")) return false;
   loadedSurveys.add("dss");
   dss.update?.();
   engine._core_update?.();

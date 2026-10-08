@@ -124,6 +124,7 @@ async function start() {
     JMGJ_SETTINGS_FILE: path.join(localRoot, 'operator.env'),
     RESEARCH_ASSET_DIR: config.assetRoot || path.join(config.dataRoot, 'assets'),
     BLACK_MARBLE_GLOBAL_DIR: path.join(config.dataRoot, 'black-marble', 'VJ146A4-2025'),
+    BLACK_MARBLE_BUNDLED_DIR: path.join(resources, 'data', 'black-marble', 'VJ146A4-2025'),
     DEM_GLOBAL_DIR: path.join(config.dataRoot, 'dem', 'Copernicus-GLO-90'),
     FRONTEND_ORIGINS: origin, RESEARCH_BACKEND_URL: `http://127.0.0.1:${backendPort}`,
     GEOCODE_BACKEND_URL: `http://127.0.0.1:${backendPort}`, NODE_ENV: 'production',
@@ -158,7 +159,9 @@ async function start() {
     fs.writeFileSync(path.join(localRoot, 'diagnostics.json'), JSON.stringify({
       ready: true, version: app.getVersion(), frontendPort: config.port, backendPort,
       frontendDenied: unauthed.status, backendDenied: backendDenied.status,
-      packaged: app.isPackaged, dataConnected: ['dem/Copernicus-GLO-90/index.sqlite', 'black-marble/VJ146A4-2025/index.json']
+      packaged: app.isPackaged,
+      blackMarbleBundled: fs.existsSync(path.join(env.BLACK_MARBLE_BUNDLED_DIR, 'index.json')),
+      dataConnected: ['dem/Copernicus-GLO-90/index.sqlite', 'black-marble/VJ146A4-2025/index.json']
         .map((name) => fs.existsSync(path.join(config.dataRoot, name))) }, null, 2));
     app.quit();
   } else win.show();

@@ -16,6 +16,7 @@ import {
   setDeepSkySupplementIndex,
 } from "./coordinates";
 import { loadDeepSkySupplementCatalog } from "./deepSkyCatalog";
+import { matchingDeepSkyNames, namedDeepSky } from "./deepSkyNames";
 import {
   DEG_TO_RAD,
   TOGGLE_PATHS,
@@ -46,6 +47,7 @@ import { usePersonalWeather } from "./usePersonalWeather";
 import { evaluateWeather } from "@/lib/weather-evaluation";
 import { getLunarContext } from "./coordinates";
 import { useAutomaticSeeing } from "./useAutomaticSeeing";
+import { useAutomaticTerrain } from "./useAutomaticTerrain";
 import { SkyViewerToolbar } from "./SkyViewerToolbar";
 import type { DisplayToggleName, DisplayToggles } from "./SkyViewerToolbar";
 import {
@@ -629,6 +631,7 @@ export default function SkyViewer() {
   });
   const [isControlPanelOpen, setIsControlPanelOpen] = useState(true);
   const weather = usePersonalWeather(observerLocation);
+  const terrain = useAutomaticTerrain(observerLocation);
   const weatherSnapshot = weather.snapshot;
   const [weatherModelSource, setWeatherModelSource] = useState("간이 추정 · 기상 자료 조회 전");
   const applySelectedInfo = useCallback((info: ObjectInfo | null) => {
@@ -805,6 +808,12 @@ export default function SkyViewer() {
     const engine = engineRef.current;
     const deepSkyCandidates = getDeepSkySearchCandidates(value);
     const deepSkySuggestions = [];
+    if (engine) {
+      for (const item of matchingDeepSkyNames(value)) {
+        const obj = findEngineObject(engine, item.id);
+        if (obj) deepSkySuggestions.push({ key, label: item.label, obj, priority: 85 });
+      }
+    }
     if (engine && deepSkyCandidates.length > 0) {
       const deepSkyTarget = findEngineObject(engine, value);
       if (deepSkyTarget) {
@@ -852,6 +861,14 @@ export default function SkyViewer() {
     const engine = engineRef.current;
     if (!engine) return;
 
+    // Autocomplete clicks and Enter must take the same photographic path.
+    if (getDeepSkySearchCandidates(label).length > 0) {
+      setDeepSkyMode(true);
+      ensureDssDataSource(engine, loadedPlanetSurveysRef.current);
+      applyDeepSkyMode(engine, true);
+      engine.zoomTo?.(DEEP_SKY_IMAGE_FOV, 1.2);
+    }
+
     setMilkyWayOutlineVisible(false);
     const nextTarget = { label, obj: target, vector };
     selectedTargetRef.current = nextTarget;
@@ -887,6 +904,12 @@ export default function SkyViewer() {
   function selectTarget(target: SweObj, label: string, vector?: number[]) {
     const engine = engineRef.current;
     if (!engine) return;
+
+    if (getDeepSkySearchCandidates(label).length > 0) {
+      setDeepSkyMode(true);
+      ensureDssDataSource(engine, loadedPlanetSurveysRef.current);
+      applyDeepSkyMode(engine, true);
+    }
 
     setMilkyWayOutlineVisible(false);
     selectedTargetRef.current = { label, obj: target, vector };
@@ -1114,13 +1137,6 @@ export default function SkyViewer() {
         return;
       }
 
-      const isDeepSkySearch = getDeepSkySearchCandidates(term).length > 0;
-      if (isDeepSkySearch) {
-        setDeepSkyMode(true);
-        ensureDssDataSource(engine, loadedPlanetSurveysRef.current);
-        applyDeepSkyMode(engine, true);
-      }
-
       const matchedClickTarget = clickTargetsRef.current.find(
         (item) => item.obj.v === target.v
       );
@@ -1130,7 +1146,7 @@ export default function SkyViewer() {
           exactSuggestion?.label ??
           matchedClickTarget?.label ??
           (suggestions[0]?.obj === target ? suggestions[0].label : undefined) ??
-          labelForObject(target, term, clickTargetsRef.current),
+          namedDeepSky(term)?.label ?? labelForObject(target, term, clickTargetsRef.current),
         selectedTarget?.obj === target
           ? selectedTarget.vector
           : exactSuggestion?.obj === target
@@ -1145,9 +1161,6 @@ export default function SkyViewer() {
             ? suggestions[0].vector
             : undefined
       );
-      if (isDeepSkySearch) {
-        engine.zoomTo?.(DEEP_SKY_IMAGE_FOV, 1.2);
-      }
     } catch (error) {
       console.error(error);
     }
@@ -1228,6 +1241,7 @@ export default function SkyViewer() {
     skyBrightnessDirection,
     skyBrightnessTimeKey,
     weatherSnapshot,
+    terrain.readyKey,
   ]);
 
   const applyObservationTime = useCallback((value: string | Date) => {
@@ -1494,7 +1508,7 @@ export default function SkyViewer() {
       {isControlPanelOpen && (
         <SkyViewerControls
           weatherPanel={<PersonalWeatherPanel weather={weather} seeing={automaticSeeing} location={observerLocation} locationName={locationQuery}
-            observationTime={new Date(skyBrightnessTimeKey)} modelSource={weatherModelSource} />}
+            observationTime={new Date(skyBrightnessTimeKey)} modelSource={weatherModelSource} terrain={terrain} />}
           calendarDays={calendarDays}
           deepSkyMode={deepSkyMode}
           formatDisplayDateTime={formatDisplayDateTime}

@@ -1,6 +1,6 @@
 {
   "name": "jmgj-research-desktop",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "JMGJ astronomy research desktop app",
   "author": "root0323",
@@ -25,6 +25,8 @@
       { "from": "build/web", "to": "web" },
       { "from": "build/web/node_modules", "to": "web/node_modules", "filter": ["**/*"] },
       { "from": "build/backend/jmgj-backend", "to": "backend" },
+      { "from": "build/data", "to": "data" },
+      { "from": "licenses", "to": "licenses" },
       { "from": "NOTICE.txt", "to": "NOTICE.txt" }
     ],
     "win": { "target": [{ "target": "nsis", "arch": ["x64"] }], "signAndEditExecutable": false },

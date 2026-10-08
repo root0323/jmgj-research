@@ -6,7 +6,12 @@ Original research: https://github.com/gyeon27/JMGJ
 Stellarium Web Engine is distributed under AGPL-3.0.
 Its bundled AGPL license is in web/public/stellarium/skydata/surveys/milkyway.
 Astronomical catalogs, images and geographic data credits are in Settings > Sources.
-DEM / Black Marble files, API credentials and user weather caches are not included.
+Black Marble 2025 VJ146A4 V2 app subsets are included (540 tiles, about 1.14 GB).
+Native-resolution radiance, quality and coordinates are retained losslessly.
+These are derived app subsets, not the complete NASA HDF-EOS products.
+DEM is downloaded from the public Copernicus GLO-90 store for the selected region.
+See resources/licenses/DATA-NOTICES.txt for sources and required notices.
+API credentials, raw research files and user weather caches are not included.
 
 Electron / Chromium notices accompany the application. Bundled Python components
 retain their upstream licensing; see backend/_internal for packaged notices.

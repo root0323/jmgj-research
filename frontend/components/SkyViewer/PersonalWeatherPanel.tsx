@@ -2,6 +2,7 @@ import { isFresh, usageSummary, WEATHER_PLANS, type WeatherLocation } from "@/li
 import { weatherAt } from "@/lib/weather-evaluation";
 import type { usePersonalWeather } from "./usePersonalWeather";
 import type { useAutomaticSeeing } from "./useAutomaticSeeing";
+import type { useAutomaticTerrain } from "./useAutomaticTerrain";
 import styles from "./PersonalWeatherPanel.module.css";
 
 type Props = {
@@ -11,11 +12,12 @@ type Props = {
   locationName: string;
   observationTime: Date;
   modelSource: string;
+  terrain: ReturnType<typeof useAutomaticTerrain>;
 };
 
 const number = (value: number) => value.toLocaleString("ko-KR");
 
-export function PersonalWeatherPanel({ weather, seeing, location, locationName, observationTime, modelSource }: Props) {
+export function PersonalWeatherPanel({ weather, seeing, terrain, location, locationName, observationTime, modelSource }: Props) {
   const { connected, busy, ledger, snapshot, plan } = weather;
   const usage = usageSummary(ledger, plan);
   const values = snapshot ? weatherAt(snapshot, observationTime) : null;
@@ -46,6 +48,9 @@ export function PersonalWeatherPanel({ weather, seeing, location, locationName, 
         <span>선택한 한 장소</span><strong>{locationName}</strong>
         <small>{location.latitude.toFixed(4)}°, {location.longitude.toFixed(4)}°</small>
         <small role="status" aria-live="polite" title={seeing.message}>시상 {seeing.loading ? "불러오는 중…" : seeing.label ?? "자료 없음"}</small>
+        {terrain.enabled && <small role="status" aria-live="polite">{terrain.message}
+          {terrain.state === "error" && <button type="button" onClick={terrain.retry}>다시 시도</button>}
+        </small>}
       </div>
       <button className={styles.load} type="button" disabled={!connected || busy} onClick={() => void weather.load()}>
         {busy ? "처리 중…" : snapshot && isFresh(snapshot) ? "저장 자료 불러오기 · 차감 없음" : "선택한 장소 불러오기"}

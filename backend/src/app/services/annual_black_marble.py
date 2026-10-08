@@ -213,7 +213,18 @@ class WorldDownload:
 
 def cached_annual_tiles(bounds) -> dict | None:
     """Only expose published, verified subsets for all required observer tiles."""
-    root = world_root()
+    roots = [world_root()]
+    bundled = setting("BLACK_MARBLE_BUNDLED_DIR")
+    if bundled:
+        roots.append(Path(bundled))
+    for root in roots:
+        result = _cached_tiles(root, bounds)
+        if result:
+            return result
+    return None
+
+
+def _cached_tiles(root: Path, bounds) -> dict | None:
     try:
         index = json.loads((root / "index.json").read_text(encoding="utf-8"))
         if index.get("product") != PRODUCT or index.get("year") != YEAR:
