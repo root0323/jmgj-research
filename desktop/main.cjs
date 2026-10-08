@@ -4,6 +4,7 @@ const path = require('node:path');
 const crypto = require('node:crypto');
 const { spawn } = require('node:child_process');
 const { safeExternal, freePort, loadConfig, saveConfig, waitReady } = require('./runtime.cjs');
+const { createUpdateController, isInstalled } = require('./updates.cjs');
 
 const localRoot = process.env.JMGJ_DESKTOP_PROFILE || path.join(process.env.LOCALAPPDATA || app.getPath('appData'), 'jmgj-research', 'desktop');
 app.setPath('userData', localRoot);
@@ -13,6 +14,7 @@ const children = [];
 let win;
 let shuttingDown = false;
 let config;
+let updates;
 let stage = 'initialize';
 const configFile = path.join(localRoot, 'config.json');
 const diagnostics = process.argv.includes('--diagnostics');
@@ -103,6 +105,7 @@ function menu() {
       { label: '기존 데이터 폴더 연결…', click: connectData },
       { label: '앱 설정·캐시 폴더 열기', click: () => shell.openPath(localRoot) } ] },
     { label: '도움말', submenu: [
+      { id: 'check-for-updates', label: '업데이트 확인…', click: () => void updates?.check() },
       { label: '연구 GitHub', click: () => shell.openExternal('https://github.com/root0323/jmgj-research') },
       { label: '앱 정보', click: () => dialog.showMessageBox(win, { title: 'JMGJ Research',
         message: `JMGJ Research ${app.getVersion()}`, detail: '개인 연구용 Windows 미리보기\n기상·천체 사진·장소 검색은 인터넷이 필요합니다.\nAPI 키는 앱 화면의 메모리에만 유지됩니다.' }) } ] },
@@ -149,6 +152,17 @@ async function start() {
     if (new URL(url).origin !== origin) { event.preventDefault(); if (safeExternal(url)) void shell.openExternal(url); }
   });
   menu();
+  const { autoUpdater } = require('electron-updater');
+  if (!diagnostics) {
+    updates = createUpdateController({ updater: autoUpdater,
+      installed: isInstalled(resources, app.isPackaged), getWindow: () => win, dialog, shutdown, log,
+      onState: ({ phase, percent }) => {
+        const item = Menu.getApplicationMenu()?.getMenuItemById('check-for-updates');
+        if (item) item.label = phase === 'checking' ? '업데이트 확인 중…'
+          : phase === 'downloading' ? `업데이트 다운로드 중 · ${Math.floor(percent)}%`
+          : phase === 'downloaded' ? '업데이트 설치·재시작…' : '업데이트 확인…';
+      } });
+  }
   await win.loadURL(origin);
   stage = 'ready';
   log('ready');
@@ -160,11 +174,13 @@ async function start() {
       ready: true, version: app.getVersion(), frontendPort: config.port, backendPort,
       frontendDenied: unauthed.status, backendDenied: backendDenied.status,
       packaged: app.isPackaged,
+      updateFeedConfigured: fs.existsSync(path.join(resources, 'app-update.yml')),
+      installed: isInstalled(resources, app.isPackaged),
       blackMarbleBundled: fs.existsSync(path.join(env.BLACK_MARBLE_BUNDLED_DIR, 'index.json')),
       dataConnected: ['dem/Copernicus-GLO-90/index.sqlite', 'black-marble/VJ146A4-2025/index.json']
         .map((name) => fs.existsSync(path.join(config.dataRoot, name))) }, null, 2));
     app.quit();
-  } else win.show();
+  } else { win.show(); updates.start(); }
 }
 
 if (!app.requestSingleInstanceLock()) app.quit();
@@ -172,6 +188,7 @@ else {
   app.on('second-instance', () => { if (win) { if (win.isMinimized()) win.restore(); win.focus(); } });
   app.on('window-all-closed', () => app.quit());
   app.on('before-quit', (event) => {
+    updates?.dispose();
     if (!shuttingDown) { event.preventDefault(); void shutdown().then(() => app.quit()); }
   });
   app.whenReady().then(start).catch(async (error) => {
