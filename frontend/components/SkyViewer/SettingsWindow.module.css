@@ -131,7 +131,9 @@
   word-break: keep-all;
 }
 
-.telescopeSettings {
+.telescopeSettings,
+.cameraSettings,
+.filterSettings {
   display: grid;
   gap: 22px;
   max-width: 400px;
@@ -178,6 +180,83 @@
 
 .saveButton:hover {
   background: rgba(125, 211, 252, 0.17);
+}
+
+.saveButton:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.saveError {
+  margin: 0;
+  color: #fca5a5;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.filterGroup {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+
+.filterGroup legend {
+  margin-bottom: 10px;
+  padding: 0;
+  color: #cbd5e1;
+  font-size: 13px;
+}
+
+.filterOptions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.filterOption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 8px 12px;
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.045);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.filterOption:has(input:checked) {
+  border-color: rgba(125, 211, 252, 0.5);
+  background: rgba(125, 211, 252, 0.1);
+  color: #bae6fd;
+}
+
+.filterOption input {
+  margin: 0;
+  accent-color: #7dd3fc;
+}
+
+.filterActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.clearButton {
+  padding: 7px 0;
+  border: 0;
+  background: transparent;
+  color: #94a3b8;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.clearButton:disabled {
+  opacity: 0.45;
+  cursor: default;
 }
 
 .sourceGroups {

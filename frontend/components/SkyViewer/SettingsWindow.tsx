@@ -2,6 +2,8 @@ import { useEffect, useId, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
 import type { TelescopeSettings } from "./types";
 import { DATA_SOURCE_GROUPS } from "./dataSources";
+import { CameraSettingsPanel } from "./CameraSettingsPanel";
+import { FilterSettingsPanel } from "./FilterSettingsPanel";
 import styles from "./SettingsWindow.module.css";
 
 const SETTINGS_TABS = [
@@ -132,6 +134,8 @@ export function SettingsWindow({
             className={styles.content}
           >
             <h3>{tab.label}</h3>
+            {tab.id === "camera" && <CameraSettingsPanel />}
+            {tab.id === "filter" && <FilterSettingsPanel />}
             {tab.id === "sources" && (
               <div className={styles.sourceGroups}>
                 {typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname) && (

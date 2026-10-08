@@ -71,6 +71,14 @@ export type TelescopeSettings = {
   apertureMm: number;
 };
 
+export type CameraSettings = {
+  sensorWidthMm: number | null;
+  sensorHeightMm: number | null;
+  pixelSizeUm: number | null;
+};
+
+export type ObservationFilter = "R" | "G" | "B" | "SII" | "Ha" | "OIII";
+
 export type GeocodeResult = ObserverLocation & {
   name: string;
 };
