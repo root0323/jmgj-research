@@ -14,6 +14,10 @@ app.setAppUserModelId('io.github.root0323.jmgj-research');
 const children = [];
 let win;
 let shuttingDown = false;
+let shutdownPromise;
+const startupAbort = new AbortController();
+const timings = {};
+const launchedAt = performance.now();
 let config;
 let updates;
 let stage = 'initialize';
@@ -21,19 +25,34 @@ const configFile = path.join(localRoot, 'config.json');
 const diagnostics = process.argv.includes('--diagnostics');
 
 function log(message) {
-  fs.mkdirSync(localRoot, { recursive: true });
-  fs.appendFileSync(path.join(localRoot, 'startup.log'), `${new Date().toISOString()} ${message}\n`);
+  // A temporarily locked log must never prevent the app from opening/quitting.
+  try {
+    fs.mkdirSync(localRoot, { recursive: true });
+    fs.appendFileSync(path.join(localRoot, 'startup.log'), `${new Date().toISOString()} ${message}\n`);
+  } catch { /* No credentials or raw errors are written to alternative files. */ }
 }
 
-function worker(command, args, env, cwd) {
+async function measure(name, operation) {
+  const started = performance.now();
+  log(`${name} starting`);
+  try { return await operation(); }
+  catch (error) { error.stage = name; throw error; }
+  finally {
+    timings[name] = Math.round(performance.now() - started);
+    log(`${name} elapsed ${timings[name]}ms`);
+  }
+}
+
+function worker(name, command, args, env, cwd) {
+  startupAbort.signal.throwIfAborted();
   const child = spawn(command, args, { env, cwd, windowsHide: true, stdio: ['pipe', 'ignore', 'pipe'] });
   child.stdin.on('error', () => {}); // A worker may exit before shutdown closes its pipe.
   // Child stderr is intentionally not persisted: provider URLs may contain keys.
   child.stderr.on('data', () => {});
-  child.once('error', () => { child.startError = true; log('worker spawn failed'); });
+  child.once('error', () => { child.startError = true; log(`${name} spawn failed`); });
   child.once('exit', (code) => {
-    log(`worker exit ${code ?? 'signal'}`);
-    if (win && !shuttingDown) {
+    log(`${name} exit ${code ?? 'signal'}`);
+    if (stage === 'ready' && win && !shuttingDown) {
       dialog.showErrorBox('JMGJ Research', '내장 서버가 종료됐습니다. 앱을 다시 실행해 주세요.');
       app.quit();
     }
@@ -42,10 +61,11 @@ function worker(command, args, env, cwd) {
   return child;
 }
 
-async function shutdown() {
-  if (shuttingDown) return;
+function shutdown() {
+  if (shutdownPromise) return shutdownPromise;
   shuttingDown = true;
-  await Promise.all(children.map(async (child) => {
+  startupAbort.abort();
+  shutdownPromise = Promise.all(children.map(async (child) => {
     child.stdin.end();
     if (child.exitCode !== null || child.signalCode !== null) return;
     await new Promise((resolve) => {
@@ -59,6 +79,30 @@ async function shutdown() {
       child.once('exit', () => { clearTimeout(timer); resolve(); });
     });
   }));
+  return shutdownPromise;
+}
+
+async function createWindow() {
+  win = new BrowserWindow({ title: 'JMGJ Research', width: 1360, height: 900, minWidth: 960, minHeight: 640,
+    backgroundColor: '#060a12', show: false, webPreferences: {
+      nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true, webviewTag: false,
+      allowRunningInsecureContent: false, spellcheck: false } });
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    if (safeExternal(url)) void shell.openExternal(url);
+    return { action: 'deny' };
+  });
+  win.webContents.on('will-navigate', (event, url) => {
+    const origin = config ? `http://127.0.0.1:${config.port}` : null;
+    if (!origin || new URL(url).origin !== origin) {
+      event.preventDefault();
+      if (safeExternal(url)) void shell.openExternal(url);
+    }
+  });
+  win.on('closed', () => { win = undefined; });
+  Menu.setApplicationMenu(null);
+  await win.loadFile(path.join(__dirname, 'startup.html'));
+  timings.loadingWindow = Math.round(performance.now() - launchedAt);
+  if (!diagnostics) win.show();
 }
 
 function setupSession(origin, token) {
@@ -114,6 +158,8 @@ function menu() {
 }
 
 async function start() {
+  await createWindow();
+  startupAbort.signal.throwIfAborted();
   stage = 'configuration';
   config = await loadConfig(configFile, path.join(process.env.LOCALAPPDATA || app.getPath('appData'), 'jmgj-research'));
   fs.mkdirSync(config.dataRoot, { recursive: true });
@@ -134,25 +180,21 @@ async function start() {
     FRONTEND_ORIGINS: origin, RESEARCH_BACKEND_URL: `http://127.0.0.1:${backendPort}`,
     GEOCODE_BACKEND_URL: `http://127.0.0.1:${backendPort}`, NODE_ENV: 'production',
     HOSTNAME: '127.0.0.1', PORT: String(config.port), ELECTRON_RUN_AS_NODE: '1', NEXT_TELEMETRY_DISABLED: '1' };
-  stage = 'backend';
-  worker(path.join(backend, 'jmgj-backend.exe'), [], env, backend);
-  await waitReady(`http://127.0.0.1:${backendPort}/api/health`, { 'x-jmgj-desktop-token': token }, children);
-  stage = 'frontend';
-  worker(process.execPath, [path.join(web, 'desktop-server.cjs')], env, web);
-  await waitReady(origin, { Cookie: `jmgj-desktop-session=${token}` }, children);
+  stage = 'services';
+  const readiness = { signal: startupAbort.signal };
+  // Independent workers prepare together. A failed/cancelled launch is always
+  // cleaned up before a retry; no previous private server is reused.
+  worker('backend', path.join(backend, 'jmgj-backend.exe'), [], env, backend);
+  worker('frontend', process.execPath, [path.join(web, 'desktop-server.cjs')], env, web);
+  await Promise.all([
+    measure('backend', () => waitReady(`http://127.0.0.1:${backendPort}/api/health/ready`,
+      { 'x-jmgj-desktop-token': token }, children, readiness)),
+    measure('frontend', () => waitReady(`${origin}/api/desktop-ready`,
+      { Cookie: `jmgj-desktop-session=${token}` }, children, readiness)),
+  ]);
+  startupAbort.signal.throwIfAborted();
   await setupSession(origin, token);
   stage = 'window';
-  win = new BrowserWindow({ title: 'JMGJ Research', width: 1360, height: 900, minWidth: 960, minHeight: 640,
-    backgroundColor: '#060a12', show: false, webPreferences: {
-      nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true, webviewTag: false,
-      allowRunningInsecureContent: false, spellcheck: false } });
-  win.webContents.setWindowOpenHandler(({ url }) => {
-    if (safeExternal(url)) void shell.openExternal(url);
-    return { action: 'deny' };
-  });
-  win.webContents.on('will-navigate', (event, url) => {
-    if (new URL(url).origin !== origin) { event.preventDefault(); if (safeExternal(url)) void shell.openExternal(url); }
-  });
   menu();
   const { autoUpdater } = require('electron-updater');
   if (!diagnostics) {
@@ -165,15 +207,18 @@ async function start() {
           : phase === 'downloaded' ? '업데이트 설치·재시작…' : '업데이트 확인…';
       } });
   }
-  await win.loadURL(origin);
+  await measure('page', () => win.loadURL(origin));
+  startupAbort.signal.throwIfAborted();
   stage = 'ready';
-  log('ready');
+  timings.total = Math.round(performance.now() - launchedAt);
+  log(`ready elapsed ${timings.total}ms`);
   if (diagnostics) {
     // Health checks only; no weather/API calls and no user credentials.
     const unauthed = await fetch(origin);
     const backendDenied = await fetch(`http://127.0.0.1:${backendPort}/api/health`);
     fs.writeFileSync(path.join(localRoot, 'diagnostics.json'), JSON.stringify({
       ready: true, version: app.getVersion(), frontendPort: config.port, backendPort,
+      timings,
       frontendDenied: unauthed.status, backendDenied: backendDenied.status,
       packaged: app.isPackaged,
       updateFeedConfigured: fs.existsSync(path.join(resources, 'app-update.yml')),
@@ -194,10 +239,15 @@ else {
     if (!shuttingDown) { event.preventDefault(); void shutdown().then(() => app.quit()); }
   });
   app.whenReady().then(start).catch(async (error) => {
-    log(`startup failed at ${stage}`);
-    if (!diagnostics) dialog.showErrorBox('JMGJ Research 시작 실패',
-      `${error.code === 'EADDRINUSE' ? '앱의 로컬 포트가 사용 중입니다. 다른 실행 창을 닫고 다시 실행해 주세요.' : '내장 서버를 실행하지 못했습니다.'}\n설정·로그 폴더: ${localRoot}`);
+    if (shuttingDown) return;
+    const failedStage = error.stage || stage;
+    const reason = ['EADDRINUSE', 'WORKER_EXIT', 'STARTUP_TIMEOUT'].includes(error.code) ? error.code : 'STARTUP_FAILED';
+    log(`startup failed at ${failedStage} (${reason})`);
     await shutdown();
+    if (!diagnostics) dialog.showErrorBox('JMGJ Research 시작 실패',
+      `${reason === 'EADDRINUSE' ? '앱의 로컬 포트가 사용 중입니다. 다른 실행 창을 닫고 다시 실행해 주세요.'
+        : reason === 'STARTUP_TIMEOUT' ? '앱 준비 시간이 초과됐습니다. 잠시 뒤 다시 실행해 주세요.'
+        : '내장 서버를 실행하지 못했습니다. 앱을 다시 실행해 주세요.'}\n설정·로그 폴더: ${localRoot}`);
     app.exit(1);
   });
 }

@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const net = require('node:net');
+const http = require('node:http');
 const { safeExternal, loadConfig, freePort, waitReady } = require('../runtime.cjs');
 
 test('external login/source links cannot open local files, credentials or hostile schemes', () => {
@@ -32,4 +33,32 @@ test('readiness does not reuse an unrelated worker or hide an exited child', asy
   const port = await freePort();
   assert.ok(port > 0);
   await assert.rejects(waitReady(`http://127.0.0.1:${port}`, {}, [{ exitCode: 1 }]), /내장 서버/);
+});
+
+test('cold server responses can take longer than the old 1.5 second deadline', async () => {
+  const server = http.createServer((request, response) => {
+    setTimeout(() => {
+      response.writeHead(request.headers['x-launch'] === 'private' ? 200 : 403);
+      response.end();
+    }, 1700);
+  });
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const url = `http://127.0.0.1:${server.address().port}/ready`;
+  try {
+    await waitReady(url, { 'x-launch': 'private' }, [], { timeout: 4000 });
+    await assert.rejects(waitReady(url, {}, [], { timeout: 100 }), { code: 'STARTUP_TIMEOUT' });
+  } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+});
+
+test('closing during startup cancels a hung readiness request promptly', async () => {
+  const server = http.createServer(() => {});
+  await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
+  const controller = new AbortController();
+  const started = Date.now();
+  const waiting = waitReady(`http://127.0.0.1:${server.address().port}`, {}, [], { signal: controller.signal });
+  setTimeout(() => controller.abort(), 30);
+  try {
+    await assert.rejects(waiting, { name: 'AbortError' });
+    assert.ok(Date.now() - started < 1500);
+  } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
 });

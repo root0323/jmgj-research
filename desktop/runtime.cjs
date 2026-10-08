@@ -58,20 +58,26 @@ function saveConfig(file, config) {
   fs.renameSync(file + '.tmp', file);
 }
 
-async function waitReady(url, headers, children, timeout = 90_000) {
+async function waitReady(url, headers, children, options = {}) {
+  const { timeout = 180_000, requestTimeout = 8_000, signal } =
+    typeof options === 'number' ? { timeout: options } : options;
   const deadline = Date.now() + timeout;
   while (Date.now() < deadline) {
+    signal?.throwIfAborted();
     if (children.some((child) => child.exitCode !== null || child.signalCode !== null || child.startError)) {
-      throw new Error('내장 서버 시작에 실패했습니다.');
+      throw Object.assign(new Error('내장 서버 시작에 실패했습니다.'), { code: 'WORKER_EXIT' });
     }
     try {
-      const response = await fetch(url, { headers, signal: AbortSignal.timeout(1500), redirect: 'error' });
-      await response.arrayBuffer();
+      const requestSignal = AbortSignal.timeout(Math.max(1, Math.min(requestTimeout, deadline - Date.now())));
+      const response = await fetch(url, { headers,
+        signal: signal ? AbortSignal.any([signal, requestSignal]) : requestSignal, redirect: 'error' });
+      await response.body?.cancel();
       if (response.ok) return;
     } catch { /* Wait for this launch's private worker, never reuse an old server. */ }
+    signal?.throwIfAborted();
     await new Promise((resolve) => setTimeout(resolve, 200));
   }
-  throw new Error('내장 서버 시작 시간이 초과됐습니다.');
+  throw Object.assign(new Error('내장 서버 시작 시간이 초과됐습니다.'), { code: 'STARTUP_TIMEOUT' });
 }
 
 module.exports = { safeExternal, validConfig, freePort, loadConfig, saveConfig, waitReady };

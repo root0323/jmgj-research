@@ -11,10 +11,6 @@ from fastapi import APIRouter, Query, HTTPException
 from pydantic import BaseModel, Field, ConfigDict
 from app.local_config import setting
 from app.services.geospatial_assets import cached_region, region_bounds
-from app.services.sky_brightness_model.core.calculator import (
-    prepare_pixel_geometry,
-    run_pipeline,
-)
 from app.services.sky_brightness_model.core.config import EnvironmentConfig
 from app.services.sky_brightness_model.core.data_loader import (
     environment_query,
@@ -271,6 +267,9 @@ def fetch_black_marble_dem_sqm(
 
     try:
         import rasterio
+        # Numba/LLVM and rasterio are required only for an actual model
+        # calculation, not for opening the app or using location search.
+        from app.services.sky_brightness_model.core.calculator import prepare_pixel_geometry, run_pipeline
     except Exception:
         return None
 

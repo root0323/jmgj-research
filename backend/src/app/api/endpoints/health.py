@@ -10,6 +10,13 @@ from app.api.endpoints.geocode import get_kakao_proxy_base
 router = APIRouter()
 
 
+@router.get("/ready")
+def ready() -> dict[str, bool]:
+    # DesktopAccessMiddleware still authenticates the launch token. Startup
+    # readiness must not enumerate geospatial files or access external APIs.
+    return {"ok": True}
+
+
 def get_asset_status(path_env: str, url_env: str) -> dict[str, Any]:
     path_value = setting(path_env).strip()
     url_configured = bool(setting(url_env).strip())
