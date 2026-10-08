@@ -1,0 +1,13 @@
+JMGJ Research — research preview
+Source and corresponding build instructions: https://github.com/root0323/jmgj-research
+Development branch: codex/personal-weather-app
+Original research: https://github.com/gyeon27/JMGJ
+
+Stellarium Web Engine is distributed under AGPL-3.0.
+Its bundled AGPL license is in web/public/stellarium/skydata/surveys/milkyway.
+Astronomical catalogs, images and geographic data credits are in Settings > Sources.
+DEM / Black Marble files, API credentials and user weather caches are not included.
+
+Electron / Chromium notices accompany the application. Bundled Python components
+retain their upstream licensing; see backend/_internal for packaged notices.
+This preview has no paid Windows code signing certificate.

@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 
-ENV_PATH = Path(__file__).with_name(".env")
+ENV_PATH = Path(os.environ.get("JMGJ_SETTINGS_FILE", str(Path(__file__).with_name(".env"))))
 
 
 def file_settings() -> dict[str, str]:

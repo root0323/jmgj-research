@@ -2,6 +2,7 @@ from app.local_config import setting
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from app.desktop_security import DesktopAccessMiddleware
 
 
 from app.api.router import api_router
@@ -24,6 +25,7 @@ def get_allowed_origins() -> list[str]:
 
 
 app = FastAPI()
+app.add_middleware(DesktopAccessMiddleware)
 
 app.add_middleware(
     CORSMiddleware,

@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import { backendHeaders } from "./backend-access";
 
 export async function proxyLocation(req: NextApiRequest, res: NextApiResponse, action: "search" | "suggest" | "reverse") {
   res.setHeader("Cache-Control", "no-store");
@@ -15,7 +16,7 @@ export async function proxyLocation(req: NextApiRequest, res: NextApiResponse, a
   try {
     const base = (process.env.GEOCODE_BACKEND_URL || process.env.RESEARCH_BACKEND_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
     const response = await fetch(`${base}/api/geocode${action === "reverse" ? "/reverse" : action === "suggest" ? "/suggest" : "/"}?${params}`, {
-      signal: AbortSignal.timeout(25_000), cache: "no-store",
+      headers: backendHeaders(), signal: AbortSignal.timeout(25_000), cache: "no-store",
     });
     if (!response.ok) throw new Error("geocode unavailable");
     return res.status(200).json(await response.json());

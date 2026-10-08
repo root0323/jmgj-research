@@ -1,0 +1,35 @@
+{
+  "name": "jmgj-research-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "JMGJ astronomy research desktop app",
+  "author": "root0323",
+  "license": "AGPL-3.0",
+  "main": "main.cjs",
+  "scripts": {
+    "prepare:app": "node scripts/prepare.cjs",
+    "start": "electron .",
+    "test": "node --test tests/*.test.cjs",
+    "pack": "electron-builder --win --dir",
+    "dist": "electron-builder --win nsis"
+  },
+  "devDependencies": { "electron": "44.7.0", "electron-builder": "26.15.3" },
+  "build": {
+    "appId": "io.github.root0323.jmgj-research",
+    "productName": "JMGJ Research",
+    "asar": true,
+    "directories": { "output": "dist" },
+    "files": ["main.cjs", "runtime.cjs", "package.json"],
+    "afterPack": "scripts/verify-package.cjs",
+    "extraResources": [
+      { "from": "build/web", "to": "web" },
+      { "from": "build/web/node_modules", "to": "web/node_modules", "filter": ["**/*"] },
+      { "from": "build/backend/jmgj-backend", "to": "backend" },
+      { "from": "NOTICE.txt", "to": "NOTICE.txt" }
+    ],
+    "win": { "target": [{ "target": "nsis", "arch": ["x64"] }], "signAndEditExecutable": false },
+    "nsis": { "oneClick": false, "perMachine": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true, "deleteAppDataOnUninstall": false },
+    "artifactName": "JMGJ-Research-${version}-Windows-${arch}-Setup.${ext}",
+    "publish": null
+  }
+}

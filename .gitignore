@@ -76,3 +76,9 @@ backend/src/app/services/sky_brightness_model/data/APIs/weather_cache*.json
 backend/src/app/services/sky_brightness_model/data/black_marble/
 backend/src/app/services/sky_brightness_model/data/dem/
 code/data/APIs/weather_cache*.json
+
+# desktop runtimes, unsigned installers and isolated production web build
+/desktop/node_modules/
+/desktop/build/
+/desktop/dist/
+/frontend/.next-desktop/

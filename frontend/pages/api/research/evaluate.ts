@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { isObject, validLocation } from "@/lib/meteoblue";
+import { backendHeaders } from "@/lib/backend-access";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   res.setHeader("Cache-Control", "no-store");
@@ -8,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const base = (process.env.RESEARCH_BACKEND_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
     const response = await fetch(`${base}/api/difficulty/evaluate-cached`, {
-      method: "POST", headers: { "Content-Type": "application/json" },
+      method: "POST", headers: { "Content-Type": "application/json", ...backendHeaders() },
       body: JSON.stringify(req.body), signal: AbortSignal.timeout(15_000), cache: "no-store",
     });
     if (!response.ok) return res.status(502).json({ error: "저장 자료를 계산하지 못했습니다." });
