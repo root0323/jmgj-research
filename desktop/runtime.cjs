@@ -80,4 +80,17 @@ async function waitReady(url, headers, children, options = {}) {
   throw Object.assign(new Error('내장 서버 시작 시간이 초과됐습니다.'), { code: 'STARTUP_TIMEOUT' });
 }
 
-module.exports = { safeExternal, validConfig, freePort, loadConfig, saveConfig, waitReady };
+function stopWorker(child, graceMs = 4000) {
+  if (child.startError || child.exitCode !== null || child.signalCode !== null) return Promise.resolve();
+  return new Promise((resolve) => {
+    const timer = setTimeout(() => {
+      // Production workers are single processes, not shell launchers. Kill
+      // only this owned child handle, and wait for its actual exit event.
+      child.kill('SIGKILL');
+    }, graceMs);
+    child.once('exit', () => { clearTimeout(timer); resolve(); });
+    child.stdin.end();
+  });
+}
+
+module.exports = { safeExternal, validConfig, freePort, loadConfig, saveConfig, waitReady, stopWorker };

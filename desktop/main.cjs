@@ -3,7 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
 const { spawn } = require('node:child_process');
-const { safeExternal, freePort, loadConfig, saveConfig, waitReady } = require('./runtime.cjs');
+const { safeExternal, freePort, loadConfig, saveConfig, waitReady, stopWorker } = require('./runtime.cjs');
 const { createUpdateController, isInstalled } = require('./updates.cjs');
 const publicServices = require('./public-services.json');
 
@@ -65,20 +65,7 @@ function shutdown() {
   if (shutdownPromise) return shutdownPromise;
   shuttingDown = true;
   startupAbort.abort();
-  shutdownPromise = Promise.all(children.map(async (child) => {
-    child.stdin.end();
-    if (child.exitCode !== null || child.signalCode !== null) return;
-    await new Promise((resolve) => {
-      const timer = setTimeout(() => {
-        if (process.platform === 'win32') {
-          const killer = spawn('taskkill', ['/pid', String(child.pid), '/t', '/f'], { windowsHide: true, stdio: 'ignore' });
-          killer.once('exit', resolve);
-          killer.once('error', resolve);
-        } else { child.kill('SIGKILL'); resolve(); }
-      }, 4000);
-      child.once('exit', () => { clearTimeout(timer); resolve(); });
-    });
-  }));
+  shutdownPromise = Promise.all(children.map(child => stopWorker(child)));
   return shutdownPromise;
 }
 
@@ -191,13 +178,13 @@ async function start() {
       { 'x-jmgj-desktop-token': token }, children, readiness)),
     measure('frontend', () => waitReady(`${origin}/api/desktop-ready`,
       { Cookie: `jmgj-desktop-session=${token}` }, children, readiness)),
+    measure('session', () => setupSession(origin, token)),
   ]);
   startupAbort.signal.throwIfAborted();
-  await setupSession(origin, token);
   stage = 'window';
   menu();
-  const { autoUpdater } = require('electron-updater');
   if (!diagnostics) {
+    const { autoUpdater } = await measure('updater', async () => require('electron-updater'));
     updates = createUpdateController({ updater: autoUpdater,
       installed: isInstalled(resources, app.isPackaged), getWindow: () => win, dialog, shutdown, log,
       onState: ({ phase, percent }) => {

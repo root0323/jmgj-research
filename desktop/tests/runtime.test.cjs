@@ -5,7 +5,8 @@ const os = require('node:os');
 const path = require('node:path');
 const net = require('node:net');
 const http = require('node:http');
-const { safeExternal, loadConfig, freePort, waitReady } = require('../runtime.cjs');
+const { spawn } = require('node:child_process');
+const { safeExternal, loadConfig, freePort, waitReady, stopWorker } = require('../runtime.cjs');
 
 test('external login/source links cannot open local files, credentials or hostile schemes', () => {
   assert.equal(safeExternal('https://my.meteoblue.com/'), true);
@@ -61,4 +62,21 @@ test('closing during startup cancels a hung readiness request promptly', async (
     await assert.rejects(waiting, { name: 'AbortError' });
     assert.ok(Date.now() - started < 1500);
   } finally { server.closeAllConnections(); await new Promise(resolve => server.close(resolve)); }
+});
+
+test('shutdown waits for owned workers and forcibly ends one that ignores stdin', async () => {
+  for (const graceful of [true, false]) {
+    const child = spawn(process.execPath, ['-e',
+      "setInterval(() => {}, 1000);" + (graceful ? "process.stdin.resume(); process.stdin.on('end', () => process.exit(0));" : "") +
+      "process.stdout.write('ready');"], { windowsHide: true, stdio: ['pipe', 'pipe', 'ignore'] });
+    child.stdin.on('error', () => {});
+    await new Promise((resolve, reject) => { child.stdout.once('data', resolve); child.once('error', reject); });
+    const started = Date.now();
+    try {
+      await stopWorker(child, 80);
+      assert.ok(child.exitCode !== null || child.signalCode !== null);
+      assert.ok(Date.now() - started < 1500);
+      if (graceful) assert.equal(child.exitCode, 0);
+    } finally { if (child.exitCode === null && child.signalCode === null) child.kill('SIGKILL'); }
+  }
 });
