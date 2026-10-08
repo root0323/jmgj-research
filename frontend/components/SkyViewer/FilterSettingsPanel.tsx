@@ -1,16 +1,18 @@
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { FILTER_GROUPS, readStoredFilterSetting, saveStoredFilterSetting } from "./filterSettings";
+import { FILTER_GROUPS } from "./filterSettings";
+import type { ObservationFilter } from "./types";
 import styles from "./SettingsWindow.module.css";
 
-export function FilterSettingsPanel() {
-  const [selectedFilter, setSelectedFilter] = useState(readStoredFilterSetting);
+export function FilterSettingsPanel({ selectedFilter, onChange, onSave }: {
+  selectedFilter: ObservationFilter | null; onChange: (filter: ObservationFilter | null) => void; onSave: () => void;
+}) {
   const [saveState, setSaveState] = useState<"idle" | "saved" | "error">("idle");
 
   function handleSave(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     try {
-      saveStoredFilterSetting(selectedFilter);
+      onSave();
       setSaveState("saved");
     } catch {
       setSaveState("error");
@@ -31,7 +33,7 @@ export function FilterSettingsPanel() {
                   value={filter.id}
                   checked={selectedFilter === filter.id}
                   onChange={() => {
-                    setSelectedFilter(filter.id);
+                    onChange(filter.id);
                     setSaveState("idle");
                   }}
                 />
@@ -50,7 +52,7 @@ export function FilterSettingsPanel() {
           className={styles.clearButton}
           disabled={selectedFilter === null}
           onClick={() => {
-            setSelectedFilter(null);
+            onChange(null);
             setSaveState("idle");
           }}
         >

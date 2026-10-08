@@ -1375,3 +1375,22 @@
     width: auto;
   }
 }
+.fieldOfViewInfo {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(280px, 80vw);
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 211, 138, 0.3);
+  border-radius: 6px;
+  background: rgba(8, 12, 24, 0.94);
+  color: #ffd38a;
+  font-size: 12px;
+  line-height: 1.6;
+  pointer-events: auto;
+}
+.fieldOfViewInfo strong { display: block; font-weight: 500; }
+.fieldOfViewInfo span { color: #94a3b8; }
+.fieldOfViewInfo button { width: 22px !important; height: 22px !important; margin-left: 6px; font-size: 18px; }

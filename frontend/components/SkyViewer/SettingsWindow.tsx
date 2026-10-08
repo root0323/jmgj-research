@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
-import type { TelescopeSettings } from "./types";
+import type { CameraSettings, ObservationFilter, TelescopeSettings } from "./types";
+import type { EquipmentSettings } from "./equipmentSettings";
+import { EquipmentPresetsPanel } from "./EquipmentPresetsPanel";
 import { DATA_SOURCE_GROUPS } from "./dataSources";
 import { CameraSettingsPanel } from "./CameraSettingsPanel";
 import { FilterSettingsPanel } from "./FilterSettingsPanel";
@@ -20,6 +22,11 @@ type SettingsTabId = (typeof SETTINGS_TABS)[number]["id"];
 type SettingsWindowProps = {
   id: string;
   telescopeSettings: TelescopeSettings;
+  cameraSettings: CameraSettings;
+  selectedFilter: ObservationFilter | null;
+  onCameraSettingsChange: (settings: CameraSettings) => void;
+  onFilterChange: (filter: ObservationFilter | null) => void;
+  onEquipmentApply: (settings: EquipmentSettings) => void;
   onTelescopeSettingsChange: (settings: TelescopeSettings) => void;
   onTelescopeSettingsSave: () => void;
   onClose: () => void;
@@ -28,6 +35,11 @@ type SettingsWindowProps = {
 export function SettingsWindow({
   id,
   telescopeSettings,
+  cameraSettings,
+  selectedFilter,
+  onCameraSettingsChange,
+  onFilterChange,
+  onEquipmentApply,
   onTelescopeSettingsChange,
   onTelescopeSettingsSave,
   onClose,
@@ -36,7 +48,7 @@ export function SettingsWindow({
   const dialogRef = useRef<HTMLDialogElement>(null);
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const [activeTab, setActiveTab] = useState<SettingsTabId>("telescope");
-  const [saveState, setSaveState] = useState<"idle" | "saved">("idle");
+  const [saveState, setSaveState] = useState<"idle" | "saved" | "error">("idle");
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -134,8 +146,8 @@ export function SettingsWindow({
             className={styles.content}
           >
             <h3>{tab.label}</h3>
-            {tab.id === "camera" && <CameraSettingsPanel />}
-            {tab.id === "filter" && <FilterSettingsPanel />}
+            {tab.id === "camera" && <CameraSettingsPanel settings={cameraSettings} onChange={onCameraSettingsChange} onSave={onTelescopeSettingsSave} />}
+            {tab.id === "filter" && <FilterSettingsPanel selectedFilter={selectedFilter} onChange={onFilterChange} onSave={onTelescopeSettingsSave} />}
             {tab.id === "sources" && (
               <div className={styles.sourceGroups}>
                 {typeof window !== "undefined" && ["localhost", "127.0.0.1"].includes(window.location.hostname) && (
@@ -194,12 +206,14 @@ export function SettingsWindow({
                   type="button"
                   className={styles.saveButton}
                   onClick={() => {
-                    onTelescopeSettingsSave();
-                    setSaveState("saved");
+                    try { onTelescopeSettingsSave(); setSaveState("saved"); }
+                    catch { setSaveState("error"); }
                   }}
                 >
                   {saveState === "saved" ? "저장됨" : "설정 저장"}
                 </button>
+                {saveState === "error" && <p className={styles.saveError} role="alert">설정을 저장하지 못했습니다. 저장 공간을 확인해 주세요.</p>}
+                <EquipmentPresetsPanel equipment={{ telescope: telescopeSettings, camera: cameraSettings, filter: selectedFilter }} onApply={onEquipmentApply} />
               </div>
             )}
           </section>

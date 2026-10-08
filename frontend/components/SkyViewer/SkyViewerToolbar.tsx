@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import styles from "./SkyViewer.module.css";
-import type { TelescopeSettings } from "./types";
+import type { CameraSettings, ObservationFilter, TelescopeSettings } from "./types";
+import type { EquipmentSettings } from "./equipmentSettings";
 import { SettingsWindow } from "./SettingsWindow";
 
 export type DisplayToggleName =
@@ -20,12 +21,23 @@ type ToolbarIconName =
   | "atmosphere"
   | "ground"
   | "deepSky"
+  | "fieldOfView"
   | "difficultyInfo"
   | "settings";
 
 type SkyViewerToolbarProps = {
   deepSkyMode: boolean;
   telescopeSettings: TelescopeSettings;
+  cameraSettings: CameraSettings;
+  selectedFilter: ObservationFilter | null;
+  onCameraSettingsChange: (settings: CameraSettings) => void;
+  onFilterChange: (filter: ObservationFilter | null) => void;
+  onEquipmentApply: (settings: EquipmentSettings) => void;
+  fieldOfViewStage: number;
+  fieldOfViewLabel: string;
+  fieldOfViewMessage: string;
+  onFieldOfViewToggle: () => void;
+  onFieldOfViewMessageDismiss: () => void;
   toggles: DisplayToggles;
   isEngineReady: boolean;
   onDeepSkyModeToggle: () => void;
@@ -135,6 +147,9 @@ function DisplayOptionsMenu({
 }
 
 function ToolbarIcon({ name }: { name: ToolbarIconName }) {
+  if (name === "fieldOfView") {
+    return <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 11h34v26H7Z" /><path d="M20 24h8M24 20v8" /></svg>;
+  }
   if (name === "constellation") {
     return (
       <svg viewBox="0 0 48 48" aria-hidden="true">
@@ -204,6 +219,16 @@ function ToolbarIcon({ name }: { name: ToolbarIconName }) {
 export function SkyViewerToolbar({
   deepSkyMode,
   telescopeSettings,
+  cameraSettings,
+  selectedFilter,
+  onCameraSettingsChange,
+  onFilterChange,
+  onEquipmentApply,
+  fieldOfViewStage,
+  fieldOfViewLabel,
+  fieldOfViewMessage,
+  onFieldOfViewToggle,
+  onFieldOfViewMessageDismiss,
   toggles,
   isEngineReady,
   onDeepSkyModeToggle,
@@ -273,6 +298,17 @@ export function SkyViewerToolbar({
         >
           <ToolbarIcon name="deepSky" />
         </button>
+        <div className={styles.toolbarSettingsWrapper}>
+          <button type="button" className={fieldOfViewStage ? styles.active : ""} onClick={onFieldOfViewToggle}
+            disabled={!isEngineReady} aria-label="촬영 화각" aria-pressed={fieldOfViewStage > 0}
+            title={fieldOfViewStage === 0 ? "화각 표시" : fieldOfViewStage === 1 ? "화각으로 확대" : "화각 닫기·이전 배율"}>
+            <ToolbarIcon name="fieldOfView" />
+          </button>
+          {(fieldOfViewStage > 0 || fieldOfViewMessage) && <div className={styles.fieldOfViewInfo} role="status">
+            {fieldOfViewMessage || <><strong>{fieldOfViewLabel}</strong><span>{fieldOfViewStage === 1 ? "한 번 더 누르면 확대" : "한 번 더 누르면 닫기"}</span></>}
+            {fieldOfViewMessage && <button type="button" aria-label="화각 안내 닫기" onClick={onFieldOfViewMessageDismiss}>×</button>}
+          </div>}
+        </div>
         <div className={styles.toolbarSettingsWrapper}>
           <button
             type="button"
@@ -348,6 +384,11 @@ export function SkyViewerToolbar({
         <SettingsWindow
           id={settingsWindowId}
           telescopeSettings={telescopeSettings}
+          cameraSettings={cameraSettings}
+          selectedFilter={selectedFilter}
+          onCameraSettingsChange={onCameraSettingsChange}
+          onFilterChange={onFilterChange}
+          onEquipmentApply={onEquipmentApply}
           onTelescopeSettingsChange={onTelescopeSettingsChange}
           onTelescopeSettingsSave={onTelescopeSettingsSave}
           onClose={closeSettingsWindow}

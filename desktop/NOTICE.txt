@@ -16,3 +16,9 @@ API credentials, raw research files and user weather caches are not included.
 Electron / Chromium notices accompany the application. Bundled Python components
 retain their upstream licensing; see backend/_internal for packaged notices.
 This preview has no paid Windows code signing certificate.
+
+Guéreins natural landscape © Fabien Chéreau / Stellarium.
+Bundled HiPS tiles from Stellarium Web Engine (AGPL-3.0):
+https://github.com/Stellarium/stellarium-web-engine/tree/master/apps/test-skydata/landscapes/guereins
+Original landscape author: https://github.com/Stellarium/stellarium/blob/master/landscapes/guereins/landscape.ini
+This default landscape is illustrative, not imagery of the selected observing site.

@@ -7,8 +7,14 @@ module.exports = async ({ appOutDir }) => {
   // The Next standalone runtime must be copied by its own explicit matcher.
   for (const required of ['web/node_modules/next/package.json', 'web/node_modules/next/dist/server/lib/start-server.js',
     'web/desktop-server.cjs', 'web/.next-desktop/BUILD_ID', 'web/public/stellarium/stellarium-web-engine.wasm',
+    'web/public/stellarium/landscapes/guereins/properties',
     'backend/jmgj-backend.exe', 'backend/jmgj-backend.pkg', 'backend/_internal/python312.dll']) {
     if (!fs.existsSync(path.join(resources, required))) throw new Error('Incomplete desktop runtime: ' + required);
+  }
+  for (let tile = 0; tile < 12; tile++) {
+    if (!fs.existsSync(path.join(resources, `web/public/stellarium/landscapes/guereins/Norder0/Dir0/Npix${tile}.webp`))) {
+      throw new Error('Incomplete bundled natural landscape');
+    }
   }
   const root = path.join(resources, 'data/black-marble/VJ146A4-2025');
   const index = JSON.parse(fs.readFileSync(path.join(root, 'index.json'), 'utf8'));

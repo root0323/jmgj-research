@@ -222,8 +222,8 @@ export function configureEngineLandscape(engine: StellariumEngine) {
   const landscapes = getEngineModule(engine, "landscapes");
   if (!landscapes) return;
 
-  addDataSource(landscapes, "/stellarium/landscapes/zero", "zero");
-  trySetValue(engine, ["landscapes.current_id"], "zero");
+  addDataSource(landscapes, "/stellarium/landscapes/guereins", "guereins");
+  trySetValue(engine, ["landscapes.current_id"], "guereins");
   trySetValue(engine, ["landscapes.visible"], true);
   trySetValue(engine, ["landscapes.fog_visible"], false);
   landscapes.update?.();

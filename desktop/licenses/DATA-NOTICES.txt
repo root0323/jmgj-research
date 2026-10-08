@@ -39,3 +39,9 @@ Digitized Sky Survey images from STScI and CDS HiPS.
 https://archive.stsci.edu/dss/acknowledging.html
 https://aladin.cds.unistra.fr/hips/
 Image credits and source links are also available in Settings > Sources.
+
+Guéreins natural landscape © Fabien Chéreau / Stellarium.
+Bundled HiPS tiles from Stellarium Web Engine (AGPL-3.0):
+https://github.com/Stellarium/stellarium-web-engine/tree/master/apps/test-skydata/landscapes/guereins
+Original landscape author: https://github.com/Stellarium/stellarium/blob/master/landscapes/guereins/landscape.ini
+This default landscape is illustrative, not imagery of the selected observing site.

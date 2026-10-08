@@ -3,8 +3,6 @@ import type { FormEvent } from "react";
 import type { CameraSettings } from "./types";
 import {
   isValidCameraSettings,
-  readStoredCameraSettings,
-  saveStoredCameraSettings,
 } from "./cameraSettings";
 import styles from "./SettingsWindow.module.css";
 
@@ -14,16 +12,17 @@ const CAMERA_FIELDS: { key: keyof CameraSettings; label: string }[] = [
   { key: "pixelSizeUm", label: "픽셀 크기(μm)" },
 ];
 
-export function CameraSettingsPanel() {
-  const [settings, setSettings] = useState(readStoredCameraSettings);
+export function CameraSettingsPanel({ settings, onChange, onSave }: {
+  settings: CameraSettings; onChange: (settings: CameraSettings) => void; onSave: () => void;
+}) {
   const [saveState, setSaveState] = useState<"idle" | "saved" | "error">("idle");
 
   function updateSetting(key: keyof CameraSettings, value: string) {
     const parsed = value === "" ? null : Number(value);
-    setSettings((current) => ({
-      ...current,
+    onChange({
+      ...settings,
       [key]: parsed !== null && Number.isFinite(parsed) ? parsed : null,
-    }));
+    });
     setSaveState("idle");
   }
 
@@ -31,7 +30,7 @@ export function CameraSettingsPanel() {
     event.preventDefault();
     if (!isValidCameraSettings(settings)) return;
     try {
-      saveStoredCameraSettings(settings);
+      onSave();
       setSaveState("saved");
     } catch {
       setSaveState("error");

@@ -48,6 +48,9 @@ import { evaluateWeather } from "@/lib/weather-evaluation";
 import { getLunarContext } from "./coordinates";
 import { useAutomaticSeeing } from "./useAutomaticSeeing";
 import { useAutomaticTerrain } from "./useAutomaticTerrain";
+import { readActiveEquipment, saveActiveEquipment } from "./equipmentSettings";
+import type { EquipmentSettings } from "./equipmentSettings";
+import { useFieldOfView } from "./useFieldOfView";
 import { SkyViewerToolbar } from "./SkyViewerToolbar";
 import type { DisplayToggleName, DisplayToggles } from "./SkyViewerToolbar";
 import {
@@ -138,14 +141,6 @@ function quantizeSkyBrightnessDirection(
     altitude: Math.round((direction.altitude ?? 0) / step) * step,
     azimuth: (((Math.round((direction.azimuth ?? 0) / step) * step) % 360) + 360) % 360,
   };
-}
-
-function saveStoredTelescopeSettings(settings: TelescopeSettings) {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(
-    TELESCOPE_SETTINGS_STORAGE_KEY,
-    JSON.stringify(settings)
-  );
 }
 
 const DEEP_SKY_IMAGE_FOV = 8 * DEG_TO_RAD;
@@ -604,8 +599,9 @@ export default function SkyViewer() {
   );
   const [timeSpeedIndex, setTimeSpeedIndex] = useState(0);
   const [timeDirection, setTimeDirection] = useState<1 | -1>(1);
-  const [telescopeSettings, setTelescopeSettings] =
-    useState<TelescopeSettings>(() => readStoredTelescopeSettings());
+  const [equipment, setEquipment] = useState(() => readActiveEquipment(readStoredTelescopeSettings()));
+  const telescopeSettings = equipment.telescope;
+  const fieldOfView = useFieldOfView(engineRef, selectedTargetRef, status === "ready", telescopeSettings.focalLengthMm, equipment.camera);
   const [skyBrightness, setSkyBrightness] = useState(() =>
     getFallbackSkyBrightness(SEOUL.latitude, SEOUL.longitude)
   );
@@ -1444,11 +1440,11 @@ export default function SkyViewer() {
   }
 
   function handleTelescopeSettingsChange(nextSettings: TelescopeSettings) {
-    setTelescopeSettings(nextSettings);
+    setEquipment(current => ({ ...current, telescope: nextSettings }));
   }
 
   function handleTelescopeSettingsSave() {
-    saveStoredTelescopeSettings(telescopeSettings);
+    saveActiveEquipment(equipment);
   }
 
   function handleApplyLocation(location: ObserverLocation, name?: string) {
@@ -1548,6 +1544,16 @@ export default function SkyViewer() {
         deepSkyMode={deepSkyMode}
         isEngineReady={status === "ready"}
         telescopeSettings={telescopeSettings}
+        cameraSettings={equipment.camera}
+        selectedFilter={equipment.filter}
+        onCameraSettingsChange={camera => setEquipment(current => ({ ...current, camera }))}
+        onFilterChange={filter => setEquipment(current => ({ ...current, filter }))}
+        onEquipmentApply={(next: EquipmentSettings) => { saveActiveEquipment(next); setEquipment(next); }}
+        fieldOfViewStage={fieldOfView.stage}
+        fieldOfViewLabel={fieldOfView.field ? `${(fieldOfView.field.width * 180 / Math.PI).toFixed(2)}° × ${(fieldOfView.field.height * 180 / Math.PI).toFixed(2)}°${fieldOfView.field.pixelScale ? ` · ${fieldOfView.field.pixelScale.toFixed(2)}″/px` : ""}` : ""}
+        fieldOfViewMessage={fieldOfView.message}
+        onFieldOfViewToggle={fieldOfView.toggle}
+        onFieldOfViewMessageDismiss={fieldOfView.dismissMessage}
         toggles={toggles}
         onDeepSkyModeToggle={handleDeepSkyModeToggle}
         onTelescopeSettingsSave={handleTelescopeSettingsSave}
