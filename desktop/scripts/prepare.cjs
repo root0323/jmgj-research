@@ -35,4 +35,4 @@ function inspect(directory) {
 }
 inspect(destination);
 inspect(path.join(desktop, 'build/backend/jmgj-backend'));
-console.log('Desktop web + Python worker prepared. Verified Black Marble subset staged separately; no credentials or raw research files.');
+console.log('Desktop web + Python worker prepared. Only the pinned Black Marble catalogue ships; no worldwide H5s, credentials or raw research files.');

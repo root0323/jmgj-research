@@ -166,35 +166,15 @@ export function projectTargetToScreen(
   );
   const fov = rawFov > Math.PI ? (rawFov * Math.PI) / 180 : rawFov;
   const projection = getCoreNumber(engine, "projection", 0);
-  const distance = Math.hypot(x, y);
-
-  if (projection === 2) {
-    const forward = -z;
-    const angle = Math.atan2(distance, forward);
-    const radius = angle * (rect.height / fov);
-    const normalizedX = distance > 0 ? x / distance : 0;
-    const normalizedY = distance > 0 ? y / distance : 0;
-
-    return {
-      x: rect.width / 2 + normalizedY * radius,
-      y: rect.height / 2 + normalizedX * radius,
-    };
-  }
-
-  const angle = Math.atan2(distance, z);
-  const scale =
-    projection === 1
-      ? rect.height / 2 / Math.tan(fov / 4)
-      : rect.height / 2 / Math.tan(fov / 2);
-  const radius =
-    projection === 1 ? Math.tan(angle / 2) * scale : Math.tan(angle) * scale;
-  const normalizedX = distance > 0 ? x / distance : 0;
-  const normalizedY = distance > 0 ? y / distance : 0;
-
-  return {
-    x: rect.width / 2 + normalizedX * radius,
-    y: rect.height / 2 - normalizedY * radius,
-  };
+  // Stellarium VIEW uses OpenGL axes: X right, Y up, -Z forward.
+  // Native fov is the viewport's smaller dimension (projection.h).
+  const forward = -z;
+  if (forward <= 0 || !Number.isFinite(fov) || fov <= 0) return null;
+  const halfSize = Math.min(rect.width, rect.height) / 2;
+  const scale = projection === 2
+    ? halfSize / Math.tan(fov / 4) / (Math.hypot(x, y, z) + forward)
+    : halfSize / Math.tan(fov / 2) / forward;
+  return { x: rect.width / 2 + x * scale, y: rect.height / 2 - y * scale };
 }
 
 function vectorToSpherical(vector: number[]) {

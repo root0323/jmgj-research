@@ -292,6 +292,10 @@ export function createMilkyWayOutlineObjects(engine: StellariumEngine) {
 }
 
 export function setInitialHorizonView(engine: StellariumEngine) {
+  // PROJ_PERSPECTIVE=1: a level horizon stays straight when looking up/down.
+  // Stereographic=2 bends the horizon away from the screen centre.
+  trySetValue(engine, ["projection"], 1);
+  keepHorizonLevel(engine);
   const altitude = 18 * DEG_TO_RAD;
   const lookVector: [number, number, number] = [
     0,
@@ -299,6 +303,14 @@ export function setInitialHorizonView(engine: StellariumEngine) {
     Math.sin(altitude),
   ];
   engine.lookAt?.(lookVector, 0);
+}
+
+export function keepHorizonLevel(engine: StellariumEngine) {
+  const observer = engine.observer ?? engine.core?.observer as (SweObj & { roll?: number }) | undefined;
+  if (observer && typeof observer.roll === "number" && Math.abs(observer.roll) > 1e-9) {
+    observer.roll = 0;
+    updateObserverFrame(engine, true);
+  }
 }
 
 export async function createConstellationLineObjects(

@@ -6,7 +6,9 @@ Original research: https://github.com/gyeon27/JMGJ
 Stellarium Web Engine is distributed under AGPL-3.0.
 Its bundled AGPL license is in web/public/stellarium/skydata/surveys/milkyway.
 Astronomical catalogs, images and geographic data credits are in Settings > Sources.
-Black Marble 2025 VJ146A4 V2 app subsets are included (540 tiles, about 1.14 GB).
+Black Marble 2025 VJ146A4 V2 app subsets are downloaded for the selected region.
+Only the pinned catalogue ships; cached tiles are reused offline. No NASA login.
+Data host: https://astrosky-black-marble.jmgj-kakao-search.workers.dev/
 Native-resolution radiance, quality and coordinates are retained losslessly.
 These are derived app subsets, not the complete NASA HDF-EOS products.
 DEM is downloaded from the public Copernicus GLO-90 store for the selected region.

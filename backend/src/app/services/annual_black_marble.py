@@ -4,6 +4,7 @@ NASA tokens are arguments only. Manifests, reports and progress never contain
 credentials. Raw NASA files are retained alongside verified app subsets.
 """
 from datetime import datetime, timezone
+from functools import lru_cache
 import json
 import os
 from pathlib import Path
@@ -236,9 +237,19 @@ def _cached_tiles(root: Path, bounds) -> dict | None:
             if not match or match[1] != tile:
                 return None
             path = root / "compact" / item["file"]
-            if path.stat().st_size != item["compactBytes"]:
+            stat = path.stat()
+            if stat.st_size != item["compactBytes"]:
+                return None
+            if item.get("compactSha256") and not _verified_hash(str(path), stat.st_size,
+                    stat.st_mtime_ns, stat.st_ctime_ns, item["compactSha256"]):
                 return None
             paths.append(str(path))
         return {"blackMarble": paths, "month": None, "year": YEAR, "product": PRODUCT}
     except (OSError, KeyError, ValueError, TypeError):
         return None
+
+
+@lru_cache(maxsize=540)
+def _verified_hash(path: str, size: int, modified: int, created: int, expected: str) -> bool:
+    # Cache by file identity metadata so sky-direction changes do not reread H5s.
+    return file_sha256(Path(path)) == expected

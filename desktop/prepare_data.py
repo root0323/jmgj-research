@@ -1,4 +1,5 @@
-"""Stage only the verified annual app subset; never copy raw research files."""
+"""Stage a verified cloud release, or only its pinned catalogue for the app."""
+import argparse
 import json
 import os
 from pathlib import Path
@@ -9,6 +10,19 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend" / "src"))
 from app.services.annual_black_marble import NAME, PRODUCT, YEAR, world_root
 from app.services.black_marble_storage import file_sha256
 from app.services.geospatial_assets import validate_light
+from app.services.cloud_black_marble import read_catalogue
+
+
+def stage_catalogue(source: Path, destination: Path):
+    catalogue = read_catalogue(source / "index.json")
+    clean = {"product": PRODUCT, "version": 2, "year": YEAR, "tiles": {
+        tile: {key: item[key] for key in ("file", "compactBytes", "compactSha256")}
+        for tile, item in sorted(catalogue["tiles"].items())}}
+    destination.mkdir(parents=True, exist_ok=True)
+    if any(path.is_file() and path.name != "index.json" for path in destination.rglob("*")):
+        raise ValueError("App catalogue staging must contain no H5 or unrelated files.")
+    (destination / "index.json").write_text(json.dumps(clean, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return {"tiles": len(clean["tiles"]), "catalogueBytes": (destination / "index.json").stat().st_size}
 
 
 def stage(source: Path, destination: Path, expected_count=540):
@@ -46,6 +60,9 @@ def stage(source: Path, destination: Path, expected_count=540):
 
 
 if __name__ == "__main__":
-    destination = Path(__file__).resolve().parent / "build/data/black-marble/VJ146A4-2025"
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--publish-directory", type=Path, help="Stage full verified tiles for Cloudflare publishing only")
+    args = parser.parse_args()
+    destination = Path(__file__).resolve().parent / "build/data-catalogue/black-marble/VJ146A4-2025"
     source = Path(os.environ["JMGJ_BLACK_MARBLE_SOURCE"]) if os.environ.get("JMGJ_BLACK_MARBLE_SOURCE") else world_root()
-    print(json.dumps(stage(source, destination)))
+    print(json.dumps(stage(source, args.publish_directory) if args.publish_directory else stage_catalogue(source, destination)))

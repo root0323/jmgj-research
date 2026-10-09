@@ -35,6 +35,7 @@ class AutomaticTerrainTests(unittest.TestCase):
                 return {'dem': str(dem), 'bounds': (126, 37, 128, 39)}
             with patch('app.services.automatic_terrain.cached_region', return_value=None), \
                  patch('app.services.automatic_terrain.cached_annual_tiles', return_value={'year': 2025}), \
+                 patch('app.services.automatic_terrain.ensure_annual_tiles', return_value={'year': 2025}), \
                  patch('app.services.automatic_terrain.prepare_region', side_effect=prepare) as download:
                 self.assertEqual(manager.request(37.5, 127, start=True)['state'], 'running')
                 self.assertTrue(entered.wait(3))

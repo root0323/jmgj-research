@@ -12,6 +12,10 @@ The app subsets retain AllAngle_Composite_Snow_Free, its quality field, lat/lon
 and source attributes with native resolution, value types and lossless compression.
 Other original layers are excluded. These derived files are not the complete NASA
 product and do not imply NASA approval or endorsement of this app or its model.
+Verified 2025 app subsets are distributed by the developer through Cloudflare
+Workers Static Assets, and stored locally only when a selected region needs them.
+Data host: https://astrosky-black-marble.jmgj-kakao-search.workers.dev/
+Processing source: https://github.com/root0323/jmgj-research
 
 Copernicus GLO-90 DEM / DSM (downloaded as needed)
 Source: https://registry.opendata.aws/copernicus-dem/

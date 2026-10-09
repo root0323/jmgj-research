@@ -32,12 +32,21 @@ module.exports = async ({ appOutDir }) => {
   const root = path.join(resources, 'data/black-marble/VJ146A4-2025');
   const index = JSON.parse(fs.readFileSync(path.join(root, 'index.json'), 'utf8'));
   if (index.product !== 'VJ146A4' || index.year !== 2025 || Object.keys(index.tiles).length !== 540) {
-    throw new Error('Incomplete bundled Black Marble dataset');
+    throw new Error('Incomplete pinned Black Marble catalogue');
   }
   for (const [tile, item] of Object.entries(index.tiles)) {
     if (!/^VJ146A4\.A2025001\.h\d{2}v\d{2}\.002\.\d{13}\.h5$/.test(item.file) ||
-      !item.file.includes('.' + tile + '.') || fs.statSync(path.join(root, 'compact', item.file)).size !== item.compactBytes) {
-      throw new Error('Missing/corrupt bundled Black Marble tile: ' + tile);
+      !item.file.includes('.' + tile + '.') || !Number.isInteger(item.compactBytes) ||
+      item.compactBytes < 8 || item.compactBytes > 25 * 1024 * 1024 || !/^[a-f0-9]{64}$/.test(item.compactSha256)) {
+      throw new Error('Invalid pinned Black Marble tile: ' + tile);
     }
   }
+  function rejectNightLights(directory) {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const file = path.join(directory, entry.name);
+      if (entry.isDirectory()) rejectNightLights(file);
+      else if (/\.(h5|hdf5)$/i.test(entry.name)) throw new Error('Worldwide night lights must not ship with the app: ' + entry.name);
+    }
+  }
+  rejectNightLights(path.join(resources, 'data'));
 };

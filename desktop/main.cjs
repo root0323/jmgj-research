@@ -163,7 +163,9 @@ async function start() {
     KAKAO_PROXY_URL: publicServices.kakaoProxyUrl || process.env.KAKAO_PROXY_URL || '',
     RESEARCH_ASSET_DIR: config.assetRoot || path.join(config.dataRoot, 'assets'),
     BLACK_MARBLE_GLOBAL_DIR: path.join(config.dataRoot, 'black-marble', 'VJ146A4-2025'),
-    BLACK_MARBLE_BUNDLED_DIR: path.join(resources, 'data', 'black-marble', 'VJ146A4-2025'),
+    BLACK_MARBLE_BUNDLED_DIR: '',
+    BLACK_MARBLE_CATALOG_FILE: path.join(resources, 'data', 'black-marble', 'VJ146A4-2025', 'index.json'),
+    BLACK_MARBLE_ASSETS_URL: publicServices.blackMarbleAssetsUrl,
     DEM_GLOBAL_DIR: path.join(config.dataRoot, 'dem', 'Copernicus-GLO-90'),
     FRONTEND_ORIGINS: origin, RESEARCH_BACKEND_URL: `http://127.0.0.1:${backendPort}`,
     GEOCODE_BACKEND_URL: `http://127.0.0.1:${backendPort}`, NODE_ENV: 'production',
@@ -218,7 +220,9 @@ async function start() {
       packaged: app.isPackaged,
       updateFeedConfigured: fs.existsSync(path.join(resources, 'app-update.yml')),
       installed: isInstalled(resources, app.isPackaged),
-      blackMarbleBundled: fs.existsSync(path.join(env.BLACK_MARBLE_BUNDLED_DIR, 'index.json')),
+      blackMarbleBundled: fs.existsSync(path.join(resources, 'data/black-marble/VJ146A4-2025/compact')),
+      blackMarbleCatalogue: fs.existsSync(env.BLACK_MARBLE_CATALOG_FILE),
+      blackMarbleCloud: env.BLACK_MARBLE_ASSETS_URL,
       dataConnected: ['dem/Copernicus-GLO-90/index.sqlite', 'black-marble/VJ146A4-2025/index.json']
         .map((name) => fs.existsSync(path.join(config.dataRoot, name))) }, null, 2));
     app.quit();

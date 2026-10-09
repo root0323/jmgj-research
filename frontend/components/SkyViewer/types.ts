@@ -15,6 +15,7 @@ export type SweObj = {
   utc?: number;
   latitude?: number;
   longitude?: number;
+  roll?: number;
   addDataSource?: (args: { url: string; key?: string }) => void;
   designations?: () => string[];
   getInfo?: (format?: string, observer?: SweObj) => unknown;

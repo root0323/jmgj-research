@@ -33,6 +33,7 @@ import {
   ensureDssDataSource,
   focusEngineMilkyWay,
   getEngineModule,
+  keepHorizonLevel,
   loadStellariumScript,
   patchWasmMemoryHelpers,
   setConstellationLineObjectVisible,
@@ -1269,6 +1270,7 @@ export default function SkyViewer() {
 
       const engine = engineRef.current;
       const lastStarCatalogUpdate = lastStarCatalogUpdateRef.current ?? 0;
+      if (engine) keepHorizonLevel(engine);
       if (engine && now - lastStarCatalogUpdate >= 600) {
         lastStarCatalogUpdateRef.current = now;
         updateVisibleStarCatalog(engine, clickTargetsRef.current);

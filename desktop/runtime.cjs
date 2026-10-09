@@ -6,7 +6,8 @@ const EXTERNAL_HOSTS = ['meteoblue.com', 'github.com', 'openstreetmap.org', 'nom
   '7timer.info', 'kakao.com', 'vworld.kr', 'nasa.gov', 'aws.amazon.com', 'opendata.aws',
   'copernicus.eu', 'esa.int', 'stellarium.org', 'unistra.fr', 'stsci.edu', 'doi.org',
   'creativecommons.org', 'astrobackyard.com', 'galactic-hunter.com', 'cloudynights.com',
-  'practicalastrophotography.com', 'nebulaphotos.com', 'nikon.com.au'];
+  'practicalastrophotography.com', 'nebulaphotos.com', 'nikon.com.au',
+  'astrosky-black-marble.jmgj-kakao-search.workers.dev'];
 
 function safeExternal(raw) {
   try {

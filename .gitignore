@@ -88,4 +88,6 @@ code/data/APIs/weather_cache*.json
 # operator-only Cloudflare tooling and local secrets
 /services/kakao-search/node_modules/
 /services/kakao-search/.wrangler/
+/services/black-marble/.wrangler/
+/services/black-marble/assets/
 .dev.vars*
