@@ -1,6 +1,6 @@
 {
   "name": "jmgj-research-desktop",
-  "version": "0.7.1",
+  "version": "0.7.2",
   "private": true,
   "description": "AstroSky astronomy research desktop app",
   "author": "root0323",
@@ -29,6 +29,7 @@
       "runtime.cjs",
       "startup.html",
       "updates.cjs",
+      "update-storage.cjs",
       "public-services.json",
       "package.json"
     ],
@@ -76,7 +77,7 @@
     "nsis": {
       "oneClick": false,
       "perMachine": false,
-      "allowToChangeInstallationDirectory": true,
+      "allowToChangeInstallationDirectory": false,
       "createDesktopShortcut": true,
       "deleteAppDataOnUninstall": false,
       "preCompressedFileExtensions": [

@@ -6,7 +6,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { createUpdateController, isInstalled } = require('../updates.cjs');
 
-function fixture({ installed = true, answers = [], available = true } = {}) {
+function fixture({ installed = true, answers = [], available = true, cleanup } = {}) {
   const updater = new EventEmitter();
   const calls = [], messages = [], progress = [];
   updater.checkForUpdates = async () => {
@@ -23,7 +23,7 @@ function fixture({ installed = true, answers = [], available = true } = {}) {
   const window = { isDestroyed: () => false, setProgressBar: (value) => progress.push(value) };
   const controller = createUpdateController({ updater, installed, getWindow: () => window,
     dialog: { showMessageBox: async (_, options) => { messages.push(options); return { response: answers.shift() ?? 1 }; } },
-    shutdown: async () => calls.push('shutdown') });
+    shutdown: async () => calls.push('shutdown'), cleanup });
   return { updater, calls, messages, progress, controller };
 }
 
@@ -105,4 +105,18 @@ test('offline background checks remain silent while manual checks explain the fa
   await f.controller.check(true);
   assert.equal(f.messages.length, 1);
   assert.equal(f.controller.getState().phase, 'idle');
+});
+
+test('checks wait for startup maintenance once and a cleanup failure never disables updates', async () => {
+  let finish, count = 0;
+  const f = fixture({ available: false, cleanup: () => { count++; return new Promise(resolve => { finish = resolve; }); } });
+  const checking = f.controller.check();
+  while (!finish) await new Promise(resolve => setImmediate(resolve));
+  assert.deepEqual(f.calls, []);
+  finish(); await checking; await f.controller.check();
+  assert.equal(count, 1);
+  assert.deepEqual(f.calls, ['check', 'check']);
+  const broken = fixture({ available: false, cleanup: async () => { throw Error('locked file'); } });
+  await broken.controller.check();
+  assert.deepEqual(broken.calls, ['check']);
 });

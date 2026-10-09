@@ -7,10 +7,14 @@ function isInstalled(resources, packaged) {
   catch { return false; }
 }
 
-function createUpdateController({ updater, installed, getWindow, dialog, shutdown, log = () => {}, onState = () => {} }) {
+function createUpdateController({ updater, installed, getWindow, dialog, shutdown, log = () => {}, onState = () => {}, cleanup = async () => {} }) {
   let state = { phase: 'idle', version: '', percent: 0 };
   let active;
   let ignoredVersion = '';
+  let maintenance;
+  function maintainOnce() {
+    return maintenance ??= Promise.resolve().then(cleanup).catch(() => log('update storage cleanup deferred'));
+  }
   const timers = [];
   const listeners = [];
   const window = () => { const value = getWindow(); return value && !value.isDestroyed() ? value : undefined; };
@@ -62,6 +66,7 @@ function createUpdateController({ updater, installed, getWindow, dialog, shutdow
           detail: 'Setup.exe로 설치한 앱을 실행해 주세요. 폴더에서 바로 실행한 미리보기에는 업데이트를 설치하지 않습니다.', buttons: ['확인'] });
         return;
       }
+      await maintainOnce(); // Do not race startup cache cleanup with a new download.
       if (state.phase === 'downloaded') return await offerInstall();
       change({ phase: 'checking' });
       const result = await updater.checkForUpdates();
@@ -103,6 +108,7 @@ function createUpdateController({ updater, installed, getWindow, dialog, shutdow
     getState: () => ({ ...state }),
     start() {
       if (!installed || timers.length) return;
+      void maintainOnce();
       timers.push(setTimeout(() => void check(false), 20_000));
       timers.push(setInterval(() => void check(false), 6 * 60 * 60 * 1000));
       timers.forEach((timer) => timer.unref?.());

@@ -5,6 +5,7 @@ const crypto = require('node:crypto');
 const { spawn } = require('node:child_process');
 const { safeExternal, freePort, loadConfig, saveConfig, waitReady, stopWorker } = require('./runtime.cjs');
 const { createUpdateController, isInstalled } = require('./updates.cjs');
+const { cleanupAfterSuccessfulStart } = require('./update-storage.cjs');
 const publicServices = require('./public-services.json');
 
 const localRoot = process.env.JMGJ_DESKTOP_PROFILE || path.join(process.env.LOCALAPPDATA || app.getPath('appData'), 'jmgj-research', 'desktop');
@@ -183,10 +184,22 @@ async function start() {
   startupAbort.signal.throwIfAborted();
   stage = 'window';
   menu();
+  await measure('page', () => win.loadURL(origin));
+  startupAbort.signal.throwIfAborted();
+  stage = 'ready';
+  timings.total = Math.round(performance.now() - launchedAt);
+  log(`ready elapsed ${timings.total}ms`);
   if (!diagnostics) {
     const { autoUpdater } = await measure('updater', async () => require('electron-updater'));
     updates = createUpdateController({ updater: autoUpdater,
       installed: isInstalled(resources, app.isPackaged), getWindow: () => win, dialog, shutdown, log,
+      cleanup: async () => {
+        const result = await cleanupAfterSuccessfulStart({ installed: isInstalled(resources, app.isPackaged),
+          execPath: process.execPath, currentVersion: app.getVersion(), signal: startupAbort.signal,
+          cacheRoot: path.join(process.env.LOCALAPPDATA || app.getPath('appData'), 'jmgj-research-desktop-updater'),
+          protectedPaths: [localRoot, config.dataRoot, config.assetRoot, process.env.JMGJ_SETTINGS_FILE], log });
+        if (result.legacyBytes || result.cacheBytes) log(`update storage reclaimed ${result.legacyBytes + result.cacheBytes} bytes`);
+      },
       onState: ({ phase, percent }) => {
         const item = Menu.getApplicationMenu()?.getMenuItemById('check-for-updates');
         if (item) item.label = phase === 'checking' ? '업데이트 확인 중…'
@@ -194,11 +207,6 @@ async function start() {
           : phase === 'downloaded' ? '업데이트 설치·재시작…' : '업데이트 확인…';
       } });
   }
-  await measure('page', () => win.loadURL(origin));
-  startupAbort.signal.throwIfAborted();
-  stage = 'ready';
-  timings.total = Math.round(performance.now() - launchedAt);
-  log(`ready elapsed ${timings.total}ms`);
   if (diagnostics) {
     // Health checks only; no weather/API calls and no user credentials.
     const unauthed = await fetch(origin);
