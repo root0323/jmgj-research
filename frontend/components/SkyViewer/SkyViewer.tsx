@@ -562,9 +562,11 @@ function centerTargetOnce(
   centerTarget(engine, target, vector, 1.2, true);
 }
 
-export default function SkyViewer() {
+export default function SkyViewer({ mobile = false, onEngineReady, onLocationChange }: { mobile?: boolean; onEngineReady?: (engine: StellariumEngine) => void; onLocationChange?: (location: ObserverLocation) => void } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<StellariumEngine | null>(null);
+  const engineReadyCallbackRef = useRef(onEngineReady);
+  useEffect(() => { engineReadyCallbackRef.current = onEngineReady; }, [onEngineReady]);
   const catalogSearchRef = useRef(new Map<string, SweObj>());
   const searchSuggestionsRef = useRef<SearchSuggestion[]>([]);
   const clickTargetsRef = useRef<SearchSuggestion[]>([]);
@@ -622,6 +624,7 @@ export default function SkyViewer() {
       latitude: SEOUL.latitude,
       longitude: SEOUL.longitude,
     });
+  useEffect(() => { onLocationChange?.(observerLocation); }, [observerLocation, onLocationChange]);
   const [toggles, setToggles] = useState<DisplayToggles>({
     horizontalCoordinates: false,
     equatorialCoordinates: false,
@@ -631,7 +634,7 @@ export default function SkyViewer() {
     atmosphere: false,
     ground: true,
   });
-  const [isControlPanelOpen, setIsControlPanelOpen] = useState(true);
+  const [isControlPanelOpen, setIsControlPanelOpen] = useState(!mobile);
   const weather = usePersonalWeather(observerLocation);
   const terrain = useAutomaticTerrain(observerLocation);
   const weatherSnapshot = weather.snapshot;
@@ -707,13 +710,14 @@ export default function SkyViewer() {
 
         const engine = await createEngine({
           canvasElement: canvas,
-          res: ["http://stelladata.noctua-software.com/surveys/stars/info.json"],
+          res: [],
           wasmFile: "/stellarium/stellarium-web-engine.wasm",
         });
 
         if (disposed) return;
 
         engineRef.current = engine;
+        engineReadyCallbackRef.current?.(engine);
         catalogSearch.clear();
         searchSuggestionsRef.current = [];
         clickTargetsRef.current = [];

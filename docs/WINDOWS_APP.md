@@ -1,5 +1,15 @@
 # Windows 앱 미리보기
 
+## 0.8.0 · Android 추가와 Windows 유지
+
+Android APK를 별도로 제공하며 기존 Windows 프로그램·업데이트·장비 설정과 지역/기상/배경 저장 자료를 유지한다. Android 구조·설치·검증은 [ANDROID_APP.md](ANDROID_APP.md)에 기록한다.
+
+기본 별 자료 서버의 인증서·서비스 오류를 피하도록 검증한 Stellarium 별 타일 45개(290,006 bytes)를 내장한다. Windows 화면·계산 서버 구조는 그대로 유지한다. backend 소스가 검증된 0.7.3과 동일함을 확인하고 계산 EXE/PKG를 재사용했다. 각각 SHA-256 `bb28198d99df5ca496bdc5e18801324df92c10cbbddfeb7380d28b1ae87fb4c6`, `b36fd3113a54212c633d1950915ae2c821cfec9ad29584553a06795fbbdc9fa4`이다.
+
+최종 Windows 묶음 `build-output/0.8.0-verified`의 웹 BUILD_ID는 `2j1AvOjoSLjT5Lk5vmjoe`이다. 프론트엔드 104개, Windows 런타임 24개 테스트를 통과했다. 별도 프로필·포트 43146 진단에서 버전 0.8.0, 준비 6.487초, 두 서버의 무인증 403, 업데이트 feed·Black Marble 지역 카탈로그 설정을 확인했다. 두 서버 exit 0과 부모 종료를 확인했다.
+
+Windows 설치 파일 221,287,490 bytes, SHA-256 `e334b665d1f94822690248d78ff22dd231f7b8421f084cf95aa1f4749d88f7f1`; blockmap 229,099 bytes, SHA-256 `fb3ddcfb8c94345a5862162a851c6629e5e5b710465dc774f125b10222a25132`; latest.yml 379 bytes, SHA-256 `d1f9bd00c5e090b15b58443aaee276042f41eeed22f5c8437219f3a793e1e704`다. manifest의 크기·SHA-512도 최종 검증본과 일치한다. 기존 앱의 차등 업데이트 및 저장 공간 정리 경로를 유지한다.
+
 현재 관측 웹을 Electron 창에서 실행한다. Next.js 서버와 Python 계산 서버를 포함하므로 사용자는 Node.js나 Python을 따로 설치하지 않는다. 서버는 이 컴퓨터의 `127.0.0.1`에서만 실행하며 앱 종료 시 함께 종료한다. Render 등 호스팅 서버를 깨우지 않는다.
 
 ## 사용

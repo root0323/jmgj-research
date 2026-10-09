@@ -15,7 +15,7 @@ export function useAutomaticTerrain({ latitude, longitude }: ObserverLocation) {
       try {
         const response = await fetch("/api/research/assets", {
           method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ location: { latitude, longitude } }), signal: controller.signal,
+          body: JSON.stringify({ location: { latitude, longitude }, retry }), signal: controller.signal,
         });
         if (!response.ok) throw new Error("terrain unavailable");
         const data = await response.json() as TerrainState;

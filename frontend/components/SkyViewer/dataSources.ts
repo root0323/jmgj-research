@@ -14,6 +14,14 @@ type DataSourceGroup = {
 // Add new external APIs, datasets and assets here when introducing them.
 export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
   {
+    title: "앱 실행·기기 센서",
+    sources: [
+      { name: "Android Sensor Framework", url: "https://developer.android.com/develop/sensors-and-location/sensors/sensors_position", description: "Android 휴대폰·태블릿의 방향과 기울기 센서. 관측 위치에 따른 자기편각을 보정하며 센서 없는 기기는 손 조작 지원" },
+      { name: "Pyodide", url: "https://pyodide.org/en/stable/", description: "Android 앱 안의 별도 WebAssembly 작업에서 기존 Python 연구 모델과 NumPy·HDF5·Rasterio를 실행. 과학 계산 결과는 실측값이 아님", notice: { label: "MPL-2.0 및 라이브러리별 이용 조건", url: "https://github.com/pyodide/pyodide/blob/main/LICENSE" } },
+      { name: "geotiff.js", url: "https://github.com/geotiffjs/geotiff.js", description: "Android 계산 작업에서 DEM 압축을 해제. 원본 해상도·높이값·좌표를 유지하며 저장된 원본 파일은 보존", notice: { label: "MIT License", url: "https://github.com/geotiffjs/geotiff.js/blob/master/LICENSE" } },
+    ],
+  },
+  {
     title: "천체 촬영 안내",
     sources: [
       { name: "AstroBackyard · 계절별 촬영 대상", url: "https://astrobackyard.com/astrophotography-targets-by-season/", description: "대표 촬영 대상·함께 담는 구도 참고. 앱의 한글 검색 이름과 대상별 촬영 포인트는 개발자가 정리" },
@@ -76,6 +84,7 @@ export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
     sources: [
       { name: "Celestron · 광학 계산 참고", url: "https://www.celestron.com/blogs/knowledgebase/astronomy-glossary-of-terms", description: "접안렌즈 겉보기 시야각과 배율로 실시야각을 추정하는 계산 기준. 앱의 원형 시야는 광학 사양 기반 근사이며 실측 영상이 아님" },
       { name: "Stellarium Web Engine", url: "https://github.com/Stellarium/stellarium-web-engine", description: "천구 표시 엔진과 Stellarium의 별·별자리·태양계·딥스카이 자료" },
+      { name: "Stellarium 기본 별 자료", url: "https://github.com/Stellarium/stellarium-web-engine/tree/15cd08a266a9fed1081bb5cd8fe62984943a9286/apps/test-skydata/stars", description: "약 7등급까지의 기본 별 타일을 고정 버전·파일 해시로 검증해 앱에 내장. 별 이름과 추가 별 정보는 HYG 카탈로그를 함께 사용", notice: { label: "Stellarium Web Engine · AGPL-3.0", url: "https://github.com/Stellarium/stellarium-web-engine/blob/master/LICENSE-AGPL-3.0.txt" } },
       { name: "Stellarium 은하수 자료", url: "https://github.com/Stellarium/stellarium-web-engine/tree/master/apps/test-skydata/surveys/milkyway", description: "Stellarium 은하수 텍스처 기반 HiPS 이미지와 이 이미지에서 추출한 윤곽선. 윤곽선은 화면 표시용이며 은하의 물리적 경계를 뜻하지 않음", notice: { label: "Stellarium Web Engine 라이선스", url: "https://github.com/Stellarium/stellarium-web-engine/blob/master/LICENSE-AGPL-3.0.txt" } },
       { name: "Stellarium · Guéreins 배경", url: "https://github.com/Stellarium/stellarium-web-engine/tree/master/apps/test-skydata/landscapes/guereins", description: "Fabien Chéreau의 프랑스 Guéreins 자연 지평 배경을 앱에 내장. 선택한 관측 장소의 실제 지형 사진이 아닌 기본 배경", credit: "Guéreins landscape © Fabien Chéreau / Stellarium", notice: { label: "Stellarium Web Engine · AGPL-3.0", url: "https://github.com/Stellarium/stellarium-web-engine/blob/master/LICENSE-AGPL-3.0.txt" } },
       { name: "ERFA · IAU SOFA", url: "https://github.com/liberfa/erfa/blob/master/src/g2icrs.c", description: "은하수 검색 시 현재 하늘의 은하면 방향을 찾는 은하좌표 변환 기준" },

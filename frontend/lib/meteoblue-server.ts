@@ -1,4 +1,3 @@
-import { randomUUID } from "node:crypto";
 import {
   isObject, WEATHER_PLANS,
   type PackageResult, type WeatherLocation, type WeatherPlan, type WeatherSnapshot,
@@ -24,7 +23,10 @@ async function readJson(response: Response) {
   } finally {
     await reader.cancel();
   }
-  return JSON.parse(Buffer.concat(chunks).toString("utf8")) as unknown;
+  const bytes = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
+  return JSON.parse(new TextDecoder().decode(bytes)) as unknown;
 }
 
 function upstreamError(status: number) {
@@ -80,7 +82,7 @@ async function fetchPackage(apiKey: string, location: WeatherLocation, name: str
 
 export async function fetchWeather(apiKey: string, location: WeatherLocation, plan: WeatherPlan): Promise<WeatherSnapshot> {
   const results = await Promise.all(WEATHER_PLANS[plan].packages.map((name) => fetchPackage(apiKey, location, name)));
-  return { id: randomUUID(), plan, location, fetchedAt: new Date().toISOString(), results };
+  return { id: crypto.randomUUID(), plan, location, fetchedAt: new Date().toISOString(), results };
 }
 
 export async function fetchAccountHistory(apiKey: string, start: string, end: string) {

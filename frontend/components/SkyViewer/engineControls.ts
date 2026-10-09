@@ -173,7 +173,7 @@ export function addOfficialPlanetDataSources(engine: StellariumEngine) {
   addDataSource(dsos, `${baseUrl}dso`, "dso");
   addDataSource(
     stars,
-    "http://stelladata.noctua-software.com/surveys/stars",
+    "/stellarium/skydata/stars",
     "stars"
   );
   addDataSource(planets, `${baseUrl}surveys/sso/moon`, "moon");

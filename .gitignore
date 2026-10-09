@@ -91,3 +91,14 @@ code/data/APIs/weather_cache*.json
 /services/black-marble/.wrangler/
 /services/black-marble/assets/
 .dev.vars*
+.android-tools/
+android/.gradle/
+android/build/
+android/app/build/
+android/app/src/main/assets/web/
+android/local.properties
+android/signing.properties
+android/*.jks
+android/web/dist/
+android/node_modules/
+frontend/public/stellarium/skydata/stars/
