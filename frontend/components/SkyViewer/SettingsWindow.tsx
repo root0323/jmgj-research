@@ -16,7 +16,7 @@ const SETTINGS_TABS = [
   { id: "camera", label: "카메라 설정" },
   { id: "filter", label: "필터 설정" },
   { id: "background", label: "배경 설정" },
-  { id: "deepSky", label: "딥스카이별 촬영 세팅 정보" },
+  { id: "deepSky", label: "천체별 촬영 세팅 정보" },
   { id: "sources", label: "출처" },
 ] as const;
 

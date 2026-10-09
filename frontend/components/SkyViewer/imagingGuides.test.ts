@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import { IMAGING_GUIDES, availableImagingRecipes, calculateImagingFrames, defaultImagingRecipe, searchImagingGuides } from "./imagingGuides";
+import { IMAGING_GUIDES, availableImagingRecipes, calculateImagingFrames, calculateLensFrames, calculatePlanetFrames, defaultImagingRecipe, searchImagingGuides } from "./imagingGuides";
 
 it("finds common Korean/English names and separately prefixed component catalog numbers", () => {
   expect(searchImagingGuides("말머리 성운")[0].id).toBe("horsehead");
@@ -9,6 +9,27 @@ it("finds common Korean/English names and separately prefixed component catalog 
   expect(searchImagingGuides("double cluster")[0].id).toBe("double");
   expect(searchImagingGuides("47 Tucanae")[0].id).toBe("tucanae");
   expect(searchImagingGuides("없는 천체")).toEqual([]);
+});
+
+it("finds lens targets and all seven observable planets independently of planetary nebulae", () => {
+  const andromeda = searchImagingGuides("M31")[0];
+  expect(andromeda.kind).not.toBe("planet");
+  if (andromeda.kind !== "planet") expect(andromeda.lens?.fixedSeconds[0]).toBeLessThan(1);
+  const milkyway = searchImagingGuides("Milky Way")[0];
+  if (milkyway.kind !== "planet") expect(milkyway.lensOnly).toBe(true);
+  for (const name of ["수성", "Venus", "화성", "Jupiter", "토성", "Uranus", "해왕성"]) expect(searchImagingGuides(name)[0].kind).toBe("planet");
+  expect(searchImagingGuides("고리 성운")[0].kind).not.toBe("planet");
+});
+
+it("plans subsecond untracked lens frames and rejects incomplete counts", () => {
+  expect(calculateLensFrames(.5, 600)).toEqual({ count: 600, minutes: 5 });
+  for (const [seconds, count] of [[0, 600], [1, 0], [1, 3.5], [NaN, 50], [1, Infinity]]) expect(calculateLensFrames(seconds, count)).toBeNull();
+});
+
+it("limits planetary cadence by exposure and counts the selected subset of one clip", () => {
+  expect(calculatePlanetFrames(10, 60, 60, 20)).toEqual({ captured: 3600, stacked: 720, effectiveFps: 60 });
+  expect(calculatePlanetFrames(100, 60, 120, 10)).toEqual({ captured: 1200, stacked: 120, effectiveFps: 10 });
+  for (const args of [[0, 60, 60, 20], [5, 0, 60, 20], [5, 60, 0, 20], [5, 60, 60, 0], [5, 60, 60, 101], [NaN, 60, 60, 20]]) expect(calculatePlanetFrames(...args as [number, number, number, number])).toBeNull();
 });
 
 it("covers every proposed northern field and southern additions without duplicate ids", () => {

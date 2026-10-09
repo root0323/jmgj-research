@@ -4,15 +4,32 @@ export type ImagingCamera = "dslr" | "color" | "mono";
 export type ImagingRecipe = "RGB" | "LRGB" | "HaRGB" | "dual" | "HOO" | "SHO";
 type ProfileId = "orion" | "brightGalaxy" | "galaxy" | "emission" | "faintEmission" | "reflection" | "cluster" | "planetary" | "wide";
 type Range = readonly [number, number];
-export type ImagingGuide = {
+type GuideIdentity = {
   id: string;
   name: string;
   catalog: string;
   aliases: readonly string[];
-  season: "겨울" | "봄" | "여름" | "가을" | "남쪽 하늘";
-  profile: ProfileId;
+  season: "겨울" | "봄" | "여름" | "가을" | "남쪽 하늘" | "관측 시기 확인";
   note: string;
 };
+export type LensGuide = {
+  focalLength: string;
+  aperture: string;
+  iso: string;
+  fixedSeconds: Range;
+  trackedSeconds: Range;
+  fixedFrames: Range;
+  trackedFrames: Range;
+  note: string;
+};
+export type DeepSkyGuide = GuideIdentity & { profile: ProfileId; lens?: LensGuide; lensOnly?: boolean; kind?: never };
+export type PlanetGuide = GuideIdentity & {
+  kind: "planet";
+  exposureMs: Range;
+  clipSeconds: Range;
+  filterNote: string;
+};
+export type ImagingGuide = DeepSkyGuide | PlanetGuide;
 
 type ImagingProfile = {
   label: string;
@@ -35,13 +52,13 @@ export const IMAGING_PROFILES: Record<ProfileId, ImagingProfile> = {
   wide: { label: "광시야 성운 영역", broadSeconds: [60, 180], narrowSeconds: null, hours: [3, 6], monoRecipe: "LRGB", filterNote: "반사성운·암흑성운과 별 색을 함께 담는 광대역 촬영이 기본입니다. 모노는 LRGB를 사용합니다." },
 };
 
-function guide(id: string, name: string, catalog: string, season: ImagingGuide["season"], profile: ProfileId, note: string, ...aliases: string[]): ImagingGuide {
+function guide(id: string, name: string, catalog: string, season: ImagingGuide["season"], profile: ProfileId, note: string, ...aliases: string[]): DeepSkyGuide {
   return { id, name, catalog, season, profile, note, aliases };
 }
 
 // A row represents an imaging field. Multiple catalog numbers can be parts of
 // one field; the list is not a count of distinct astronomical objects.
-export const IMAGING_GUIDES: readonly ImagingGuide[] = [
+const DEEP_SKY_GUIDES: readonly DeepSkyGuide[] = [
   guide("orion", "오리온 대성운 · 러닝맨 성운", "M42 · M43 · NGC 1977", "겨울", "orion", "중심부는 5–15초 짧은 노출을 20–40장 추가해 HDR로 합성하세요. 러닝맨의 푸른 반사광은 광대역으로 남깁니다.", "오리온 성운", "Orion", "Running Man"),
   guide("horsehead", "말머리 성운 · 불꽃 성운", "B33 · IC 434 · NGC 2024", "겨울", "emission", "말머리는 B33, 밝은 배경은 IC 434입니다. Hα로 붉은 배경을 강조하고, 불꽃과 별 색은 RGB로 보완하세요. 알니탁의 번짐·고스트를 확인하세요.", "Barnard 33", "Horsehead", "Flame"),
   guide("rosette", "장미 성운", "NGC 2237 · 2238 · 2239 · 2246 / NGC 2244", "겨울", "emission", "성운 전체를 담는 화각을 먼저 확인하세요. HOO·SHO 모두 쓰이며 중앙 성단의 별 색은 RGB로 보완할 수 있습니다.", "Rosette", "C49", "NGC 2238", "NGC 2239", "NGC 2246"),
@@ -80,7 +97,8 @@ export const IMAGING_GUIDES: readonly ImagingGuide[] = [
   guide("hercules", "헤라클레스 구상성단", "M13 · NGC 6205", "여름", "cluster", "중심부 별이 뭉개지지 않게 짧은 노출부터 시작하세요. RGB 또는 LRGB로 별 색을 보존하세요.", "헤르쿨레스", "Hercules"),
   guide("wildduck", "야생오리 성단", "M11 · NGC 6705", "여름", "cluster", "밀집한 별과 주변 은하수 별을 함께 담습니다. 짧은 광대역 노출로 밝은 별의 포화를 줄이세요.", "Wild Duck"),
   guide("rho", "뱀주인자리 로 · 안타레스 주변", "Rho Ophiuchi · IC 4604 주변", "여름", "wide", "푸른 반사광·황색 성운·암흑 먼지를 함께 찍는 광시야 구도입니다. 어두운 하늘과 광대역을 우선하세요.", "로 오피유키", "Rho Ophiuchi", "Antares"),
-  guide("andromeda", "안드로메다 은하", "M31 · M32 · M110", "가을", "brightGalaxy", "넓은 화각을 확인하고 핵이 포화되면 10–30초 짧은 노출을 20–40장 보충하세요. 위성 은하도 함께 담을 수 있습니다.", "Andromeda"),
+  { ...guide("andromeda", "안드로메다 은하", "M31 · M32 · M110", "가을", "brightGalaxy", "넓은 화각을 확인하고 핵이 포화되면 10–30초 짧은 노출을 20–40장 보충하세요. 위성 은하도 함께 담을 수 있습니다.", "Andromeda", "망원경 없이 안드로메다"),
+    lens: { focalLength: "135–300mm · 실제 초점거리", aperture: "f/2.8–5.6", iso: "ISO 800–3200", fixedSeconds: [.5, 2], trackedSeconds: [30, 120], fixedFrames: [300, 1000], trackedFrames: [60, 180], note: "망원경 없이 망원렌즈로 은하 전체를 촬영할 수 있습니다. 삼각대 고정 촬영은 짧은 노출을 많이 합성하고 자주 구도를 다시 잡으세요. 적도의를 쓰면 긴 노출로 외곽을 더 쉽게 확보합니다. 센서 크기에 따라 화각은 달라집니다." } },
   guide("triangulum", "삼각형자리 은하", "M33 · NGC 598", "가을", "galaxy", "나선팔의 표면 밝기가 낮습니다. 광대역 총 노출을 늘리고 Hα로 별 생성 영역을 선택적으로 보충하세요.", "삼각형 은하", "Triangulum"),
   guide("heart", "하트 성운", "IC 1805", "가을", "faintEmission", "전체 하트와 중심 Melotte 15 촬영은 화각이 다릅니다. HOO·SHO 모두 쓰이며 약한 채널에 시간을 더 배분하세요.", "Heart", "Melotte 15"),
   guide("soul", "소울 · 태아 성운", "IC 1848 · W5", "가을", "faintEmission", "넓은 성운 전체는 짧은 초점거리·모자이크가 필요할 수 있습니다. 하트 성운과 함께 담는 구도도 있습니다.", "Soul", "영혼 성운"),
@@ -102,6 +120,27 @@ export const IMAGING_GUIDES: readonly ImagingGuide[] = [
   guide("magellanic", "대·소마젤란 은하", "LMC · SMC", "남쪽 하늘", "wide", "매우 넓은 두 은하를 각각 광시야로 촬영합니다. 광대역을 기본으로 하고 내부 방출성운에는 Hα를 보충할 수 있습니다. 한국에서는 뜨지 않습니다.", "대마젤란", "소마젤란", "Magellanic Clouds"),
 ];
 
+const MILKY_WAY: DeepSkyGuide = {
+  ...guide("milkyway", "은하수", "Milky Way · 광시야", "여름", "wide", "은하 중심부의 고도·방향과 달빛을 확인하세요. 한국에서는 보통 봄 새벽부터 여름·가을 초저녁에 중심부를 촬영합니다. 하늘과 움직이지 않는 전경은 따로 촬영해 합성할 수 있습니다.", "은하수 중심", "Milky Way", "Galaxy landscape", "망원경 없이", "광각렌즈"),
+  lensOnly: true,
+  lens: { focalLength: "14–35mm · 실제 초점거리", aperture: "f/1.8–2.8부터 · 별 모양 확인", iso: "ISO 1600–6400", fixedSeconds: [5, 15], trackedSeconds: [30, 90], fixedFrames: [20, 60], trackedFrames: [20, 60], note: "카메라와 광각렌즈·삼각대로 시작할 수 있습니다. 고정 촬영의 노출 한계는 초점거리·픽셀 크기·하늘 방향에 따라 다릅니다. 별이 흐르면 더 짧게 촬영하세요. 추적한 하늘과 전경은 별도로 합성합니다." },
+};
+
+const PLANETS: readonly PlanetGuide[] = [
+  { id: "mercury", name: "수성", catalog: "Mercury", aliases: ["행성", "수성 촬영"], season: "관측 시기 확인", kind: "planet", exposureMs: [1, 10], clipSeconds: [30, 90], filterNote: "컬러는 UV/IR 차단, 모노는 RGB. IR-pass는 흑백 명암을 보완하는 선택입니다.", note: "주로 위상 촬영 대상입니다. 낮은 고도와 밝은 박명 때문에 초점·시상 확보가 어렵습니다. 태양과 충분히 떨어진 때를 선택하고 광학계를 태양으로 향하지 마세요." },
+  { id: "venus", name: "금성", catalog: "Venus", aliases: ["행성", "샛별"], season: "관측 시기 확인", kind: "planet", exposureMs: [1, 10], clipSeconds: [60, 180], filterNote: "가시광 RGB는 위상을 기록합니다. 구름 무늬는 UV 대역을 통과하는 필터·카메라·광학계가 별도로 필요하고 노출도 길어질 수 있습니다.", note: "밝은 원반의 포화를 먼저 막으세요. UV 무늬 촬영은 일반 RGB 세팅과 별도입니다. 태양에 가까운 대상이므로 태양과 충분히 떨어진 때를 선택하세요." },
+  { id: "mars", name: "화성", catalog: "Mars", aliases: ["행성", "붉은 행성"], season: "관측 시기 확인", kind: "planet", exposureMs: [2, 10], clipSeconds: [60, 180], filterNote: "컬러는 UV/IR 차단, 모노는 RGB. IR-pass는 명암 보완용이며 자연색 RGB와 구분합니다.", note: "충 부근에서 원반이 커집니다. 극관·표면 무늬가 포화되지 않도록 확인하고, 낮은 고도의 색 번짐은 ADC와 고도 선택으로 줄일 수 있습니다." },
+  { id: "jupiter", name: "목성", catalog: "Jupiter", aliases: ["행성", "대적점", "Jove"], season: "관측 시기 확인", kind: "planet", exposureMs: [3, 15], clipSeconds: [60, 120], filterNote: "컬러는 UV/IR 차단, 모노는 RGB. IR-pass는 흑백 세부 보완에 사용합니다. SHO는 일반 자연색 행성 촬영 방식이 아닙니다.", note: "빠른 자전 때문에 긴 영상을 한 번에 합치면 세부가 흐려질 수 있습니다. 짧은 클립을 여러 번 찍고, 모노 RGB도 전체 채널 촬영 시간을 짧게 유지하세요. 위성에는 원반과 별도의 밝은 노출이 필요할 수 있습니다." },
+  { id: "saturn", name: "토성", catalog: "Saturn", aliases: ["행성", "토성 고리"], season: "관측 시기 확인", kind: "planet", exposureMs: [10, 30], clipSeconds: [120, 180], filterNote: "컬러는 UV/IR 차단, 모노는 RGB. IR-pass는 명암 보완용으로 선택합니다.", note: "목성보다 어두워 노출·Gain의 균형이 중요합니다. 고리가 원반보다 어두울 수 있으므로 함께 확인하세요. 장시간 클립은 자전·시상 변화 때문에 구간을 나눌 수 있습니다." },
+  { id: "uranus", name: "천왕성", catalog: "Uranus", aliases: ["행성"], season: "관측 시기 확인", kind: "planet", exposureMs: [30, 100], clipSeconds: [120, 300], filterNote: "우선 광대역 RGB로 작은 원반과 색을 기록하세요. IR 무늬 촬영은 큰 구경·민감한 카메라·별도 노출이 필요합니다.", note: "밝기가 낮고 원반이 작습니다. 목성처럼 많은 표면 세부를 기대하기보다 정확한 위치 확인과 초점·추적을 우선하세요. 위성은 원반과 별도 장노출이 필요합니다." },
+  { id: "neptune", name: "해왕성", catalog: "Neptune", aliases: ["행성"], season: "관측 시기 확인", kind: "planet", exposureMs: [50, 200], clipSeconds: [120, 300], filterNote: "우선 광대역 RGB로 원반과 색을 기록하세요. IR 관측은 별도 전문 촬영으로 구분합니다.", note: "매우 작고 어두운 원반입니다. 충분한 구경·정확한 초점·추적이 필요하고 주변 별과 구분해야 합니다. 위성 촬영은 원반 촬영과 별도로 진행하세요." },
+];
+
+export const IMAGING_GUIDES: readonly ImagingGuide[] = [...DEEP_SKY_GUIDES, MILKY_WAY, ...PLANETS];
+export function imagingGuideLabel(item: ImagingGuide): string {
+  return item.kind === "planet" ? "행성 · 동영상 합성" : item.lensOnly ? "은하수 · 카메라 렌즈" : IMAGING_PROFILES[item.profile].label;
+}
+
 export function normalizeImagingSearch(value: string): string {
   return value.normalize("NFKC").toLowerCase().replace(/[^a-z0-9가-힣]/g, "");
 }
@@ -109,23 +148,37 @@ export function normalizeImagingSearch(value: string): string {
 export function searchImagingGuides(query: string): readonly ImagingGuide[] {
   const key = normalizeImagingSearch(query);
   if (!key) return IMAGING_GUIDES;
-  return IMAGING_GUIDES.filter(item => [item.name, item.catalog, item.season, IMAGING_PROFILES[item.profile].label, ...item.aliases]
+  return IMAGING_GUIDES.filter(item => [item.name, item.catalog, item.season, imagingGuideLabel(item), ...item.aliases]
     .some(value => normalizeImagingSearch(value).includes(key)));
 }
 
 export function availableImagingRecipes(item: ImagingGuide, camera: ImagingCamera): readonly ImagingRecipe[] {
+  if (item.kind === "planet") return ["RGB"];
   const narrow = IMAGING_PROFILES[item.profile].narrowSeconds !== null;
   if (camera !== "mono") return narrow ? ["RGB", "dual"] : ["RGB"];
   return narrow ? ["LRGB", "RGB", "HOO", "SHO", "HaRGB"] : ["LRGB", "RGB"];
 }
 
 export function defaultImagingRecipe(item: ImagingGuide, camera: ImagingCamera): ImagingRecipe {
+  if (item.kind === "planet") return "RGB";
   return camera === "mono" ? IMAGING_PROFILES[item.profile].monoRecipe : "RGB";
 }
 
-export function imagingExposureRange(item: ImagingGuide, recipe: ImagingRecipe): Range {
+export function imagingExposureRange(item: DeepSkyGuide, recipe: ImagingRecipe): Range {
   const profile = IMAGING_PROFILES[item.profile];
   return ["dual", "HOO", "SHO", "HaRGB"].includes(recipe) ? profile.narrowSeconds ?? profile.broadSeconds : profile.broadSeconds;
+}
+
+export function calculateLensFrames(seconds: number, count: number) {
+  if (!Number.isFinite(seconds) || seconds <= 0 || seconds > 3600 || !Number.isInteger(count) || count < 1 || count > 10000) return null;
+  return { count, minutes: seconds * count / 60 };
+}
+
+export function calculatePlanetFrames(exposureMs: number, fps: number, duration: number, percent: number) {
+  if (![exposureMs, fps, duration, percent].every(Number.isFinite) || exposureMs < .1 || exposureMs > 1000 || fps < 1 || fps > 1000 || duration < 5 || duration > 600 || percent < 1 || percent > 100) return null;
+  const effectiveFps = Math.min(fps, 1000 / exposureMs);
+  const captured = Math.floor(effectiveFps * duration);
+  return { captured, stacked: Math.floor(captured * percent / 100), effectiveFps };
 }
 
 const CHANNELS: Record<ImagingRecipe, readonly (readonly [string, number])[]> = {

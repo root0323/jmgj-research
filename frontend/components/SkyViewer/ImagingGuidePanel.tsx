@@ -3,8 +3,10 @@ import type { TelescopeSettings } from "./types";
 import {
   IMAGING_GUIDES, IMAGING_PROFILES, availableImagingRecipes, calculateImagingFrames,
   defaultImagingRecipe, imagingExposureRange, searchImagingGuides,
+  imagingGuideLabel,
 } from "./imagingGuides";
-import type { ImagingCamera, ImagingGuide, ImagingRecipe } from "./imagingGuides";
+import type { DeepSkyGuide, ImagingCamera, ImagingGuide, ImagingRecipe } from "./imagingGuides";
+import { LensImagingDetails, PlanetImagingDetails } from "./SpecialImagingDetails";
 import styles from "./ImagingGuidePanel.module.css";
 
 const CAMERAS: readonly { id: ImagingCamera; label: string }[] = [
@@ -38,7 +40,7 @@ export function ImagingGuidePanel({ telescope }: { telescope: TelescopeSettings 
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14 5-7 7 7 7M7 12h14" /></svg>목록으로 돌아가기
         </button>
         <div className={styles.details}>
-          <div className={styles.targetTitle}><span>{IMAGING_PROFILES[selected.profile].label}</span>
+          <div className={styles.targetTitle}><span>{imagingGuideLabel(selected)}</span>
             <h4 ref={headingRef} tabIndex={-1}>{selected.name}</h4><p>{selected.catalog}</p>
           </div>
           <fieldset className={styles.cameras}><legend>촬영 카메라</legend>
@@ -46,17 +48,18 @@ export function ImagingGuidePanel({ telescope }: { telescope: TelescopeSettings 
               <input type="radio" name={`${id}-camera`} value={option.id} checked={camera === option.id} onChange={() => setCamera(option.id)} />{option.label}
             </label>)}
           </fieldset>
-          <GuideDetails key={`${selected.id}-${camera}`} guide={selected} camera={camera} telescope={telescope} />
+          {selected.kind === "planet" ? <PlanetImagingDetails key={`${selected.id}-${camera}`} guide={selected} camera={camera} telescope={telescope} /> :
+            <DeepSkyDetails key={`${selected.id}-${camera}`} guide={selected} camera={camera} telescope={telescope} />}
         </div>
       </> : <>
       <div className={styles.search}>
         <label htmlFor={`${id}-search`}>촬영 대상 검색</label>
         <div><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10" cy="10" r="6" /><path d="m15 15 5 5" /></svg>
           <input id={`${id}-search`} type="search" value={query} onChange={event => setQuery(event.target.value)}
-            placeholder="장미 성운, M31, NGC 7000…" autoComplete="off" />
+            placeholder="장미 성운, M31, 은하수, 목성…" autoComplete="off" />
         </div>
       </div>
-        <div ref={catalogRef} className={styles.catalog} aria-label="딥스카이 촬영 대상 목록">
+        <div ref={catalogRef} className={styles.catalog} aria-label="천체 촬영 대상 목록">
           <p className={styles.resultCount} role="status">{results.length} / {IMAGING_GUIDES.length}개 촬영 대상·구도</p>
           <p className={styles.catalogHint}>함께 표시한 천체는 촬영 구도를 기준으로 묶었습니다. 대상별 필터·보완 노출은 상세 정보에서 확인하세요.</p>
           <ul>
@@ -78,7 +81,18 @@ export function ImagingGuidePanel({ telescope }: { telescope: TelescopeSettings 
   );
 }
 
-function GuideDetails({ guide, camera, telescope }: { guide: ImagingGuide; camera: ImagingCamera; telescope: TelescopeSettings }) {
+function DeepSkyDetails({ guide, camera, telescope }: { guide: DeepSkyGuide; camera: ImagingCamera; telescope: TelescopeSettings }) {
+  const [optics, setOptics] = useState(guide.lensOnly ? "lens" : "telescope");
+  return <>
+    {guide.lens && !guide.lensOnly && <fieldset className={styles.cameras}><legend>촬영 장비</legend>
+      <label><input type="radio" name={`${guide.id}-optics`} checked={optics === "telescope"} onChange={() => setOptics("telescope")} />망원경</label>
+      <label><input type="radio" name={`${guide.id}-optics`} checked={optics === "lens"} onChange={() => setOptics("lens")} />카메라 렌즈 · 망원경 없이</label>
+    </fieldset>}
+    {optics === "lens" && guide.lens ? <LensImagingDetails guide={guide} lens={guide.lens} camera={camera} /> : <GuideDetails guide={guide} camera={camera} telescope={telescope} />}
+  </>;
+}
+
+function GuideDetails({ guide, camera, telescope }: { guide: DeepSkyGuide; camera: ImagingCamera; telescope: TelescopeSettings }) {
   const id = useId();
   const profile = IMAGING_PROFILES[guide.profile];
   const [recipe, setRecipe] = useState<ImagingRecipe>(defaultImagingRecipe(guide, camera));
