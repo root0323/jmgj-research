@@ -4,6 +4,8 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const crypto = require('node:crypto');
+const { execFile } = require('node:child_process');
+const { promisify } = require('node:util');
 const { cleanupAfterSuccessfulStart } = require('../update-storage.cjs');
 
 function fixture(t) {
@@ -121,4 +123,20 @@ test('aborted startup performs no destructive maintenance', async t => {
   const before = snapshot(f.root), controller = new AbortController(); controller.abort();
   await cleanupAfterSuccessfulStart({ ...f.options, signal: controller.signal });
   assert.deepEqual(snapshot(f.root), before);
+});
+
+test('the actual Electron runtime removes a physical ASAR archive without touching the live app or user data', async t => {
+  const f = fixture(t), archive = path.join(f.legacy, 'resources/app.asar');
+  const asar = require('@electron/asar');
+  const temporaryArchive = path.join(f.root, 'legacy.asar');
+  await asar.createPackage(archive, temporaryArchive);
+  fs.rmSync(archive, { recursive: true }); fs.renameSync(temporaryArchive, archive);
+  const active = snapshot(f.current), user = snapshot(f.profile), script = path.join(f.root, 'electron-cleanup.cjs');
+  fs.writeFileSync(script, `const {app}=require('electron');app.whenReady().then(async()=>{const {cleanupAfterSuccessfulStart}=require(${JSON.stringify(path.resolve(__dirname, '../update-storage.cjs'))});console.log(JSON.stringify(await cleanupAfterSuccessfulStart({...${JSON.stringify(f.options)},log:message=>console.error(message)})));app.exit(0);}).catch(()=>app.exit(1));`);
+  const env = { ...process.env }; delete env.ELECTRON_RUN_AS_NODE;
+  const child = await promisify(execFile)(require('electron'), [script], { env, windowsHide: true, timeout: 20000 });
+  assert.ok(JSON.parse(child.stdout.trim()).legacyBytes > 0, child.stderr);
+  assert.equal(fs.existsSync(archive), false);
+  assert.deepEqual(snapshot(f.current), active);
+  assert.deepEqual(snapshot(f.profile), user);
 });

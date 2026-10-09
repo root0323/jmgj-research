@@ -1,4 +1,9 @@
-const fs = require('node:fs');
+const archiveFs = require('node:fs');
+// Electron presents ASAR files as virtual directories. Cleanup must operate on
+// the physical archive. Transparent reads also leave the old archive open on
+// Windows, so identity is read through a bounded, explicitly closed file handle.
+let fs;
+try { fs = require('original-fs'); } catch { fs = archiveFs; }
 const fsp = fs.promises;
 const path = require('node:path');
 const crypto = require('node:crypto');
@@ -60,6 +65,30 @@ async function digest(file, signal) {
   return hash.digest('base64');
 }
 
+async function packageIdentity(archive) {
+  const info = await stat(archive);
+  if (info?.isDirectory()) return JSON.parse(await fsp.readFile(path.join(archive, 'package.json'), 'utf8'));
+  if (!info?.isFile() || info.isSymbolicLink()) return null;
+  const handle = await fsp.open(archive, 'r');
+  try {
+    const read = async (size, offset) => {
+      if (offset < 0 || offset + size > info.size) throw new Error('Invalid archive range');
+      const buffer = Buffer.alloc(size);
+      if ((await handle.read(buffer, 0, size, offset)).bytesRead !== size) throw new Error('Incomplete archive');
+      return buffer;
+    };
+    const size = await read(8, 0), headerSize = size.readUInt32LE(4);
+    if (size.readUInt32LE(0) !== 4 || headerSize < 8 || headerSize > 16 * 1024 * 1024) return null;
+    const header = await read(headerSize, 8), jsonSize = header.readUInt32LE(4);
+    if (header.readUInt32LE(0) !== headerSize - 4 || jsonSize > headerSize - 8) return null;
+    const entry = JSON.parse(header.subarray(8, 8 + jsonSize).toString('utf8')).files?.['package.json'];
+    if (!entry || entry.unpacked || entry.link || !Number.isSafeInteger(entry.size) || entry.size < 1 || entry.size > 65536 || !/^\d+$/.test(entry.offset)) return null;
+    const offset = Number(entry.offset);
+    if (!Number.isSafeInteger(offset)) return null;
+    return JSON.parse((await read(entry.size, 8 + headerSize + offset)).toString('utf8'));
+  } finally { await handle.close(); }
+}
+
 async function cleanInstalledCache({ cacheRoot, currentVersion, protectedPaths, signal }) {
   if (!cacheRoot || path.basename(cacheRoot) !== CACHE_NAME) return 0;
   const rootStat = await stat(cacheRoot);
@@ -112,10 +141,8 @@ async function cleanRenamedInstallation({ execPath, currentVersion, protectedPat
   if (await treeBytes(marker, boundary, protectedPaths, signal) === null ||
       await treeBytes(archive, boundary, protectedPaths, signal) === null) return 0;
   if (await fsp.readFile(marker, 'utf8') !== 'nsis') return 0;
-  // Electron reads app.asar/package.json transparently; Node tests use an asar
-  // directory fixture. An unreadable/unrecognized package is left untouched.
-  const pkg = JSON.parse(await fsp.readFile(path.join(archive, 'package.json'), 'utf8'));
-  if (pkg.name !== APP_NAME || !older(pkg.version, currentVersion) || older('0.7.1', pkg.version)) return 0;
+  const pkg = await packageIdentity(archive);
+  if (pkg?.name !== APP_NAME || !older(pkg.version, currentVersion) || older('0.7.1', pkg.version)) return 0;
   const preserved = [...protectedPaths, active];
   let reclaimed = 0, incomplete = false;
   for (const relative of [...LEGACY_FILES, ...LEGACY_RESOURCES.map(name => path.join('resources', name))]) {
@@ -150,7 +177,7 @@ async function cleanupAfterSuccessfulStart(options) {
   // Failure in one optional cleanup cannot prevent the app or updater working.
   for (const [field, operation] of [['legacyBytes', cleanRenamedInstallation], ['cacheBytes', cleanInstalledCache]]) {
     try { result[field] = await operation(args); }
-    catch { options.log?.('update storage cleanup deferred'); }
+    catch (error) { options.log?.(`update storage cleanup deferred ${field} (${typeof error.code === 'string' && /^[A-Z_]+$/.test(error.code) ? error.code : 'ERROR'})`); }
   }
   return result;
 }
