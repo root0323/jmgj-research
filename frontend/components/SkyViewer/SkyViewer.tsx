@@ -9,6 +9,7 @@ import {
   type CSSProperties,
 } from "react";
 import styles from "./SkyViewer.module.css";
+import { useBackgrounds } from "./useBackgrounds";
 import {
   getCoreNumber,
   getObjectInfo,
@@ -602,6 +603,7 @@ export default function SkyViewer() {
   const [timeDirection, setTimeDirection] = useState<1 | -1>(1);
   const [equipment, setEquipment] = useState(() => readActiveEquipment(readStoredTelescopeSettings()));
   const telescopeSettings = equipment.telescope;
+  const backgrounds = useBackgrounds(engineRef, status === "ready");
   const fieldOfView = useFieldOfView(engineRef, selectedTargetRef, status === "ready", telescopeSettings.focalLengthMm, equipment.camera, equipment.eyepiece);
   const cameraFieldLabel = fieldOfView.field ? `${(fieldOfView.field.width * 180 / Math.PI).toFixed(2)}° × ${(fieldOfView.field.height * 180 / Math.PI).toFixed(2)}°${fieldOfView.field.pixelScale ? ` · ${fieldOfView.field.pixelScale.toFixed(2)}″/px` : ""}` : "";
   const eyepieceFieldLabel = fieldOfView.eyepieceField ? `약 ${(fieldOfView.eyepieceField.diameter * 180 / Math.PI).toFixed(2)}° · ${fieldOfView.eyepieceField.magnification.toFixed(1)}배` : "";
@@ -1552,6 +1554,8 @@ export default function SkyViewer() {
       )}
 
       <SkyViewerToolbar
+        backgrounds={backgrounds}
+        onShowGround={() => handleToggle("ground", true)}
         deepSkyMode={deepSkyMode}
         isEngineReady={status === "ready"}
         telescopeSettings={telescopeSettings}

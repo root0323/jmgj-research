@@ -1,8 +1,8 @@
 {
   "name": "jmgj-research-desktop",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "private": true,
-  "description": "JMGJ astronomy research desktop app",
+  "description": "AstroSky astronomy research desktop app",
   "author": "root0323",
   "license": "AGPL-3.0",
   "main": "main.cjs",
@@ -19,7 +19,7 @@
   },
   "build": {
     "appId": "io.github.root0323.jmgj-research",
-    "productName": "JMGJ Research",
+    "productName": "AstroSky",
     "asar": true,
     "directories": {
       "output": "dist"
@@ -79,7 +79,9 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "deleteAppDataOnUninstall": false,
-      "preCompressedFileExtensions": [".h5"],
+      "preCompressedFileExtensions": [
+        ".h5"
+      ],
       "include": "installer.nsh"
     },
     "artifactName": "JMGJ-Research-${version}-Windows-${arch}-Setup.${ext}",

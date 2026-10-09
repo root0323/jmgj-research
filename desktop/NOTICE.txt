@@ -1,4 +1,4 @@
-JMGJ Research — research preview
+AstroSky — research preview
 Source and corresponding build instructions: https://github.com/root0323/jmgj-research
 Development branch: codex/personal-weather-app
 Original research: https://github.com/gyeon27/JMGJ
@@ -22,3 +22,10 @@ Bundled HiPS tiles from Stellarium Web Engine (AGPL-3.0):
 https://github.com/Stellarium/stellarium-web-engine/tree/master/apps/test-skydata/landscapes/guereins
 Original landscape author: https://github.com/Stellarium/stellarium/blob/master/landscapes/guereins/landscape.ini
 This default landscape is illustrative, not imagery of the selected observing site.
+
+Custom panorama sky segmentation uses Qualcomm FFNet-40S (BSD-3-Clause)
+and ONNX Runtime Web 1.23.2 (MIT). Models and runtime are bundled for offline
+processing; user panoramas are kept locally, not sent to an AI service.
+https://huggingface.co/qualcomm/FFNet-40S
+https://github.com/microsoft/onnxruntime
+See resources/licenses/FFNET.txt, ONNX-RUNTIME.txt and ONNX-THIRD-PARTY.txt.

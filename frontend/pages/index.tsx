@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import Head from "next/head";
 
 const SkyViewer = dynamic(
   () => import("../components/SkyViewer"),
@@ -6,5 +7,5 @@ const SkyViewer = dynamic(
 );
 
 export default function Home() {
-  return <SkyViewer />;
+  return <><Head><title>AstroSky</title></Head><SkyViewer /></>;
 }

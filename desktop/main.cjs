@@ -53,7 +53,7 @@ function worker(name, command, args, env, cwd) {
   child.once('exit', (code) => {
     log(`${name} exit ${code ?? 'signal'}`);
     if (stage === 'ready' && win && !shuttingDown) {
-      dialog.showErrorBox('JMGJ Research', '내장 서버가 종료됐습니다. 앱을 다시 실행해 주세요.');
+      dialog.showErrorBox('AstroSky', '내장 서버가 종료됐습니다. 앱을 다시 실행해 주세요.');
       app.quit();
     }
   });
@@ -70,7 +70,7 @@ function shutdown() {
 }
 
 async function createWindow() {
-  win = new BrowserWindow({ title: 'JMGJ Research', width: 1360, height: 900, minWidth: 960, minHeight: 640,
+  win = new BrowserWindow({ title: 'AstroSky', width: 1360, height: 900, minWidth: 960, minHeight: 640,
     backgroundColor: '#060a12', show: false, webPreferences: {
       nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true, webviewTag: false,
       allowRunningInsecureContent: false, spellcheck: false } });
@@ -139,8 +139,8 @@ function menu() {
     { label: '도움말', submenu: [
       { id: 'check-for-updates', label: '업데이트 확인…', click: () => void updates?.check() },
       { label: '연구 GitHub', click: () => shell.openExternal('https://github.com/root0323/jmgj-research') },
-      { label: '앱 정보', click: () => dialog.showMessageBox(win, { title: 'JMGJ Research',
-        message: `JMGJ Research ${app.getVersion()}`, detail: '개인 연구용 Windows 미리보기\n기상·천체 사진·장소 검색은 인터넷이 필요합니다.\n개인 기상 API 키는 앱 화면의 메모리에만 유지됩니다.' }) } ] },
+      { label: '앱 정보', click: () => dialog.showMessageBox(win, { title: 'AstroSky',
+        message: `AstroSky ${app.getVersion()}`, detail: '개인 연구용 Windows 미리보기\n기상·천체 사진·장소 검색은 인터넷이 필요합니다.\n개인 기상 API 키는 앱 화면의 메모리에만 유지됩니다.' }) } ] },
   ]));
 }
 
@@ -231,7 +231,7 @@ else {
     const reason = ['EADDRINUSE', 'WORKER_EXIT', 'STARTUP_TIMEOUT'].includes(error.code) ? error.code : 'STARTUP_FAILED';
     log(`startup failed at ${failedStage} (${reason})`);
     await shutdown();
-    if (!diagnostics) dialog.showErrorBox('JMGJ Research 시작 실패',
+    if (!diagnostics) dialog.showErrorBox('AstroSky 시작 실패',
       `${reason === 'EADDRINUSE' ? '앱의 로컬 포트가 사용 중입니다. 다른 실행 창을 닫고 다시 실행해 주세요.'
         : reason === 'STARTUP_TIMEOUT' ? '앱 준비 시간이 초과됐습니다. 잠시 뒤 다시 실행해 주세요.'
         : '내장 서버를 실행하지 못했습니다. 앱을 다시 실행해 주세요.'}\n설정·로그 폴더: ${localRoot}`);

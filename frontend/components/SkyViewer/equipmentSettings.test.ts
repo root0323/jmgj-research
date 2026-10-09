@@ -2,6 +2,12 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { readActiveEquipment, readEquipmentPresets, saveActiveEquipment, saveEquipmentPresets } from "./equipmentSettings";
 const telescope = { focalLengthMm: 1000, apertureMm: 100 };
 const camera = { sensorWidthMm: 36, sensorHeightMm: 24, pixelSizeUm: 3.76 };
+it("stores L as a single active filter and in equipment combinations", () => {
+  const equipment = {telescope,camera,filter:"L" as const};
+  saveActiveEquipment(equipment); saveEquipmentPresets([{...equipment,id:"luminance",name:"L 촬영"}]);
+  expect(readActiveEquipment(telescope).filter).toBe("L");
+  expect(readEquipmentPresets()[0].filter).toBe("L");
+});
 let storage: Map<string, string>;
 beforeEach(() => {
   storage = new Map();

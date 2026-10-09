@@ -7,6 +7,8 @@ import { DATA_SOURCE_GROUPS } from "./dataSources";
 import { CameraSettingsPanel } from "./CameraSettingsPanel";
 import { FilterSettingsPanel } from "./FilterSettingsPanel";
 import styles from "./SettingsWindow.module.css";
+import { BackgroundSettingsPanel } from "./BackgroundSettingsPanel";
+import type { BackgroundController } from "./useBackgrounds";
 
 const SETTINGS_TABS = [
   { id: "telescope", label: "망원경 설정" },
@@ -21,6 +23,8 @@ type SettingsTabId = (typeof SETTINGS_TABS)[number]["id"];
 
 type SettingsWindowProps = {
   id: string;
+  backgrounds: BackgroundController;
+  onShowGround: () => void;
   telescopeSettings: TelescopeSettings;
   cameraSettings: CameraSettings;
   eyepieceSettings: EyepieceSettings;
@@ -36,6 +40,8 @@ type SettingsWindowProps = {
 
 export function SettingsWindow({
   id,
+  backgrounds,
+  onShowGround,
   telescopeSettings,
   cameraSettings,
   eyepieceSettings,
@@ -105,7 +111,7 @@ export function SettingsWindow({
     <dialog
       id={id}
       ref={dialogRef}
-      className={styles.window}
+      className={`${styles.window} ${activeTab === "background" ? styles.backgroundWindow : ""}`}
       aria-labelledby={labelId}
       onCancel={(event) => {
         event.preventDefault();
@@ -150,6 +156,7 @@ export function SettingsWindow({
             className={styles.content}
           >
             <h3>{tab.label}</h3>
+            {tab.id === "background" && <BackgroundSettingsPanel backgrounds={backgrounds} onShowGround={onShowGround} />}
             {tab.id === "camera" && <CameraSettingsPanel settings={cameraSettings} onChange={onCameraSettingsChange} onSave={onTelescopeSettingsSave} />}
             {tab.id === "filter" && <FilterSettingsPanel selectedFilter={selectedFilter} onChange={onFilterChange} onSave={onTelescopeSettingsSave} />}
             {tab.id === "sources" && (

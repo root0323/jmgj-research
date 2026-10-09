@@ -82,6 +82,8 @@ code/data/APIs/weather_cache*.json
 /desktop/build/
 /desktop/dist/
 /frontend/.next-desktop/
+/frontend/public/background-runtime/
+/frontend/public/background-model/
 
 # operator-only Cloudflare tooling and local secrets
 /services/kakao-search/node_modules/

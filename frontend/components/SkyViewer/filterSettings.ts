@@ -3,7 +3,8 @@ import type { ObservationFilter } from "./types";
 const STORAGE_KEY = "jmgj:filter-settings";
 
 export const FILTER_GROUPS = [
-  { name: "RGB", filters: [
+  { name: "LRGB", filters: [
+    { id: "L", label: "L" },
     { id: "R", label: "R" },
     { id: "G", label: "G" },
     { id: "B", label: "B" },

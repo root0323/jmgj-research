@@ -14,6 +14,13 @@ type DataSourceGroup = {
 // Add new external APIs, datasets and assets here when introducing them.
 export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
   {
+    title: "사용자 배경 처리",
+    sources: [
+      { name: "Qualcomm FFNet-40S", url: "https://huggingface.co/qualcomm/FFNet-40S", description: "사용자 파노라마의 하늘 영역을 앱 안에서 분리하는 내장 모델. 원본과 보정 결과는 사용자 기기에 저장", credit: "Copyright © 2022 Qualcomm Technologies, Inc. · BSD-3-Clause", notice: {label: "FFNet 라이선스", url: "https://github.com/Qualcomm-AI-research/FFNet/blob/master/LICENSE"} },
+      { name: "ONNX Runtime", url: "https://onnxruntime.ai/", description: "하늘 분리 모델의 오프라인 실행", credit: "Copyright © Microsoft Corporation · MIT" },
+    ],
+  },
+  {
     title: "프로젝트",
     sources: [
       { name: "root0323 GitHub", url: "https://github.com/root0323", description: "개발자 GitHub 계정" },

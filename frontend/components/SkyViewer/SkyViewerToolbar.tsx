@@ -3,6 +3,7 @@ import styles from "./SkyViewer.module.css";
 import type { CameraSettings, EyepieceSettings, ObservationFilter, TelescopeSettings } from "./types";
 import type { EquipmentSettings } from "./equipmentSettings";
 import { SettingsWindow } from "./SettingsWindow";
+import type { BackgroundController } from "./useBackgrounds";
 
 export type DisplayToggleName =
   | "horizontalCoordinates"
@@ -27,6 +28,8 @@ type ToolbarIconName =
   | "settings";
 
 type SkyViewerToolbarProps = {
+  backgrounds: BackgroundController;
+  onShowGround: () => void;
   deepSkyMode: boolean;
   telescopeSettings: TelescopeSettings;
   cameraSettings: CameraSettings;
@@ -227,6 +230,8 @@ function ToolbarIcon({ name }: { name: ToolbarIconName }) {
 }
 
 export function SkyViewerToolbar({
+  backgrounds,
+  onShowGround,
   deepSkyMode,
   telescopeSettings,
   cameraSettings,
@@ -410,6 +415,8 @@ export function SkyViewerToolbar({
       {isSettingsOpen && (
         <SettingsWindow
           id={settingsWindowId}
+          backgrounds={backgrounds}
+          onShowGround={onShowGround}
           telescopeSettings={telescopeSettings}
           cameraSettings={cameraSettings}
           eyepieceSettings={eyepieceSettings}

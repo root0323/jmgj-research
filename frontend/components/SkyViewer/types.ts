@@ -82,7 +82,7 @@ export type EyepieceSettings = {
   apparentFieldDegrees: number | null;
 };
 
-export type ObservationFilter = "R" | "G" | "B" | "SII" | "Ha" | "OIII";
+export type ObservationFilter = "L" | "R" | "G" | "B" | "SII" | "Ha" | "OIII";
 
 export type GeocodeResult = ObserverLocation & {
   name: string;

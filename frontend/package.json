@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "predev": "node scripts/prepare-background-assets.cjs",
+    "prebuild": "node scripts/prepare-background-assets.cjs",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -11,6 +13,7 @@
   },
   "dependencies": {
     "next": "16.1.6",
+    "onnxruntime-web": "1.23.2",
     "react": "19.2.3",
     "react-dom": "19.2.3"
   },
@@ -20,6 +23,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "fake-indexeddb": "6.2.4",
+    "fflate": "0.8.2",
     "typescript": "^5",
     "vitest": "^4.1.8"
   }

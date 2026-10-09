@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const net = require('node:net');
 
-const EXTERNAL_HOSTS = ['meteoblue.com', 'github.com', 'openstreetmap.org', 'nominatim.org',
+const EXTERNAL_HOSTS = ['meteoblue.com', 'github.com', 'openstreetmap.org', 'nominatim.org', 'celestron.com', 'huggingface.co', 'onnxruntime.ai',
   '7timer.info', 'kakao.com', 'vworld.kr', 'nasa.gov', 'aws.amazon.com', 'opendata.aws',
   'copernicus.eu', 'esa.int', 'stellarium.org', 'unistra.fr', 'stsci.edu', 'doi.org',
   'creativecommons.org'];

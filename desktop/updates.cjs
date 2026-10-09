@@ -20,7 +20,7 @@ function createUpdateController({ updater, installed, getWindow, dialog, shutdow
   }
   function show(options) {
     const owner = window();
-    return owner ? dialog.showMessageBox(owner, { title: 'JMGJ Research 업데이트', ...options }) : Promise.resolve({ response: 1 });
+    return owner ? dialog.showMessageBox(owner, { title: 'AstroSky 업데이트', ...options }) : Promise.resolve({ response: 1 });
   }
   function listen(event, handler) { updater.on(event, handler); listeners.push([event, handler]); }
   // Only this controller can initiate downloads or installation. Ordinary app
