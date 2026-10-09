@@ -14,6 +14,20 @@ type DataSourceGroup = {
 // Add new external APIs, datasets and assets here when introducing them.
 export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
   {
+    title: "딥스카이 촬영 안내",
+    sources: [
+      { name: "AstroBackyard · 계절별 촬영 대상", url: "https://astrobackyard.com/astrophotography-targets-by-season/", description: "대표 촬영 대상·함께 담는 구도 참고. 앱의 한글 검색 이름과 대상별 촬영 포인트는 개발자가 정리" },
+      { name: "Galactic Hunter · 겨울 촬영 대상", url: "https://www.galactic-hunter.com/post/winter-the-15-best-astrophotography-targets", description: "겨울 성운·성단의 촬영 사례와 구도 참고" },
+      { name: "Galactic Hunter · 봄 촬영 대상", url: "https://www.galactic-hunter.com/post/spring-the-15-best-astrophotography-targets", description: "봄 은하·은하군과 올빼미 성운 촬영 사례 참고" },
+      { name: "Galactic Hunter · 여름 촬영 대상", url: "https://www.galactic-hunter.com/post/summer-the-15-best-astrophotography-targets", description: "여름 방출성운·행성상성운·성단 촬영 사례 참고" },
+      { name: "Galactic Hunter · 가을 촬영 대상", url: "https://www.galactic-hunter.com/post/fall-the-15-best-astrophotography-targets", description: "가을 은하·성운의 촬영 사례와 광대역·협대역 선택 참고" },
+      { name: "Cloudy Nights · 남쪽 하늘 촬영 기록", url: "https://www.cloudynights.com/forums/topic/753727-what-southern-dso-should-i-photograph/", description: "남쪽 하늘의 대표 촬영 대상 참고. 촬영 인기도를 집계한 통계 자료는 아님" },
+      { name: "Practical Astrophotography · 보정 프레임", url: "https://www.practicalastrophotography.com/a-brief-guide-to-calibration-frames", description: "Flat·Dark·Bias·Dark-flat의 촬영 조건과 시작 장수 참고. 앱 수치는 공개 가이드를 바탕으로 정리한 시작 범위이며 대상별 실측 평균·보장된 최적값이 아님" },
+      { name: "Nebula Photos · Nico Carver", url: "https://www.nebulaphotos.com/doc/filters-summary.pdf", description: "컬러·모노 카메라와 필터 선택의 일반 원리 참고. 앱의 장수·시간 배분은 별도 계획 예시", credit: "Nico Carver · Filters for Deep Sky Astrophotography (2020) · CC BY-SA 4.0", notice: { label: "CC BY-SA 4.0", url: "https://creativecommons.org/licenses/by-sa/4.0/" } },
+      { name: "AstroBackyard · 카메라 촬영 설정", url: "https://astrobackyard.com/7-astrophotography-tips/", description: "RAW·수동 노출·ISO·카메라 렌즈 조리개 등 기본 촬영 설정 참고. 노출·총 시간과 채널 배분은 앱에서 정리한 시험 촬영 시작 예시이며 기종·환경별 자동 노출 모델이 아님" },
+    ],
+  },
+  {
     title: "사용자 배경 처리",
     sources: [
       { name: "Qualcomm FFNet-40S", url: "https://huggingface.co/qualcomm/FFNet-40S", description: "사용자 파노라마의 하늘 영역을 앱 안에서 분리하는 내장 모델. 원본과 보정 결과는 사용자 기기에 저장", credit: "Copyright © 2022 Qualcomm Technologies, Inc. · BSD-3-Clause", notice: {label: "FFNet 라이선스", url: "https://github.com/Qualcomm-AI-research/FFNet/blob/master/LICENSE"} },

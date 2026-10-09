@@ -23,6 +23,9 @@
 }
 
 .backgroundWindow { width: min(940px, calc(100vw - 40px)); height: min(760px, calc(100dvh - 40px)); }
+.imagingWindow { width: min(1100px, calc(100vw - 40px)); height: min(760px, calc(100dvh - 40px)); }
+.imagingContent:not([hidden]) { display: flex; flex-direction: column; overflow: hidden; }
+.imagingContent h3 { flex: 0 0 auto; margin-bottom: 16px; }
 
 .window::backdrop {
   background: rgba(2, 5, 12, 0.32);
