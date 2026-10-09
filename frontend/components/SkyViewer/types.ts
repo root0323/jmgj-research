@@ -77,6 +77,11 @@ export type CameraSettings = {
   pixelSizeUm: number | null;
 };
 
+export type EyepieceSettings = {
+  focalLengthMm: number | null;
+  apparentFieldDegrees: number | null;
+};
+
 export type ObservationFilter = "R" | "G" | "B" | "SII" | "Ha" | "OIII";
 
 export type GeocodeResult = ObserverLocation & {

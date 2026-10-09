@@ -6,6 +6,7 @@ import {
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
 } from "react";
 import styles from "./SkyViewer.module.css";
 import {
@@ -48,7 +49,7 @@ import { evaluateWeather } from "@/lib/weather-evaluation";
 import { getLunarContext } from "./coordinates";
 import { useAutomaticSeeing } from "./useAutomaticSeeing";
 import { useAutomaticTerrain } from "./useAutomaticTerrain";
-import { readActiveEquipment, saveActiveEquipment } from "./equipmentSettings";
+import { readActiveEquipment, saveActiveEquipment, EMPTY_EYEPIECE } from "./equipmentSettings";
 import type { EquipmentSettings } from "./equipmentSettings";
 import { useFieldOfView } from "./useFieldOfView";
 import { SkyViewerToolbar } from "./SkyViewerToolbar";
@@ -601,7 +602,9 @@ export default function SkyViewer() {
   const [timeDirection, setTimeDirection] = useState<1 | -1>(1);
   const [equipment, setEquipment] = useState(() => readActiveEquipment(readStoredTelescopeSettings()));
   const telescopeSettings = equipment.telescope;
-  const fieldOfView = useFieldOfView(engineRef, selectedTargetRef, status === "ready", telescopeSettings.focalLengthMm, equipment.camera);
+  const fieldOfView = useFieldOfView(engineRef, selectedTargetRef, status === "ready", telescopeSettings.focalLengthMm, equipment.camera, equipment.eyepiece);
+  const cameraFieldLabel = fieldOfView.field ? `${(fieldOfView.field.width * 180 / Math.PI).toFixed(2)}° × ${(fieldOfView.field.height * 180 / Math.PI).toFixed(2)}°${fieldOfView.field.pixelScale ? ` · ${fieldOfView.field.pixelScale.toFixed(2)}″/px` : ""}` : "";
+  const eyepieceFieldLabel = fieldOfView.eyepieceField ? `약 ${(fieldOfView.eyepieceField.diameter * 180 / Math.PI).toFixed(2)}° · ${fieldOfView.eyepieceField.magnification.toFixed(1)}배` : "";
   const [skyBrightness, setSkyBrightness] = useState(() =>
     getFallbackSkyBrightness(SEOUL.latitude, SEOUL.longitude)
   );
@@ -1481,6 +1484,9 @@ export default function SkyViewer() {
 
   return (
     <main className={styles.shell}>
+      <div className={`${styles.skyViewport} ${fieldOfView.preview ? styles.instrumentViewport : ""} ${fieldOfView.preview?.mode === "eyepiece" ? styles.eyepieceViewport : ""}`}
+        style={fieldOfView.preview ? { "--optical-aspect": fieldOfView.preview.aspect } as CSSProperties : undefined}
+        aria-label={fieldOfView.preview ? `${fieldOfView.preview.mode === "camera" ? "카메라" : "접안렌즈"} 시야` : "관측 하늘"}>
       <canvas
         ref={canvasRef}
         className={styles.canvas}
@@ -1489,8 +1495,13 @@ export default function SkyViewer() {
         onWheel={handleCanvasWheel}
         onClick={handleCanvasClick}
       />
+      </div>
+      {fieldOfView.preview && <header className={styles.instrumentHeading}>
+        <div><strong>{fieldOfView.preview.mode === "camera" ? "카메라 시야" : "접안렌즈 시야"}</strong><span>{fieldOfView.preview.mode === "camera" ? cameraFieldLabel : eyepieceFieldLabel}</span></div>
+        <button type="button" onClick={fieldOfView.close} aria-label="장비 시야 닫기" title="닫기 · Esc">×</button>
+      </header>}
 
-      <button
+      {!fieldOfView.preview && <button
         type="button"
         className={styles.panelToggle}
         onClick={() => setIsControlPanelOpen((current) => !current)}
@@ -1499,9 +1510,9 @@ export default function SkyViewer() {
         title={isControlPanelOpen ? "관측 패널 닫기" : "관측 패널 열기"}
       >
         <span aria-hidden="true" />
-      </button>
+      </button>}
 
-      {isControlPanelOpen && (
+      {isControlPanelOpen && !fieldOfView.preview && (
         <SkyViewerControls
           weatherPanel={<PersonalWeatherPanel weather={weather} seeing={automaticSeeing} location={observerLocation} locationName={locationQuery}
             observationTime={new Date(skyBrightnessTimeKey)} modelSource={weatherModelSource} terrain={terrain} />}
@@ -1545,15 +1556,21 @@ export default function SkyViewer() {
         isEngineReady={status === "ready"}
         telescopeSettings={telescopeSettings}
         cameraSettings={equipment.camera}
+        eyepieceSettings={equipment.eyepiece ?? EMPTY_EYEPIECE}
+        onEyepieceSettingsChange={eyepiece => setEquipment(current => ({ ...current, eyepiece }))}
         selectedFilter={equipment.filter}
         onCameraSettingsChange={camera => setEquipment(current => ({ ...current, camera }))}
         onFilterChange={filter => setEquipment(current => ({ ...current, filter }))}
         onEquipmentApply={(next: EquipmentSettings) => { saveActiveEquipment(next); setEquipment(next); }}
         fieldOfViewStage={fieldOfView.stage}
-        fieldOfViewLabel={fieldOfView.field ? `${(fieldOfView.field.width * 180 / Math.PI).toFixed(2)}° × ${(fieldOfView.field.height * 180 / Math.PI).toFixed(2)}°${fieldOfView.field.pixelScale ? ` · ${fieldOfView.field.pixelScale.toFixed(2)}″/px` : ""}` : ""}
+        fieldOfViewLabel={cameraFieldLabel}
         fieldOfViewMessage={fieldOfView.message}
         onFieldOfViewToggle={fieldOfView.toggle}
         onFieldOfViewMessageDismiss={fieldOfView.dismissMessage}
+        eyepieceFieldOfViewStage={fieldOfView.eyepieceStage}
+        eyepieceFieldOfViewLabel={eyepieceFieldLabel}
+        eyepieceFieldOfViewMessage={fieldOfView.eyepieceMessage}
+        onEyepieceFieldOfViewToggle={fieldOfView.toggleEyepiece}
         toggles={toggles}
         onDeepSkyModeToggle={handleDeepSkyModeToggle}
         onTelescopeSettingsSave={handleTelescopeSettingsSave}
@@ -1561,11 +1578,11 @@ export default function SkyViewer() {
         onToggle={handleToggle}
       />
 
-      <CalculationInfoPanel
+      {!fieldOfView.preview && <CalculationInfoPanel
         fields={selectedInfo?.calculationFields ?? []}
         isSkyBrightnessLoading={isSkyBrightnessLoading}
-      />
-      <ObjectInfoPanel info={isObjectInfoOpen ? selectedInfo : null} onClose={() => setIsObjectInfoOpen(false)} />
+      />}
+      {!fieldOfView.preview && <ObjectInfoPanel info={isObjectInfoOpen ? selectedInfo : null} onClose={() => setIsObjectInfoOpen(false)} />}
     </main>
   );
 }

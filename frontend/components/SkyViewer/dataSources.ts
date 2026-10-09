@@ -50,6 +50,7 @@ export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
   {
     title: "천체·사진",
     sources: [
+      { name: "Celestron · 광학 계산 참고", url: "https://www.celestron.com/blogs/knowledgebase/astronomy-glossary-of-terms", description: "접안렌즈 겉보기 시야각과 배율로 실시야각을 추정하는 계산 기준. 앱의 원형 시야는 광학 사양 기반 근사이며 실측 영상이 아님" },
       { name: "Stellarium Web Engine", url: "https://github.com/Stellarium/stellarium-web-engine", description: "천구 표시 엔진과 Stellarium의 별·별자리·태양계·딥스카이 자료" },
       { name: "Stellarium 은하수 자료", url: "https://github.com/Stellarium/stellarium-web-engine/tree/master/apps/test-skydata/surveys/milkyway", description: "Stellarium 은하수 텍스처 기반 HiPS 이미지와 이 이미지에서 추출한 윤곽선. 윤곽선은 화면 표시용이며 은하의 물리적 경계를 뜻하지 않음", notice: { label: "Stellarium Web Engine 라이선스", url: "https://github.com/Stellarium/stellarium-web-engine/blob/master/LICENSE-AGPL-3.0.txt" } },
       { name: "Stellarium · Guéreins 배경", url: "https://github.com/Stellarium/stellarium-web-engine/tree/master/apps/test-skydata/landscapes/guereins", description: "Fabien Chéreau의 프랑스 Guéreins 자연 지평 배경을 앱에 내장. 선택한 관측 장소의 실제 지형 사진이 아닌 기본 배경", credit: "Guéreins landscape © Fabien Chéreau / Stellarium", notice: { label: "Stellarium Web Engine · AGPL-3.0", url: "https://github.com/Stellarium/stellarium-web-engine/blob/master/LICENSE-AGPL-3.0.txt" } },

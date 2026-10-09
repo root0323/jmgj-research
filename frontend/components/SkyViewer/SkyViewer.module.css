@@ -15,6 +15,28 @@
   z-index: 0;
 }
 
+.skyViewport { position: absolute; inset: 0; }
+.instrumentViewport {
+  inset: auto;
+  left: 50%; top: calc(50% - 8px);
+  transform: translate(-50%, -50%);
+  width: min(calc(100vw - 48px), calc((100dvh - 190px) * var(--optical-aspect)));
+  aspect-ratio: var(--optical-aspect);
+  overflow: hidden;
+  border: 1px solid #ffd38a;
+  background: #000;
+}
+.instrumentViewport .canvas { pointer-events: none; }
+.eyepieceViewport { border-radius: 50%; border-color: #8ad9ff; }
+.instrumentHeading {
+  position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 18px; z-index: 1;
+  background: rgba(2, 3, 10, 0.85); padding: 8px 14px; border-radius: 6px;
+}
+.instrumentHeading strong { display: block; font-size: 15px; }
+.instrumentHeading span { color: #cbd5e1; font-size: 12px; white-space: nowrap; }
+.instrumentHeading button { border: 0; background: transparent; color: #cbd5e1; font-size: 26px; cursor: pointer; }
+
 .panel {
   position: absolute;
   top: 20px;

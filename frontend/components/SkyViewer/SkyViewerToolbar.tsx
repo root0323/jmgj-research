@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import styles from "./SkyViewer.module.css";
-import type { CameraSettings, ObservationFilter, TelescopeSettings } from "./types";
+import type { CameraSettings, EyepieceSettings, ObservationFilter, TelescopeSettings } from "./types";
 import type { EquipmentSettings } from "./equipmentSettings";
 import { SettingsWindow } from "./SettingsWindow";
 
@@ -22,6 +22,7 @@ type ToolbarIconName =
   | "ground"
   | "deepSky"
   | "fieldOfView"
+  | "eyepieceFieldOfView"
   | "difficultyInfo"
   | "settings";
 
@@ -29,6 +30,12 @@ type SkyViewerToolbarProps = {
   deepSkyMode: boolean;
   telescopeSettings: TelescopeSettings;
   cameraSettings: CameraSettings;
+  eyepieceSettings: EyepieceSettings;
+  onEyepieceSettingsChange: (settings: EyepieceSettings) => void;
+  eyepieceFieldOfViewStage: number;
+  eyepieceFieldOfViewLabel: string;
+  eyepieceFieldOfViewMessage: string;
+  onEyepieceFieldOfViewToggle: () => void;
   selectedFilter: ObservationFilter | null;
   onCameraSettingsChange: (settings: CameraSettings) => void;
   onFilterChange: (filter: ObservationFilter | null) => void;
@@ -147,6 +154,9 @@ function DisplayOptionsMenu({
 }
 
 function ToolbarIcon({ name }: { name: ToolbarIconName }) {
+  if (name === "eyepieceFieldOfView") {
+    return <svg className={styles.coordinateToolbarIcon} viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="17" /><path d="M20 24h8M24 20v8" /></svg>;
+  }
   if (name === "fieldOfView") {
     return <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 11h34v26H7Z" /><path d="M20 24h8M24 20v8" /></svg>;
   }
@@ -220,6 +230,12 @@ export function SkyViewerToolbar({
   deepSkyMode,
   telescopeSettings,
   cameraSettings,
+  eyepieceSettings,
+  onEyepieceSettingsChange,
+  eyepieceFieldOfViewStage,
+  eyepieceFieldOfViewLabel,
+  eyepieceFieldOfViewMessage,
+  onEyepieceFieldOfViewToggle,
   selectedFilter,
   onCameraSettingsChange,
   onFilterChange,
@@ -301,12 +317,23 @@ export function SkyViewerToolbar({
         <div className={styles.toolbarSettingsWrapper}>
           <button type="button" className={fieldOfViewStage ? styles.active : ""} onClick={onFieldOfViewToggle}
             disabled={!isEngineReady} aria-label="촬영 화각" aria-pressed={fieldOfViewStage > 0}
-            title={fieldOfViewStage === 0 ? "화각 표시" : fieldOfViewStage === 1 ? "화각으로 확대" : "화각 닫기·이전 배율"}>
+            title={fieldOfViewStage === 0 ? "화각 표시" : fieldOfViewStage === 1 ? "카메라 시야로 보기" : "화각 닫기·이전 화면"}>
             <ToolbarIcon name="fieldOfView" />
           </button>
           {(fieldOfViewStage > 0 || fieldOfViewMessage) && <div className={styles.fieldOfViewInfo} role="status">
-            {fieldOfViewMessage || <><strong>{fieldOfViewLabel}</strong><span>{fieldOfViewStage === 1 ? "한 번 더 누르면 확대" : "한 번 더 누르면 닫기"}</span></>}
+            {fieldOfViewMessage || <><strong>{fieldOfViewLabel}</strong><span>{fieldOfViewStage === 1 ? "한 번 더 누르면 카메라 시야" : "한 번 더 누르면 닫기"}</span></>}
             {fieldOfViewMessage && <button type="button" aria-label="화각 안내 닫기" onClick={onFieldOfViewMessageDismiss}>×</button>}
+          </div>}
+        </div>
+        <div className={styles.toolbarSettingsWrapper}>
+          <button type="button" className={eyepieceFieldOfViewStage ? styles.active : ""} onClick={onEyepieceFieldOfViewToggle}
+            disabled={!isEngineReady} aria-label="접안렌즈 화각" aria-pressed={eyepieceFieldOfViewStage > 0}
+            title={eyepieceFieldOfViewStage === 0 ? "접안렌즈 화각 표시" : eyepieceFieldOfViewStage === 1 ? "접안렌즈 시야로 보기" : "접안렌즈 화각 닫기·이전 화면"}>
+            <ToolbarIcon name="eyepieceFieldOfView" />
+          </button>
+          {(eyepieceFieldOfViewStage > 0 || eyepieceFieldOfViewMessage) && <div className={styles.fieldOfViewInfo} role="status">
+            {eyepieceFieldOfViewMessage || <><strong>{eyepieceFieldOfViewLabel}</strong><span>{eyepieceFieldOfViewStage === 1 ? "한 번 더 누르면 접안렌즈 시야" : "한 번 더 누르면 닫기"}</span></>}
+            {eyepieceFieldOfViewMessage && <button type="button" aria-label="접안렌즈 화각 안내 닫기" onClick={onFieldOfViewMessageDismiss}>×</button>}
           </div>}
         </div>
         <div className={styles.toolbarSettingsWrapper}>
@@ -385,6 +412,8 @@ export function SkyViewerToolbar({
           id={settingsWindowId}
           telescopeSettings={telescopeSettings}
           cameraSettings={cameraSettings}
+          eyepieceSettings={eyepieceSettings}
+          onEyepieceSettingsChange={onEyepieceSettingsChange}
           selectedFilter={selectedFilter}
           onCameraSettingsChange={onCameraSettingsChange}
           onFilterChange={onFilterChange}

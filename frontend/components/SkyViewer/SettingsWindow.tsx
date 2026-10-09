@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from "react";
 import type { KeyboardEvent } from "react";
-import type { CameraSettings, ObservationFilter, TelescopeSettings } from "./types";
+import type { CameraSettings, EyepieceSettings, ObservationFilter, TelescopeSettings } from "./types";
 import type { EquipmentSettings } from "./equipmentSettings";
 import { EquipmentPresetsPanel } from "./EquipmentPresetsPanel";
 import { DATA_SOURCE_GROUPS } from "./dataSources";
@@ -23,6 +23,8 @@ type SettingsWindowProps = {
   id: string;
   telescopeSettings: TelescopeSettings;
   cameraSettings: CameraSettings;
+  eyepieceSettings: EyepieceSettings;
+  onEyepieceSettingsChange: (settings: EyepieceSettings) => void;
   selectedFilter: ObservationFilter | null;
   onCameraSettingsChange: (settings: CameraSettings) => void;
   onFilterChange: (filter: ObservationFilter | null) => void;
@@ -36,6 +38,8 @@ export function SettingsWindow({
   id,
   telescopeSettings,
   cameraSettings,
+  eyepieceSettings,
+  onEyepieceSettingsChange,
   selectedFilter,
   onCameraSettingsChange,
   onFilterChange,
@@ -202,6 +206,17 @@ export function SettingsWindow({
                     />
                   </label>
                 </div>
+                <h4>접안렌즈</h4>
+                <div className={styles.fields}>
+                  {([{ key: "focalLengthMm", label: "접안렌즈 초점거리(mm)" }, { key: "apparentFieldDegrees", label: "겉보기 시야각(°)" }] as const).map(({ key, label }) => (
+                    <label key={key}><span>{label}</span><input type="number" min={0.001} max={key === "apparentFieldDegrees" ? 180 : undefined} step="any"
+                      value={eyepieceSettings[key] ?? ""} onChange={event => {
+                        const value = event.target.value === "" ? null : Number(event.target.value);
+                        onEyepieceSettingsChange({ ...eyepieceSettings, [key]: value }); setSaveState("idle");
+                      }} /></label>
+                  ))}
+                </div>
+                <p>겉보기 시야각은 접안렌즈 제품 사양에 적힌 값입니다. 두 값을 입력하면 배율과 원형 화각을 계산합니다.</p>
                 <button
                   type="button"
                   className={styles.saveButton}
@@ -213,7 +228,7 @@ export function SettingsWindow({
                   {saveState === "saved" ? "저장됨" : "설정 저장"}
                 </button>
                 {saveState === "error" && <p className={styles.saveError} role="alert">설정을 저장하지 못했습니다. 저장 공간을 확인해 주세요.</p>}
-                <EquipmentPresetsPanel equipment={{ telescope: telescopeSettings, camera: cameraSettings, filter: selectedFilter }} onApply={onEquipmentApply} />
+                <EquipmentPresetsPanel equipment={{ telescope: telescopeSettings, camera: cameraSettings, eyepiece: eyepieceSettings, filter: selectedFilter }} onApply={onEquipmentApply} />
               </div>
             )}
           </section>

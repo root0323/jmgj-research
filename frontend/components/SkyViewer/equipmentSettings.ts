@@ -1,10 +1,11 @@
-import type { CameraSettings, ObservationFilter, TelescopeSettings } from "./types";
+import type { CameraSettings, EyepieceSettings, ObservationFilter, TelescopeSettings } from "./types";
 import { readStoredCameraSettings } from "./cameraSettings";
 import { FILTER_GROUPS, readStoredFilterSetting } from "./filterSettings";
 
 export type EquipmentSettings = {
   telescope: TelescopeSettings;
   camera: CameraSettings;
+  eyepiece?: EyepieceSettings;
   filter: ObservationFilter | null;
 };
 export type EquipmentPreset = EquipmentSettings & { id: string; name: string };
@@ -12,6 +13,10 @@ const ACTIVE_KEY = "jmgj:active-equipment-v1";
 const PRESETS_KEY = "jmgj:equipment-presets-v1";
 const filters = new Set<string>(FILTER_GROUPS.flatMap(group => group.filters.map(filter => filter.id)));
 const positive = (value: unknown) => typeof value === "number" && Number.isFinite(value) && value > 0;
+export const EMPTY_EYEPIECE: EyepieceSettings = { focalLengthMm: null, apparentFieldDegrees: null };
+export function isValidEyepiece(settings: EyepieceSettings) {
+  return positive(settings.focalLengthMm) && positive(settings.apparentFieldDegrees) && settings.apparentFieldDegrees! <= 180;
+}
 
 export function isEquipmentSettings(value: unknown): value is EquipmentSettings {
   if (!value || typeof value !== "object") return false;
@@ -19,7 +24,10 @@ export function isEquipmentSettings(value: unknown): value is EquipmentSettings 
   return !!item.telescope && positive(item.telescope.focalLengthMm) && positive(item.telescope.apertureMm) &&
     !!item.camera && [item.camera.sensorWidthMm, item.camera.sensorHeightMm, item.camera.pixelSizeUm]
       .every(number => number === null || positive(number)) &&
-    (item.filter === null || (typeof item.filter === "string" && filters.has(item.filter)));
+    (item.filter === null || (typeof item.filter === "string" && filters.has(item.filter))) &&
+    (item.eyepiece === undefined || (!!item.eyepiece &&
+      (item.eyepiece.focalLengthMm === null || positive(item.eyepiece.focalLengthMm)) &&
+      (item.eyepiece.apparentFieldDegrees === null || (positive(item.eyepiece.apparentFieldDegrees) && item.eyepiece.apparentFieldDegrees <= 180))));
 }
 
 export function readActiveEquipment(telescope: TelescopeSettings): EquipmentSettings {

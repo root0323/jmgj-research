@@ -33,3 +33,20 @@ it("does not replace the previous active combination when storage fails", () => 
   expect(() => saveActiveEquipment({ ...equipment, telescope: { ...telescope, focalLengthMm: 500 } })).toThrow();
   expect(readActiveEquipment(telescope)).toEqual(equipment);
 });
+
+it("saves and restores a visual observing combination with no configured camera", () => {
+  const equipment = { telescope, camera: { sensorWidthMm: null, sensorHeightMm: null, pixelSizeUm: null }, eyepiece: { focalLengthMm: 25, apparentFieldDegrees: 60 }, filter: null };
+  saveActiveEquipment(equipment);
+  saveEquipmentPresets([{ ...equipment, id: "visual", name: "안시 관측" }]);
+  expect(readActiveEquipment(telescope)).toEqual(equipment);
+  expect(readEquipmentPresets()[0].eyepiece).toEqual(equipment.eyepiece);
+});
+
+it("rejects invalid new eyepiece specifications while preserving old combinations", () => {
+  const equipment = { telescope, camera, filter: null };
+  saveActiveEquipment(equipment);
+  expect(() => saveActiveEquipment({ ...equipment, eyepiece: { focalLengthMm: 25, apparentFieldDegrees: 181 } })).toThrow();
+  expect(readActiveEquipment(telescope)).toEqual(equipment);
+  saveEquipmentPresets([{ ...equipment, id: "old", name: "기존 장비" }]);
+  expect(readEquipmentPresets()[0]).toEqual({ ...equipment, id: "old", name: "기존 장비" });
+});
