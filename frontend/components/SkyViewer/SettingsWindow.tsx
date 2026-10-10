@@ -23,6 +23,8 @@ const SETTINGS_TABS = [
 type SettingsTabId = (typeof SETTINGS_TABS)[number]["id"];
 
 type SettingsWindowProps = {
+  onAppUpdate?: () => void;
+  appVersion?: string;
   id: string;
   backgrounds: BackgroundController;
   onShowGround: () => void;
@@ -40,6 +42,8 @@ type SettingsWindowProps = {
 };
 
 export function SettingsWindow({
+  onAppUpdate,
+  appVersion,
   id,
   backgrounds,
   onShowGround,
@@ -112,7 +116,7 @@ export function SettingsWindow({
     <dialog
       id={id}
       ref={dialogRef}
-      className={`${styles.window} ${activeTab === "background" ? styles.backgroundWindow : ""} ${activeTab === "deepSky" ? styles.imagingWindow : ""}`}
+      className={`${styles.window} ${onAppUpdate ? styles.appWindow : ""} ${activeTab === "background" ? styles.backgroundWindow : ""} ${activeTab === "deepSky" ? styles.imagingWindow : ""}`}
       aria-labelledby={labelId}
       onCancel={(event) => {
         event.preventDefault();
@@ -243,6 +247,7 @@ export function SettingsWindow({
           </section>
         ))}
       </div>
+      {onAppUpdate && <footer className={styles.appFooter}><span>AstroSky {appVersion}</span><button type="button" onClick={onAppUpdate}>업데이트 확인</button></footer>}
     </dialog>
   );
 }

@@ -26,7 +26,7 @@ final class NativeNetwork {
         HttpURLConnection c = (HttpURLConnection) url.openConnection();
         c.setInstanceFollowRedirects(false);
         c.setConnectTimeout(15000); c.setReadTimeout(data ? 90000 : 30000);
-        c.setRequestProperty("User-Agent", "AstroSky-Android/0.8.0 (https://github.com/root0323/jmgj-research)");
+        c.setRequestProperty("User-Agent", "AstroSky-Android/" + BuildConfig.VERSION_NAME + " (https://github.com/root0323/jmgj-research)");
         return c;
     }
     static JSONObject json(String address) throws Exception {

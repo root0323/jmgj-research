@@ -7,6 +7,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type ReactNode,
 } from "react";
 import styles from "./SkyViewer.module.css";
 import { useBackgrounds } from "./useBackgrounds";
@@ -472,7 +473,7 @@ function CalculationInfoPanel({
   if (visibleFields.length === 0) return null;
 
   return (
-    <aside className={styles.calculationPanel} aria-label="\uACC4\uC0B0 \uAE30\uC900">
+    <aside className={styles.calculationPanel} aria-label="계산 기준">
       <button
         type="button"
         onClick={() => setIsOpen((current) => !current)}
@@ -483,8 +484,8 @@ function CalculationInfoPanel({
           {isSkyBrightnessLoading && (
             <span
               className={styles.calculationSpinner}
-              aria-label="\uD558\uB298 \uBC1D\uAE30 \uAC31\uC2E0 \uC911"
-              title="\uD558\uB298 \uBC1D\uAE30 \uAC31\uC2E0 \uC911"
+              aria-label="하늘 밝기 갱신 중"
+              title="하늘 밝기 갱신 중"
             />
           )}
         </span>
@@ -562,7 +563,7 @@ function centerTargetOnce(
   centerTarget(engine, target, vector, 1.2, true);
 }
 
-export default function SkyViewer({ mobile = false, onEngineReady, onLocationChange }: { mobile?: boolean; onEngineReady?: (engine: StellariumEngine) => void; onLocationChange?: (location: ObserverLocation) => void } = {}) {
+export default function SkyViewer({ mobile = false, onEngineReady, onLocationChange, compassControl, onAppUpdate, appVersion }: { mobile?: boolean; onEngineReady?: (engine: StellariumEngine) => void; onLocationChange?: (location: ObserverLocation) => void; compassControl?: ReactNode; onAppUpdate?: () => void; appVersion?: string } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<StellariumEngine | null>(null);
   const engineReadyCallbackRef = useRef(onEngineReady);
@@ -1560,6 +1561,9 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
       )}
 
       <SkyViewerToolbar
+        compassControl={compassControl}
+        onAppUpdate={onAppUpdate}
+        appVersion={appVersion}
         backgrounds={backgrounds}
         onShowGround={() => handleToggle("ground", true)}
         deepSkyMode={deepSkyMode}

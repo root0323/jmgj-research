@@ -5,11 +5,13 @@ import android.app.Activity;
 import android.content.*;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Insets;
 import android.hardware.*;
 import android.net.Uri;
 import android.os.*;
 import android.view.*;
 import android.webkit.*;
+import android.widget.FrameLayout;
 import androidx.webkit.*;
 import org.json.*;
 import java.io.*;
@@ -19,6 +21,7 @@ import java.util.concurrent.*;
 public class MainActivity extends Activity implements SensorEventListener {
     private static final String ORIGIN = "https://appassets.androidplatform.net";
     private WebView web;
+    private AppUpdater updater;
     private final ExecutorService network = Executors.newFixedThreadPool(3);
     private final ExecutorService downloads = Executors.newSingleThreadExecutor();
     private SensorManager sensors;
@@ -41,10 +44,20 @@ public class MainActivity extends Activity implements SensorEventListener {
         if (rotation == null) rotation = sensors.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
         accelerometer = sensors.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         magnetometer = sensors.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        web = new WebView(this); web.setBackgroundColor(Color.BLACK); setContentView(web);
-        web.setOnApplyWindowInsetsListener((v, insets) -> {
-            v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom()); return insets;
+        if (Build.VERSION.SDK_INT >= 30) getWindow().setDecorFitsSystemWindows(false);
+        else getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+        FrameLayout frame = new FrameLayout(this);
+        web = new WebView(this); web.setBackgroundColor(Color.BLACK);
+        frame.addView(web, new FrameLayout.LayoutParams(-1, -1)); setContentView(frame);
+        frame.setOnApplyWindowInsetsListener((v, insets) -> {
+            if (Build.VERSION.SDK_INT >= 30) {
+                Insets safe = insets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout() | WindowInsets.Type.ime());
+                v.setPadding(safe.left, safe.top, safe.right, safe.bottom);
+            } else v.setPadding(insets.getSystemWindowInsetLeft(), insets.getSystemWindowInsetTop(), insets.getSystemWindowInsetRight(), insets.getSystemWindowInsetBottom());
+            return insets;
         });
+        frame.requestApplyInsets();
+        try { updater = new AppUpdater(this); } catch (Exception ignored) { }
         WebSettings s = web.getSettings(); s.setJavaScriptEnabled(true); s.setDomStorageEnabled(true);
         s.setAllowFileAccess(false); s.setAllowContentAccess(true); s.setMixedContentMode(WebSettings.MIXED_CONTENT_NEVER_ALLOW);
         s.setSupportZoom(false); s.setMediaPlaybackRequiresUserGesture(true);
@@ -94,6 +107,10 @@ public class MainActivity extends Activity implements SensorEventListener {
                     case "request": bridge.request(id, p.getString("url")); break;
                     case "download": bridge.download(id, p.getString("url"), p.getString("name"), p.optString("hash"), p.optLong("bytes")); break;
                     case "follow": bridge.follow(p.getBoolean("enabled"), p.getDouble("latitude"), p.getDouble("longitude")); result(id, new JSONObject()); break;
+                    case "updateState": if (updater != null) result(id, updater.state()); break;
+                    case "updateCheck": if (updater != null) updater.check(value -> result(id, value)); break;
+                    case "updateDownload": if (updater != null) updater.download(value -> result(id, value)); break;
+                    case "updateInstall": if (updater != null) updater.install(value -> result(id, value)); break;
                 }
             } catch (Exception ignored) { }
         });
@@ -117,7 +134,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
     public final class Bridge {
         public String capabilities() {
-            return "{\"android\":true,\"compass\":" + (rotation != null || (accelerometer != null && magnetometer != null)) + ",\"version\":\"0.8.0\"}";
+            return "{\"android\":true,\"compass\":" + (rotation != null || (accelerometer != null && magnetometer != null)) + ",\"version\":\"" + BuildConfig.VERSION_NAME + "\"}";
         }
         public void request(int id, String address) {
             network.submit(() -> { try { result(id, NativeNetwork.json(address)); } catch (Exception e) { try { result(id, new JSONObject().put("error", "자료 서버 연결 실패. 네트워크와 API 권한을 확인하세요.")); } catch (JSONException ignored) { } } });
@@ -160,7 +177,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
     @Override public void onAccuracyChanged(Sensor sensor, int accuracy) { if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) magneticAccuracy = accuracy; }
     @Override protected void onPause() { super.onPause(); paused = true; updateSensors(); }
-    @Override protected void onResume() { super.onResume(); paused = false; if (sensors != null) updateSensors(); }
+    @Override protected void onResume() { super.onResume(); paused = false; if (sensors != null) updateSensors(); if (updater != null) updater.resumed(); }
     @Override public void onRequestPermissionsResult(int code, String[] permissions, int[] grants) {
         super.onRequestPermissionsResult(code, permissions, grants);
         if (code == 43 && locationCallback != null) { locationCallback.invoke(ORIGIN, grants.length > 0 && grants[0] == PackageManager.PERMISSION_GRANTED, false); locationCallback = null; }
@@ -172,5 +189,5 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override public void onBackPressed() {
         web.evaluateJavascript("window.__astroskyBack?.()", handled -> { if (!"true".equals(handled)) MainActivity.super.onBackPressed(); });
     }
-    @Override protected void onDestroy() { sensors.unregisterListener(this); network.shutdownNow(); downloads.shutdownNow(); if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) WebViewCompat.removeWebMessageListener(web, "AstroSkyAndroid"); web.destroy(); super.onDestroy(); }
+    @Override protected void onDestroy() { sensors.unregisterListener(this); network.shutdownNow(); downloads.shutdownNow(); if (updater != null) updater.close(); if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) WebViewCompat.removeWebMessageListener(web, "AstroSkyAndroid"); web.destroy(); super.onDestroy(); }
 }

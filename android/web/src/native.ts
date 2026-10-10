@@ -19,7 +19,7 @@ export function native(action: string, payload: Record<string, unknown> = {}, si
   if (signal?.aborted) return Promise.reject(signal.reason);
   const id = ++sequence;
   return new Promise((resolve, reject) => {
-    const timer = setTimeout(() => { pending.delete(id); reject(new Error('연결 시간이 초과됐습니다.')); }, action === 'download' ? 180_000 : 40_000);
+    const timer = setTimeout(() => { pending.delete(id); reject(new Error('연결 시간이 초과됐습니다.')); }, action === 'updateDownload' ? 30 * 60_000 : action === 'download' ? 180_000 : 90_000);
     pending.set(id, { resolve, reject, timer });
     signal?.addEventListener('abort', () => { const work = pending.get(id); if (!work) return; clearTimeout(work.timer); pending.delete(id); reject(signal.reason); }, { once: true });
     window.AstroSkyAndroid!.postMessage(JSON.stringify({ id, action, ...payload }));

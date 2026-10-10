@@ -49,6 +49,7 @@ export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
     sources: [
       { name: "root0323 GitHub", url: "https://github.com/root0323", description: "개발자 GitHub 계정" },
       { name: "jmgj-research", url: "https://github.com/root0323/jmgj-research", description: "이 프로그램의 연구·개발 저장소" },
+      { name: "GitHub Releases", url: "https://docs.github.com/en/rest/releases/releases", description: "개발자 저장소의 정식 릴리스와 Android·Windows 업데이트 파일 및 파일 검증 해시" },
       { name: "원본 연구 코드 · JMGJ", url: "https://github.com/gyeon27/JMGJ", description: "프로그램의 기반이 된 연구 코드" },
     ],
   },

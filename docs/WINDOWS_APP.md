@@ -251,3 +251,13 @@ DSLR/미러리스·천체용 컬러·모노 카메라별 필터 조합과 적도
 실제 앱 내부 업데이트로 0.7.2를 설치·재실행했다. 실행 중 앱의 위치가 이전과 같은 `JMGJ Research\AstroSky\AstroSky.exe`이며 ASAR·웹 BUILD_ID·계산 EXE·PKG 해시가 최종 묶음과 모두 일치한다. 기존 포트 43127, 망원경 714mm / 102mm 및 저장된 장비 조합을 유지했고 엔진 연결·지형 및 야간광 준비 상태를 확인했다. 지역 DEM 캐시 12개(19,477,936 bytes)의 개별 해시가 정리 전과 같고 내장 Black Marble 540개(1,137,270,637 bytes)도 유지됐다.
 
 정상 실행 후 이전 상위 설치 위치의 프로그램 파일과 자료가 제거돼 잔여 구버전 파일은 0개다. 업데이트 캐시는 `installer.exe`와 `current.blockmap` 2개, 총 1,309,067,525 bytes로 줄었고 설치 파일 해시는 공개 0.7.2 검증본과 일치한다. 정리 전 구버전 및 업데이트 캐시 합계와 실제 잔여 파일을 비교한 회수 용량은 3,260,262,718 bytes(약 3.26GB / 3.04GiB)다. 사용자 자료를 추가하지 않고 같은 최신 버전을 사용하는 경우 업데이트 횟수에 비례해 구버전이나 설치 캐시 세트가 쌓이지 않는다. 다운로드·설치 중의 임시 공간이나 사용에 따라 달라지는 로그·브라우저 캐시는 이 비교에 포함하지 않는다.
+
+## 0.8.0·0.8.1 Windows 유지와 배포 검증
+
+Android 추가 이후에도 Windows 실행·업데이트 기능을 유지한다. [0.8.0 정식 릴리스](https://github.com/root0323/jmgj-research/releases/tag/v0.8.0)는 소스 `c2c443b35bf2fd5ceeadca129c36bee394baeea2`에서 빌드했다. Windows 설치 파일 221,287,490 bytes, SHA-256 `e334b665d1f94822690248d78ff22dd231f7b8421f084cf95aa1f4749d88f7f1`와 blockmap·latest.yml을 공개 API로 검증했다. Black Marble은 전체 내장 대신 지역 클라우드 자료를 사용한다.
+
+0.8.1은 Android 업데이트 기능과 공통 계산 기준 접근성 이름 보정을 포함한다. Windows에도 같은 최종 공통 웹을 새로 빌드해 포장했으며 APK 전용 버튼은 Windows에 추가하지 않는다. 웹 BUILD_ID는 `NjqOrkTFKSlJheWjCWF38`이다. 백엔드 소스는 검증된 0.7.3과 동일하며 서버 묶음을 재사용했다. EXE SHA-256 `bb28198d99df5ca496bdc5e18801324df92c10cbbddfeb7380d28b1ae87fb4c6`, PKG `b36fd3113a54212c633d1950915ae2c821cfec9ad29584553a06795fbbdc9fa4`가 일치한다.
+
+최종 Windows 설치 파일 221,287,887 bytes, SHA-256 `e7a1255292f097c182ab44d78a2610e77722aaadcfe92e57fc323d3d559a731e`; blockmap 229,226 bytes, SHA-256 `a7bf62da60e01614630b0791266de10fb72ea5b93850960fc2ffa4e35cab005b`; latest.yml 379 bytes, SHA-256 `a99c43515742548d1862720025b1c0c3a15c2e78fe58c62bf8a2a71db9e441bd`다. 설치 본체는 814,145,450 bytes이며 manifest의 버전·크기·SHA-512, ASAR·웹·서버 파일 일치를 확인했다. 개인 키·환경 파일·원본 H5·DEM 파일은 패키지에 넣지 않는다.
+
+공통 테스트 104개와 Windows 테스트 24개를 통과했다. 최종 패키지를 별도 프로필·포트 43147에서 실행해 버전 0.8.1, 준비 시간 11.916초, 두 서버의 무인증 요청 403, 클라우드 자료 목록과 업데이트 feed를 확인했다. 프론트엔드·백엔드 모두 exit 0으로 종료했다. 이 진단은 기존 사용자 프로필을 건드리지 않고 실제 지역 모델 정확도도 판정하지 않는다. 최종 소스를 origin 연구 브랜치에 저장하고 같은 커밋의 v0.8.1 정식 Latest 릴리스에 APK·Windows 설치 파일·blockmap·latest.yml을 게시한다. 게시 후에는 공개 API의 태그 커밋·파일 크기·digest와 로컬 검증본을 대조한다.

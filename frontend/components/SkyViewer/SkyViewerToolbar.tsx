@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import styles from "./SkyViewer.module.css";
 import type { CameraSettings, EyepieceSettings, ObservationFilter, TelescopeSettings } from "./types";
 import type { EquipmentSettings } from "./equipmentSettings";
@@ -28,6 +29,9 @@ type ToolbarIconName =
   | "settings";
 
 type SkyViewerToolbarProps = {
+  compassControl?: ReactNode;
+  onAppUpdate?: () => void;
+  appVersion?: string;
   backgrounds: BackgroundController;
   onShowGround: () => void;
   deepSkyMode: boolean;
@@ -230,6 +234,9 @@ function ToolbarIcon({ name }: { name: ToolbarIconName }) {
 }
 
 export function SkyViewerToolbar({
+  compassControl,
+  onAppUpdate,
+  appVersion,
   backgrounds,
   onShowGround,
   deepSkyMode,
@@ -411,9 +418,12 @@ export function SkyViewerToolbar({
             <ToolbarIcon name="settings" />
           </button>
         </div>
+        {compassControl}
       </div>
       {isSettingsOpen && (
         <SettingsWindow
+          appVersion={appVersion}
+          onAppUpdate={onAppUpdate ? () => { closeSettingsWindow(); onAppUpdate(); } : undefined}
           id={settingsWindowId}
           backgrounds={backgrounds}
           onShowGround={onShowGround}

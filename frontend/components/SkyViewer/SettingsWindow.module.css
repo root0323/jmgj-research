@@ -22,6 +22,10 @@
   grid-template-rows: 54px minmax(0, 1fr);
 }
 
+.appWindow[open] { grid-template-rows: 54px minmax(0, 1fr) 54px; }
+.appFooter { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 16px; border-top: 1px solid rgba(148, 163, 184, 0.18); font-size: 12px; color: #94a3b8; }
+.appFooter button { min-height: 40px; border: 1px solid #3a526e; border-radius: 6px; padding: 0 12px; background: #10253b; color: #bae6fd; font: inherit; cursor: pointer; }
+
 .backgroundWindow { width: min(940px, calc(100vw - 40px)); height: min(760px, calc(100dvh - 40px)); }
 .imagingWindow { width: min(1100px, calc(100vw - 40px)); height: min(760px, calc(100dvh - 40px)); }
 .imagingContent:not([hidden]) { display: flex; flex-direction: column; overflow: hidden; }
