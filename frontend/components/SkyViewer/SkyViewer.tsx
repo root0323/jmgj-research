@@ -1,6 +1,7 @@
 import {
   FormEvent,
   MouseEvent,
+  type PointerEvent,
   useCallback,
   useEffect,
   useMemo,
@@ -994,6 +995,17 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
     }
   }
 
+  function handleCanvasPointerDown(event: PointerEvent<HTMLCanvasElement>) {
+    if (mobile) {
+      dragStateRef.current = { x: event.clientX, y: event.clientY };
+      // Touch gestures must release both active and delayed tracking without
+      // clearing the selected target or its information panel.
+      cancelTargetTracking();
+      if (engineRef.current) releaseTracking(engineRef.current);
+    }
+    releaseCompassForManualView();
+  }
+
   function handleCanvasMouseDown(event: MouseEvent<HTMLCanvasElement>) {
     dragStateRef.current = {
       x: event.clientX,
@@ -1517,7 +1529,7 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
       <canvas
         ref={canvasRef}
         className={styles.canvas}
-        onPointerDown={releaseCompassForManualView}
+        onPointerDown={handleCanvasPointerDown}
         onMouseDown={handleCanvasMouseDown}
         onMouseMove={handleCanvasMouseMove}
         onWheel={handleCanvasWheel}
