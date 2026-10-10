@@ -1,4 +1,4 @@
-param([string]$Tools = (Join-Path $PSScriptRoot '../../.verification/android-tools'), [string]$Output = 'C:/Users/hyeon/AppData/Local/jmgj-research/android-build/0.8.2', [switch]$Debug)
+param([string]$Tools = (Join-Path $PSScriptRoot '../../.verification/android-tools'), [string]$Output = 'C:/Users/hyeon/AppData/Local/jmgj-research/android-build/0.8.3', [switch]$Debug)
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $Tools = (Resolve-Path $Tools).Path
@@ -25,6 +25,8 @@ try {
   }
   CopyTree (Join-Path $repo 'android/web/dist') $assets
   CopyTree (Join-Path $repo 'frontend/public') $assets
+  & node android/scripts/prepare-renderer.cjs
+  if ($LASTEXITCODE -ne 0) { throw 'Android renderer preparation failed' }
   CopyTree (Join-Path $repo 'android/build/mobile-model') (Join-Path $assets 'mobile-model')
   CopyTree (Join-Path $repo 'desktop/licenses') (Join-Path $assets 'licenses')
   CopyTree (Join-Path $repo 'android/licenses') (Join-Path $assets 'licenses')

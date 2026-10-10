@@ -35,6 +35,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     private boolean directionPending;
     private final DirectionSensorFilter gravityFilter = new DirectionSensorFilter();
     private final DirectionSensorFilter magneticFilter = new DirectionSensorFilter();
+    private final float[] rotationMatrix = new float[9];
     private int magneticAccuracy = SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM;
     private File dataRoot;
     private ValueCallback<Uri[]> fileCallback;
@@ -162,7 +163,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         gravityFilter.reset(); magneticFilter.reset();
         sensorStarted = SystemClock.elapsedRealtimeNanos();
         if (!following || paused) return;
-        if (rotation != null) sensors.registerListener(this, rotation, SensorManager.SENSOR_DELAY_GAME);
+        if (rotation != null) sensors.registerListener(this, rotation, 33_333);
         else if (accelerometer != null && magnetometer != null) {
             sensors.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
             sensors.registerListener(this, magnetometer, SensorManager.SENSOR_DELAY_GAME);
@@ -170,23 +171,26 @@ public class MainActivity extends Activity implements SensorEventListener {
     }
     @Override public void onSensorChanged(SensorEvent event) {
         if (!following || paused || event.timestamp < sensorStarted) return;
-        float[] matrix = new float[9];
-        if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR || event.sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR) SensorManager.getRotationMatrixFromVector(matrix, event.values);
-        else {
+        boolean isRotation = event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR || event.sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR;
+        if (!isRotation) {
             if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) gravity = gravityFilter.update(event.values, event.timestamp);
             else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) magnetic = magneticFilter.update(event.values, event.timestamp);
-            if (gravity == null || magnetic == null || !SensorManager.getRotationMatrix(matrix, null, gravity, magnetic)) return;
         }
+        // Do not allocate/convert a rotation matrix for samples the WebView cannot use.
         if (directionPending || event.timestamp - lastSensor < 33_000_000) return;
+        if (isRotation) SensorManager.getRotationMatrixFromVector(rotationMatrix, event.values);
+        else {
+            if (gravity == null || magnetic == null || !SensorManager.getRotationMatrix(rotationMatrix, null, gravity, magnetic)) return;
+        }
         lastSensor = event.timestamp;
-        double[] direction = SkyDirection.fromMatrix(matrix, declination);
+        double[] direction = SkyDirection.fromMatrix(rotationMatrix, declination);
         int accuracy = rotation == null ? magneticAccuracy : event.accuracy;
         directionPending = true;
         web.evaluateJavascript("window.__astroskyDirection?.(" + direction[0] + "," + direction[1] + "," + accuracy + "," + directionGeneration + ")", ignored -> directionPending = false);
     }
     @Override public void onAccuracyChanged(Sensor sensor, int accuracy) { if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) magneticAccuracy = accuracy; }
-    @Override protected void onPause() { super.onPause(); paused = true; updateSensors(); }
-    @Override protected void onResume() { super.onResume(); paused = false; if (sensors != null) updateSensors(); if (updater != null) updater.resumed(); }
+    @Override protected void onPause() { super.onPause(); paused = true; updateSensors(); if (web != null) { web.onPause(); web.pauseTimers(); } }
+    @Override protected void onResume() { super.onResume(); if (web != null) { web.resumeTimers(); web.onResume(); } paused = false; if (sensors != null) updateSensors(); if (updater != null) updater.resumed(); }
     @Override public void onRequestPermissionsResult(int code, String[] permissions, int[] grants) {
         super.onRequestPermissionsResult(code, permissions, grants);
         if (code == 43 && locationCallback != null) { locationCallback.invoke(ORIGIN, grants.length > 0 && grants[0] == PackageManager.PERMISSION_GRANTED, false); locationCallback = null; }

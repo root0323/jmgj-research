@@ -21,26 +21,46 @@ describe('Android compass direction', () => {
     const f=new CompassFilter();f.update(0,0,0);
     let v=f.update(180,0,33)!;
     expect(v[1]).toBeGreaterThan(0.1);
-    for(let t=66;t<=660;t+=33)v=f.update(180,0,t)!;
+    for(let t=66;t<=660;t+=33)v=f.update(180,0,t) ?? v;
     expect(v[0]).toBeLessThan(-0.999);
     expect(Math.hypot(...v)).toBeCloseTo(1);
     expect(smoothVector([0,0,1],[0,0,-1],0.25)[0]).toBeGreaterThan(0.1);
   });
   it('crosses north smoothly and follows upward camera direction', () => {
-    const f=new CompassFilter();f.update(359,30,0);
-    const v=f.update(1,30,33)!;
+    const f=new CompassFilter();const initial=f.update(359,30,0)!;
+    const v=f.update(1,30,33) ?? initial;
     expect(v[0]).toBeGreaterThan(.86);
     expect(Math.abs(v[1])).toBeLessThan(.016);
-    for(let t=66;t<=660;t+=33)f.update(90,80,t);
-    expect(f.update(90,80,693)?.[2]).toBeCloseTo(Math.sin(80*Math.PI/180),2);
+    let up=v;
+    for(let t=66;t<=693;t+=33)up=f.update(90,80,t) ?? up;
+    expect(up[2]).toBeCloseTo(Math.sin(80*Math.PI/180),2);
   });
   it('starts fresh after toggle/resume, rejects invalid and old samples, suppresses tiny jitter', () => {
     const f=new CompassFilter();const north=f.update(0,37,10)!;
-    expect(f.update(.01,37,43)).toEqual(north);
+    expect(north).toEqual(directionVector(0,37));
+    expect(f.update(.01,37,43)).toBeNull();
     expect(f.update(180,37,40)).toBeNull();
     expect(f.update(NaN,37,100)).toBeNull();
     expect(f.update(0,91,100)).toBeNull();
     f.reset();expect(f.update(180,0,110)?.[0]).toBe(-1);
     expect(f.update(90,60,2000)?.[1]).toBeCloseTo(.5);
+  });
+  it('holds a resting camera through alternating sensor noise without repeated updates', () => {
+    const f=new CompassFilter();const start=f.update(359.8,45,0)!;
+    let updates=0,displayed=start,maxAngle=0;
+    for(let t=33;t<=3300;t+=33){
+      const next=f.update(359.8 + (t%66 ? .8 : -.8),45 + (t%99 ? .35 : -.35),t);
+      if(next){updates++;displayed=next;}
+      maxAngle=Math.max(maxAngle, Math.acos(Math.min(1,start.reduce((n,v,i)=>n+v*displayed[i],0)))*180/Math.PI);
+    }
+    expect(maxAngle).toBeLessThan(.26);
+    expect(updates).toBeLessThan(5);
+  });
+  it('accumulates slow deliberate motion and quickly follows a large turn', () => {
+    const f=new CompassFilter();let v=f.update(0,30,0)!;
+    for(let t=33;t<=3300;t+=33)v=f.update(t/3300*4,30,t) ?? v;
+    expect(Math.atan2(v[1],v[0])*180/Math.PI).toBeGreaterThan(3.4);
+    for(let t=3333;t<=3630;t+=33)v=f.update(90,30,t) ?? v;
+    expect(Math.atan2(v[1],v[0])*180/Math.PI).toBeGreaterThan(87);
   });
 });
