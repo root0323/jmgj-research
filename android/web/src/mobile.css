@@ -1,0 +1,46 @@
+html, body, #root, .mobile-app { width: 100%; height: 100%; margin: 0; background: #02030a; overflow: hidden; }
+.mobile-app { position: relative; }
+.mobile-app > div { width: 100%; height: 100%; }
+.compass-controls { position: absolute; z-index: 4; left: 50%; transform: translateX(-50%); bottom: 64px; display: flex; align-items: center; flex-direction: column; gap: 8px; max-width: min(320px, calc(100vw - 24px)); }
+.alignment-toggle { min-height: 44px; padding: 5px 14px; border: 1px solid #3a526e; border-radius: 8px; color: #d9e8f5; background: #071426e8; font: inherit; font-size: 12px; }
+.alignment-toggle span { color: #91d8b6; }
+.mobile-app .compass-button[aria-pressed=true] { background: #175581; color: white; }
+.mobile-app [aria-label="표시 옵션"], .mobile-app [aria-label="관측 하늘 조작 패널"] { backdrop-filter: none; }
+.mobile-app [aria-label="계산 기준"] { top: 12px; right: 12px; width: min(280px, calc(100vw - 90px)); max-height: calc(100dvh - 135px); overflow-y: auto; }
+.compass-controls > p { position: absolute; bottom: 100%; width: min(320px, calc(100vw - 24px)); box-sizing: border-box; margin: 0 0 8px; padding: 10px; background: #071426ee; border: 1px solid #3a526e; border-radius: 8px; font-size: 12px; line-height: 1.5; }
+.compass-controls p button { background: transparent; border: 0; color: white; font-size: 20px; float: right; }
+.compass-alignment { position: absolute; bottom: calc(100% + 8px); width: min(320px, calc(100vw - 24px)); max-height: calc(100dvh - 184px); overflow-y: auto; padding: 10px; box-sizing: border-box; border: 1px solid #3a526e; border-radius: 10px; background: #071426ed; color: #eef5ff; }
+.compass-alignment header { display: flex; justify-content: space-between; align-items: center; margin: -6px -6px 4px 0; font-size: 13px; }
+.compass-alignment header button { width: 44px; flex: none; border: 0; background: transparent; font-size: 22px; }
+.compass-alignment p { margin: 0 0 6px; padding: 0; border: 0; background: none; font-size: 12px; }
+.compass-alignment > div { display: flex; gap: 8px; }
+.compass-alignment button { flex: 1; min-height: 44px; border: 1px solid #557496; border-radius: 7px; color: #eef5ff; background: #1e3e60; font-size: 13px; }
+.compass-alignment button:disabled { opacity: .45; }
+.compass-alignment small { display: block; margin-top: 6px; font-size: 11px; color: #b2cbdc; }
+@media (max-width: 640px) {
+  .mobile-app [aria-label="표시 옵션"] { left: 50%; transform: translateX(-50%); max-width: calc(100vw - 8px); }
+  .mobile-app [aria-label="표시 옵션"] button { width: 44px; height: 48px; }
+  .mobile-app [aria-label="선택한 천체 정보"] { bottom: 82px; max-height: min(38dvh, 310px); overflow-y: auto; }
+  .mobile-app [aria-label="관측 하늘 조작 패널"] { max-height: calc(100dvh - 100px); }
+}
+@media (max-width: 480px) {
+  .mobile-app [aria-label="표시 옵션"] { display: grid; grid-template-columns: repeat(5, 44px); height: auto; }
+  .compass-controls { bottom: 106px; }
+  .mobile-app [aria-label="선택한 천체 정보"] { bottom: 112px; }
+  .mobile-app [aria-label="관측 하늘 조작 패널"] { max-height: calc(100dvh - 155px); }
+}
+.update-window { position: fixed; inset: 50% auto auto 50%; transform: translate(-50%, -50%); margin: 0; width: min(440px, calc(100vw - 24px)); max-width: none; max-height: calc(100dvh - 24px); padding: 0; overflow: auto; border: 1px solid #3a526e; border-radius: 10px; background: #08101d; color: #e2e8f0; font: inherit; }
+.update-window::backdrop { background: #02050bcc; }
+.update-window header { display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 1px solid #3a526e; }
+.update-window h2 { font-size: 17px; margin: 0; }
+.update-window button { min-height: 44px; border: 1px solid #3a526e; border-radius: 6px; background: #10253b; color: #bae6fd; padding: 6px 12px; font: inherit; }
+.update-window button:disabled { opacity: .5; }
+.update-window header button { border: 0; background: transparent; font-size: 24px; }
+.update-content { padding: 16px; font-size: 14px; line-height: 1.6; }
+.update-content progress { width: 100%; }
+.update-note { color: #94a3b8; font-size: 12px; }
+.update-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 20px; }
+@media (max-height: 500px) {
+  .mobile-app [aria-label="관측 하늘 조작 패널"] { max-height: calc(100dvh - 90px); width: min(360px, calc(100vw - 100px)); }
+  .mobile-app [aria-label="선택한 천체 정보"] { max-height: calc(100dvh - 160px); overflow-y: auto; bottom: 82px; left: auto; width: min(320px, 45vw); }
+}

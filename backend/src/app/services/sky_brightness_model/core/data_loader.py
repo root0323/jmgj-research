@@ -283,36 +283,43 @@ def load_pixel_data_from_h5(filepath: str, obs_coord: tuple, max_radius_km: floa
             base_path = 'HDFEOS/GRIDS/VIIRS_Grid_DNB_2d/Data Fields/'
 
             radiance_sds = f[base_path + BLACK_MARBLE_RADIANCE_SDS]
-            radiance_data = radiance_sds[:].astype(np.float64)
+            lat_raw = f[base_path + 'lat'][:]
+            lon_raw = f[base_path + 'lon'][:]
+            lat_offset = max_radius_km / 110.5
+            lon_offset = lat_offset / max(0.01, np.cos(np.radians(obs_lat)))
+            lat_min, lat_max = obs_lat - lat_offset, obs_lat + lat_offset
+            lon_min, lon_max = obs_lon - lon_offset, obs_lon + lon_offset
+            window = (slice(None), slice(None))
+            if lat_raw.ndim == 1 and lon_raw.ndim == 1:
+                rows = np.flatnonzero((lat_raw >= lat_min) & (lat_raw <= lat_max))
+                cols = np.flatnonzero((lon_raw >= lon_min) & (lon_raw <= lon_max))
+                if not rows.size or not cols.size:
+                    return []
+                window = (slice(rows[0], rows[-1] + 1), slice(cols[0], cols[-1] + 1))
+                lat_raw, lon_raw = lat_raw[window[0]], lon_raw[window[1]]
+            else:
+                lat_raw, lon_raw = lat_raw[window], lon_raw[window]
+            raw_radiance = radiance_sds[window].astype(np.float64)
             scale_factor = float(np.asarray(radiance_sds.attrs.get("scale_factor", 1.0)).squeeze())
             offset = float(np.asarray(radiance_sds.attrs.get("offset", 0.0)).squeeze())
             fill_value = float(np.asarray(radiance_sds.attrs.get("_FillValue", -999.9)).squeeze())
-            radiance_data = radiance_data * scale_factor + offset
+            radiance_data = raw_radiance * scale_factor + offset
 
             quality_data = None
             quality_path = base_path + BLACK_MARBLE_QUALITY_SDS
             if quality_path in f:
-                quality_data = f[quality_path][:]
+                quality_data = f[quality_path][window]
 
-            lat_raw = f[base_path + 'lat'][:]
-            lon_raw = f[base_path + 'lon'][:]
-            
             if lat_raw.ndim == 1 and lon_raw.ndim == 1:
                 lon_data, lat_data = np.meshgrid(lon_raw, lat_raw)
             else:
                 lat_data = lat_raw
                 lon_data = lon_raw
 
-            lat_offset = max_radius_km / 111.0
-            lon_offset = lat_offset / max(0.1, np.cos(np.radians(obs_lat)))
-            
-            lat_min, lat_max = obs_lat - lat_offset, obs_lat + lat_offset
-            lon_min, lon_max = obs_lon - lon_offset, obs_lon + lon_offset
-
             valid_mask = (
                 (radiance_data > 0)
                 & np.isfinite(radiance_data)
-                & (radiance_data != fill_value)
+                & (raw_radiance != fill_value)
             )
             if quality_data is not None:
                 quality_mask = np.isin(quality_data, list(BLACK_MARBLE_ALLOWED_QUALITY))
@@ -419,6 +426,30 @@ def environment_query(time, lat, lon):
         except Exception as e:
             print(f"API 요청 또는 캐시 저장 중 에러 발생: {e}")
             return aod, cloud_fraction, cloud_base_h, seeing, moonlight, (moon_zen, moon_az), moon_phase_angle, moon_cloud_transmission
+
+    return environment_from_responses(time, responses)
+
+
+def environment_from_responses(time, responses):
+    """Evaluate supplied forecasts without reading a key, disk cache, or network.
+
+    Keep the original research interpolation, including its lunar time convention.
+    Normalize the three-hour package blocks without changing the original payloads.
+    """
+    responses = {name: dict(value) for name, value in responses.items() if isinstance(value, dict)}
+    for name in ('p2', 'p3', 'p4'):
+        value = responses.get(name, {})
+        if 'data_1h' not in value and 'data_3h' in value:
+            value['data_1h'] = value['data_3h']
+    aod = 0.0
+    cloud_fraction = 0.0
+    cloud_base_h = 30.0
+    seeing = 0.0
+    moonlight = 0.0
+    moon_cloud_transmission = 1.0
+    moon_phase_angle = calculate_lunar_phase_angle_deg(time)
+    moon_zen = 90.0
+    moon_az = 0.0
 
     # 4. 데이터 파싱 및 가공 (기존 로직과 동일하나 responses 딕셔너리에서 가져옴)
     try:

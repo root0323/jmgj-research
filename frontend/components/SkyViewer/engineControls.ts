@@ -1,5 +1,6 @@
 import { loadWesternConstellationGeoJson } from "./skyCatalog";
 import type { StellariumEngine, StellariumFactory, SweObj } from "./types";
+import milkyWayOutline from "@/data/milkyway-outline.json";
 
 declare global {
   interface Window {
@@ -12,6 +13,9 @@ const DSS_SURVEY_URL = "https://alasky.cds.unistra.fr/DSS/DSSColor";
 
 export const TOGGLE_PATHS = {
   horizontalCoordinates: ["lines.azimuthal.visible"],
+  equatorialCoordinates: ["lines.equatorial_jnow.visible"],
+  equator: ["lines.equator_line.visible"],
+  ecliptic: ["lines.ecliptic.visible"],
   constellationLines: [
     "constellations.lines_visible",
     "constellations.visible",
@@ -147,9 +151,12 @@ export function addDataSource(
   key: string
 ) {
   try {
-    module?.addDataSource?.({ url, key });
+    if (!module?.addDataSource) return false;
+    module.addDataSource({ url, key });
+    return true;
   } catch (error) {
     console.warn(`Could not add Stellarium data source: ${key}`, error);
+    return false;
   }
 }
 
@@ -166,7 +173,7 @@ export function addOfficialPlanetDataSources(engine: StellariumEngine) {
   addDataSource(dsos, `${baseUrl}dso`, "dso");
   addDataSource(
     stars,
-    "http://stelladata.noctua-software.com/surveys/stars",
+    "/stellarium/skydata/stars",
     "stars"
   );
   addDataSource(planets, `${baseUrl}surveys/sso/moon`, "moon");
@@ -204,7 +211,7 @@ export function ensureDssDataSource(
   const dss = getEngineModule(engine, "dss");
   if (!dss) return false;
 
-  addDataSource(dss, DSS_SURVEY_URL, "dss");
+  if (!addDataSource(dss, DSS_SURVEY_URL, "dss")) return false;
   loadedSurveys.add("dss");
   dss.update?.();
   engine._core_update?.();
@@ -215,14 +222,80 @@ export function configureEngineLandscape(engine: StellariumEngine) {
   const landscapes = getEngineModule(engine, "landscapes");
   if (!landscapes) return;
 
-  addDataSource(landscapes, "/stellarium/landscapes/zero", "zero");
-  trySetValue(engine, ["landscapes.current_id"], "zero");
+  addDataSource(landscapes, "/stellarium/landscapes/guereins", "guereins");
+  trySetValue(engine, ["landscapes.current_id"], "guereins");
   trySetValue(engine, ["landscapes.visible"], true);
   trySetValue(engine, ["landscapes.fog_visible"], false);
   landscapes.update?.();
 }
 
+export function configureEngineMilkyWay(engine: StellariumEngine) {
+  const milkyway = getEngineModule(engine, "milkyway");
+  if (!milkyway) return;
+
+  addDataSource(milkyway, "/stellarium/skydata/surveys/milkyway", "milkyway");
+}
+
+export function focusEngineMilkyWay(engine: StellariumEngine) {
+  const observer = engine.observer ?? (engine.core?.observer as SweObj | undefined);
+  if (!observer || !engine.convertFrame) return;
+
+  // Project the local zenith onto the galactic plane to show its highest
+  // visible part, instead of pointing below the horizon at the galactic centre.
+  const zenith = engine.convertFrame(observer, "OBSERVED", "ICRF", [0, 0, 1]);
+  if (zenith.length < 3 || !zenith.slice(0, 3).every(Number.isFinite)) return;
+  // ICRS north galactic pole: third row of ERFA/SOFA's equatorial-to-galactic matrix.
+  const pole = [-0.8676661490190047, -0.1980763734312015, 0.4559837761750669];
+  const dot = zenith.slice(0, 3).reduce((sum, value, index) => sum + value * pole[index], 0);
+  const projected = zenith.slice(0, 3).map((value, index) => value - dot * pole[index]);
+  const length = Math.hypot(...projected);
+  if (length < 1e-8) return;
+  const direction = projected.map((value) => value / length);
+  const observed = engine.convertFrame(observer, "ICRF", "OBSERVED", direction);
+  if (observed.length < 3 || !observed.slice(0, 3).every(Number.isFinite)) return;
+
+  trySetValue(engine, ["milkyway.visible"], true);
+  engine.lookAt?.(observed.slice(0, 3) as [number, number, number], 1.2);
+  engine.zoomTo?.(90 * DEG_TO_RAD, 1.2);
+}
+
+export function createMilkyWayOutlineObjects(engine: StellariumEngine) {
+  const objects: SweObj[] = [];
+  // Short spherical arcs have local bounding caps, so the engine can clip
+  // each visible section correctly across the horizon and the RA=0 seam.
+  // Separate objects also keep JSON calls below this WASM build's stack limit.
+  for (const boundary of milkyWayOutline.boundaries) {
+    for (let start = 0; start < boundary.length - 1; start += 15) {
+      const outline = engine.createObj?.("geojson", {});
+      if (!outline) continue;
+      const feature = {
+        type: "Feature",
+        properties: {
+          stroke: "#a6cfff",
+          "stroke-opacity": 0.75,
+          "stroke-width": 1.2,
+          "stroke-glow": false,
+          fill: "#000000",
+          "fill-opacity": 0,
+        },
+        geometry: {
+          type: "LineString",
+          coordinates: boundary.slice(start, start + 16),
+        },
+      };
+      outline.data = { type: "FeatureCollection", features: [feature] };
+      outline.z = 16;
+      objects.push(outline);
+    }
+  }
+  return objects;
+}
+
 export function setInitialHorizonView(engine: StellariumEngine) {
+  // PROJ_PERSPECTIVE=1: a level horizon stays straight when looking up/down.
+  // Stereographic=2 bends the horizon away from the screen centre.
+  trySetValue(engine, ["projection"], 1);
+  keepHorizonLevel(engine);
   const altitude = 18 * DEG_TO_RAD;
   const lookVector: [number, number, number] = [
     0,
@@ -230,6 +303,14 @@ export function setInitialHorizonView(engine: StellariumEngine) {
     Math.sin(altitude),
   ];
   engine.lookAt?.(lookVector, 0);
+}
+
+export function keepHorizonLevel(engine: StellariumEngine) {
+  const observer = engine.observer ?? engine.core?.observer as (SweObj & { roll?: number }) | undefined;
+  if (observer && typeof observer.roll === "number" && Math.abs(observer.roll) > 1e-9) {
+    observer.roll = 0;
+    updateObserverFrame(engine, true);
+  }
 }
 
 export async function createConstellationLineObjects(
@@ -336,6 +417,20 @@ export function applyNightSkyDefaults(engine: StellariumEngine) {
   trySetValue(engine, ["stars.visible"], true);
   trySetValue(engine, ["planets.visible"], true);
   trySetAllValues(engine, TOGGLE_PATHS.horizontalCoordinates, false);
+  trySetAllValues(engine, TOGGLE_PATHS.equatorialCoordinates, false);
+  trySetAllValues(engine, TOGGLE_PATHS.equator, false);
+  trySetAllValues(engine, TOGGLE_PATHS.ecliptic, false);
+  // Use the native grid renderer and the horizontal grid's existing colour.
+  // The equatorial grid and equator both use the equator of the selected date.
+  const lines = engine.core?.lines as
+    | Record<string, { color?: number[] }>
+    | undefined;
+  const gridColor = lines?.azimuthal?.color;
+  if (gridColor?.length === 4) {
+    for (const line of ["equatorial_jnow", "equator_line", "ecliptic"]) {
+      trySetValue(engine, [`lines.${line}.color`], [...gridColor]);
+    }
+  }
   trySetAllValues(engine, TOGGLE_PATHS.constellationLines, false);
   trySetValue(engine, ["constellations.show_only_pointed"], false);
   trySetValue(engine, ["constellations.labels_visible"], false);
@@ -343,6 +438,7 @@ export function applyNightSkyDefaults(engine: StellariumEngine) {
   trySetValue(engine, ["constellations.bounds_visible"], false);
   trySetValue(engine, TOGGLE_PATHS.atmosphere, false);
   trySetValue(engine, TOGGLE_PATHS.ground, true);
+  trySetValue(engine, ["milkyway.visible"], true);
   trySetValue(engine, ["planets.scale_moon"], false);
   trySetValue(
     engine,

@@ -1,0 +1,33 @@
+AstroSky — research preview
+Source and corresponding build instructions: https://github.com/root0323/jmgj-research
+Development branch: codex/personal-weather-app
+Original research: https://github.com/gyeon27/JMGJ
+
+Stellarium Web Engine is distributed under AGPL-3.0.
+Its bundled AGPL license is in web/public/stellarium/skydata/surveys/milkyway.
+Astronomical catalogs, images and geographic data credits are in Settings > Sources.
+Black Marble 2025 VJ146A4 V2 app subsets are downloaded for the selected region.
+Only the pinned catalogue ships; cached tiles are reused offline. No NASA login.
+Data host: https://astrosky-black-marble.jmgj-kakao-search.workers.dev/
+Native-resolution radiance, quality and coordinates are retained losslessly.
+These are derived app subsets, not the complete NASA HDF-EOS products.
+DEM is downloaded from the public Copernicus GLO-90 store for the selected region.
+See resources/licenses/DATA-NOTICES.txt for sources and required notices.
+API credentials, raw research files and user weather caches are not included.
+
+Electron / Chromium notices accompany the application. Bundled Python components
+retain their upstream licensing; see backend/_internal for packaged notices.
+This preview has no paid Windows code signing certificate.
+
+Guéreins natural landscape © Fabien Chéreau / Stellarium.
+Bundled HiPS tiles from Stellarium Web Engine (AGPL-3.0):
+https://github.com/Stellarium/stellarium-web-engine/tree/master/apps/test-skydata/landscapes/guereins
+Original landscape author: https://github.com/Stellarium/stellarium/blob/master/landscapes/guereins/landscape.ini
+This default landscape is illustrative, not imagery of the selected observing site.
+
+Custom panorama sky segmentation uses Qualcomm FFNet-40S (BSD-3-Clause)
+and ONNX Runtime Web 1.23.2 (MIT). Models and runtime are bundled for offline
+processing; user panoramas are kept locally, not sent to an AI service.
+https://huggingface.co/qualcomm/FFNet-40S
+https://github.com/microsoft/onnxruntime
+See resources/licenses/FFNET.txt, ONNX-RUNTIME.txt and ONNX-THIRD-PARTY.txt.

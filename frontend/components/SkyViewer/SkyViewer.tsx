@@ -1,13 +1,17 @@
 import {
   FormEvent,
   MouseEvent,
+  type PointerEvent,
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
+  type CSSProperties,
+  type ReactNode,
 } from "react";
 import styles from "./SkyViewer.module.css";
+import { useBackgrounds } from "./useBackgrounds";
 import {
   getCoreNumber,
   getObjectInfo,
@@ -16,6 +20,7 @@ import {
   setDeepSkySupplementIndex,
 } from "./coordinates";
 import { loadDeepSkySupplementCatalog } from "./deepSkyCatalog";
+import { matchingDeepSkyNames, namedDeepSky } from "./deepSkyNames";
 import {
   DEG_TO_RAD,
   TOGGLE_PATHS,
@@ -24,9 +29,13 @@ import {
   applyDeepSkyMode,
   applyNightSkyDefaults,
   configureEngineLandscape,
+  configureEngineMilkyWay,
   createConstellationLineObjects,
+  createMilkyWayOutlineObjects,
   ensureDssDataSource,
+  focusEngineMilkyWay,
   getEngineModule,
+  keepHorizonLevel,
   loadStellariumScript,
   patchWasmMemoryHelpers,
   setConstellationLineObjectVisible,
@@ -38,8 +47,17 @@ import {
 } from "./engineControls";
 import { ObjectInfoPanel } from "./ObjectInfoPanel";
 import { SkyViewerControls } from "./SkyViewerControls";
+import { PersonalWeatherPanel } from "./PersonalWeatherPanel";
+import { usePersonalWeather } from "./usePersonalWeather";
+import { evaluateWeather } from "@/lib/weather-evaluation";
+import { getLunarContext } from "./coordinates";
+import { useAutomaticSeeing } from "./useAutomaticSeeing";
+import { useAutomaticTerrain } from "./useAutomaticTerrain";
+import { readActiveEquipment, saveActiveEquipment, EMPTY_EYEPIECE } from "./equipmentSettings";
+import type { EquipmentSettings } from "./equipmentSettings";
+import { useFieldOfView } from "./useFieldOfView";
 import { SkyViewerToolbar } from "./SkyViewerToolbar";
-import type { DisplayToggleName } from "./SkyViewerToolbar";
+import type { DisplayToggleName, DisplayToggles } from "./SkyViewerToolbar";
 import {
   FEATURED_STAR_NAMES,
   getDeepSkySearchCandidates,
@@ -57,10 +75,7 @@ import {
   parseDateTimeLocalValue,
   toDateTimeLocalValue,
 } from "./timeUtils";
-import {
-  getFallbackSkyBrightness,
-  getSkyBrightnessDetails,
-} from "./difficulty";
+import { getFallbackSkyBrightness } from "./difficulty";
 import type { SkyBrightnessDirection } from "./difficulty";
 import type {
   EngineStatus,
@@ -131,14 +146,6 @@ function quantizeSkyBrightnessDirection(
     altitude: Math.round((direction.altitude ?? 0) / step) * step,
     azimuth: (((Math.round((direction.azimuth ?? 0) / step) * step) % 360) + 360) % 360,
   };
-}
-
-function saveStoredTelescopeSettings(settings: TelescopeSettings) {
-  if (typeof window === "undefined") return;
-  window.localStorage.setItem(
-    TELESCOPE_SETTINGS_STORAGE_KEY,
-    JSON.stringify(settings)
-  );
 }
 
 const DEEP_SKY_IMAGE_FOV = 8 * DEG_TO_RAD;
@@ -412,13 +419,15 @@ function getSafeObjectInfo(
   skyBrightness: number,
   telescopeApertureMm: number,
   seeingArcsec?: number | null,
-  daylight?: boolean
+  daylight?: boolean,
+  seeingLabel?: string
 ) {
   try {
     return getObjectInfo(engine, target, label, vector, {
       skyBrightness,
       telescopeApertureMm,
       seeingArcsec,
+      seeingLabel,
       daylight,
     });
   } catch (error) {
@@ -465,7 +474,7 @@ function CalculationInfoPanel({
   if (visibleFields.length === 0) return null;
 
   return (
-    <aside className={styles.calculationPanel} aria-label="\uACC4\uC0B0 \uAE30\uC900">
+    <aside className={styles.calculationPanel} aria-label="계산 기준">
       <button
         type="button"
         onClick={() => setIsOpen((current) => !current)}
@@ -476,8 +485,8 @@ function CalculationInfoPanel({
           {isSkyBrightnessLoading && (
             <span
               className={styles.calculationSpinner}
-              aria-label="\uD558\uB298 \uBC1D\uAE30 \uAC31\uC2E0 \uC911"
-              title="\uD558\uB298 \uBC1D\uAE30 \uAC31\uC2E0 \uC911"
+              aria-label="하늘 밝기 갱신 중"
+              title="하늘 밝기 갱신 중"
             />
           )}
         </span>
@@ -555,17 +564,37 @@ function centerTargetOnce(
   centerTarget(engine, target, vector, 1.2, true);
 }
 
-export default function SkyViewer() {
+export default function SkyViewer({ mobile = false, onEngineReady, onLocationChange, compassControl, compassFollowing = false, onManualViewChange, onAppUpdate, appVersion }: { mobile?: boolean; onEngineReady?: (engine: StellariumEngine) => void; onLocationChange?: (location: ObserverLocation) => void; compassControl?: ReactNode; compassFollowing?: boolean; onManualViewChange?: () => void; onAppUpdate?: () => void; appVersion?: string } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<StellariumEngine | null>(null);
+  const engineReadyCallbackRef = useRef(onEngineReady);
+  useEffect(() => { engineReadyCallbackRef.current = onEngineReady; }, [onEngineReady]);
   const catalogSearchRef = useRef(new Map<string, SweObj>());
   const searchSuggestionsRef = useRef<SearchSuggestion[]>([]);
   const clickTargetsRef = useRef<SearchSuggestion[]>([]);
   const selectedTargetRef = useRef<SelectedTarget | null>(null);
   const trackingTargetRef = useRef<SelectedTarget | null>(null);
   const trackingActivationTimeoutRef = useRef<number | null>(null);
+  const compassFollowingRef = useRef(compassFollowing);
+  useEffect(() => {
+    compassFollowingRef.current = compassFollowing;
+    if (!compassFollowing) return;
+    trackingTargetRef.current = null;
+    if (trackingActivationTimeoutRef.current !== null) {
+      window.clearTimeout(trackingActivationTimeoutRef.current);
+      trackingActivationTimeoutRef.current = null;
+    }
+    if (engineRef.current) releaseTracking(engineRef.current);
+  }, [compassFollowing]);
+  function releaseCompassForManualView() {
+    if (!compassFollowingRef.current) return;
+    compassFollowingRef.current = false;
+    onManualViewChange?.();
+  }
   const constellationLineObjectsRef = useRef<SweObj[]>([]);
   const isConstellationLineObjectAddedRef = useRef(false);
+  const milkyWayOutlineRef = useRef<SweObj[]>([]);
+  const isMilkyWayOutlineAddedRef = useRef(false);
   const loadedPlanetSurveysRef = useRef(new Set<string>());
   const simulatedTimeRef = useRef(new Date());
   const lastTickRef = useRef<number | null>(null);
@@ -582,6 +611,7 @@ export default function SkyViewer() {
   const [query, setQuery] = useState("Saturn");
   const [suggestions, setSuggestions] = useState<SearchSuggestion[]>([]);
   const [selectedInfo, setSelectedInfo] = useState<ObjectInfo | null>(null);
+  const [isObjectInfoOpen, setIsObjectInfoOpen] = useState(true);
   const [timeDraft, setTimeDraft] = useState(DEFAULT_TIME);
   const [timePickerDraft, setTimePickerDraft] = useState(DEFAULT_TIME);
   const [isEditingTime, setIsEditingTime] = useState(false);
@@ -592,8 +622,12 @@ export default function SkyViewer() {
   );
   const [timeSpeedIndex, setTimeSpeedIndex] = useState(0);
   const [timeDirection, setTimeDirection] = useState<1 | -1>(1);
-  const [telescopeSettings, setTelescopeSettings] =
-    useState<TelescopeSettings>(() => readStoredTelescopeSettings());
+  const [equipment, setEquipment] = useState(() => readActiveEquipment(readStoredTelescopeSettings()));
+  const telescopeSettings = equipment.telescope;
+  const backgrounds = useBackgrounds(engineRef, status === "ready");
+  const fieldOfView = useFieldOfView(engineRef, selectedTargetRef, status === "ready", telescopeSettings.focalLengthMm, equipment.camera, equipment.eyepiece);
+  const cameraFieldLabel = fieldOfView.field ? `${(fieldOfView.field.width * 180 / Math.PI).toFixed(2)}° × ${(fieldOfView.field.height * 180 / Math.PI).toFixed(2)}°${fieldOfView.field.pixelScale ? ` · ${fieldOfView.field.pixelScale.toFixed(2)}″/px` : ""}` : "";
+  const eyepieceFieldLabel = fieldOfView.eyepieceField ? `약 ${(fieldOfView.eyepieceField.diameter * 180 / Math.PI).toFixed(2)}° · ${fieldOfView.eyepieceField.magnification.toFixed(1)}배` : "";
   const [skyBrightness, setSkyBrightness] = useState(() =>
     getFallbackSkyBrightness(SEOUL.latitude, SEOUL.longitude)
   );
@@ -608,13 +642,21 @@ export default function SkyViewer() {
       latitude: SEOUL.latitude,
       longitude: SEOUL.longitude,
     });
-  const [toggles, setToggles] = useState({
+  useEffect(() => { onLocationChange?.(observerLocation); }, [observerLocation, onLocationChange]);
+  const [toggles, setToggles] = useState<DisplayToggles>({
     horizontalCoordinates: false,
+    equatorialCoordinates: false,
     constellationLines: false,
+    equator: false,
+    ecliptic: false,
     atmosphere: false,
     ground: true,
   });
-  const [isControlPanelOpen, setIsControlPanelOpen] = useState(false);
+  const [isControlPanelOpen, setIsControlPanelOpen] = useState(!mobile);
+  const weather = usePersonalWeather(observerLocation);
+  const terrain = useAutomaticTerrain(observerLocation);
+  const weatherSnapshot = weather.snapshot;
+  const [weatherModelSource, setWeatherModelSource] = useState("간이 추정 · 기상 자료 조회 전");
   const applySelectedInfo = useCallback((info: ObjectInfo | null) => {
     setSelectedInfo(info);
     setSkyBrightnessDirection((current) => {
@@ -656,6 +698,8 @@ export default function SkyViewer() {
     datetime.setMinutes(0, 0, 0);
     return datetime.toISOString();
   }, [timeDraft]);
+  const automaticSeeing = useAutomaticSeeing(observerLocation, parseDateTimeLocalValue(timeDraft));
+  const seeingLabel = automaticSeeing.label ?? "정보 없음";
 
   useEffect(() => {
     isSkyViewerMountedRef.current = true;
@@ -684,19 +728,33 @@ export default function SkyViewer() {
 
         const engine = await createEngine({
           canvasElement: canvas,
-          res: ["http://stelladata.noctua-software.com/surveys/stars/info.json"],
+          res: [],
           wasmFile: "/stellarium/stellarium-web-engine.wasm",
         });
 
         if (disposed) return;
 
         engineRef.current = engine;
+        engineReadyCallbackRef.current?.(engine);
         catalogSearch.clear();
         searchSuggestionsRef.current = [];
         clickTargetsRef.current = [];
         patchWasmMemoryHelpers(engine);
         addOfficialPlanetDataSources(engine);
         configureEngineLandscape(engine);
+        configureEngineMilkyWay(engine);
+        const milkyway = getEngineModule(engine, "milkyway");
+        if (milkyway) {
+          for (const alias of ["은하수", "Milky Way", "MilkyWay", "은하수 (Milky Way)"]) {
+            searchSuggestionsRef.current.push({
+              kind: "milkyWay",
+              key: normalizeSearchKey(alias),
+              label: "은하수 (Milky Way)",
+              obj: milkyway,
+              priority: 90,
+            });
+          }
+        }
         setObserverLocation(
           engine,
           SEOUL.latitude,
@@ -740,6 +798,14 @@ export default function SkyViewer() {
 
     return () => {
       disposed = true;
+      for (const outline of milkyWayOutlineRef.current) {
+        if (isMilkyWayOutlineAddedRef.current) {
+          (engineRef.current?.core as SweObj | undefined)?.remove?.(outline);
+        }
+        outline.destroy?.();
+      }
+      milkyWayOutlineRef.current = [];
+      isMilkyWayOutlineAddedRef.current = false;
       engineRef.current = null;
       catalogSearch.clear();
       searchSuggestionsRef.current = [];
@@ -766,6 +832,12 @@ export default function SkyViewer() {
     const engine = engineRef.current;
     const deepSkyCandidates = getDeepSkySearchCandidates(value);
     const deepSkySuggestions = [];
+    if (engine) {
+      for (const item of matchingDeepSkyNames(value)) {
+        const obj = findEngineObject(engine, item.id);
+        if (obj) deepSkySuggestions.push({ key, label: item.label, obj, priority: 85 });
+      }
+    }
     if (engine && deepSkyCandidates.length > 0) {
       const deepSkyTarget = findEngineObject(engine, value);
       if (deepSkyTarget) {
@@ -792,12 +864,39 @@ export default function SkyViewer() {
     );
   }
 
+  function setMilkyWayOutlineVisible(visible: boolean) {
+    const engine = engineRef.current;
+    const core = engine?.core as SweObj | undefined;
+    if (!engine || !core) return;
+    if (visible && milkyWayOutlineRef.current.length === 0) {
+      milkyWayOutlineRef.current = createMilkyWayOutlineObjects(engine);
+    }
+    if (milkyWayOutlineRef.current.length === 0 || isMilkyWayOutlineAddedRef.current === visible) return;
+    for (const outline of milkyWayOutlineRef.current) {
+      if (visible) core.add?.(outline);
+      else core.remove?.(outline);
+    }
+    isMilkyWayOutlineAddedRef.current = visible;
+    core.update?.();
+    engine._core_update?.();
+  }
+
   function focusTarget(target: SweObj, label: string, vector?: number[]) {
     const engine = engineRef.current;
     if (!engine) return;
 
+    // Autocomplete clicks and Enter must take the same photographic path.
+    if (getDeepSkySearchCandidates(label).length > 0) {
+      setDeepSkyMode(true);
+      ensureDssDataSource(engine, loadedPlanetSurveysRef.current);
+      applyDeepSkyMode(engine, true);
+      engine.zoomTo?.(DEEP_SKY_IMAGE_FOV, 1.2);
+    }
+
+    setMilkyWayOutlineVisible(false);
     const nextTarget = { label, obj: target, vector };
     selectedTargetRef.current = nextTarget;
+    setIsObjectInfoOpen(true);
     setEngineSelection(engine, target);
     trackingTargetRef.current = null;
     if (trackingActivationTimeoutRef.current !== null) {
@@ -814,12 +913,14 @@ export default function SkyViewer() {
         skyBrightness,
         telescopeSettings.apertureMm,
         seeingArcsec,
-        isSunAboveHorizon(engine)
+        isSunAboveHorizon(engine),
+        seeingLabel
       )
     );
+    releaseCompassForManualView();
     centerTargetOnce(engine, target, vector);
     trackingActivationTimeoutRef.current = window.setTimeout(() => {
-      trackingTargetRef.current = nextTarget;
+      if (!compassFollowingRef.current) trackingTargetRef.current = nextTarget;
       trackingActivationTimeoutRef.current = null;
     }, 1250);
     setSuggestions([]);
@@ -829,7 +930,15 @@ export default function SkyViewer() {
     const engine = engineRef.current;
     if (!engine) return;
 
+    if (getDeepSkySearchCandidates(label).length > 0) {
+      setDeepSkyMode(true);
+      ensureDssDataSource(engine, loadedPlanetSurveysRef.current);
+      applyDeepSkyMode(engine, true);
+    }
+
+    setMilkyWayOutlineVisible(false);
     selectedTargetRef.current = { label, obj: target, vector };
+    setIsObjectInfoOpen(true);
     setEngineSelection(engine, target);
     cancelTargetTracking();
     addPlanetSurveyIfNeeded(engine, label, loadedPlanetSurveysRef.current);
@@ -843,7 +952,8 @@ export default function SkyViewer() {
         skyBrightness,
         telescopeSettings.apertureMm,
         seeingArcsec,
-        isSunAboveHorizon(engine)
+        isSunAboveHorizon(engine),
+        seeingLabel
       )
     );
     setSuggestions([]);
@@ -851,6 +961,7 @@ export default function SkyViewer() {
 
   function clearSelectedTarget() {
     const engine = engineRef.current;
+    setMilkyWayOutlineVisible(false);
     selectedTargetRef.current = null;
     applySelectedInfo(null);
     cancelTargetTracking();
@@ -863,6 +974,15 @@ export default function SkyViewer() {
   function focusSuggestion(item: SearchSuggestion) {
     const engine = engineRef.current;
     if (!engine) return;
+    if (item.kind === "milkyWay") {
+      releaseCompassForManualView();
+      clearSelectedTarget();
+      setIsObjectInfoOpen(false);
+      setQuery(item.label);
+      focusEngineMilkyWay(engine);
+      setMilkyWayOutlineVisible(true);
+      return;
+    }
     setQuery(item.label);
     focusTarget(item.obj, item.label, item.vector);
   }
@@ -873,6 +993,17 @@ export default function SkyViewer() {
       window.clearTimeout(trackingActivationTimeoutRef.current);
       trackingActivationTimeoutRef.current = null;
     }
+  }
+
+  function handleCanvasPointerDown(event: PointerEvent<HTMLCanvasElement>) {
+    if (mobile) {
+      dragStateRef.current = { x: event.clientX, y: event.clientY };
+      // Touch gestures must release both active and delayed tracking without
+      // clearing the selected target or its information panel.
+      cancelTargetTracking();
+      if (engineRef.current) releaseTracking(engineRef.current);
+    }
+    releaseCompassForManualView();
   }
 
   function handleCanvasMouseDown(event: MouseEvent<HTMLCanvasElement>) {
@@ -1025,6 +1156,11 @@ export default function SkyViewer() {
       const exactSuggestion =
         suggestions.find((item) => item.key === normalizedTerm) ??
         searchSuggestionsRef.current.find((item) => item.key === normalizedTerm);
+      const milkyWaySuggestion = exactSuggestion ?? suggestions[0];
+      if (milkyWaySuggestion?.kind === "milkyWay") {
+        focusSuggestion(milkyWaySuggestion);
+        return;
+      }
       const engineTarget = findEngineObject(engine, term);
       const catalogTarget = catalogSearchRef.current.get(normalizedTerm);
       const target =
@@ -1038,13 +1174,6 @@ export default function SkyViewer() {
         return;
       }
 
-      const isDeepSkySearch = getDeepSkySearchCandidates(term).length > 0;
-      if (isDeepSkySearch) {
-        setDeepSkyMode(true);
-        ensureDssDataSource(engine, loadedPlanetSurveysRef.current);
-        applyDeepSkyMode(engine, true);
-      }
-
       const matchedClickTarget = clickTargetsRef.current.find(
         (item) => item.obj.v === target.v
       );
@@ -1054,7 +1183,7 @@ export default function SkyViewer() {
           exactSuggestion?.label ??
           matchedClickTarget?.label ??
           (suggestions[0]?.obj === target ? suggestions[0].label : undefined) ??
-          labelForObject(target, term, clickTargetsRef.current),
+          namedDeepSky(term)?.label ?? labelForObject(target, term, clickTargetsRef.current),
         selectedTarget?.obj === target
           ? selectedTarget.vector
           : exactSuggestion?.obj === target
@@ -1069,9 +1198,6 @@ export default function SkyViewer() {
             ? suggestions[0].vector
             : undefined
       );
-      if (isDeepSkySearch) {
-        engine.zoomTo?.(DEEP_SKY_IMAGE_FOV, 1.2);
-      }
     } catch (error) {
       console.error(error);
     }
@@ -1091,10 +1217,11 @@ export default function SkyViewer() {
         skyBrightness,
         telescopeSettings.apertureMm,
         seeingArcsec,
-        isSunAboveHorizon(engine)
+        isSunAboveHorizon(engine),
+        seeingLabel
       )
     );
-  }, [applySelectedInfo, seeingArcsec, skyBrightness, telescopeSettings.apertureMm]);
+  }, [applySelectedInfo, seeingArcsec, seeingLabel, skyBrightness, telescopeSettings.apertureMm]);
 
   useEffect(() => {
     updateSelectedInfo();
@@ -1103,6 +1230,7 @@ export default function SkyViewer() {
   useEffect(() => {
     let disposed = false;
     const datetime = new Date(skyBrightnessTimeKey);
+    const controller = new AbortController();
     const locationKey = `${observerLocation.latitude.toFixed(
       6
     )},${observerLocation.longitude.toFixed(6)}`;
@@ -1113,18 +1241,22 @@ export default function SkyViewer() {
       : "none";
     const requestKey = `${locationKey}|${skyBrightnessTimeKey}|${directionKey}`;
     skyBrightnessRequestKeyRef.current = requestKey;
+    if (!weatherSnapshot) {
+      setSkyBrightness(getFallbackSkyBrightness(observerLocation.latitude, observerLocation.longitude));
+      setSeeingArcsec(null);
+      setWeatherModelSource("간이 추정 · 기상 자료 조회 전");
+      setIsSkyBrightnessLoading(false);
+      return;
+    }
     setIsSkyBrightnessLoading(true);
 
-    void getSkyBrightnessDetails(
-      observerLocation.latitude,
-      observerLocation.longitude,
-      datetime,
-      skyBrightnessDirection ?? undefined
-    )
+    const astronomy = engineRef.current ? getLunarContext(engineRef.current, datetime, weatherSnapshot.location) : null;
+    void evaluateWeather(weatherSnapshot, datetime, skyBrightnessDirection, controller.signal, astronomy)
       .then((details) => {
         if (!disposed && skyBrightnessRequestKeyRef.current === requestKey) {
           setSkyBrightness(details.sqm);
           setSeeingArcsec(details.seeingArcsec);
+          setWeatherModelSource(details.source);
         }
       })
       .finally(() => {
@@ -1138,12 +1270,15 @@ export default function SkyViewer() {
 
     return () => {
       disposed = true;
+      controller.abort();
     };
   }, [
     observerLocation.latitude,
     observerLocation.longitude,
     skyBrightnessDirection,
     skyBrightnessTimeKey,
+    weatherSnapshot,
+    terrain.readyKey,
   ]);
 
   const applyObservationTime = useCallback((value: string | Date) => {
@@ -1170,6 +1305,7 @@ export default function SkyViewer() {
 
       const engine = engineRef.current;
       const lastStarCatalogUpdate = lastStarCatalogUpdateRef.current ?? 0;
+      if (engine) keepHorizonLevel(engine);
       if (engine && now - lastStarCatalogUpdate >= 600) {
         lastStarCatalogUpdateRef.current = now;
         updateVisibleStarCatalog(engine, clickTargetsRef.current);
@@ -1188,7 +1324,7 @@ export default function SkyViewer() {
 
       applyObservationTime(simulatedTimeRef.current);
       const trackingTarget = trackingTargetRef.current;
-      if (engine && trackingTarget) {
+      if (engine && trackingTarget && !compassFollowingRef.current) {
         centerTarget(engine, trackingTarget.obj, trackingTarget.vector, 0, false);
       }
 
@@ -1285,12 +1421,11 @@ export default function SkyViewer() {
     applyObservationTime(now);
   }
 
-  async function handleToggle(name: DisplayToggleName) {
+  async function handleToggle(name: DisplayToggleName, enabled?: boolean) {
     const engine = engineRef.current;
-    const nextValue = !toggles[name];
-    setToggles((current) => ({ ...current, [name]: nextValue }));
-
     if (!engine) return;
+    const nextValue = enabled ?? !toggles[name];
+    setToggles((current) => ({ ...current, [name]: nextValue }));
 
     trySetAllValues(engine, TOGGLE_PATHS[name], nextValue);
     if (name === "constellationLines") {
@@ -1347,11 +1482,11 @@ export default function SkyViewer() {
   }
 
   function handleTelescopeSettingsChange(nextSettings: TelescopeSettings) {
-    setTelescopeSettings(nextSettings);
+    setEquipment(current => ({ ...current, telescope: nextSettings }));
   }
 
   function handleTelescopeSettingsSave() {
-    saveStoredTelescopeSettings(telescopeSettings);
+    saveActiveEquipment(equipment);
   }
 
   function handleApplyLocation(location: ObserverLocation, name?: string) {
@@ -1377,7 +1512,8 @@ export default function SkyViewer() {
           skyBrightness,
           telescopeSettings.apertureMm,
           seeingArcsec,
-          isSunAboveHorizon(engine)
+          isSunAboveHorizon(engine),
+          undefined
         )
       );
     }
@@ -1387,16 +1523,25 @@ export default function SkyViewer() {
 
   return (
     <main className={styles.shell}>
+      <div className={`${styles.skyViewport} ${fieldOfView.preview ? styles.instrumentViewport : ""} ${fieldOfView.preview?.mode === "eyepiece" ? styles.eyepieceViewport : ""}`}
+        style={fieldOfView.preview ? { "--optical-aspect": fieldOfView.preview.aspect } as CSSProperties : undefined}
+        aria-label={fieldOfView.preview ? `${fieldOfView.preview.mode === "camera" ? "카메라" : "접안렌즈"} 시야` : "관측 하늘"}>
       <canvas
         ref={canvasRef}
         className={styles.canvas}
+        onPointerDown={handleCanvasPointerDown}
         onMouseDown={handleCanvasMouseDown}
         onMouseMove={handleCanvasMouseMove}
         onWheel={handleCanvasWheel}
         onClick={handleCanvasClick}
       />
+      </div>
+      {fieldOfView.preview && <header className={styles.instrumentHeading}>
+        <div><strong>{fieldOfView.preview.mode === "camera" ? "카메라 시야" : "접안렌즈 시야"}</strong><span>{fieldOfView.preview.mode === "camera" ? cameraFieldLabel : eyepieceFieldLabel}</span></div>
+        <button type="button" onClick={fieldOfView.close} aria-label="장비 시야 닫기" title="닫기 · Esc">×</button>
+      </header>}
 
-      <button
+      {!fieldOfView.preview && <button
         type="button"
         className={styles.panelToggle}
         onClick={() => setIsControlPanelOpen((current) => !current)}
@@ -1405,10 +1550,12 @@ export default function SkyViewer() {
         title={isControlPanelOpen ? "관측 패널 닫기" : "관측 패널 열기"}
       >
         <span aria-hidden="true" />
-      </button>
+      </button>}
 
-      {isControlPanelOpen && (
+      {isControlPanelOpen && !fieldOfView.preview && (
         <SkyViewerControls
+          weatherPanel={<PersonalWeatherPanel weather={weather} seeing={automaticSeeing} location={observerLocation} locationName={locationQuery}
+            observationTime={new Date(skyBrightnessTimeKey)} modelSource={weatherModelSource} terrain={terrain} />}
           calendarDays={calendarDays}
           deepSkyMode={deepSkyMode}
           formatDisplayDateTime={formatDisplayDateTime}
@@ -1445,8 +1592,30 @@ export default function SkyViewer() {
       )}
 
       <SkyViewerToolbar
+        compassControl={compassControl}
+        onAppUpdate={onAppUpdate}
+        appVersion={appVersion}
+        backgrounds={backgrounds}
+        onShowGround={() => handleToggle("ground", true)}
         deepSkyMode={deepSkyMode}
+        isEngineReady={status === "ready"}
         telescopeSettings={telescopeSettings}
+        cameraSettings={equipment.camera}
+        eyepieceSettings={equipment.eyepiece ?? EMPTY_EYEPIECE}
+        onEyepieceSettingsChange={eyepiece => setEquipment(current => ({ ...current, eyepiece }))}
+        selectedFilter={equipment.filter}
+        onCameraSettingsChange={camera => setEquipment(current => ({ ...current, camera }))}
+        onFilterChange={filter => setEquipment(current => ({ ...current, filter }))}
+        onEquipmentApply={(next: EquipmentSettings) => { saveActiveEquipment(next); setEquipment(next); }}
+        fieldOfViewStage={fieldOfView.stage}
+        fieldOfViewLabel={cameraFieldLabel}
+        fieldOfViewMessage={fieldOfView.message}
+        onFieldOfViewToggle={fieldOfView.toggle}
+        onFieldOfViewMessageDismiss={fieldOfView.dismissMessage}
+        eyepieceFieldOfViewStage={fieldOfView.eyepieceStage}
+        eyepieceFieldOfViewLabel={eyepieceFieldLabel}
+        eyepieceFieldOfViewMessage={fieldOfView.eyepieceMessage}
+        onEyepieceFieldOfViewToggle={fieldOfView.toggleEyepiece}
         toggles={toggles}
         onDeepSkyModeToggle={handleDeepSkyModeToggle}
         onTelescopeSettingsSave={handleTelescopeSettingsSave}
@@ -1454,11 +1623,11 @@ export default function SkyViewer() {
         onToggle={handleToggle}
       />
 
-      <CalculationInfoPanel
+      {!fieldOfView.preview && <CalculationInfoPanel
         fields={selectedInfo?.calculationFields ?? []}
         isSkyBrightnessLoading={isSkyBrightnessLoading}
-      />
-      <ObjectInfoPanel info={selectedInfo} />
+      />}
+      {!fieldOfView.preview && <ObjectInfoPanel info={isObjectInfoOpen ? selectedInfo : null} onClose={() => setIsObjectInfoOpen(false)} />}
     </main>
   );
 }

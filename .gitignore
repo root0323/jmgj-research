@@ -55,6 +55,8 @@ venv/
 .env
 
 # local geospatial/model assets
+/.verification/
+/.local-data/
 *.h5
 *.hdf5
 *.img
@@ -74,3 +76,29 @@ backend/src/app/services/sky_brightness_model/data/APIs/weather_cache*.json
 backend/src/app/services/sky_brightness_model/data/black_marble/
 backend/src/app/services/sky_brightness_model/data/dem/
 code/data/APIs/weather_cache*.json
+
+# desktop runtimes, unsigned installers and isolated production web build
+/desktop/node_modules/
+/desktop/build/
+/desktop/dist/
+/frontend/.next-desktop/
+/frontend/public/background-runtime/
+/frontend/public/background-model/
+
+# operator-only Cloudflare tooling and local secrets
+/services/kakao-search/node_modules/
+/services/kakao-search/.wrangler/
+/services/black-marble/.wrangler/
+/services/black-marble/assets/
+.dev.vars*
+.android-tools/
+android/.gradle/
+android/build/
+android/app/build/
+android/app/src/main/assets/web/
+android/local.properties
+android/signing.properties
+android/*.jks
+android/web/dist/
+android/node_modules/
+frontend/public/stellarium/skydata/stars/
