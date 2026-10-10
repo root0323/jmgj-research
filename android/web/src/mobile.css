@@ -6,6 +6,12 @@ html, body, #root, .mobile-app { width: 100%; height: 100%; margin: 0; backgroun
 .mobile-app [aria-label="계산 기준"] { top: 12px; right: 12px; width: min(280px, calc(100vw - 90px)); max-height: calc(100dvh - 135px); overflow-y: auto; }
 .compass-controls p { margin-top: 8px; padding: 10px; background: #071426ee; border: 1px solid #3a526e; border-radius: 8px; font-size: 12px; line-height: 1.5; }
 .compass-controls p button { background: transparent; border: 0; color: white; font-size: 20px; float: right; }
+.compass-alignment { width: min(320px, calc(100vw - 24px)); padding: 10px; box-sizing: border-box; border: 1px solid #3a526e; border-radius: 10px; background: #071426ed; color: #eef5ff; }
+.compass-alignment p { margin: 0 0 6px; padding: 0; border: 0; background: none; font-size: 12px; }
+.compass-alignment > div { display: flex; gap: 8px; }
+.compass-alignment button { flex: 1; min-height: 44px; border: 1px solid #557496; border-radius: 7px; color: #eef5ff; background: #1e3e60; font-size: 13px; }
+.compass-alignment button:disabled { opacity: .45; }
+.compass-alignment small { display: block; margin-top: 6px; font-size: 11px; color: #b2cbdc; }
 @media (max-width: 640px) {
   .mobile-app [aria-label="표시 옵션"] { left: 50%; transform: translateX(-50%); max-width: calc(100vw - 8px); }
   .mobile-app [aria-label="표시 옵션"] button { width: 44px; height: 48px; }

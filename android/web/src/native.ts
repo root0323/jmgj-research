@@ -3,7 +3,7 @@ declare global {
   interface Window {
     AstroSkyAndroid?: { postMessage: (json: string) => void };
     __astroskyResult?: (id: number, result: Record<string, unknown>) => void;
-    __astroskyDirection?: (azimuth: number, altitude: number, accuracy: number) => void;
+    __astroskyDirection?: (azimuth: number, altitude: number, accuracy: number, generation: number) => void;
     __astroskyBack?: () => boolean;
   }
 }

@@ -563,7 +563,7 @@ function centerTargetOnce(
   centerTarget(engine, target, vector, 1.2, true);
 }
 
-export default function SkyViewer({ mobile = false, onEngineReady, onLocationChange, compassControl, onAppUpdate, appVersion }: { mobile?: boolean; onEngineReady?: (engine: StellariumEngine) => void; onLocationChange?: (location: ObserverLocation) => void; compassControl?: ReactNode; onAppUpdate?: () => void; appVersion?: string } = {}) {
+export default function SkyViewer({ mobile = false, onEngineReady, onLocationChange, compassControl, compassFollowing = false, onManualViewChange, onAppUpdate, appVersion }: { mobile?: boolean; onEngineReady?: (engine: StellariumEngine) => void; onLocationChange?: (location: ObserverLocation) => void; compassControl?: ReactNode; compassFollowing?: boolean; onManualViewChange?: () => void; onAppUpdate?: () => void; appVersion?: string } = {}) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const engineRef = useRef<StellariumEngine | null>(null);
   const engineReadyCallbackRef = useRef(onEngineReady);
@@ -574,6 +574,22 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
   const selectedTargetRef = useRef<SelectedTarget | null>(null);
   const trackingTargetRef = useRef<SelectedTarget | null>(null);
   const trackingActivationTimeoutRef = useRef<number | null>(null);
+  const compassFollowingRef = useRef(compassFollowing);
+  useEffect(() => {
+    compassFollowingRef.current = compassFollowing;
+    if (!compassFollowing) return;
+    trackingTargetRef.current = null;
+    if (trackingActivationTimeoutRef.current !== null) {
+      window.clearTimeout(trackingActivationTimeoutRef.current);
+      trackingActivationTimeoutRef.current = null;
+    }
+    if (engineRef.current) releaseTracking(engineRef.current);
+  }, [compassFollowing]);
+  function releaseCompassForManualView() {
+    if (!compassFollowingRef.current) return;
+    compassFollowingRef.current = false;
+    onManualViewChange?.();
+  }
   const constellationLineObjectsRef = useRef<SweObj[]>([]);
   const isConstellationLineObjectAddedRef = useRef(false);
   const milkyWayOutlineRef = useRef<SweObj[]>([]);
@@ -900,9 +916,10 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
         seeingLabel
       )
     );
+    releaseCompassForManualView();
     centerTargetOnce(engine, target, vector);
     trackingActivationTimeoutRef.current = window.setTimeout(() => {
-      trackingTargetRef.current = nextTarget;
+      if (!compassFollowingRef.current) trackingTargetRef.current = nextTarget;
       trackingActivationTimeoutRef.current = null;
     }, 1250);
     setSuggestions([]);
@@ -957,6 +974,7 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
     const engine = engineRef.current;
     if (!engine) return;
     if (item.kind === "milkyWay") {
+      releaseCompassForManualView();
       clearSelectedTarget();
       setIsObjectInfoOpen(false);
       setQuery(item.label);
@@ -1294,7 +1312,7 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
 
       applyObservationTime(simulatedTimeRef.current);
       const trackingTarget = trackingTargetRef.current;
-      if (engine && trackingTarget) {
+      if (engine && trackingTarget && !compassFollowingRef.current) {
         centerTarget(engine, trackingTarget.obj, trackingTarget.vector, 0, false);
       }
 
@@ -1499,6 +1517,7 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
       <canvas
         ref={canvasRef}
         className={styles.canvas}
+        onPointerDown={releaseCompassForManualView}
         onMouseDown={handleCanvasMouseDown}
         onMouseMove={handleCanvasMouseMove}
         onWheel={handleCanvasWheel}

@@ -30,6 +30,11 @@ public class MainActivity extends Activity implements SensorEventListener {
     private boolean following, paused;
     private double declination;
     private long lastSensor;
+    private long sensorStarted;
+    private long directionGeneration;
+    private boolean directionPending;
+    private final DirectionSensorFilter gravityFilter = new DirectionSensorFilter();
+    private final DirectionSensorFilter magneticFilter = new DirectionSensorFilter();
     private int magneticAccuracy = SensorManager.SENSOR_STATUS_ACCURACY_MEDIUM;
     private File dataRoot;
     private ValueCallback<Uri[]> fileCallback;
@@ -106,7 +111,7 @@ public class MainActivity extends Activity implements SensorEventListener {
                     case "capabilities": result(id, new JSONObject(bridge.capabilities())); break;
                     case "request": bridge.request(id, p.getString("url")); break;
                     case "download": bridge.download(id, p.getString("url"), p.getString("name"), p.optString("hash"), p.optLong("bytes")); break;
-                    case "follow": bridge.follow(p.getBoolean("enabled"), p.getDouble("latitude"), p.getDouble("longitude")); result(id, new JSONObject()); break;
+                    case "follow": bridge.follow(p.getBoolean("enabled"), p.getDouble("latitude"), p.getDouble("longitude"), p.getLong("generation")); result(id, new JSONObject()); break;
                     case "updateState": if (updater != null) result(id, updater.state()); break;
                     case "updateCheck": if (updater != null) updater.check(value -> result(id, value)); break;
                     case "updateDownload": if (updater != null) updater.download(value -> result(id, value)); break;
@@ -145,16 +150,17 @@ public class MainActivity extends Activity implements SensorEventListener {
                 result(id, new JSONObject().put("path", "/native-data/" + f.getName()).put("bytes", f.length()));
             } catch (Exception e) { try { result(id, new JSONObject().put("error", "지역 자료 다운로드·검증 실패. 저장 공간과 네트워크를 확인하세요.")); } catch (JSONException ignored) { } } });
         }
-        public void follow(boolean enabled, double latitude, double longitude) {
-            web.post(() -> {
+        public void follow(boolean enabled, double latitude, double longitude, long generation) {
                 declination = new GeomagneticField((float)latitude, (float)longitude, 0, System.currentTimeMillis()).getDeclination();
+                directionGeneration = generation;
                 following = enabled;
                 updateSensors();
-            });
         }
     }
     private void updateSensors() {
-        sensors.unregisterListener(this); gravity = null; magnetic = null;
+        sensors.unregisterListener(this); gravity = null; magnetic = null; lastSensor = 0;
+        gravityFilter.reset(); magneticFilter.reset();
+        sensorStarted = SystemClock.elapsedRealtimeNanos();
         if (!following || paused) return;
         if (rotation != null) sensors.registerListener(this, rotation, SensorManager.SENSOR_DELAY_GAME);
         else if (accelerometer != null && magnetometer != null) {
@@ -163,17 +169,20 @@ public class MainActivity extends Activity implements SensorEventListener {
         }
     }
     @Override public void onSensorChanged(SensorEvent event) {
+        if (!following || paused || event.timestamp < sensorStarted) return;
         float[] matrix = new float[9];
         if (event.sensor.getType() == Sensor.TYPE_ROTATION_VECTOR || event.sensor.getType() == Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR) SensorManager.getRotationMatrixFromVector(matrix, event.values);
         else {
-            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) gravity = event.values.clone(); else magnetic = event.values.clone();
+            if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) gravity = gravityFilter.update(event.values, event.timestamp);
+            else if (event.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) magnetic = magneticFilter.update(event.values, event.timestamp);
             if (gravity == null || magnetic == null || !SensorManager.getRotationMatrix(matrix, null, gravity, magnetic)) return;
         }
-        if (!following || event.timestamp - lastSensor < 33_000_000) return;
+        if (directionPending || event.timestamp - lastSensor < 33_000_000) return;
         lastSensor = event.timestamp;
         double[] direction = SkyDirection.fromMatrix(matrix, declination);
         int accuracy = rotation == null ? magneticAccuracy : event.accuracy;
-        web.evaluateJavascript("window.__astroskyDirection?.(" + direction[0] + "," + direction[1] + "," + accuracy + ")", null);
+        directionPending = true;
+        web.evaluateJavascript("window.__astroskyDirection?.(" + direction[0] + "," + direction[1] + "," + accuracy + "," + directionGeneration + ")", ignored -> directionPending = false);
     }
     @Override public void onAccuracyChanged(Sensor sensor, int accuracy) { if (sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD) magneticAccuracy = accuracy; }
     @Override protected void onPause() { super.onPause(); paused = true; updateSensors(); }
