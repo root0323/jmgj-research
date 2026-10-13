@@ -140,7 +140,7 @@ function MobileApp({ capabilities }: { capabilities: Capabilities }) {
         <svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="none" stroke="currentColor" strokeWidth="1.5"/><path d="M21 7l-2 12-12 6 6-12z" fill="currentColor"/><path d="M16 16l5-9-2 12z" fill="#071426"/></svg>
       </button>
     } />, [engine, following, capabilities.version, onLocation, openUpdate, stopFollowing, toggleFollowing]);
-  return <main className="mobile-app">
+  return <main className={`mobile-app${capabilities.pwa ? ' pwa-app' : ''}`}>
     {sky}
     <aside className="compass-controls">
       {following && <button type="button" className="alignment-toggle" aria-expanded={alignmentOpen} aria-controls="north-alignment" onClick={() => { setAlignmentOpen(open => !open); setMessage(''); }}>
@@ -171,7 +171,7 @@ async function start() {
     installApi();
     createRoot(document.getElementById('root')!).render(<MobileApp capabilities={capabilities} />);
   } catch {
-    document.getElementById('root')!.textContent = 'Android 연결에 실패했습니다. 앱을 다시 열거나 Android System WebView를 업데이트해 주세요.';
+    document.getElementById('root')!.textContent = window.AstroSkyPWA ? '앱 연결에 실패했습니다. 최신 Safari에서 앱을 다시 열어 주세요.' : 'Android 연결에 실패했습니다. 앱을 다시 열거나 Android System WebView를 업데이트해 주세요.';
   }
 }
 void start();

@@ -17,6 +17,7 @@ export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
     title: "앱 실행·기기 센서",
     sources: [
       { name: "WebKit 저장 정책", url: "https://webkit.org/blog/14403/updates-to-storage-policy/", description: "아이폰·아이패드 PWA의 지역 자료·기상·장비 저장과 영구 저장 권한 정책" },
+      { name: "WebKit 화면 안전 영역", url: "https://webkit.org/blog/7929/designing-websites-for-iphone-x/", description: "PWA에서 노치·홈 표시줄을 피하는 세로·가로 화면 여백 처리" },
       { name: "Device Orientation API", url: "https://developer.mozilla.org/en-US/docs/Web/API/DeviceOrientationEvent/requestPermission_static", description: "PWA의 방향·기울기 센서 권한과 후면 카메라 방향 변환. 북쪽 정렬과 센서 평활화 지원" },
       { name: "Cloudflare Workers Static Assets", url: "https://developers.cloudflare.com/workers/static-assets/", description: "PWA 화면·계산 엔진 배포 및 허용된 기상·장소·지역 자료 제공자 연결. 개인 API 키는 서버에 저장하지 않음" },
       { name: "Electron safeStorage", url: "https://www.electronjs.org/docs/latest/api/safe-storage", description: "Windows 앱의 개인 Meteoblue API 키를 현재 Windows 사용자 계정의 암호화 기능으로 보호해 저장·복원" },

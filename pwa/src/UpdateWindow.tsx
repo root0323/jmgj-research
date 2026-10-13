@@ -10,13 +10,15 @@ export function UpdateWindow({ version, onClose }: { version: string; onClose: (
     const previous = document.activeElement; dialog.current?.showModal();
     const registration = window.__pwaRegistration;
     const update = () => setWaiting(Boolean(registration?.waiting));
+    const updateFound = () => registration?.installing?.addEventListener('statechange', update);
     const receive = (event: MessageEvent) => { if (event.data?.type === 'OFFLINE_STATE') { setOffline(event.data); setBusy(Boolean(event.data.running)); } };
     navigator.serviceWorker.addEventListener('message', receive);
-    registration?.addEventListener('updatefound', () => registration.installing?.addEventListener('statechange', update));
+    registration?.addEventListener('updatefound', updateFound);
+    update();
     navigator.serviceWorker.controller?.postMessage({ type: 'OFFLINE_STATE' });
     registration?.update().then(update).catch(() => setMessage('업데이트 서버에 연결하지 못했습니다. 저장한 자료로 계속 사용할 수 있습니다.'));
     navigator.storage?.estimate().then(value => setUsage(value));
-    return () => { navigator.serviceWorker.removeEventListener('message', receive); if (previous instanceof HTMLElement && previous.isConnected) previous.focus(); };
+    return () => { navigator.serviceWorker.removeEventListener('message', receive); registration?.removeEventListener('updatefound', updateFound); registration?.installing?.removeEventListener('statechange', update); if (previous instanceof HTMLElement && previous.isConnected) previous.focus(); };
   }, []);
   async function prepare() {
     setBusy(true); setMessage('');

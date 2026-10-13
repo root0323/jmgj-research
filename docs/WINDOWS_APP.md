@@ -1,5 +1,15 @@
 # Windows 앱 미리보기
 
+## 0.9.1 · PWA 부수 기능 보완과 설치 파일 제공
+
+Apple PWA의 150도 FOV 상한·안전 영역·터치·오프라인 재실행을 확인하고 공유 모바일 패널 크기 계산을 보완했다. Windows 기능·설정과 지역 자료를 유지하며 같은 소스 버전의 정식 설치 파일·blockmap·latest.yml을 제공한다.
+
+웹 BUILD_ID는 `jjhEFqASj3zMuxuQ22jGw`다. backend 소스 변경이 없으며 검증된 0.7.3 서버를 재사용했다. EXE `bb28198d99df5ca496bdc5e18801324df92c10cbbddfeb7380d28b1ae87fb4c6`, PKG `b36fd3113a54212c633d1950915ae2c821cfec9ad29584553a06795fbbdc9fa4`를 최종 패키지에서 대조했다. ASAR 원본·웹 빌드·데이터 목록·설치 파일의 SHA-512와 업데이트 manifest가 일치했다.
+
+독립 프로필·포트 43161의 최종 패키지에서 준비 완료·버전 0.9.1·frontend/backend 무인증 403·업데이트 feed·Black Marble 카탈로그 연결을 확인했다. 두 서버가 exit 0으로 종료했으며 사용자 프로필을 변경하지 않았다. 동시 빌드 중 시작 시간 30.724초는 성능 개선 수치로 해석하지 않는다.
+
+설치 파일은 221,293,843 bytes, SHA-256 `cab77b1c64f2fb8a984e5429b4844b6156247f8cd7342bb75564dd4712b17c30`다. blockmap 229,145 bytes·latest.yml 379 bytes를 포함해 기존 내부 업데이트를 유지한다. Windows·Android Node 테스트 31개를 통과했다.
+
 ## 0.9.0 · Apple PWA 추가와 기존 앱 유지
 
 아이폰·아이패드용 [PWA](PWA_APP.md)를 추가하고 Windows·Android 프로그램과 사용자 저장 자료를 유지한다. 공통 출처 목록에 WebKit·브라우저 센서·Cloudflare를 추가하고 Windows에서 공식 링크를 열 수 있게 했다. 사용자 배경을 저장할 때 PWA 루트 Service Worker를 유지하는 공통 분기를 추가했으며 Windows의 배경 저장 방식은 그대로다.

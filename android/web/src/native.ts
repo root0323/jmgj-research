@@ -2,6 +2,7 @@ export type Capabilities = { android: boolean; pwa?: boolean; compass: boolean; 
 declare global {
   interface Window {
     AstroSkyAndroid?: { postMessage: (json: string) => void };
+    AstroSkyPWA?: boolean;
     __astroskyResult?: (id: number, result: Record<string, unknown>) => void;
     __astroskyDirection?: (azimuth: number, altitude: number, accuracy: number, generation: number) => void;
     __astroskyBack?: () => boolean;

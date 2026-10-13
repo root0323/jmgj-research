@@ -1,6 +1,7 @@
 import { browserCredentials } from '@/lib/personal-settings';
 import { BrowserOrientation, type OrientationSample } from './orientation';
 import { downloadRegion } from './storage';
+import { prepareStorage } from './startup';
 const transport = window.fetch.bind(window);
 const credentials = browserCredentials();
 const orientation = new BrowserOrientation();
@@ -18,13 +19,9 @@ export async function requestRemote(url: string) {
 }
 export async function initializeBrowser() {
   if (!isSecureContext || !('serviceWorker' in navigator)) throw Error('HTTPS와 최신 Safari가 필요합니다.');
-  const registration = await navigator.serviceWorker.register('/sw.js', { scope: '/', updateViaCache: 'none' });
   window.AstroSkyPWA = true;
-  await navigator.serviceWorker.ready;
-  if (!navigator.serviceWorker.controller) await new Promise<void>((resolve, reject) => {
-    const timer = setTimeout(() => reject(Error('저장소 준비에 실패했습니다. 화면을 다시 열어 주세요.')), 20_000);
-    navigator.serviceWorker.addEventListener('controllerchange', () => { clearTimeout(timer); resolve(); }, { once: true });
-  });
+  document.documentElement.classList.add('pwa-platform');
+  const registration = await prepareStorage(navigator.serviceWorker, location.origin);
   document.addEventListener('visibilitychange', reset);
   window.addEventListener('deviceorientation', sensor);
   window.addEventListener('deviceorientationabsolute', sensor);
@@ -35,8 +32,8 @@ export async function initializeBrowser() {
       // Run permission synchronously in the initiating click, before any await.
       let permission: Promise<string> | undefined;
       if (payload.action === 'permission') {
-        const api = DeviceOrientationEvent as typeof DeviceOrientationEvent & { requestPermission?: () => Promise<string> };
-        permission = api.requestPermission ? api.requestPermission() : Promise.resolve('granted');
+        const api = window.DeviceOrientationEvent as typeof DeviceOrientationEvent & { requestPermission?: (absolute?: boolean) => Promise<string> };
+        permission = !api ? Promise.resolve('denied') : api.requestPermission ? api.requestPermission(true) : Promise.resolve('granted');
       }
       (async () => {
         switch (payload.action) {

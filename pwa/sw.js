@@ -71,6 +71,7 @@ async function prepare() {
   offline.running = false; await publish();
 }
 self.addEventListener('message', event => {
+  if (event.data?.type === 'CLAIM_CLIENT') event.waitUntil(self.clients.claim());
   if (event.data?.type === 'APPLY_UPDATE') event.waitUntil(self.skipWaiting());
   if (event.data?.type === 'PREPARE_OFFLINE') {
     if (!preparation) preparation = prepare().finally(() => { preparation = null; });
