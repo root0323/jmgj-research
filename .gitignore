@@ -102,3 +102,5 @@ android/*.jks
 android/web/dist/
 android/node_modules/
 frontend/public/stellarium/skydata/stars/
+/pwa/build/
+/pwa/.wrangler/

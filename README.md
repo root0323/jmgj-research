@@ -1,5 +1,11 @@
 # AstroSky · JMGJ Research
 
+## 아이폰·아이패드 PWA
+
+[AstroSky PWA 접속·설치](https://astrosky.jmgj-kakao-search.workers.dev/) · [PWA 소스와 사용법](pwa/README.md)
+
+Safari의 공유 메뉴에서 **홈 화면에 추가**를 선택합니다. Android와 공통 화면·연구 모델을 사용하며 개인 키·장소 저장, 지역 자료 다운로드, 나침반·북쪽 정렬과 오프라인 준비를 지원합니다. 기기의 실제 방향 센서와 성능은 별도 실기기 확인이 필요합니다. Windows·Android 설치 파일도 기존대로 정식 릴리스에서 제공합니다.
+
 ## 개인 연구용 웹 버전
 
 Meteoblue 공식 로그인·계정 페이지 연결, 개인 API 키 입력, 한 장소 수동 조회,

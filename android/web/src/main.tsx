@@ -33,15 +33,20 @@ function MobileApp({ capabilities }: { capabilities: Capabilities }) {
     setFollowing(false);
     setAlignmentOpen(false);
   }, []);
-  const toggleFollowing = useCallback(() => {
+  const toggleFollowing = useCallback(async () => {
     if (!capabilities.compass) { setMessage('이 기기에는 나침반 센서가 없습니다. 화면을 손으로 움직여 주세요.'); return; }
     if (following) { stopFollowing(); return; }
+    // Safari requests sensor permission from this button's user gesture.
+    if (capabilities.pwa) {
+      try { await native('permission'); }
+      catch { setMessage('방향 센서 사용을 허용해 주세요. 권한이 없으면 화면을 손으로 움직일 수 있습니다.'); return; }
+    }
     rawDirection.current = null;
     filter.current.reset();
     setSensorReady(false);
-    setMessage('');
+    setMessage(capabilities.pwa ? '새 방향값을 기다리는 동안 기기를 조금 기울여 주세요. 실제 방향과 차이가 있으면 북쪽 정렬을 사용해 주세요.' : '');
     setFollowing(true);
-  }, [capabilities.compass, following, stopFollowing]);
+  }, [capabilities.compass, capabilities.pwa, following, stopFollowing]);
   function setAlignment(value: number | null) {
     offset.current = value;
     setNorthOffset(value);

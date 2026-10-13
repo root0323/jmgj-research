@@ -1,6 +1,6 @@
 import { beforeEach, afterEach, expect, it, vi } from "vitest";
 import { IDBFactory } from "fake-indexeddb";
-import { readBackgrounds, readSelectedBackground, removeBackground, saveBackground, selectBackground } from "./backgroundStorage";
+import { readBackgrounds, readSelectedBackground, removeBackground, saveBackground, selectBackground, prepareBackgroundServiceWorker } from "./backgroundStorage";
 import type { SavedBackground } from "./backgroundStorage";
 let files: Map<string, Response>;
 let fail: boolean;
@@ -20,6 +20,11 @@ beforeEach(() => {
   vi.stubGlobal("navigator",{serviceWorker:{register:async()=>{},ready:Promise.resolve(),controller:{}},storage:{persist:async()=>false}});
 });
 afterEach(()=>vi.unstubAllGlobals());
+it("keeps the PWA worker when adding a user landscape", async () => {
+  window.AstroSkyPWA = true;
+  const register = vi.fn(); vi.stubGlobal("navigator", {serviceWorker:{register,controller:{}}});
+  await prepareBackgroundServiceWorker(); expect(register).not.toHaveBeenCalled();
+});
 it("restores the active background and original source after reopening storage", async () => {
   const item=record("one"); await saveBackground(item,tiles,512);
   const saved=await readBackgrounds(); expect(saved[0].settings).toEqual(item.settings);

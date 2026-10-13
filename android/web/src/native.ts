@@ -1,4 +1,4 @@
-export type Capabilities = { android: boolean; compass: boolean; version: string };
+export type Capabilities = { android: boolean; pwa?: boolean; compass: boolean; version: string };
 declare global {
   interface Window {
     AstroSkyAndroid?: { postMessage: (json: string) => void };

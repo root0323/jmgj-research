@@ -4,6 +4,7 @@ export type SavedBackground = {
   width: number; height: number; bytes: number; savedAt: string; source: Blob; mask: Blob;
 };
 export const BACKGROUND_CACHE = "jmgj-background-files-v1";
+declare global { interface Window { AstroSkyPWA?: boolean } }
 const DB_NAME = "jmgj-backgrounds-v1";
 function openDatabase(): Promise<IDBDatabase> {
   return new Promise((resolve, reject) => {
@@ -36,6 +37,9 @@ export function selectBackground(id: string | null) {
 }
 export async function prepareBackgroundServiceWorker() {
   if (!navigator.serviceWorker || !window.isSecureContext || !window.caches) throw new Error("이 화면에서는 배경을 저장할 수 없습니다. 설치 앱이나 HTTPS 화면에서 이용해 주세요.");
+  // PWA's single root worker also serves user landscapes. Replacing it with
+  // the desktop background-only worker would break offline/model storage.
+  if (window.AstroSkyPWA && navigator.serviceWorker.controller) return;
   await navigator.serviceWorker.register("/background-sw.js", { scope: "/" });
   await navigator.serviceWorker.ready;
   if (!navigator.serviceWorker.controller) {

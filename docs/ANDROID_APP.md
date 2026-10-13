@@ -1,5 +1,11 @@
 # AstroSky Android
 
+## 0.9.0 · PWA와 공통 기능 공유
+
+Windows·Android를 유지하면서 Apple용 [PWA](PWA_APP.md)를 추가했다. 모바일 화면·연구 모델·장비·촬영 안내·방향 평활화와 정렬은 공유하며 PWA의 센서 권한 분기는 Android에서 실행하지 않는다. 서명과 앱 ID를 유지하고 versionCode 900, versionName 0.9.0으로 배포한다. 기존 앱의 설정·지역·기상·배경·개인 키는 유지하며 업데이트 확인 또는 APK 덮어 설치로 받는다.
+
+최종 APK는 76,025,300 bytes, SHA-256 `0887dfde62a102791f664303ec1c6eb7ef164a0c9836ae0566dc04c3dcf5e89f`다. 실제 APK의 웹 파일·엔진 렌더러와 Java 소스를 빌드 입력에 대조했고 기존 배포 인증서 `e5b8e6099682eb248b624e2baa28c2450e6ea8188409db784ecb9f596542c9d9`와 같은 서명을 확인했다. Java 10개, 기존 렌더러·DEM 테스트와 Android 타입·release 빌드를 통과했다. 이번 PWA 추가로 Android의 지역 저장 방식이나 연구 계수를 변경하지 않았다.
+
 Windows 앱을 유지하면서 추가한 Android 버전이다. 휴대폰·태블릿에서 같은 천체 화면, 장비 설정, 사진, 촬영 안내, 개인 기상 자료와 지역 계산을 사용한다.
 
 ## 설치와 호환

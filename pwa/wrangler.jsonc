@@ -1,0 +1,14 @@
+{
+  "name": "astrosky",
+  "main": "server/worker.mjs",
+  "compatibility_date": "2026-10-13",
+  "workers_dev": true,
+  "preview_urls": false,
+  "observability": { "enabled": false },
+  "services": [
+    { "binding": "KAKAO", "service": "jmgj-kakao-search" },
+    { "binding": "BLACK_MARBLE", "service": "astrosky-black-marble" }
+  ],
+  "assets": { "directory": "./build", "binding": "ASSETS", "run_worker_first": ["/bridge", "/background-model/ffnet_40s.data"] },
+  "ratelimits": [{ "name": "BRIDGE_LIMITER", "namespace_id": "1032302", "simple": { "limit": 120, "period": 60 } }]
+}

@@ -1,5 +1,15 @@
 # Windows 앱 미리보기
 
+## 0.9.0 · Apple PWA 추가와 기존 앱 유지
+
+아이폰·아이패드용 [PWA](PWA_APP.md)를 추가하고 Windows·Android 프로그램과 사용자 저장 자료를 유지한다. 공통 출처 목록에 WebKit·브라우저 센서·Cloudflare를 추가하고 Windows에서 공식 링크를 열 수 있게 했다. 사용자 배경을 저장할 때 PWA 루트 Service Worker를 유지하는 공통 분기를 추가했으며 Windows의 배경 저장 방식은 그대로다.
+
+최종 Windows 웹 BUILD_ID는 `RPQXn3gZ7UYQU2ijot_N5`다. backend 소스에 변경이 없음을 확인하고 검증된 0.7.3 계산 서버를 재사용했다. EXE·PKG SHA-256은 각각 `bb28198d99df5ca496bdc5e18801324df92c10cbbddfeb7380d28b1ae87fb4c6`, `b36fd3113a54212c633d1950915ae2c821cfec9ad29584553a06795fbbdc9fa4`다. 실제 ASAR 런타임과 웹·데이터 목록을 빌드 입력과 대조했으며 원본 H5·DEM·개인 키를 설치 파일에 포함하지 않았다.
+
+독립 프로필·포트 43160의 패키지 진단에서 버전 0.9.0, 준비 완료, 두 서버의 무인증 403, 업데이트 feed와 Black Marble 카탈로그 연결을 확인했다. backend·frontend가 모두 exit 0으로 종료했으며 사용자 설치 프로필을 변경하지 않았다.
+
+설치 파일은 221,293,647 bytes, SHA-256 `f3312b035f0102b4c1bc0f47911bd2b214a983e27f78b2435bb43ef4dd8dd961`다. blockmap 229,164 bytes와 latest.yml 379 bytes의 SHA-512·크기도 설치 파일과 일치한다. 같은 소스 태그의 정식 GitHub Release에 PWA ZIP·Android APK·Windows 설치 파일·blockmap·latest.yml을 제공한다. 기존 사용자는 앱 업데이트로 받고 신규 사용자는 설치 파일을 사용한다.
+
 ## 0.8.0 · Android 추가와 Windows 유지
 
 Android APK를 별도로 제공하며 기존 Windows 프로그램·업데이트·장비 설정과 지역/기상/배경 저장 자료를 유지한다. Android 구조·설치·검증은 [ANDROID_APP.md](ANDROID_APP.md)에 기록한다.
