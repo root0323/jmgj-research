@@ -1,0 +1,13 @@
+.window { width: min(680px, calc(100vw - 24px)); max-width: calc(100vw - 24px); max-height: calc(100dvh - 24px); margin: auto; padding: 0; border: 1px solid #4a627b; border-radius: 12px; background: #0d1726; color: #e8f2ff; overflow: hidden; }
+.window::backdrop { background: #0009; }
+.window header { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid #35475d; }
+.window h2 { margin: 0; font-size: 18px; }
+.window header button { flex-shrink: 0; width: 36px; height: 36px; padding: 0; border: 1px solid #456079; border-radius: 7px; color: #e8f2ff; background: #243750; font-size: 26px; cursor: pointer; }
+.content { max-height: calc(100dvh - 105px); overflow-y: auto; padding: 16px 20px; font-size: 14px; line-height: 1.7; }
+.content dl { margin: 16px 0; }
+.content dl > div { padding: 12px 0; border-bottom: 1px solid #2e4055; }
+.content dt { font-weight: 700; color: #a9d9ff; }
+.content dd { margin: 4px 0 0; color: #c6d4e4; }
+.flow { margin-top: 0; padding: 12px; border-radius: 8px; background: #1a3045; }
+.note { color: #adc2d8; }
+.window button:focus-visible { outline: 2px solid #8fd3ff; outline-offset: 2px; }

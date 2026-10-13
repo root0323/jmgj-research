@@ -22,6 +22,8 @@ public class MainActivity extends Activity implements SensorEventListener {
     private static final String ORIGIN = "https://appassets.androidplatform.net";
     private WebView web;
     private AppUpdater updater;
+    private CredentialStore credentials;
+    private final ExecutorService settings = Executors.newSingleThreadExecutor();
     private final ExecutorService network = Executors.newFixedThreadPool(3);
     private final ExecutorService downloads = Executors.newSingleThreadExecutor();
     private SensorManager sensors;
@@ -45,6 +47,7 @@ public class MainActivity extends Activity implements SensorEventListener {
         super.onCreate(saved);
         getWindow().setStatusBarColor(Color.BLACK); getWindow().setNavigationBarColor(Color.BLACK);
         dataRoot = new File(getFilesDir(), "regional-data"); dataRoot.mkdirs();
+        credentials = new CredentialStore(this);
         sensors = (SensorManager) getSystemService(SENSOR_SERVICE);
         rotation = sensors.getDefaultSensor(Sensor.TYPE_ROTATION_VECTOR);
         if (rotation == null) rotation = sensors.getDefaultSensor(Sensor.TYPE_GEOMAGNETIC_ROTATION_VECTOR);
@@ -110,6 +113,19 @@ public class MainActivity extends Activity implements SensorEventListener {
                 JSONObject p = new JSONObject(message.getData()); int id = p.getInt("id");
                 switch (p.getString("action")) {
                     case "capabilities": result(id, new JSONObject(bridge.capabilities())); break;
+                    case "credential":
+                        settings.submit(() -> {
+                            try {
+                                String operation = p.getString("operation"); JSONObject value = new JSONObject();
+                                if (operation.equals("read")) { String key = credentials.read(); value.put("key", key == null ? JSONObject.NULL : key); }
+                                else if (operation.equals("save")) credentials.save(p.getString("key"));
+                                else if (operation.equals("clear")) credentials.clear();
+                                else throw new IllegalArgumentException();
+                                result(id, value);
+                            } catch (Exception e) {
+                                try { result(id, new JSONObject().put("error", "API 키 저장소를 사용할 수 없습니다.")); } catch (JSONException ignored) { }
+                            }
+                        }); break;
                     case "request": bridge.request(id, p.getString("url")); break;
                     case "download": bridge.download(id, p.getString("url"), p.getString("name"), p.optString("hash"), p.optLong("bytes")); break;
                     case "follow": bridge.follow(p.getBoolean("enabled"), p.getDouble("latitude"), p.getDouble("longitude"), p.getLong("generation")); result(id, new JSONObject()); break;
@@ -202,5 +218,5 @@ public class MainActivity extends Activity implements SensorEventListener {
     @Override public void onBackPressed() {
         web.evaluateJavascript("window.__astroskyBack?.()", handled -> { if (!"true".equals(handled)) MainActivity.super.onBackPressed(); });
     }
-    @Override protected void onDestroy() { sensors.unregisterListener(this); network.shutdownNow(); downloads.shutdownNow(); if (updater != null) updater.close(); if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) WebViewCompat.removeWebMessageListener(web, "AstroSkyAndroid"); web.destroy(); super.onDestroy(); }
+    @Override protected void onDestroy() { sensors.unregisterListener(this); network.shutdownNow(); downloads.shutdownNow(); settings.shutdownNow(); if (updater != null) updater.close(); if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) WebViewCompat.removeWebMessageListener(web, "AstroSkyAndroid"); web.destroy(); super.onDestroy(); }
 }

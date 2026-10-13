@@ -20,3 +20,8 @@ test('Renderer adaptation fails visibly if upstream renderer changes', () => {
   assert.ok(optimizeRenderer(source).includes(OPTIMIZED));
   assert.throws(()=>optimizeRenderer(source.replace(ORIGINAL,'changed')));
 });
+test('Android clamps gesture zoom before any render, including native update overshoot', () => {
+  const core={fov:0},max=150*Math.PI/180;let frames=0;
+  const context={Module:{core,canvas:{width:300,height:200,getBoundingClientRect:()=>({width:300,height:200})},_core_update(){core.fov=4;},zoomTo(v,t){assert.equal(t,0);core.fov=v;},_core_render(){assert.equal(core.fov,max);frames++;}},mouseDown:false,document:{hidden:false},window:{devicePixelRatio:1,requestAnimationFrame(){}}};
+  vm.createContext(context);vm.runInContext(OPTIMIZED,context);context.render(0);context.render(40);assert.equal(frames,2);
+});

@@ -11,6 +11,7 @@
 .panel input:focus, .panel select:focus { outline: 2px solid #84cfff; outline-offset: 1px; }
 .panel button { padding: 9px 10px; border: 1px solid #48637d; border-radius: 6px; font: inherit; cursor: pointer; color: #e6f0ff; background: #23354d; white-space: nowrap; }
 .panel button:disabled { opacity: .45; cursor: default; }
+.panel .helpButton { padding: 2px 6px; background: transparent; color: #b9ddfa; font-size: 12px; }
 .keyForm input { flex: 1; }
 .field { display: grid; gap: 6px; margin-top: 12px; color: #c6d4e5; }
 .target { display: grid; gap: 3px; margin: 14px 0 10px; }

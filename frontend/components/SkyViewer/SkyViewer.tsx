@@ -36,6 +36,7 @@ import {
   focusEngineMilkyWay,
   getEngineModule,
   keepHorizonLevel,
+  limitSkyFieldOfView,
   loadStellariumScript,
   patchWasmMemoryHelpers,
   setConstellationLineObjectVisible,
@@ -49,6 +50,7 @@ import { ObjectInfoPanel } from "./ObjectInfoPanel";
 import { SkyViewerControls } from "./SkyViewerControls";
 import { PersonalWeatherPanel } from "./PersonalWeatherPanel";
 import { usePersonalWeather } from "./usePersonalWeather";
+import { readObserver, saveObserver } from "@/lib/personal-settings";
 import { evaluateWeather } from "@/lib/weather-evaluation";
 import { getLunarContext } from "./coordinates";
 import { useAutomaticSeeing } from "./useAutomaticSeeing";
@@ -642,6 +644,17 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
       latitude: SEOUL.latitude,
       longitude: SEOUL.longitude,
     });
+  const initialObserverRef = useRef({ latitude: SEOUL.latitude, longitude: SEOUL.longitude });
+  const [locationStorageWarning, setLocationStorageWarning] = useState(false);
+  useEffect(() => {
+    try {
+      const saved = readObserver(window.localStorage);
+      if (!saved) return;
+      initialObserverRef.current = { latitude: saved.latitude, longitude: saved.longitude };
+      setObserverLocationState(initialObserverRef.current);
+      setLocationQuery(saved.name);
+    } catch { setLocationStorageWarning(true); }
+  }, []);
   useEffect(() => { onLocationChange?.(observerLocation); }, [observerLocation, onLocationChange]);
   const [toggles, setToggles] = useState<DisplayToggles>({
     horizontalCoordinates: false,
@@ -757,8 +770,8 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
         }
         setObserverLocation(
           engine,
-          SEOUL.latitude,
-          SEOUL.longitude,
+          initialObserverRef.current.latitude,
+          initialObserverRef.current.longitude,
           SEOUL.elevation
         );
         setObservationTime(engine, initialTimeRef.current);
@@ -1305,7 +1318,7 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
 
       const engine = engineRef.current;
       const lastStarCatalogUpdate = lastStarCatalogUpdateRef.current ?? 0;
-      if (engine) keepHorizonLevel(engine);
+      if (engine) { keepHorizonLevel(engine); limitSkyFieldOfView(engine); }
       if (engine && now - lastStarCatalogUpdate >= 600) {
         lastStarCatalogUpdateRef.current = now;
         updateVisibleStarCatalog(engine, clickTargetsRef.current);
@@ -1498,7 +1511,11 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
     }
 
     setObserverLocationState(location);
-    setLocationQuery(name ?? "선택한 위치");
+    const locationName = (name?.trim() || "선택한 위치").slice(0, 200);
+    setLocationQuery(locationName);
+    initialObserverRef.current = location;
+    try { setLocationStorageWarning(!saveObserver(window.localStorage, { ...location, name: locationName })); }
+    catch { setLocationStorageWarning(true); }
     applyObservationTime(simulatedTimeRef.current);
 
     const selected = selectedTargetRef.current;
@@ -1523,6 +1540,7 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
 
   return (
     <main className={styles.shell}>
+      {locationStorageWarning && <p role="status" className={styles.error}>선택한 장소를 저장하지 못했습니다. 앱 저장 공간을 확인해 주세요.</p>}
       <div className={`${styles.skyViewport} ${fieldOfView.preview ? styles.instrumentViewport : ""} ${fieldOfView.preview?.mode === "eyepiece" ? styles.eyepieceViewport : ""}`}
         style={fieldOfView.preview ? { "--optical-aspect": fieldOfView.preview.aspect } as CSSProperties : undefined}
         aria-label={fieldOfView.preview ? `${fieldOfView.preview.mode === "camera" ? "카메라" : "접안렌즈"} 시야` : "관측 하늘"}>

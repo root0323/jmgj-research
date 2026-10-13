@@ -1,6 +1,6 @@
 {
   "name": "jmgj-research-desktop",
-  "version": "0.8.4",
+  "version": "0.8.5",
   "private": true,
   "description": "AstroSky astronomy research desktop app",
   "author": "root0323",
@@ -26,6 +26,8 @@
     },
     "files": [
       "main.cjs",
+      "preload.cjs",
+      "credentials.cjs",
       "runtime.cjs",
       "startup.html",
       "updates.cjs",

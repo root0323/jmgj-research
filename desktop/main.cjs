@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, dialog, session, shell } = require('electron');
+const { app, BrowserWindow, Menu, dialog, session, shell, ipcMain, safeStorage } = require('electron');
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
@@ -7,6 +7,7 @@ const { safeExternal, freePort, loadConfig, saveConfig, waitReady, stopWorker } 
 const { createUpdateController, isInstalled } = require('./updates.cjs');
 const { cleanupAfterSuccessfulStart } = require('./update-storage.cjs');
 const publicServices = require('./public-services.json');
+const { createCredentials, trustedCredentialFrame } = require('./credentials.cjs');
 
 const localRoot = process.env.JMGJ_DESKTOP_PROFILE || path.join(process.env.LOCALAPPDATA || app.getPath('appData'), 'jmgj-research', 'desktop');
 app.setPath('userData', localRoot);
@@ -74,6 +75,7 @@ async function createWindow() {
   win = new BrowserWindow({ title: 'AstroSky', width: 1360, height: 900, minWidth: 960, minHeight: 640,
     backgroundColor: '#060a12', show: false, webPreferences: {
       nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true, webviewTag: false,
+      preload: path.join(__dirname, 'preload.cjs'),
       allowRunningInsecureContent: false, spellcheck: false } });
   win.webContents.setWindowOpenHandler(({ url }) => {
     if (safeExternal(url)) void shell.openExternal(url);
@@ -141,7 +143,7 @@ function menu() {
       { id: 'check-for-updates', label: '업데이트 확인…', click: () => void updates?.check() },
       { label: '연구 GitHub', click: () => shell.openExternal('https://github.com/root0323/jmgj-research') },
       { label: '앱 정보', click: () => dialog.showMessageBox(win, { title: 'AstroSky',
-        message: `AstroSky ${app.getVersion()}`, detail: '개인 연구용 Windows 미리보기\n기상·천체 사진·장소 검색은 인터넷이 필요합니다.\n개인 기상 API 키는 앱 화면의 메모리에만 유지됩니다.' }) } ] },
+        message: `AstroSky ${app.getVersion()}`, detail: '개인 연구용 Windows 미리보기\n기상·천체 사진·장소 검색은 인터넷이 필요합니다.\n개인 기상 API 키는 Windows 암호화 저장소로 보호해 복원합니다.' }) } ] },
   ]));
 }
 
@@ -152,6 +154,16 @@ async function start() {
   config = await loadConfig(configFile, path.join(process.env.LOCALAPPDATA || app.getPath('appData'), 'jmgj-research'));
   fs.mkdirSync(config.dataRoot, { recursive: true });
   const origin = `http://127.0.0.1:${config.port}`;
+  const credentialStore = createCredentials(path.join(localRoot, 'meteoblue-key.bin'), safeStorage);
+  ipcMain.handle('astrosky:credential', (event, action, key) => {
+    if (!trustedCredentialFrame(event, win?.webContents, origin)) throw Error('Credential access denied');
+    try {
+      if (action === 'read') return credentialStore.read();
+      if (action === 'save') return credentialStore.save(key);
+      if (action === 'clear') return credentialStore.clear();
+    } catch { throw Error('Credential storage operation failed'); }
+    throw Error('Unsupported credential operation');
+  });
   const token = crypto.randomBytes(32).toString('hex');
   const backendPort = await freePort();
   const resources = app.isPackaged ? process.resourcesPath : path.join(__dirname, 'build');

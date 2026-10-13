@@ -16,6 +16,8 @@ export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
   {
     title: "앱 실행·기기 센서",
     sources: [
+      { name: "Electron safeStorage", url: "https://www.electronjs.org/docs/latest/api/safe-storage", description: "Windows 앱의 개인 Meteoblue API 키를 현재 Windows 사용자 계정의 암호화 기능으로 보호해 저장·복원" },
+      { name: "Android Keystore", url: "https://developer.android.com/privacy-and-security/keystore", description: "Android 앱의 개인 Meteoblue API 키를 기기 Keystore의 AES-GCM 키로 암호화해 앱 전용 저장소에 저장·복원" },
       { name: "Android Sensor Framework", url: "https://developer.android.com/develop/sensors-and-location/sensors/sensors_position", description: "Android 휴대폰·태블릿의 방향과 기울기 센서. 관측 위치에 따른 자기편각을 보정하며 센서 없는 기기는 손 조작 지원" },
       { name: "Pyodide", url: "https://pyodide.org/en/stable/", description: "Android 앱 안의 별도 WebAssembly 작업에서 기존 Python 연구 모델과 NumPy·HDF5·Rasterio를 실행. 과학 계산 결과는 실측값이 아님", notice: { label: "MPL-2.0 및 라이브러리별 이용 조건", url: "https://github.com/pyodide/pyodide/blob/main/LICENSE" } },
       { name: "geotiff.js", url: "https://github.com/geotiffjs/geotiff.js", description: "Android 계산 작업에서 DEM 압축을 해제. 원본 해상도·높이값·좌표를 유지하며 저장된 원본 파일은 보존", notice: { label: "MIT License", url: "https://github.com/geotiffjs/geotiff.js/blob/master/LICENSE" } },

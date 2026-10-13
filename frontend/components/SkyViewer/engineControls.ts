@@ -466,6 +466,17 @@ export function applyNightSkyDefaults(engine: StellariumEngine) {
   trySetValue(engine, ["bortle_index"], 1);
 }
 
+// Perspective projection becomes singular at 180°. Keep a margin for wide
+// tablet viewports and gesture inertia while retaining normal zoom-in.
+export const MAX_SKY_FOV = 150 * DEG_TO_RAD;
+export function limitSkyFieldOfView(engine: StellariumEngine) {
+  const fov = Number(engine.core?.fov);
+  if (Number.isFinite(fov) && fov > MAX_SKY_FOV) {
+    engine.zoomTo?.(MAX_SKY_FOV, 0);
+    trySetValue(engine, ["fov"], MAX_SKY_FOV);
+  }
+}
+
 export function applyDeepSkyMode(engine: StellariumEngine, enabled: boolean) {
   const dss = getEngineModule(engine, "dss");
   trySetValue(engine, ["dsos.visible"], enabled);

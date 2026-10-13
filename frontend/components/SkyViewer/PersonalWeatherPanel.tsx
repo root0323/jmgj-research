@@ -4,6 +4,8 @@ import type { usePersonalWeather } from "./usePersonalWeather";
 import type { useAutomaticSeeing } from "./useAutomaticSeeing";
 import type { useAutomaticTerrain } from "./useAutomaticTerrain";
 import styles from "./PersonalWeatherPanel.module.css";
+import { useState } from "react";
+import { ApiHelpWindow } from "./ApiHelpWindow";
 
 type Props = {
   weather: ReturnType<typeof usePersonalWeather>;
@@ -19,6 +21,7 @@ const number = (value: number) => value.toLocaleString("ko-KR");
 
 export function PersonalWeatherPanel({ weather, seeing, terrain, location, locationName, observationTime, modelSource }: Props) {
   const { connected, busy, ledger, snapshot, plan } = weather;
+  const [helpOpen, setHelpOpen] = useState(false);
   const usage = usageSummary(ledger, plan);
   const values = snapshot ? weatherAt(snapshot, observationTime) : null;
   const modifyNumber = (field: "budget" | "usedBeforeApp", raw: string) => {
@@ -35,8 +38,9 @@ export function PersonalWeatherPanel({ weather, seeing, terrain, location, locat
       <div className={styles.links}>
         <a href="https://www.meteoblue.com/en/user/login/index" target="_blank" rel="noopener noreferrer">Meteoblue 로그인 ↗</a>
         <a href="https://www.meteoblue.com/en/user/account/index" target="_blank" rel="noopener noreferrer">API 키 발급·계정 ↗</a>
+        <button type="button" className={styles.helpButton} onClick={() => setHelpOpen(true)}>API·토큰·계정 안내</button>
       </div>
-      <p className={styles.help}>본인 계정에서 Weather API를 활성화하고 발급된 키를 붙여 넣으세요. 키는 새로고침하면 지워집니다.</p>
+      <p className={styles.help}>본인 계정에서 Weather API를 활성화하고 발급된 키를 붙여 넣으세요. 키 적용 시 이 기기에 암호화해 저장하며 다음 실행 때 복원합니다.</p>
       <form className={styles.keyForm} onSubmit={(event) => { event.preventDefault(); void weather.applyKey(); }}>
         <label className={styles.srOnly} htmlFor="personal-weather-key">Meteoblue API 키</label>
         <input id="personal-weather-key" type="password" value={weather.keyInput} disabled={busy} autoComplete="off" spellCheck={false}
@@ -88,8 +92,9 @@ export function PersonalWeatherPanel({ weather, seeing, terrain, location, locat
         <label className={styles.field}><span>계정 사용 내역 조회 시작일</span><input type="date" disabled={busy} value={ledger.activationDate} onChange={(event) => weather.updateLedger({ ...ledger, activationDate: event.target.value, history: null })} /></label>
         <button className={styles.secondary} type="button" disabled={busy || !connected} onClick={() => void weather.syncUsage()}>전일까지 계정 사용량 동기화</button>
         <p className={styles.help}>시작일을 API 활성화 날짜로 맞추세요. 동기화 후에는 ‘이미 사용한 크레딧’ 대신 계정 사용 내역을 반영합니다. 남은 횟수는 3시간 구성의 비용으로 환산한 예상치입니다.</p>
-        {connected && <button className={styles.secondary} type="button" disabled={busy} onClick={weather.disconnect}>API 키 연결 해제</button>}
+        {connected && <button className={styles.secondary} type="button" disabled={busy} onClick={() => void weather.disconnect()}>API 키 연결 해제</button>}
       </details>
+      {helpOpen && <ApiHelpWindow onClose={() => setHelpOpen(false)} />}
     </section>
   );
 }

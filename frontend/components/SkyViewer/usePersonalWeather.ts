@@ -4,6 +4,7 @@ import {
   type CreditLedger, type WeatherLocation, type WeatherPlan, type WeatherSnapshot,
 } from "@/lib/meteoblue";
 import { keyFingerprint, readLedger, readWeather, saveLedger, saveWeather } from "@/lib/weather-storage";
+import { credentials } from "@/lib/personal-settings";
 
 export function usePersonalWeather(location: WeatherLocation) {
   const [keyInput, setKeyInput] = useState("");
@@ -12,12 +13,31 @@ export function usePersonalWeather(location: WeatherLocation) {
   const [ledger, setLedger] = useState<CreditLedger>(newLedger);
   const ledgerRef = useRef(ledger);
   const [stored, setStored] = useState<{ key: string; snapshot: WeatherSnapshot } | null>(null);
-  const [busy, setBusy] = useState(false);
-  const busyRef = useRef(false);
+  const [busy, setBusy] = useState(true);
+  const busyRef = useRef(true);
   const [message, setMessage] = useState("Meteoblue에서 발급한 개인 API 키를 입력하세요.");
   const [storageWarning, setStorageWarning] = useState(false);
   const currentCacheKey = account ? cacheKey(account.fingerprint, plan, location) : "";
   const snapshot = stored?.key === currentCacheKey ? stored.snapshot : null;
+
+  useEffect(() => {
+    let cancelled = false;
+    void (async () => {
+      try {
+        const key = await credentials().read();
+        if (!key || cancelled) return;
+        if (!validKey(key)) throw new Error("Invalid saved credential");
+        const fingerprint = await keyFingerprint(key);
+        if (cancelled) return;
+        const value = readLedger(fingerprint);
+        ledgerRef.current = value; setLedger(value); setAccount({ key, fingerprint });
+        setMessage("저장한 API 키를 복원했습니다. 저장 기상 자료를 확인하며 새 조회는 불러오기 버튼으로 요청합니다.");
+      } catch {
+        if (!cancelled) setMessage("저장한 API 키를 복원하지 못했습니다. 키를 다시 입력해 주세요.");
+      } finally { if (!cancelled) { busyRef.current = false; setBusy(false); } }
+    })();
+    return () => { cancelled = true; };
+  }, []);
 
   const updateLedger = useCallback((value: CreditLedger) => {
     ledgerRef.current = value;
@@ -46,16 +66,24 @@ export function usePersonalWeather(location: WeatherLocation) {
       setLedger(value);
       setAccount({ key, fingerprint });
       setKeyInput("");
-      setMessage("키 적용 완료. 장소를 정하고 ‘불러오기’를 누르면 조회합니다.");
+      try {
+        await credentials().save(key);
+        setMessage("키 적용·저장 완료. 앱을 다시 켜도 복원됩니다. 장소를 정하고 ‘불러오기’를 누르면 조회합니다.");
+      } catch { setMessage("키는 적용했지만 저장하지 못했습니다. 이번 실행에서만 사용할 수 있습니다."); }
     } catch { setMessage("키를 적용하지 못했습니다. HTTPS 또는 localhost로 접속하세요."); }
     finally { busyRef.current = false; setBusy(false); }
   }
 
-  function disconnect() {
+  async function disconnect() {
     if (busyRef.current) return;
-    setAccount(null); setKeyInput(""); setStored(null);
-    const value = newLedger(); ledgerRef.current = value; setLedger(value);
-    setMessage("키 연결을 해제했습니다. 저장 자료와 사용 기록은 이 브라우저에 유지됩니다.");
+    busyRef.current = true; setBusy(true);
+    try {
+      await credentials().clear();
+      setAccount(null); setKeyInput(""); setStored(null);
+      const value = newLedger(); ledgerRef.current = value; setLedger(value);
+      setMessage("키 연결을 해제하고 저장한 키를 삭제했습니다. 기상 자료와 사용 기록은 유지됩니다.");
+    } catch { setMessage("저장한 키를 삭제하지 못했습니다. 연결 해제를 다시 시도해 주세요."); }
+    finally { busyRef.current = false; setBusy(false); }
   }
 
   async function load(force = false) {

@@ -12,7 +12,10 @@ var canvas=Module.canvas;var dpr=window.devicePixelRatio||1;var rect=canvas.getB
 var displayWidth=rect.width;var displayHeight=rect.height;
 var width=Math.round(displayWidth*dpr),height=Math.round(displayHeight*dpr);
 if(canvas.width!==width||canvas.height!==height){canvas.width=width;canvas.height=height}
-Module._core_update();Module._core_render(displayWidth,displayHeight,dpr)
+Module._core_update();
+var maxFov=150*Math.PI/180;
+if(Module.core&&Module.core.fov>maxFov){Module.zoomTo(maxFov,0);Module.core.fov=maxFov}
+Module._core_render(displayWidth,displayHeight,dpr)
 };`;
 
 function optimizeRenderer(source) {

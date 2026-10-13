@@ -1,4 +1,4 @@
-# JMGJ
+# AstroSky · JMGJ Research
 
 ## 개인 연구용 웹 버전
 
@@ -8,7 +8,7 @@ Meteoblue 공식 로그인·계정 페이지 연결, 개인 API 키 입력, 한 
 
 사용법과 실행 방법은 [개인 기상 자료 안내](docs/PERSONAL_WEATHER.md)를 참고하세요.
 추후 추가할 기능은 [개발 목록](docs/ROADMAP.md)에 기록합니다.
-현재 웹 버전을 먼저 구현했으며 Windows 앱 패키징은 다음 단계입니다.
+Windows·Android 설치 파일과 앱 내부 업데이트를 [정식 릴리스](https://github.com/root0323/jmgj-research/releases/latest)에서 제공합니다. 0.8.5부터 적용한 개인 API 키와 마지막 관측 장소를 저장·복원하며 API·토큰·계정 안내창과 최대 FOV 150° 제한을 제공합니다.
 
 JMGJ는 관측 위치와 시간을 기준으로 밤하늘을 시각화하는 웹 기반 천체 관측 도구입니다. 
 프론트엔드는 Stellarium Web Engine을 이용해 천구, 별, 행성, 달, 태양, 딥스카이 천체를 렌더링하고, 백엔드는 주소 검색·역지오코딩과 하늘 밝기 연구 모델 계산을 담당합니다.

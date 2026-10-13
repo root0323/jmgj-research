@@ -158,6 +158,11 @@ function MobileApp({ capabilities }: { capabilities: Capabilities }) {
 async function start() {
   try {
     const capabilities = await native('capabilities') as unknown as Capabilities;
+    window.AstroSkyCredentials = {
+      read: async () => { const value = await native('credential', { operation: 'read' }); return typeof value.key === 'string' ? value.key : null; },
+      save: async key => { await native('credential', { operation: 'save', key }); },
+      clear: async () => { await native('credential', { operation: 'clear' }); },
+    };
     installApi();
     createRoot(document.getElementById('root')!).render(<MobileApp capabilities={capabilities} />);
   } catch {

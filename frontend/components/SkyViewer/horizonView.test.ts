@@ -1,9 +1,16 @@
 import { describe, expect, it, vi } from "vitest";
-import { keepHorizonLevel, setInitialHorizonView } from "./engineControls";
+import { keepHorizonLevel, setInitialHorizonView, limitSkyFieldOfView, MAX_SKY_FOV } from "./engineControls";
 import { projectTargetToScreen } from "./coordinates";
 import type { StellariumEngine } from "./types";
 
 describe("level horizon view", () => {
+  it("caps excessive zoom-out below the perspective singularity without changing normal zoom", () => {
+    const core = { fov: Math.PI * 1.5 }, zoomTo = vi.fn();
+    const engine = { core, zoomTo } as StellariumEngine;
+    limitSkyFieldOfView(engine); expect(core.fov).toBe(MAX_SKY_FOV); expect(zoomTo).toHaveBeenCalledWith(MAX_SKY_FOV, 0);
+    zoomTo.mockClear(); limitSkyFieldOfView(engine); expect(zoomTo).not.toHaveBeenCalled();
+    core.fov = .01; limitSkyFieldOfView(engine); expect(core.fov).toBe(.01);
+  });
   it("uses perspective and resets roll while preserving the viewing direction", () => {
     const core = { projection: 2, observer: { v: 1, roll: 0.2, yaw: 1, pitch: 0.3 } };
     const engine = { core, lookAt: vi.fn(), _observer_update: vi.fn() } as StellariumEngine;
