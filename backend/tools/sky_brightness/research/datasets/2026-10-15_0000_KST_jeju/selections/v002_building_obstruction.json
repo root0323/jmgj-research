@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "included": 21,
+  "excluded": 4,
+  "excluded_altitude_deg": 30,
+  "excluded_azimuths_deg": [
+    300,
+    315,
+    330,
+    345
+  ],
+  "reason": "Buildings obstructed these observations; user confirmed",
+  "source_rows_preserved": true,
+  "supersedes": "v001_all_observations"
+}

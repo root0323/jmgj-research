@@ -1,0 +1,119 @@
+{
+  "observation_count": 21,
+  "time_zone": "Asia/Seoul",
+  "weather_environments": {
+    "('2026-10-15 00:00', 33.426769, 126.530349)": [
+      0.07,
+      0.002258064516129032,
+      30.0,
+      1.29,
+      0.0,
+      [
+        136.32922,
+        265.7447
+      ],
+      133.624420888407,
+      1.0
+    ]
+  },
+  "cache_sha256": "bab252c27342e719c641e5369bf954b147858d2bd509a04fc7a1669328141a1a",
+  "baseline": {
+    "n": 21,
+    "rmse": 1.0633472158203232,
+    "mae": 0.8803899220419863,
+    "bias_pred_minus_actual": -0.8585251313675007
+  },
+  "fit_on_all_observations": {
+    "n": 21,
+    "rmse": 0.6221476948056955,
+    "mae": 0.5293225645952259,
+    "bias_pred_minus_actual": 0.005490689432296644
+  },
+  "blocked_angular_diagnostic": {
+    "n": 21,
+    "rmse": 0.7453603236881294,
+    "mae": 0.6439301944772277,
+    "bias_pred_minus_actual": 0.00041214948826877383
+  },
+  "candidate_art_scale": 0.44060656787616537,
+  "folds": [
+    {
+      "held_out_group": 0,
+      "art_scale": 0.5314205800806819,
+      "n": 4,
+      "rmse": 1.0569596344344312,
+      "mae": 1.0064076919808693,
+      "bias_pred_minus_actual": -1.0064076919808693
+    },
+    {
+      "held_out_group": 1,
+      "art_scale": 0.4389717969286834,
+      "n": 4,
+      "rmse": 0.20767905458563357,
+      "mae": 0.16770128480443525,
+      "bias_pred_minus_actual": 0.020929034183968298
+    },
+    {
+      "held_out_group": 2,
+      "art_scale": 0.374768257032683,
+      "n": 4,
+      "rmse": 0.9176747478853038,
+      "mae": 0.8804464097722953,
+      "bias_pred_minus_actual": 0.8804464097722953
+    },
+    {
+      "held_out_group": 3,
+      "art_scale": 0.39474104769704443,
+      "n": 4,
+      "rmse": 0.6723930459059386,
+      "mae": 0.5985868310759894,
+      "bias_pred_minus_actual": 0.5985868310759894
+    },
+    {
+      "held_out_group": 4,
+      "art_scale": 0.4929491204491242,
+      "n": 4,
+      "rmse": 0.6375135336003762,
+      "mae": 0.6094410508049144,
+      "bias_pred_minus_actual": -0.6094410508049144
+    },
+    {
+      "held_out_group": 6,
+      "art_scale": 0.43157614916992726,
+      "n": 1,
+      "rmse": 0.4722010102677672,
+      "mae": 0.4722010102677672,
+      "bias_pred_minus_actual": 0.4722010102677672
+    }
+  ],
+  "candidate_status": "diagnostic_only_not_applied",
+  "limitation": "One location and time. Angular holdout is not validation across nights; ms_a/ms_b cannot be separated at one AOD. No model defaults are changed.",
+  "asset_hashes": {
+    "h5": "564dab8277384ac4f14b37ef9940f726084584b082c42e3b71036bfe2adb5e15",
+    "dem": "1c3f6d441d95c1f5219ce90f4db53bd442d0040bb0caa0cccdcf1ca6a58866f0"
+  },
+  "geometry": {
+    "max_pixels": 10000,
+    "radius_km": 30.0
+  },
+  "excluded_observation_count": 4,
+  "exclusion": {
+    "azimuths_deg": [
+      300.0,
+      315.0,
+      330.0,
+      345.0
+    ],
+    "altitude_deg": 30,
+    "reason": "User confirmed that buildings obstructed these directions"
+  },
+  "recalculation_method": "Filter obstructed observations and refit amplitude from previously computed radiance components. Weather and physics unchanged.",
+  "source_comparison_sha256": "94a5b9b0c5f3fe18dca1ebe6414c462223c9ef40e6179d77f1da7ab35ca7431b",
+  "zenith": {
+    "actual": 18.8,
+    "baseline": 18.41561107502744,
+    "candidate": 19.251678936755944,
+    "baseline_error": -0.38438892497256205,
+    "candidate_error": 0.4516789367559433
+  }
+}

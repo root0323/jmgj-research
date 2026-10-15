@@ -1,0 +1,30 @@
+{
+  "status": "candidate_not_applied",
+  "art_scale": 0.6732156660053734,
+  "max_pixels": 1000,
+  "radius_km": 30,
+  "location": [
+    33.426769,
+    126.530349
+  ],
+  "time_kst": "2026-10-15 00:00",
+  "excluded_azimuths": [
+    300.0,
+    315.0,
+    330.0,
+    345.0
+  ],
+  "fit_metrics": {
+    "n": 21,
+    "rmse": 0.6439767299356723,
+    "mae": 0.5384579419032315,
+    "bias_pred_minus_actual": 0.006052832805222423
+  },
+  "angular_diagnostic": {
+    "n": 21,
+    "rmse": 0.7732588335433445,
+    "mae": 0.6553638174286673,
+    "bias_pred_minus_actual": 0.0009698347355076126
+  },
+  "independent_night_validation": false
+}

@@ -1,5 +1,10 @@
 # AstroSky · JMGJ Research
 
+
+## 실측 기반 모델 연구
+
+[모델 연구 자료와 개선 기록](backend/tools/sky_brightness/research/)에 실측 원본·API 원본·관측 제외 기준·모델 스냅샷·보정 후보와 검증 결과를 실행별로 보존합니다. 최신 자료는 2026-10-15 제주 관측이며, 건물에 가린 4개를 제외한 21개 분석과 이전 25개 분석을 함께 제공합니다. 새 개선은 이전 기록을 남기고 추가합니다.
+
 ## 아이폰·아이패드 PWA
 
 [AstroSky PWA 접속·설치](https://astrosky.jmgj-kakao-search.workers.dev/) · [PWA 소스와 사용법](pwa/README.md)

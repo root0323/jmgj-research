@@ -1,0 +1,14 @@
+{
+  "baseline_commit": "82a295073f541fc3aa7aeaa08f3aebccaee01746",
+  "calculator_and_config": "Exact source bytes from the AstroSky repository at the baseline commit",
+  "data_loader.py": "Research-only adapter derived from the reference code: metadata-aware times and explicit offline cache_path. It is not a replacement for the production adapter.",
+  "data_loader_production_source.py": "Original AstroSky adapter for historical provenance; not used for matching this UTC cache.",
+  "runtime_defaults_modified": false,
+  "candidate_model_accepted": false,
+  "source_hashes": {
+    "calculator.py": "39851b1fad3c7f1d441ca2f887e4b26dbf9ba073ac5fcde50ab0b272a87bcf28",
+    "config.py": "5bbee049897dc5412770bca632b79798955d106cd6bd655dc13670734354b9c3",
+    "data_loader.py": "2ad29891552918fda44e09ee430cc050548b83fdd90e8dba2fa62d69e039076d",
+    "data_loader_production_source.py": "2ed9aa57540d874a413cd1b2faf97562dbc2b55a1409ae14d4e2cfa35d0b9bbd"
+  }
+}
