@@ -15,11 +15,37 @@
   z-index: 0;
 }
 
+.skyViewport { position: absolute; inset: 0; }
+.instrumentViewport {
+  inset: auto;
+  left: 50%; top: calc(50% - 8px);
+  transform: translate(-50%, -50%);
+  width: min(calc(100vw - 48px), calc((100dvh - 190px) * var(--optical-aspect)));
+  aspect-ratio: var(--optical-aspect);
+  overflow: hidden;
+  border: 1px solid #ffd38a;
+  background: #000;
+}
+.instrumentViewport .canvas { pointer-events: none; }
+.eyepieceViewport { border-radius: 50%; border-color: #8ad9ff; }
+.instrumentHeading {
+  position: absolute; top: 16px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 18px; z-index: 1;
+  background: rgba(2, 3, 10, 0.85); padding: 8px 14px; border-radius: 6px;
+}
+.instrumentHeading strong { display: block; font-size: 15px; }
+.instrumentHeading span { color: #cbd5e1; font-size: 12px; white-space: nowrap; }
+.instrumentHeading button { border: 0; background: transparent; color: #cbd5e1; font-size: 26px; cursor: pointer; }
+
 .panel {
   position: absolute;
   top: 20px;
   left: 20px;
   width: min(390px, calc(100vw - 40px));
+  max-height: calc(100dvh - 40px);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   padding: 20px 16px 16px;
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 8px;
@@ -45,6 +71,12 @@
   cursor: pointer;
   box-shadow: 0 12px 34px rgba(0, 0, 0, 0.28);
   backdrop-filter: blur(10px);
+}
+
+.panelBody {
+  min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
 .panelToggle:hover {
@@ -83,6 +115,7 @@
 }
 
 .header {
+  flex-shrink: 0;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -298,7 +331,57 @@
   padding: 0;
 }
 
-.toolbarSettingsPanel,
+.toolbarLineMenu {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% + 10px);
+  z-index: 8;
+  display: grid;
+  width: 154px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  background: rgba(8, 12, 24, 0.94);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(14px);
+}
+
+.toolbarLineMenu label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 36px;
+  padding: 7px 10px;
+  border-radius: 4px;
+  color: #e2e8f0;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.toolbarLineMenu label:hover {
+  background: rgba(125, 211, 252, 0.1);
+}
+
+.toolbarLineMenu input {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  accent-color: #7dd3fc;
+  cursor: pointer;
+}
+
+.toolbarLineMenu label:has(input:disabled) {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.bottomToolbar button:focus-visible,
+.toolbarLineMenu input:focus-visible {
+  outline: 2px solid #7dd3fc;
+  outline-offset: -2px;
+}
+
 .toolbarDifficultyPanel {
   position: absolute;
   right: 0;
@@ -316,7 +399,6 @@
   transform-origin: right bottom;
 }
 
-.toolbarSettingsPanel h2,
 .toolbarDifficultyPanel h2 {
   margin: 0;
   color: #ffffff;
@@ -357,51 +439,6 @@
   font-size: 12px;
 }
 
-.toolbarSettingsPanel label {
-  display: grid;
-  gap: 6px;
-}
-
-.toolbarSettingsPanel span {
-  color: #cbd5e1;
-  font-size: 12px;
-}
-
-.toolbarSettingsPanel input {
-  width: 100%;
-  min-width: 0;
-  height: 36px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.09);
-  color: #ffffff;
-  font: inherit;
-  outline: none;
-  padding: 0 10px;
-}
-
-.toolbarSettingsPanel input:focus {
-  border-color: #7dd3fc;
-}
-
-.toolbarSaveButton {
-  width: 100%;
-  height: 36px;
-  border: 1px solid rgba(74, 222, 128, 0.34);
-  border-radius: 6px;
-  background: rgba(22, 101, 52, 0.45);
-  color: #dcfce7;
-  font: inherit;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.toolbarSaveButton:hover {
-  background: rgba(22, 101, 52, 0.62);
-  color: #ffffff;
-}
-
 .bottomToolbar button:hover {
   color: rgba(248, 250, 252, 0.86);
   background: rgba(255, 255, 255, 0.08);
@@ -434,6 +471,12 @@
 .bottomToolbar circle {
   fill: currentColor;
   stroke: none;
+}
+
+.bottomToolbar .coordinateToolbarIcon circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 4;
 }
 
 .bottomToolbar button:nth-child(3) path,
@@ -771,6 +814,8 @@
 }
 
 .mapModal {
+  color: #f6f7fb;
+  overflow-y: auto;
   position: fixed;
   inset: 0;
   display: grid;
@@ -782,6 +827,8 @@
 }
 
 .mapDialog {
+  max-height: calc(100dvh - 104px);
+  overflow-y: auto;
   width: min(560px, calc(100vw - 32px));
   padding: 16px;
   border: 1px solid rgba(255, 255, 255, 0.18);
@@ -891,6 +938,7 @@
 }
 
 .mapTile {
+  pointer-events: none;
   position: absolute;
   width: 256px;
   height: 256px;
@@ -960,6 +1008,16 @@
   gap: 8px;
   margin-bottom: 8px;
 }
+
+.mapCoords label { display: grid; gap: 4px; color: #dbeafe; font-size: 12px; }
+.mapCoords input { min-width: 0; width: 100%; padding: 8px; border: 1px solid #52617a; border-radius: 6px; color: #fff; background: #142039; color-scheme: dark; }
+.mapCoords button { grid-column: 1 / -1; }
+.placeResults { list-style: none; padding: 0; margin: 5px 0 10px; max-height: 150px; overflow: auto; border: 1px solid #485a74; border-radius: 6px; background: #101c30; }
+.placeResults li + li { border-top: 1px solid #314158; }
+.placeResults button { display: grid; gap: 3px; width: 100%; padding: 9px 10px; border: 0; border-radius: 0; background: transparent; color: #dbeafe; text-align: left; font: inherit; font-size: 12px; white-space: normal; }
+.placeResults button:hover, .placeResults button:focus-visible { background: #263b55; }
+.placeResults small { color: #9eb4cf; }
+.mapAttribution a { color: inherit; pointer-events: auto; }
 
 .mapActions {
   display: grid;
@@ -1114,10 +1172,32 @@
 }
 
 .infoHeader {
+  position: relative;
   display: grid;
   gap: 10px;
   margin-bottom: 12px;
 }
+.infoHeader h2 { padding-right: 28px; }
+
+.infoCloseButton {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #a9bdcf;
+  cursor: pointer;
+  font-size: 23px;
+  line-height: 1;
+}
+.infoCloseButton:hover { background: #263c51; color: #fff; }
+.infoCloseButton:focus-visible { outline: 2px solid #8dd1ff; outline-offset: 2px; }
 
 .calculationBox {
   display: grid;
@@ -1317,3 +1397,22 @@
     width: auto;
   }
 }
+.fieldOfViewInfo {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(280px, 80vw);
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 211, 138, 0.3);
+  border-radius: 6px;
+  background: rgba(8, 12, 24, 0.94);
+  color: #ffd38a;
+  font-size: 12px;
+  line-height: 1.6;
+  pointer-events: auto;
+}
+.fieldOfViewInfo strong { display: block; font-weight: 500; }
+.fieldOfViewInfo span { color: #94a3b8; }
+.fieldOfViewInfo button { width: 22px !important; height: 22px !important; margin-left: 6px; font-size: 18px; }

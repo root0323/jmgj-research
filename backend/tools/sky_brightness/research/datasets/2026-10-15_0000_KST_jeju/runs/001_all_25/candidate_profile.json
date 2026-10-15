@@ -1,0 +1,38 @@
+{
+  "status": "candidate_not_applied",
+  "scope": {
+    "time_kst": "2026-10-15 00:00",
+    "latitude": 33.426769,
+    "longitude": 126.530349
+  },
+  "model_settings": {
+    "max_pixels": 1000,
+    "radius_km": 30,
+    "keep_radiance_fraction": 0.99
+  },
+  "candidate": {
+    "art_scale": 0.551162535173046
+  },
+  "validation": {
+    "baseline": {
+      "n": 25,
+      "rmse": 0.9753294718658124,
+      "mae": 0.7674485503017461,
+      "bias_pred_minus_actual": -0.6128432159743947
+    },
+    "candidate_fit": {
+      "n": 25,
+      "rmse": 0.7521205851404558,
+      "mae": 0.6406602208445339,
+      "bias_pred_minus_actual": 0.01059616811370617
+    },
+    "candidate_art_scale": 0.551162535173046,
+    "blocked_angular_diagnostic": {
+      "n": 25,
+      "rmse": 0.8811147068374199,
+      "mae": 0.7613054574866056,
+      "bias_pred_minus_actual": 0.004935175502922817
+    }
+  },
+  "decision": "Do not promote a global art_scale from this snapshot: azimuth structure remains mismatched and zenith gets worse."
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "latest_dataset": "2026-10-15_0000_KST_jeju",
+  "latest_run": "002_unobstructed_21",
+  "accepted_model_run": null,
+  "datasets": [
+    {
+      "id": "2026-10-15_0000_KST_jeju",
+      "raw_observations": 25,
+      "included_observations": 21,
+      "runs": [
+        "001_all_25",
+        "002_unobstructed_21"
+      ],
+      "status": "candidate_not_applied"
+    }
+  ]
+}

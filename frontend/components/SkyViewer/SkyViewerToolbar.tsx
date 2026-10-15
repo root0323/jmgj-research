@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import styles from "./SkyViewer.module.css";
-import type { TelescopeSettings } from "./types";
+import type { CameraSettings, EyepieceSettings, ObservationFilter, TelescopeSettings } from "./types";
+import type { EquipmentSettings } from "./equipmentSettings";
+import { SettingsWindow } from "./SettingsWindow";
+import type { BackgroundController } from "./useBackgrounds";
 
 export type DisplayToggleName =
   | "horizontalCoordinates"
+  | "equatorialCoordinates"
   | "constellationLines"
+  | "equator"
+  | "ecliptic"
   | "atmosphere"
   | "ground";
 
@@ -16,20 +23,150 @@ type ToolbarIconName =
   | "atmosphere"
   | "ground"
   | "deepSky"
+  | "fieldOfView"
+  | "eyepieceFieldOfView"
   | "difficultyInfo"
   | "settings";
 
 type SkyViewerToolbarProps = {
+  compassControl?: ReactNode;
+  onAppUpdate?: () => void;
+  appVersion?: string;
+  backgrounds: BackgroundController;
+  onShowGround: () => void;
   deepSkyMode: boolean;
   telescopeSettings: TelescopeSettings;
+  cameraSettings: CameraSettings;
+  eyepieceSettings: EyepieceSettings;
+  onEyepieceSettingsChange: (settings: EyepieceSettings) => void;
+  eyepieceFieldOfViewStage: number;
+  eyepieceFieldOfViewLabel: string;
+  eyepieceFieldOfViewMessage: string;
+  onEyepieceFieldOfViewToggle: () => void;
+  selectedFilter: ObservationFilter | null;
+  onCameraSettingsChange: (settings: CameraSettings) => void;
+  onFilterChange: (filter: ObservationFilter | null) => void;
+  onEquipmentApply: (settings: EquipmentSettings) => void;
+  fieldOfViewStage: number;
+  fieldOfViewLabel: string;
+  fieldOfViewMessage: string;
+  onFieldOfViewToggle: () => void;
+  onFieldOfViewMessageDismiss: () => void;
   toggles: DisplayToggles;
+  isEngineReady: boolean;
   onDeepSkyModeToggle: () => void;
   onTelescopeSettingsSave: () => void;
   onTelescopeSettingsChange: (settings: TelescopeSettings) => void;
-  onToggle: (name: DisplayToggleName) => void;
+  onToggle: (name: DisplayToggleName, enabled?: boolean) => void;
 };
 
+const COORDINATE_OPTIONS: { name: DisplayToggleName; label: string }[] = [
+  { name: "horizontalCoordinates", label: "지평좌표" },
+  { name: "equatorialCoordinates", label: "적도좌표" },
+];
+
+const LINE_OPTIONS: { name: DisplayToggleName; label: string }[] = [
+  { name: "constellationLines", label: "별자리선" },
+  { name: "equator", label: "적도" },
+  { name: "ecliptic", label: "황도" },
+];
+
+function DisplayOptionsMenu({
+  label,
+  icon,
+  options,
+  toggles,
+  isOpen,
+  isEngineReady,
+  onOpenToggle,
+  onClose,
+  onToggle,
+}: {
+  label: string;
+  icon: ToolbarIconName;
+  options: { name: DisplayToggleName; label: string }[];
+  toggles: DisplayToggles;
+  isOpen: boolean;
+  isEngineReady: boolean;
+  onOpenToggle: () => void;
+  onClose: () => void;
+  onToggle: SkyViewerToolbarProps["onToggle"];
+}) {
+  const menuId = useId();
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const isActive = options.some((option) => toggles[option.name]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    function handlePointerDown(event: PointerEvent) {
+      if (event.target instanceof Node && !wrapperRef.current?.contains(event.target)) {
+        onClose();
+      }
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      onClose();
+      buttonRef.current?.focus();
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen, onClose]);
+
+  return (
+    <div
+      className={styles.toolbarSettingsWrapper}
+      ref={wrapperRef}
+      onBlur={(event) => {
+        if (!event.currentTarget.contains(event.relatedTarget)) onClose();
+      }}
+    >
+      <button
+        ref={buttonRef}
+        type="button"
+        className={isActive || isOpen ? styles.active : ""}
+        onClick={onOpenToggle}
+        aria-label={label}
+        aria-expanded={isOpen}
+        aria-controls={isOpen ? menuId : undefined}
+        title={label}
+      >
+        <ToolbarIcon name={icon} />
+      </button>
+      {isOpen && (
+        <section id={menuId} className={styles.toolbarLineMenu} aria-label={label}>
+          {options.map((option) => (
+            <label key={option.name}>
+              <input
+                type="checkbox"
+                checked={toggles[option.name]}
+                disabled={!isEngineReady}
+                onChange={(event) => onToggle(option.name, event.target.checked)}
+              />
+              <span>{option.label}</span>
+            </label>
+          ))}
+        </section>
+      )}
+    </div>
+  );
+}
+
 function ToolbarIcon({ name }: { name: ToolbarIconName }) {
+  if (name === "eyepieceFieldOfView") {
+    return <svg className={styles.coordinateToolbarIcon} viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="17" /><path d="M20 24h8M24 20v8" /></svg>;
+  }
+  if (name === "fieldOfView") {
+    return <svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 11h34v26H7Z" /><path d="M20 24h8M24 20v8" /></svg>;
+  }
   if (name === "constellation") {
     return (
       <svg viewBox="0 0 48 48" aria-hidden="true">
@@ -45,7 +182,7 @@ function ToolbarIcon({ name }: { name: ToolbarIconName }) {
 
   if (name === "horizontal") {
     return (
-      <svg viewBox="0 0 48 48" aria-hidden="true">
+      <svg className={styles.coordinateToolbarIcon} viewBox="0 0 48 48" aria-hidden="true">
         <circle cx="24" cy="24" r="18" />
         <path d="M6 24h36M24 6c5 5 7.5 11 7.5 18S29 37 24 42M24 6c-5 5-7.5 11-7.5 18S19 37 24 42M10.5 14.5h27M10.5 33.5h27" />
       </svg>
@@ -97,9 +234,31 @@ function ToolbarIcon({ name }: { name: ToolbarIconName }) {
 }
 
 export function SkyViewerToolbar({
+  compassControl,
+  onAppUpdate,
+  appVersion,
+  backgrounds,
+  onShowGround,
   deepSkyMode,
   telescopeSettings,
+  cameraSettings,
+  eyepieceSettings,
+  onEyepieceSettingsChange,
+  eyepieceFieldOfViewStage,
+  eyepieceFieldOfViewLabel,
+  eyepieceFieldOfViewMessage,
+  onEyepieceFieldOfViewToggle,
+  selectedFilter,
+  onCameraSettingsChange,
+  onFilterChange,
+  onEquipmentApply,
+  fieldOfViewStage,
+  fieldOfViewLabel,
+  fieldOfViewMessage,
+  onFieldOfViewToggle,
+  onFieldOfViewMessageDismiss,
   toggles,
+  isEngineReady,
   onDeepSkyModeToggle,
   onTelescopeSettingsSave,
   onTelescopeSettingsChange,
@@ -107,177 +266,180 @@ export function SkyViewerToolbar({
 }: SkyViewerToolbarProps) {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isDifficultyInfoOpen, setIsDifficultyInfoOpen] = useState(false);
-  const [saveState, setSaveState] = useState<"idle" | "saved">("idle");
-
-  function updateTelescopeSetting(
-    key: keyof TelescopeSettings,
-    value: string
-  ) {
-    const parsed = Number(value);
-    onTelescopeSettingsChange({
-      ...telescopeSettings,
-      [key]: Number.isFinite(parsed) ? Math.max(1, parsed) : 1,
-    });
-    setSaveState("idle");
-  }
-
-  function saveTelescopeSettings() {
-    onTelescopeSettingsSave();
-    setSaveState("saved");
-  }
+  const [openLineMenu, setOpenLineMenu] = useState<"coordinates" | "lines" | null>(null);
+  const closeLineMenu = useCallback(() => setOpenLineMenu(null), []);
+  const settingsWindowId = useId();
+  const closeSettingsWindow = useCallback(() => setIsSettingsOpen(false), []);
 
   return (
-    <div className={styles.bottomToolbar} aria-label="표시 옵션">
-      <button
-        type="button"
-        className={toggles.constellationLines ? styles.active : ""}
-        onClick={() => onToggle("constellationLines")}
-        aria-label={`별자리선 ${toggles.constellationLines ? "끄기" : "켜기"}`}
-        aria-pressed={toggles.constellationLines}
-        title={`별자리선 ${toggles.constellationLines ? "끄기" : "켜기"}`}
-      >
-        <ToolbarIcon name="constellation" />
-      </button>
-      <button
-        type="button"
-        className={toggles.horizontalCoordinates ? styles.active : ""}
-        onClick={() => onToggle("horizontalCoordinates")}
-        aria-label={`지평좌표 ${toggles.horizontalCoordinates ? "끄기" : "켜기"}`}
-        aria-pressed={toggles.horizontalCoordinates}
-        title={`지평좌표 ${toggles.horizontalCoordinates ? "끄기" : "켜기"}`}
-      >
-        <ToolbarIcon name="horizontal" />
-      </button>
-      <button
-        type="button"
-        className={toggles.atmosphere ? styles.active : ""}
-        onClick={() => onToggle("atmosphere")}
-        aria-label={`대기 ${toggles.atmosphere ? "끄기" : "켜기"}`}
-        aria-pressed={toggles.atmosphere}
-        title={`대기 ${toggles.atmosphere ? "끄기" : "켜기"}`}
-      >
-        <ToolbarIcon name="atmosphere" />
-      </button>
-      <button
-        type="button"
-        className={toggles.ground ? styles.active : ""}
-        onClick={() => onToggle("ground")}
-        aria-label={`지평 ${toggles.ground ? "끄기" : "켜기"}`}
-        aria-pressed={toggles.ground}
-        title={`지평 ${toggles.ground ? "끄기" : "켜기"}`}
-      >
-        <ToolbarIcon name="ground" />
-      </button>
-      <button
-        type="button"
-        className={deepSkyMode ? styles.active : ""}
-        onClick={onDeepSkyModeToggle}
-        aria-label={`딥스카이 ${deepSkyMode ? "끄기" : "켜기"}`}
-        aria-pressed={deepSkyMode}
-        title={`딥스카이 ${deepSkyMode ? "끄기" : "켜기"}`}
-      >
-        <ToolbarIcon name="deepSky" />
-      </button>
-      <div className={styles.toolbarSettingsWrapper}>
+    <>
+      <div className={styles.bottomToolbar} aria-label="표시 옵션">
+        <DisplayOptionsMenu
+          label="별자리선"
+          icon="constellation"
+          options={LINE_OPTIONS}
+          toggles={toggles}
+          isOpen={openLineMenu === "lines"}
+          isEngineReady={isEngineReady}
+          onOpenToggle={() => setOpenLineMenu((current) => current === "lines" ? null : "lines")}
+          onClose={closeLineMenu}
+          onToggle={onToggle}
+        />
+        <DisplayOptionsMenu
+          label="좌표계"
+          icon="horizontal"
+          options={COORDINATE_OPTIONS}
+          toggles={toggles}
+          isOpen={openLineMenu === "coordinates"}
+          isEngineReady={isEngineReady}
+          onOpenToggle={() => setOpenLineMenu((current) => current === "coordinates" ? null : "coordinates")}
+          onClose={closeLineMenu}
+          onToggle={onToggle}
+        />
         <button
           type="button"
-          className={[
-            styles.settingsToolbarButton,
-            isDifficultyInfoOpen ? styles.active : "",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-          onClick={() => setIsDifficultyInfoOpen((current) => !current)}
-          aria-label="관측 난이도 설명"
-          aria-expanded={isDifficultyInfoOpen}
-          title="관측 난이도 설명"
+          className={toggles.atmosphere ? styles.active : ""}
+          onClick={() => onToggle("atmosphere")}
+          aria-label={`대기 ${toggles.atmosphere ? "끄기" : "켜기"}`}
+          aria-pressed={toggles.atmosphere}
+          title={`대기 ${toggles.atmosphere ? "끄기" : "켜기"}`}
         >
-          <ToolbarIcon name="difficultyInfo" />
+          <ToolbarIcon name="atmosphere" />
         </button>
-        {isDifficultyInfoOpen && (
-          <section
-            className={styles.toolbarDifficultyPanel}
+        <button
+          type="button"
+          className={toggles.ground ? styles.active : ""}
+          onClick={() => onToggle("ground")}
+          aria-label={`지평 ${toggles.ground ? "끄기" : "켜기"}`}
+          aria-pressed={toggles.ground}
+          title={`지평 ${toggles.ground ? "끄기" : "켜기"}`}
+        >
+          <ToolbarIcon name="ground" />
+        </button>
+        <button
+          type="button"
+          className={deepSkyMode ? styles.active : ""}
+          onClick={onDeepSkyModeToggle}
+          aria-label={`딥스카이 ${deepSkyMode ? "끄기" : "켜기"}`}
+          aria-pressed={deepSkyMode}
+          title={`딥스카이 ${deepSkyMode ? "끄기" : "켜기"}`}
+        >
+          <ToolbarIcon name="deepSky" />
+        </button>
+        <div className={styles.toolbarSettingsWrapper}>
+          <button type="button" className={fieldOfViewStage ? styles.active : ""} onClick={onFieldOfViewToggle}
+            disabled={!isEngineReady} aria-label="촬영 화각" aria-pressed={fieldOfViewStage > 0}
+            title={fieldOfViewStage === 0 ? "화각 표시" : fieldOfViewStage === 1 ? "카메라 시야로 보기" : "화각 닫기·이전 화면"}>
+            <ToolbarIcon name="fieldOfView" />
+          </button>
+          {(fieldOfViewStage > 0 || fieldOfViewMessage) && <div className={styles.fieldOfViewInfo} role="status">
+            {fieldOfViewMessage || <><strong>{fieldOfViewLabel}</strong><span>{fieldOfViewStage === 1 ? "한 번 더 누르면 카메라 시야" : "한 번 더 누르면 닫기"}</span></>}
+            {fieldOfViewMessage && <button type="button" aria-label="화각 안내 닫기" onClick={onFieldOfViewMessageDismiss}>×</button>}
+          </div>}
+        </div>
+        <div className={styles.toolbarSettingsWrapper}>
+          <button type="button" className={eyepieceFieldOfViewStage ? styles.active : ""} onClick={onEyepieceFieldOfViewToggle}
+            disabled={!isEngineReady} aria-label="접안렌즈 화각" aria-pressed={eyepieceFieldOfViewStage > 0}
+            title={eyepieceFieldOfViewStage === 0 ? "접안렌즈 화각 표시" : eyepieceFieldOfViewStage === 1 ? "접안렌즈 시야로 보기" : "접안렌즈 화각 닫기·이전 화면"}>
+            <ToolbarIcon name="eyepieceFieldOfView" />
+          </button>
+          {(eyepieceFieldOfViewStage > 0 || eyepieceFieldOfViewMessage) && <div className={styles.fieldOfViewInfo} role="status">
+            {eyepieceFieldOfViewMessage || <><strong>{eyepieceFieldOfViewLabel}</strong><span>{eyepieceFieldOfViewStage === 1 ? "한 번 더 누르면 접안렌즈 시야" : "한 번 더 누르면 닫기"}</span></>}
+            {eyepieceFieldOfViewMessage && <button type="button" aria-label="접안렌즈 화각 안내 닫기" onClick={onFieldOfViewMessageDismiss}>×</button>}
+          </div>}
+        </div>
+        <div className={styles.toolbarSettingsWrapper}>
+          <button
+            type="button"
+            className={[
+              styles.settingsToolbarButton,
+              isDifficultyInfoOpen ? styles.active : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            onClick={() => setIsDifficultyInfoOpen((current) => !current)}
             aria-label="관측 난이도 설명"
+            aria-expanded={isDifficultyInfoOpen}
+            title="관측 난이도 설명"
           >
-            <h2>난이도 설명</h2>
-            <ol>
-              <li>
-                <strong>1단계</strong>
-                <span>안시 관측 가능</span>
-              </li>
-              <li>
-                <strong>2단계</strong>
-                <span>망원경 안시 관측 가능</span>
-              </li>
-              <li>
-                <strong>3단계</strong>
-                <span>망원경 촬영 가능</span>
-              </li>
-              <li>
-                <strong>4단계</strong>
-                <span>필터 등 특수 장비 필요</span>
-              </li>
-              <li>
-                <strong>5단계</strong>
-                <span>현재 조건에서 관측 불가</span>
-              </li>
-            </ol>
-          </section>
-        )}
-      </div>
-      <div className={styles.toolbarSettingsWrapper}>
-        <button
-          type="button"
-          className={[
-            styles.settingsToolbarButton,
-            isSettingsOpen ? styles.active : "",
-          ]
-            .filter(Boolean)
-            .join(" ")}
-          onClick={() => setIsSettingsOpen((current) => !current)}
-          aria-label="망원경 설정"
-          aria-expanded={isSettingsOpen}
-          title="망원경 설정"
-        >
-          <ToolbarIcon name="settings" />
-        </button>
-        {isSettingsOpen && (
-          <section className={styles.toolbarSettingsPanel} aria-label="망원경 설정">
-            <h2>망원경 설정</h2>
-            <label>
-              <span>초점거리(mm)</span>
-              <input
-                type="number"
-                min={1}
-                step={10}
-                value={telescopeSettings.focalLengthMm}
-                onChange={(event) =>
-                  updateTelescopeSetting("focalLengthMm", event.target.value)
-                }
-              />
-            </label>
-            <label>
-              <span>구경(mm)</span>
-              <input
-                type="number"
-                min={1}
-                step={5}
-                value={telescopeSettings.apertureMm}
-                onChange={(event) =>
-                  updateTelescopeSetting("apertureMm", event.target.value)
-                }
-              />
-            </label>
-            <button
-              type="button"
-              className={styles.toolbarSaveButton}
-              onClick={saveTelescopeSettings}
+            <ToolbarIcon name="difficultyInfo" />
+          </button>
+          {isDifficultyInfoOpen && (
+            <section
+              className={styles.toolbarDifficultyPanel}
+              aria-label="관측 난이도 설명"
             >
-              {saveState === "saved" ? "저장됨" : "상태 저장"}
-            </button>
-          </section>
-        )}
+              <h2>난이도 설명</h2>
+              <ol>
+                <li>
+                  <strong>1단계</strong>
+                  <span>안시 관측 가능</span>
+                </li>
+                <li>
+                  <strong>2단계</strong>
+                  <span>망원경 안시 관측 가능</span>
+                </li>
+                <li>
+                  <strong>3단계</strong>
+                  <span>망원경 촬영 가능</span>
+                </li>
+                <li>
+                  <strong>4단계</strong>
+                  <span>필터 등 특수 장비 필요</span>
+                </li>
+                <li>
+                  <strong>5단계</strong>
+                  <span>현재 조건에서 관측 불가</span>
+                </li>
+              </ol>
+            </section>
+          )}
+        </div>
+        <div className={styles.toolbarSettingsWrapper}>
+          <button
+            type="button"
+            className={[
+              styles.settingsToolbarButton,
+              isSettingsOpen ? styles.active : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+            onClick={() => {
+              closeLineMenu();
+              setIsDifficultyInfoOpen(false);
+              setIsSettingsOpen(true);
+            }}
+            aria-label="설정"
+            aria-haspopup="dialog"
+            aria-expanded={isSettingsOpen}
+            aria-controls={isSettingsOpen ? settingsWindowId : undefined}
+            title="설정"
+          >
+            <ToolbarIcon name="settings" />
+          </button>
+        </div>
+        {compassControl}
       </div>
-    </div>
+      {isSettingsOpen && (
+        <SettingsWindow
+          appVersion={appVersion}
+          onAppUpdate={onAppUpdate ? () => { closeSettingsWindow(); onAppUpdate(); } : undefined}
+          id={settingsWindowId}
+          backgrounds={backgrounds}
+          onShowGround={onShowGround}
+          telescopeSettings={telescopeSettings}
+          cameraSettings={cameraSettings}
+          eyepieceSettings={eyepieceSettings}
+          onEyepieceSettingsChange={onEyepieceSettingsChange}
+          selectedFilter={selectedFilter}
+          onCameraSettingsChange={onCameraSettingsChange}
+          onFilterChange={onFilterChange}
+          onEquipmentApply={onEquipmentApply}
+          onTelescopeSettingsChange={onTelescopeSettingsChange}
+          onTelescopeSettingsSave={onTelescopeSettingsSave}
+          onClose={closeSettingsWindow}
+        />
+      )}
+    </>
   );
 }

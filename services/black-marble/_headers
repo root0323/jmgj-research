@@ -1,0 +1,7 @@
+/VJ146A4-2025/*
+  Access-Control-Allow-Origin: *
+  Cache-Control: public, max-age=31536000, immutable
+  X-Content-Type-Options: nosniff
+
+/VJ146A4-2025/compact/*
+  Content-Type: application/octet-stream

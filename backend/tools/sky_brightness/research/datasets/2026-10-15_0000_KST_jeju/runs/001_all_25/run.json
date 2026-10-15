@@ -1,0 +1,32 @@
+{
+  "run_id": "001_all_25",
+  "session": "2026-10-15_0000_KST_jeju",
+  "selection": "v001_all_25",
+  "status": "candidate_not_applied",
+  "baseline_source_commit": "82a295073f541fc3aa7aeaa08f3aebccaee01746",
+  "baseline_model_snapshot": "models/82a295073f54",
+  "preprocessing": "Korean observation time matched to package metadata UTC offset; altitude converted to zenith angle",
+  "api_input": "inputs/api_snapshot_2026-10-14_1500_UTC.json",
+  "baseline": {
+    "n": 25,
+    "rmse": 0.9753294718658124,
+    "mae": 0.7674485503017461,
+    "bias_pred_minus_actual": -0.6128432159743947
+  },
+  "candidate_fit": {
+    "n": 25,
+    "rmse": 0.7521205851404558,
+    "mae": 0.6406602208445339,
+    "bias_pred_minus_actual": 0.01059616811370617
+  },
+  "angular_diagnostic": {
+    "n": 25,
+    "rmse": 0.8811147068374199,
+    "mae": 0.7613054574866056,
+    "bias_pred_minus_actual": 0.004935175502922817
+  },
+  "candidate_art_scale": 0.551162535173046,
+  "independent_night_validation": false,
+  "decision": "Do not promote globally: remaining angular mismatch and degraded zenith error.",
+  "superseded_by": "002_unobstructed_21"
+}
