@@ -6,6 +6,8 @@
 
 0.9.2의 기본 오프라인 자산은 211개, 121,118,060 bytes다. 업데이트는 기존 Service Worker 경로를 사용하며 개인 키·장소·장비·지역·기상·배경 저장 방식을 변경하지 않는다. 공통 124개, PWA 14개와 서버 6개 테스트 및 production 빌드·타입 검사를 통과했다. Apple 실기기의 센서 정확도를 새로 검증한 것은 아니다. 배포 ZIP 222개 항목의 압축 해제 바이트 일치를 확인했으며 59,647,445 bytes, SHA-256 `49ca633726e3d66df03c15edbb54055637cedaf6653a87a424ae4a0d009be178`다. ZIP 게시와 공개 웹서비스 배포는 구분한다.
 
+2026-10-19 사용자 승인 후 기존 공개 웹앱에 0.9.2를 배포했다. Cloudflare Worker 버전 ID는 `93ed2c54-bcda-48cc-a56d-dfd86888dc25`다. 공개 `offline-assets.json`의 버전 0.9.2와 211개 파일을 확인하고, manifest·index.html·sw.js의 SHA-256이 로컬 최종 빌드와 같음을 대조했다. 공개 웹앱의 실제 엔진에서 **별자리선 → 별궤적** 메뉴와 태양의 점선 궤적·현재 위치 표시를 확인했으며 브라우저 오류 로그는 없었다. Apple 실기기 시험 결과로 간주하지 않는다. [정식 릴리스의 PWA ZIP](https://github.com/root0323/jmgj-research/releases/download/v0.9.2/AstroSky-0.9.2-PWA.zip)도 공개 크기·SHA-256이 위 검증본과 일치한다.
+
 설치 링크: https://astrosky.jmgj-kakao-search.workers.dev/
 
 아이폰·아이패드의 Safari에서 링크를 열고 공유 메뉴의 **홈 화면에 추가**를 선택한다. 홈 화면의 AstroSky 아이콘을 실행한 뒤 장비·장소·개인 기상 키를 설정하고 **설정 → 업데이트 확인 → 오프라인 사용 준비**를 완료한다. Safari 탭과 홈 화면 앱의 저장소는 분리될 수 있으므로 홈 화면 앱에서 준비한다.

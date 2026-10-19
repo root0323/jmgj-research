@@ -14,6 +14,8 @@ Windows 웹 BUILD_ID는 `ujaPbU3QqX9-0dw_p7wuC`다. 계산 서버 소스는 v0.9
 
 설치 파일은 221,296,703 bytes, SHA-256 `2a5295a2add9bd982dc0aa24de7232aac86ccaa3f8b45414b3a86d731ba50d35`다. blockmap은 229,164 bytes, SHA-256 `833126468aacefc73277ff50fd66af8b462d4ca6fd7baf66388a8ef573fdb112`; latest.yml은 379 bytes, SHA-256 `43b2601671432bf8be187b9314642313877fb0ec33cd17b7573862f8296a8871`다. manifest의 버전·파일명·크기·SHA-512가 일치한다. 검증한 소스를 origin에 저장하고 동일한 소스의 v0.9.2 정식 Latest 릴리스에 설치 파일·blockmap·latest.yml과 Android APK·PWA ZIP을 게시한다. 공개 태그·파일 크기·SHA-256을 로컬 검증본과 대조하는 기존 절차를 따른다.
 
+2026-10-19 사용자 승인 후 [0.9.2 정식 릴리스](https://github.com/root0323/jmgj-research/releases/tag/v0.9.2)를 Latest로 공개했다. 공개 API에서 draft/prerelease가 아니며 태그가 최종 빌드 소스 `14952facbf88d1fb89c4f8b4304fc2f8d10243c7`를 가리킴을 확인했다. 설치 파일·blockmap·latest.yml·Android APK·PWA ZIP 5개의 공개 크기와 SHA-256 digest가 최종 검증본과 모두 일치한다. 기존 릴리스는 유지했다. [공유용 Windows 설치 파일](https://github.com/root0323/jmgj-research/releases/download/v0.9.2/JMGJ-Research-0.9.2-Windows-x64-Setup.exe)과 기존 앱의 업데이트 확인을 사용할 수 있다. 이 배포 기록은 빌드 이후 문서에 추가하며 v0.9.2 태그를 이동하지 않는다.
+
 ## 0.9.1 · PWA 부수 기능 보완과 설치 파일 제공
 
 Apple PWA의 150도 FOV 상한·안전 영역·터치·오프라인 재실행을 확인하고 공유 모바일 패널 크기 계산을 보완했다. Windows 기능·설정과 지역 자료를 유지하며 같은 소스 버전의 정식 설치 파일·blockmap·latest.yml을 제공한다.
