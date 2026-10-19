@@ -465,6 +465,11 @@ export function SkyViewerControls({
         >
           별자리선 {toggles.constellationLines ? "켜짐" : "꺼짐"}
         </button>
+        <button type="button" className={toggles.annualTrajectory ? styles.active : ""}
+          onClick={() => onToggle("annualTrajectory")} aria-pressed={toggles.annualTrajectory}
+          disabled={status !== "ready"} title="선택한 천체의 매일 같은 시각, 1년간 위치">
+          별궤적 {toggles.annualTrajectory ? "켜짐" : "꺼짐"}
+        </button>
         <button
           type="button"
           className={toggles.atmosphere ? styles.active : ""}

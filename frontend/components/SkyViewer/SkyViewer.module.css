@@ -16,6 +16,7 @@
 }
 
 .skyViewport { position: absolute; inset: 0; }
+.annualTrajectory { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; overflow: hidden; }
 .instrumentViewport {
   inset: auto;
   left: 50%; top: calc(50% - 8px);

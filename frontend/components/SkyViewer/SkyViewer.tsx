@@ -58,6 +58,7 @@ import { useAutomaticTerrain } from "./useAutomaticTerrain";
 import { readActiveEquipment, saveActiveEquipment, EMPTY_EYEPIECE } from "./equipmentSettings";
 import type { EquipmentSettings } from "./equipmentSettings";
 import { useFieldOfView } from "./useFieldOfView";
+import { AnnualTrajectoryOverlay } from "./AnnualTrajectoryOverlay";
 import { SkyViewerToolbar } from "./SkyViewerToolbar";
 import type { DisplayToggleName, DisplayToggles } from "./SkyViewerToolbar";
 import {
@@ -660,6 +661,7 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
     horizontalCoordinates: false,
     equatorialCoordinates: false,
     constellationLines: false,
+    annualTrajectory: false,
     equator: false,
     ecliptic: false,
     atmosphere: false,
@@ -1440,6 +1442,7 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
     const nextValue = enabled ?? !toggles[name];
     setToggles((current) => ({ ...current, [name]: nextValue }));
 
+    if (name === "annualTrajectory") return;
     trySetAllValues(engine, TOGGLE_PATHS[name], nextValue);
     if (name === "constellationLines") {
       trySetValue(engine, ["constellations.show_only_pointed"], false);
@@ -1553,6 +1556,8 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
         onWheel={handleCanvasWheel}
         onClick={handleCanvasClick}
       />
+      <AnnualTrajectoryOverlay engineRef={engineRef} targetRef={selectedTargetRef} timeRef={simulatedTimeRef}
+        enabled={status === "ready" && toggles.annualTrajectory} showGround={toggles.ground} />
       </div>
       {fieldOfView.preview && <header className={styles.instrumentHeading}>
         <div><strong>{fieldOfView.preview.mode === "camera" ? "카메라 시야" : "접안렌즈 시야"}</strong><span>{fieldOfView.preview.mode === "camera" ? cameraFieldLabel : eyepieceFieldLabel}</span></div>

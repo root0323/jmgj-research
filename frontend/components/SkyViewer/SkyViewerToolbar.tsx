@@ -10,6 +10,7 @@ export type DisplayToggleName =
   | "horizontalCoordinates"
   | "equatorialCoordinates"
   | "constellationLines"
+  | "annualTrajectory"
   | "equator"
   | "ecliptic"
   | "atmosphere"
@@ -67,6 +68,7 @@ const COORDINATE_OPTIONS: { name: DisplayToggleName; label: string }[] = [
 
 const LINE_OPTIONS: { name: DisplayToggleName; label: string }[] = [
   { name: "constellationLines", label: "별자리선" },
+  { name: "annualTrajectory", label: "별궤적" },
   { name: "equator", label: "적도" },
   { name: "ecliptic", label: "황도" },
 ];
@@ -144,7 +146,7 @@ function DisplayOptionsMenu({
       {isOpen && (
         <section id={menuId} className={styles.toolbarLineMenu} aria-label={label}>
           {options.map((option) => (
-            <label key={option.name}>
+            <label key={option.name} title={option.name === "annualTrajectory" ? "선택한 천체의 위치를 매일 같은 시각 기준으로 1년간 점선으로 표시합니다." : undefined}>
               <input
                 type="checkbox"
                 checked={toggles[option.name]}
