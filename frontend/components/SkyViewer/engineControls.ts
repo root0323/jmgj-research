@@ -321,6 +321,9 @@ export async function createConstellationLineObjects(
   const groupedFeatures = new Map<string, (typeof data.features)>();
 
   for (const feature of data.features) {
+    // Native GeoJSON point titles also render behind the camera in this build.
+    // Draw names in ConstellationLabelsOverlay, with hemisphere/horizon clipping.
+    if (feature.geometry.type !== "LineString") continue;
     const constellationId = feature.properties["constellation-id"] ?? "misc";
     const group = groupedFeatures.get(constellationId) ?? [];
     group.push(feature);

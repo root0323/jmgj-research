@@ -59,6 +59,7 @@ import { readActiveEquipment, saveActiveEquipment, EMPTY_EYEPIECE } from "./equi
 import type { EquipmentSettings } from "./equipmentSettings";
 import { useFieldOfView } from "./useFieldOfView";
 import { AnnualTrajectoryOverlay } from "./AnnualTrajectoryOverlay";
+import { ConstellationLabelsOverlay } from "./ConstellationLabelsOverlay";
 import { SkyViewerToolbar } from "./SkyViewerToolbar";
 import type { DisplayToggleName, DisplayToggles } from "./SkyViewerToolbar";
 import {
@@ -1558,6 +1559,8 @@ export default function SkyViewer({ mobile = false, onEngineReady, onLocationCha
       />
       <AnnualTrajectoryOverlay engineRef={engineRef} targetRef={selectedTargetRef} timeRef={simulatedTimeRef}
         enabled={status === "ready" && toggles.annualTrajectory} showGround={toggles.ground} />
+      <ConstellationLabelsOverlay engineRef={engineRef}
+        enabled={status === "ready" && toggles.constellationLines} showGround={toggles.ground} />
       </div>
       {fieldOfView.preview && <header className={styles.instrumentHeading}>
         <div><strong>{fieldOfView.preview.mode === "camera" ? "카메라 시야" : "접안렌즈 시야"}</strong><span>{fieldOfView.preview.mode === "camera" ? cameraFieldLabel : eyepieceFieldLabel}</span></div>
