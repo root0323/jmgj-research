@@ -6,6 +6,12 @@
 
 실제 WASM 엔진으로 궁수자리·쌍둥이자리 양방향 및 지평 켜기/끄기, 관측자·카메라 보존, 88개 이름·연결선 보존을 검증했다. 브라우저에서도 Nunki/Pollux 전환, 반대편 이름 제거와 토글 끄기를 확인했다. 공통 128개, Windows/Android Node 31개, PWA 14개와 서버 6개 테스트 및 공통·Android·PWA 타입 검사와 변경 코드 lint를 통과했다. 기존 별궤적의 실제 엔진 테스트도 포함한다. 모델 계수·실측·사용자 저장 자료는 변경하지 않는다.
 
+최종 웹 BUILD_ID는 `CIVdbMrTqafdYrrztETjK`다. 계산 서버 소스가 0.9.2와 같음을 확인하고 검증된 서버를 재사용했다. EXE·PKG SHA-256은 각각 `bb28198d99df5ca496bdc5e18801324df92c10cbbddfeb7380d28b1ae87fb4c6`, `b36fd3113a54212c633d1950915ae2c821cfec9ad29584553a06795fbbdc9fa4`다. 최종 ASAR·웹·서버 입력 일치와 비밀 설정·H5/DEM·중복 Next trace 제외를 대조했다. 독립 프로필·포트 43164 진단에서 버전 0.9.3, 준비 완료 94.768초, 두 서버의 무인증 403, 업데이트 feed와 클라우드 자료 목록을 확인했다. frontend/backend 모두 exit 0이며 진단 부모도 종료됐다. 기존 설치 앱을 교체하지 않았다.
+
+설치 파일은 221,297,660 bytes, SHA-256 `24fa22e126800000ed5d8e1a3cc8924c8ec52dde39baf7c25aae80d6fbfbf2c3`; blockmap은 229,230 bytes, SHA-256 `3c4082bae406a33a8946e6934dd2d24a15197d1d300e4d34589cb907c1c048ec`; latest.yml은 379 bytes, SHA-256 `ea02431ba23cac4f23da58304c2dc7bb1c67a5a88800ffb3792a22a2f287b018`다. manifest의 버전·크기·SHA-512를 대조했다. Android Java 10개도 통과해 이번 검증은 총 189개다.
+
+2026-10-20 [0.9.3 정식 릴리스](https://github.com/root0323/jmgj-research/releases/tag/v0.9.3)를 Latest로 공개했다. 공개 API에서 draft/prerelease가 아니며 태그가 빌드 소스 `63c6c4085b0afc9703185bd72524242c97ca41a1`를 가리키고 설치 파일·blockmap·latest.yml·APK·PWA ZIP 5개의 크기·SHA-256 digest가 검증본과 같음을 확인했다. [공유용 Windows 설치 파일](https://github.com/root0323/jmgj-research/releases/download/v0.9.3/JMGJ-Research-0.9.3-Windows-x64-Setup.exe)과 앱 내부 업데이트를 함께 제공한다. 기존 릴리스·차등 업데이트 자료를 보존하며 배포 후 기록을 추가한 문서 커밋으로 태그를 이동하지 않는다.
+
 ## 0.9.2 · 선택한 천체의 별궤적
 
 하단 **별자리선** 메뉴에서 별자리선 바로 아래의 **별궤적**을 켠다. 선택한 천체만 앱에 표시된 같은 시각 기준으로 매일의 위치를 계산해 1년간 점선으로 표시한다. 선택을 해제하거나 기능을 끄면 숨기며, 다른 천체를 선택하면 해당 궤적으로 바뀐다. 작은 노란색 원과 `현재` 표시는 지금 설정된 날짜·시각의 위치다. 북극성은 확대해서 작은 원형 궤적을 보고, 태양은 한낮 시각을 설정하고 축소해 아날렘마 전체를 볼 수 있다.
