@@ -9,7 +9,9 @@
 | --- | ---: | ---: | --- |
 | [2026-10-15 00:00 한국시간 · 제주](datasets/2026-10-15_0000_KST_jeju/) | 25개 | 건물 차폐 4개를 뺀 21개 | 보정 후보 보존, 앱 기본값 미적용 |
 
-최신 실행: [002_unobstructed_21](datasets/2026-10-15_0000_KST_jeju/runs/002_unobstructed_21/).
+최신 실행: [003_directional_rmse](datasets/2026-10-15_0000_KST_jeju/runs/003_directional_rmse/).
+현재 평가 코드로 21개 관측을 재계산한 MSE·RMSE와 방위각·고도별 그래프를 보존한다.
+보정과 방향 구간 검증은 [002_unobstructed_21](datasets/2026-10-15_0000_KST_jeju/runs/002_unobstructed_21/)에 있다.
 처음 계산한 [001_all_25](datasets/2026-10-15_0000_KST_jeju/runs/001_all_25/)도 보존한다.
 
 ## 저장 구조

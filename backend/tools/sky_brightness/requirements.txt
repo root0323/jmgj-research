@@ -1,0 +1,4 @@
+-r ../../src/app/requirements.txt
+pandas
+matplotlib
+optuna
