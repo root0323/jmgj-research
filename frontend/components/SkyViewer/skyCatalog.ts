@@ -5,6 +5,7 @@ import type {
   StellariumEngine,
   SweObj,
 } from "./types";
+import { namedDeepSky } from "./deepSkyNames";
 
 const DEG_TO_RAD = Math.PI / 180;
 const DEFAULT_RENDERED_STAR_MAG = 5.3;
@@ -36,6 +37,7 @@ export type BrightStarSupplement = {
 let starLayerState: {
   layer: SweObj;
   stars: RenderableStar[];
+  nextStar: number;
 } | null = null;
 const brightStarSupplementIndex = new Map<string, BrightStarSupplement>();
 
@@ -193,7 +195,7 @@ export function normalizeSearchKey(value: string) {
 }
 
 export function getDeepSkySearchCandidates(term: string) {
-  const normalized = term.trim();
+  const normalized = namedDeepSky(term)?.id ?? term.trim();
   const match = normalized.match(/^(m|messier|ngc|ic)\s*0*([0-9]+)$/i);
   if (!match) return [];
 
@@ -595,7 +597,8 @@ export async function loadBrightStarCatalog(
 
   starLayerState = {
     layer,
-    stars: renderableStars,
+    stars: renderableStars.sort((a, b) => a.star.vmag - b.star.vmag),
+    nextStar: 0,
   };
 
   return added;
@@ -630,9 +633,13 @@ export function updateVisibleStarCatalog(
   const magnitudeLimit = getStarMagnitudeLimitForFov(fov);
 
   let added = 0;
-  for (const item of starLayerState.stars) {
-    if (added >= STAR_RENDER_BATCH_SIZE) break;
-    if (item.rendered || item.star.vmag > magnitudeLimit) continue;
+  // Stars remain added when zooming out. Keep a cursor in magnitude order so
+  // idle frames don't rescan the entire catalog after each completed batch.
+  while (starLayerState.nextStar < starLayerState.stars.length && added < STAR_RENDER_BATCH_SIZE) {
+    const item = starLayerState.stars[starLayerState.nextStar];
+    if (item.star.vmag > magnitudeLimit) break;
+    starLayerState.nextStar += 1;
+    if (item.rendered) continue;
 
     starLayerState.layer.add?.(item.obj);
     item.rendered = true;

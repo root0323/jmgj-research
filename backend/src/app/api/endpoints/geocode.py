@@ -1,15 +1,34 @@
 import httpx
 import asyncio
-import os
 import time
-from fastapi import APIRouter, Query
+import hashlib
+from urllib.parse import urlsplit
+from app.local_config import setting
+from fastapi import APIRouter, HTTPException, Query
 
 router = APIRouter()
 
-GEOCODE_TIMEOUT = httpx.Timeout(2.2, connect=0.8)
-REVERSE_GEOCODE_TIMEOUT = httpx.Timeout(1.8, connect=0.8)
+GEOCODE_TIMEOUT = httpx.Timeout(7.0, connect=3.0)
+REVERSE_GEOCODE_TIMEOUT = httpx.Timeout(7.0, connect=3.0)
+NOMINATIM_BASE = setting("NOMINATIM_BASE_URL", "https://nominatim.openstreetmap.org").rstrip("/")
+PHOTON_BASE = setting("PHOTON_BASE_URL", "https://photon.komoot.io").rstrip("/")
+NOMINATIM_LOCK = asyncio.Lock()
+NOMINATIM_LAST_REQUEST = 0.0
+
+
+async def nominatim_get(client, path, **kwargs):
+    """Serialize the public service across search and reverse, at most 1/s per worker."""
+    global NOMINATIM_LAST_REQUEST
+    async with NOMINATIM_LOCK:
+        delay = 1.05 - (time.monotonic() - NOMINATIM_LAST_REQUEST)
+        if delay > 0:
+            await asyncio.sleep(delay)
+        NOMINATIM_LAST_REQUEST = time.monotonic()
+        return await client.get(f"{NOMINATIM_BASE}/{path}", **kwargs)
+
+
 VWORLD_TIMEOUT = httpx.Timeout(2.0, connect=0.8)
-KAKAO_TIMEOUT = httpx.Timeout(2.0, connect=0.8)
+KAKAO_TIMEOUT = httpx.Timeout(4.0, connect=1.5)
 GEOCODE_CACHE_SECONDS = 600
 GEOCODE_MAX_VARIANTS = 4
 GEOCODE_CACHE: dict[str, tuple[float, list[dict]]] = {}
@@ -18,11 +37,9 @@ KAKAO_ADDRESS_URL = "https://dapi.kakao.com/v2/local/search/address.json"
 KAKAO_KEYWORD_URL = "https://dapi.kakao.com/v2/local/search/keyword.json"
 KAKAO_REVERSE_URL = "https://dapi.kakao.com/v2/local/geo/coord2address.json"
 VWORLD_ADDRESS_URLS = [
-    "http://api.vworld.kr/req/address",
     "https://api.vworld.kr/req/address",
 ]
 VWORLD_SEARCH_URLS = [
-    "http://api.vworld.kr/req/search",
     "https://api.vworld.kr/req/search",
 ]
 
@@ -173,7 +190,8 @@ def build_query_variants(query: str) -> list[str]:
     variants.append(normalized)
 
     if (
-        not is_broad_admin_query(normalized)
+        is_korean_query(normalized)
+        and not is_broad_admin_query(normalized)
         and "대한민국" not in normalized
         and "한국" not in normalized
     ):
@@ -191,13 +209,18 @@ def result_key(result: dict) -> str:
     )
 
 
+def contains_kakao_result(value) -> bool:
+    items = value if isinstance(value, list) else [value]
+    return any(isinstance(item, dict) and str(item.get("source", "")).startswith("kakao") for item in items)
+
+
 def get_cached(cache: dict, key: str):
     cached = cache.get(key)
     if not cached:
         return None
 
     expires_at, value = cached
-    if expires_at < time.monotonic():
+    if expires_at < time.monotonic() or contains_kakao_result(value):
         cache.pop(key, None)
         return None
 
@@ -205,11 +228,17 @@ def get_cached(cache: dict, key: str):
 
 
 def set_cached(cache: dict, key: str, value):
+    # Kakao Local results are used live, not retained for later searches.
+    if contains_kakao_result(value):
+        cache.pop(key, None)
+        return
+    if len(cache) >= 512:
+        cache.pop(next(iter(cache)))
     cache[key] = (time.monotonic() + GEOCODE_CACHE_SECONDS, value)
 
 
 def get_vworld_api_key() -> str | None:
-    value = os.getenv("VWORLD_API_KEY", "").strip()
+    value = setting("VWORLD_API_KEY").strip()
     if not value or value == "your-vworld-api-key":
         return None
     return value
@@ -220,17 +249,48 @@ def get_vworld_headers() -> dict[str, str]:
         "Accept": "application/json,text/plain,*/*",
         "User-Agent": "JMGJ-school-project/0.1",
     }
-    referer = os.getenv("VWORLD_API_REFERER", "").strip()
+    referer = setting("VWORLD_API_REFERER").strip()
     if referer:
         headers["Referer"] = referer
     return headers
 
 
 def get_kakao_api_key() -> str | None:
-    value = os.getenv("KAKAO_REST_API_KEY", "").strip()
+    value = setting("KAKAO_REST_API_KEY").strip()
     if not value or value == "your-kakao-rest-api-key":
         return None
     return value
+
+
+def get_kakao_proxy_base() -> str | None:
+    value = setting("KAKAO_PROXY_URL").strip().rstrip("/")
+    try:
+        url = urlsplit(value)
+        if (url.scheme == "https" and url.hostname and url.hostname.endswith(".workers.dev")
+                and not url.username and not url.password and url.port in (None, 443)
+                and not url.path and not url.query and not url.fragment):
+            return value
+    except ValueError:
+        pass
+    return None
+
+
+def kakao_enabled() -> bool:
+    return bool(get_kakao_proxy_base() or get_kakao_api_key())
+
+
+def provider_version() -> str:
+    identity = f"{get_kakao_proxy_base()}|{get_kakao_api_key()}|{get_vworld_api_key()}|{setting('VWORLD_API_REFERER')}"
+    return hashlib.sha256(identity.encode()).hexdigest()[:16]
+
+
+async def kakao_get(client: httpx.AsyncClient, url: str, api_key: str | None, params: dict):
+    proxy = get_kakao_proxy_base()
+    if proxy:
+        # Only the public service URL reaches installed apps, never the owner key.
+        return await client.get(proxy + urlsplit(url).path, params=params,
+                                headers={"Accept": "application/json"}, follow_redirects=False)
+    return await client.get(url, params=params, headers=get_kakao_headers(api_key), follow_redirects=False)
 
 
 def get_kakao_headers(api_key: str) -> dict[str, str]:
@@ -336,23 +396,22 @@ async def fetch_nominatim_results(
     query: str,
 ) -> list[dict]:
     try:
-        response = await client.get(
-            "https://nominatim.openstreetmap.org/search",
+        response = await nominatim_get(
+            client, "search",
             params={
                 "format": "json",
                 "addressdetails": 1,
-                "countrycodes": "kr",
                 "dedupe": 0,
                 "limit": 10,
                 "q": query,
             },
             headers=headers,
         )
-    except httpx.HTTPError:
-        return []
+    except httpx.HTTPError as error:
+        raise HTTPException(503, "Place search temporarily unavailable") from error
 
     if response.status_code != 200:
-        return []
+        raise HTTPException(503, "Place search temporarily unavailable")
 
     results = response.json()
     if not isinstance(results, list):
@@ -368,7 +427,7 @@ async def fetch_photon_results(
 ) -> list[dict]:
     try:
         response = await client.get(
-            "https://photon.komoot.io/api/",
+            f"{PHOTON_BASE}/api/",
             params={"q": query, "limit": 10},
             headers=headers,
         )
@@ -398,7 +457,7 @@ async def fetch_photon_results(
             continue
 
         country = str(properties.get("country") or "")
-        if country and country not in {"대한민국", "South Korea", "Republic of Korea"}:
+        if is_korean_query(query) and country and country not in {"대한민국", "South Korea", "Republic of Korea"}:
             continue
 
         name = str(properties.get("name") or query)
@@ -493,13 +552,13 @@ def kakao_keyword_result(document: dict, query: str) -> dict | None:
 async def fetch_kakao_address_results(
     client: httpx.AsyncClient,
     query: str,
-    api_key: str,
+    api_key: str | None,
 ) -> list[dict]:
     try:
-        response = await client.get(
+        response = await kakao_get(client,
             KAKAO_ADDRESS_URL,
+            api_key,
             params={"query": query, "size": 10},
-            headers=get_kakao_headers(api_key),
         )
     except httpx.HTTPError:
         return []
@@ -525,13 +584,13 @@ async def fetch_kakao_address_results(
 async def fetch_kakao_keyword_results(
     client: httpx.AsyncClient,
     query: str,
-    api_key: str,
+    api_key: str | None,
 ) -> list[dict]:
     try:
-        response = await client.get(
+        response = await kakao_get(client,
             KAKAO_KEYWORD_URL,
+            api_key,
             params={"query": query, "size": 10},
-            headers=get_kakao_headers(api_key),
         )
     except httpx.HTTPError:
         return []
@@ -557,7 +616,7 @@ async def fetch_kakao_keyword_results(
 async def fetch_kakao_results(
     client: httpx.AsyncClient,
     query: str,
-    api_key: str,
+    api_key: str | None,
 ) -> list[dict]:
     address_results, keyword_results = await asyncio.gather(
         fetch_kakao_address_results(client, query, api_key),
@@ -569,7 +628,7 @@ async def fetch_kakao_results(
 async def fetch_kakao_debug(
     client: httpx.AsyncClient,
     query: str,
-    api_key: str,
+    api_key: str | None,
 ) -> list[dict]:
     checks = [
         ("address", KAKAO_ADDRESS_URL, {"query": query, "size": 3}),
@@ -579,10 +638,10 @@ async def fetch_kakao_debug(
 
     for name, url, params in checks:
         try:
-            response = await client.get(
+            response = await kakao_get(client,
                 url,
+                api_key,
                 params=params,
-                headers=get_kakao_headers(api_key),
             )
             data = parse_json_response(response)
             documents = data.get("documents") if isinstance(data, dict) else None
@@ -593,7 +652,7 @@ async def fetch_kakao_debug(
                     "http_status": response.status_code,
                     "document_count": len(documents) if isinstance(documents, list) else None,
                     "total_count": meta.get("total_count") if isinstance(meta, dict) else None,
-                    "body": None if data else text_snippet(response),
+                    "body": None,
                     "params": params,
                 }
             )
@@ -878,6 +937,8 @@ async def fetch_vworld_debug(
     diagnostics: list[dict] = []
 
     for name, url, params in checks:
+        if not url.startswith("https://"):
+            continue
         safe_params = {key: value for key, value in params.items() if key != "key"}
         try:
             response = await client.get(
@@ -892,7 +953,7 @@ async def fetch_vworld_debug(
                         "name": name,
                         "http_status": response.status_code,
                         "content_type": response.headers.get("content-type"),
-                        "body": text_snippet(response),
+                        "body": None,
                         "params": safe_params,
                     }
                 )
@@ -906,7 +967,7 @@ async def fetch_vworld_debug(
                     "name": name,
                     "http_status": response.status_code,
                     "vworld_status": envelope.get("status") if isinstance(envelope, dict) else None,
-                    "error": envelope.get("error") if isinstance(envelope, dict) else None,
+                    "error": bool(envelope.get("error")) if isinstance(envelope, dict) else None,
                     "has_result": bool(result),
                     "item_count": len(items) if isinstance(items, list) else None,
                     "params": safe_params,
@@ -986,13 +1047,13 @@ async def fetch_kakao_reverse_result(
     client: httpx.AsyncClient,
     lat: float,
     lon: float,
-    api_key: str,
+    api_key: str | None,
 ) -> dict:
     try:
-        response = await client.get(
+        response = await kakao_get(client,
             KAKAO_REVERSE_URL,
+            api_key,
             params={"x": lon, "y": lat, "input_coord": "WGS84"},
-            headers=get_kakao_headers(api_key),
         )
     except httpx.HTTPError:
         return {}
@@ -1043,20 +1104,46 @@ async def fetch_variant_results(
         nominatim_results = await fetch_nominatim_results(client, headers, variant)
         return index, [*photon_results, *nominatim_results]
 
-    photon_results, nominatim_results = await asyncio.gather(
-        fetch_photon_results(client, headers, variant),
-        fetch_nominatim_results(client, headers, variant),
-    )
+    photon_results = await fetch_photon_results(client, headers, variant)
+    matching = [result for result in photon_results if is_acceptable_result(result, query)
+                and normalize_place_key(variant) in normalize_place_key(str(result.get("name") or ""))]
+    if matching:
+        return index, matching
+    nominatim_results = await fetch_nominatim_results(client, headers, variant)
     return index, [*photon_results, *nominatim_results]
+
+
+@router.get("/suggest")
+async def suggest_places(query: str = Query(..., min_length=3, max_length=160)):
+    """Use configured place APIs, then Photon. Never autocomplete Nominatim."""
+    normalized = " ".join(query.split())
+    kakao_key, vworld_key = get_kakao_api_key(), get_vworld_api_key()
+    # A newly saved provider must bypass old public-fallback cache entries.
+    key = f"suggest:{provider_version()}:" + normalize_place_key(normalized)
+    cached = get_cached(GEOCODE_CACHE, key)
+    if cached is not None:
+        return cached
+    expanded = build_school_query_variants(normalized)
+    headers = {"User-Agent": "JMGJ-research/1.0 (https://github.com/root0323/jmgj-research)", "Accept-Language": "ko,en"}
+    async with httpx.AsyncClient(timeout=GEOCODE_TIMEOUT) as client:
+        query_text = expanded[0] if expanded else normalized
+        results = await fetch_kakao_results(client, query_text, kakao_key) if kakao_enabled() else []
+        if not results and vworld_key:
+            results = await fetch_vworld_results(client, query_text, vworld_key)
+        if not results:
+            results = await fetch_photon_results(client, headers, query_text)
+    if results:
+        set_cached(GEOCODE_CACHE, key, results[:5])
+    return results[:5]
 
 
 @router.get("/")
 async def geocode(
-    query: str = Query(..., min_length=2),
+    query: str = Query(..., min_length=2, max_length=160),
     debug: bool = False,
 ):
     normalized_query = " ".join(query.split())
-    cache_key = normalize_place_key(normalized_query)
+    cache_key = provider_version() + ":" + normalize_place_key(normalized_query)
     if not debug:
         cached = get_cached(GEOCODE_CACHE, cache_key)
         if cached is not None:
@@ -1064,7 +1151,7 @@ async def geocode(
 
     headers = {
         "Accept-Language": "ko,en",
-        "User-Agent": "JMGJ-school-project/0.1",
+        "User-Agent": "JMGJ-research/1.0 (https://github.com/root0323/jmgj-research)",
     }
 
     collected: dict[str, tuple[dict, int]] = {}
@@ -1075,7 +1162,7 @@ async def geocode(
     if debug:
         kakao_diagnostics = []
         vworld_diagnostics = []
-        if kakao_api_key:
+        if kakao_enabled():
             async with httpx.AsyncClient(timeout=KAKAO_TIMEOUT) as client:
                 kakao_diagnostics = await fetch_kakao_debug(
                     client,
@@ -1093,13 +1180,14 @@ async def geocode(
             "query": normalized_query,
             "variants": variants,
             "kakao_key_present": bool(kakao_api_key),
+            "kakao_proxy_configured": bool(get_kakao_proxy_base()),
             "kakao": kakao_diagnostics,
             "vworld_key_present": bool(vworld_api_key),
-            "vworld_referer": os.getenv("VWORLD_API_REFERER", "").strip() or None,
+            "vworld_referer": setting("VWORLD_API_REFERER").strip() or None,
             "vworld": vworld_diagnostics,
         }
 
-    if kakao_api_key:
+    if kakao_enabled():
         async with httpx.AsyncClient(timeout=KAKAO_TIMEOUT) as client:
             kakao_variant_results = await asyncio.gather(
                 *[
@@ -1158,18 +1246,14 @@ async def geocode(
             return vworld_results
 
     async with httpx.AsyncClient(timeout=GEOCODE_TIMEOUT) as client:
-        variant_results = await asyncio.gather(
-            *[
-                fetch_variant_results(client, headers, normalized_query, variant, index)
-                for index, variant in enumerate(variants)
-            ]
-        )
-
-        for index, results in variant_results:
+        for index, variant in enumerate(variants):
+            _, results = await fetch_variant_results(client, headers, normalized_query, variant, index)
             for result in results:
                 key = result_key(result)
                 if key not in collected:
                     collected[key] = (result, index)
+            if any(is_acceptable_result(result, normalized_query) for result in results):
+                break
 
     ranked = sorted(
         collected.values(),
@@ -1190,19 +1274,19 @@ async def reverse_geocode(
     lat: float = Query(..., ge=-90, le=90),
     lon: float = Query(..., ge=-180, le=180),
 ):
-    cache_key = f"{lat:.5f},{lon:.5f}"
+    cache_key = f"{provider_version()}:{lat:.5f},{lon:.5f}"
     cached = get_cached(REVERSE_GEOCODE_CACHE, cache_key)
     if cached is not None:
         return cached
 
     headers = {
         "Accept-Language": "ko,en",
-        "User-Agent": "JMGJ-school-project/0.1",
+        "User-Agent": "JMGJ-research/1.0 (https://github.com/root0323/jmgj-research)",
     }
     kakao_api_key = get_kakao_api_key()
     vworld_api_key = get_vworld_api_key()
 
-    if kakao_api_key:
+    if kakao_enabled():
         async with httpx.AsyncClient(timeout=REVERSE_GEOCODE_TIMEOUT) as client:
             result = await fetch_kakao_reverse_result(client, lat, lon, kakao_api_key)
         if result:
@@ -1222,8 +1306,8 @@ async def reverse_geocode(
 
     async with httpx.AsyncClient(timeout=REVERSE_GEOCODE_TIMEOUT) as client:
         try:
-            response = await client.get(
-                "https://nominatim.openstreetmap.org/reverse",
+            response = await nominatim_get(
+                client, "reverse",
                 params={
                     "format": "json",
                     "addressdetails": 1,

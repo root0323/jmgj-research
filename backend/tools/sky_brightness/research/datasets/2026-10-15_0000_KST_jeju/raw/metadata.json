@@ -1,0 +1,27 @@
+{
+  "source": "User supplied observations and confirmed position in conversation",
+  "time_kst": "2026-10-15T00:00:00+09:00",
+  "time_utc": "2026-10-14T15:00:00Z",
+  "latitude": 33.426769,
+  "longitude": 126.530349,
+  "sqm_unit": "mag/arcsec^2",
+  "azimuth_convention": "north=0,east=90,south=180,west=270; confirmed by user",
+  "observation_count": 25,
+  "raw_api_filename": "weather_cache_33.4268_126.5303.json.gz",
+  "raw_api_original_bytes": 6915435,
+  "raw_api_original_sha256": "338500c8ebfe595e96e21f1260a002df5d4700f7fa2130710591c38816f982d7",
+  "raw_api_gzip_sha256": "276ceaaf8eb0ef94c36b7a227a39888b6c262f9a6868b8cc0748cbba69382a38",
+  "raw_api_gzip_bytes": 424290,
+  "api_modelrun_utc": "2026-10-15 05:42",
+  "api_time_basis": "metadata.utc_timeoffset=0",
+  "weather_at_observation": {
+    "aod": 0.07,
+    "cloud_percent": 0.22580645161290322,
+    "seeing_arcsec": 1.29,
+    "moon_altitude_deg": -46.32922
+  },
+  "limitations": [
+    "Cache generated after observation; retrospective evaluation only.",
+    "SQM instrument model, field of view and measurement uncertainty were not supplied."
+  ]
+}

@@ -1,198 +1,81 @@
 import type { GeocodeResult, ObserverLocation } from "./types";
 
-const GEOCODE_TIMEOUT_MS = 5500;
-const REVERSE_GEOCODE_TIMEOUT_MS = 3500;
-const GEOCODE_CACHE_MS = 10 * 60 * 1000;
-const GEOCODE_BASE_URL =
-  process.env.NEXT_PUBLIC_GEOCODE_BASE_URL ??
-  (process.env.NODE_ENV === "development"
-    ? "http://127.0.0.1:8000/api/geocode"
-    : "https://jmgj-backend.onrender.com/api/geocode");
-const GEOCODE_RENDER_URL = "https://jmgj-backend.onrender.com/api/geocode";
+const CACHE_MS = 10 * 60_000;
+const places = new Map<string, { at: number; value: GeocodeResult[] }>();
+const suggestions = new Map<string, { at: number; value: GeocodeResult[] }>();
+const addresses = new Map<string, { at: number; value: string }>();
 
-const GEOCODE_URLS = Array.from(
-  new Set(
-    [
-      GEOCODE_BASE_URL,
-      process.env.NODE_ENV === "development" ? GEOCODE_RENDER_URL : null,
-    ].filter((url): url is string => Boolean(url))
-  )
-);
+async function request(path: string, signal?: AbortSignal) {
+  const timeout = AbortSignal.timeout(30_000);
+  const response = await fetch(`/api/location/${path}`, { cache: "no-store", signal: signal ? AbortSignal.any([signal, timeout]) : timeout });
+  if (!response.ok) throw new Error("장소 검색 서버에 연결하지 못했습니다. 잠시 후 다시 시도하거나 지도·좌표로 선택하세요.");
+  return response.json();
+}
 
-const geocodeCache = new Map<
-  string,
-  { expiresAt: number; result: GeocodeResult | null }
->();
-const reverseGeocodeCache = new Map<
-  string,
-  { expiresAt: number; result: string | null }
->();
+function parsePlaces(results: unknown, query: string): GeocodeResult[] {
+  if (!Array.isArray(results)) throw new Error("장소 검색 응답을 확인하지 못했습니다.");
+  const seen = new Set<string>();
+  return results.filter((item) => item && item.lat != null && item.lon != null &&
+    Number.isFinite(Number(item.lat)) && Math.abs(Number(item.lat)) <= 90 &&
+    Number.isFinite(Number(item.lon)) && Math.abs(Number(item.lon)) <= 180)
+    .map((item) => ({ latitude: Number(item.lat), longitude: Number(item.lon), name: item.display_name ?? item.name ?? query }))
+    .filter((item) => {
+      const key = `${item.latitude.toFixed(5)},${item.longitude.toFixed(5)}`;
+      if (seen.has(key)) return false;
+      seen.add(key); return true;
+    });
+}
 
-type GeocodeRequestResult = {
-  reached: boolean;
-  result: GeocodeResult | null;
-};
+function containsKakao(results: unknown): boolean {
+  const items = Array.isArray(results) ? results : [results];
+  return items.some((item) => item && typeof item.source === "string" && item.source.startsWith("kakao"));
+}
 
-type ReverseGeocodeRequestResult = {
-  reached: boolean;
-  result: string | null;
-};
-
-function getCached<T>(
-  cache: Map<string, { expiresAt: number; result: T }>,
-  key: string
-) {
-  const cached = cache.get(key);
-  if (!cached) return undefined;
-  if (cached.expiresAt < Date.now()) {
-    cache.delete(key);
-    return undefined;
+export function completePlaceQuery(query: string): string | null {
+  const term = query.trim();
+  if (!/[가-힣]/.test(term) || /학교$/.test(term)) return null;
+  for (const [short, full] of [["초", "초등학교"], ["중", "중학교"], ["고", "고등학교"]]) {
+    if (term.endsWith(short) && term.length > short.length) return term.slice(0, -short.length) + full;
   }
-  return cached.result;
+  return null;
 }
 
-function setCached<T>(
-  cache: Map<string, { expiresAt: number; result: T }>,
-  key: string,
-  result: T
-) {
-  cache.set(key, {
-    expiresAt: Date.now() + GEOCODE_CACHE_MS,
-    result,
-  });
-}
-
-async function fetchWithTimeout(url: string, timeoutMs: number) {
-  const controller = new AbortController();
-  const timeout = window.setTimeout(() => {
-    controller.abort(new DOMException("Request timed out", "TimeoutError"));
-  }, timeoutMs);
-  try {
-    return await fetch(url, { signal: controller.signal });
-  } finally {
-    window.clearTimeout(timeout);
-  }
-}
-
-async function firstResolved<T>(
-  tasks: Array<Promise<{ reached: boolean; result: T | null }>>
-) {
-  return new Promise<{ reached: boolean; result: T | null }>((resolve) => {
-    let pending = tasks.length;
-    let settled = false;
-
-    for (const task of tasks) {
-      task
-        .then((result) => {
-          if (settled) return;
-          if (result.result || result.reached) {
-            settled = true;
-            resolve(result);
-            return;
-        }
-
-          pending -= 1;
-          if (pending === 0) resolve({ reached: false, result: null });
-        })
-        .catch(() => {
-          pending -= 1;
-          if (!settled && pending === 0) {
-            resolve({ reached: false, result: null });
-          }
-        });
-    }
-  });
-}
-
-export async function geocodeLocation(
-  query: string
-): Promise<GeocodeResult | null> {
+export async function geocodeLocations(query: string): Promise<GeocodeResult[]> {
   const key = query.trim().toLowerCase();
-  const cached = getCached(geocodeCache, key);
-  if (cached !== undefined) return cached;
-
-  const response = await firstResolved(
-    GEOCODE_URLS.map((baseUrl) => requestGeocodeLocation(baseUrl, query))
-  );
-  setCached(geocodeCache, key, response.result);
-  return response.result;
+  const cached = places.get(key);
+  if (cached && Date.now() - cached.at < CACHE_MS) return cached.value;
+  const results = await request(`search?query=${encodeURIComponent(query.trim())}`);
+  const value = parsePlaces(results, query);
+  // Only a successful response can establish that a place was not found.
+  if (!containsKakao(results)) places.set(key, { at: Date.now(), value });
+  return value;
 }
 
-async function requestGeocodeLocation(
-  baseUrl: string,
-  query: string
-): Promise<GeocodeRequestResult> {
-  try {
-    const response = await fetchWithTimeout(
-      `${baseUrl}?query=${encodeURIComponent(query)}`,
-      GEOCODE_TIMEOUT_MS
-    );
-    if (!response.ok) return { reached: true, result: null };
-
-    const results = (await response.json()) as Array<{
-      lat?: string;
-      lon?: string;
-      display_name?: string;
-      name?: string;
-    }>;
-    const first = results[0];
-    if (!first) return { reached: true, result: null };
-
-    const latitude = Number(first.lat);
-    const longitude = Number(first.lon);
-    if (![latitude, longitude].every(Number.isFinite)) {
-      return { reached: true, result: null };
-    }
-
-    return {
-      reached: true,
-      result: {
-        latitude,
-        longitude,
-        name: first.display_name ?? first.name ?? query,
-      },
-    };
-  } catch {
-    return { reached: false, result: null };
-  }
+export async function geocodeLocation(query: string): Promise<GeocodeResult | null> {
+  return (await geocodeLocations(query))[0] ?? null;
 }
 
-export async function reverseGeocodeLocation(location: ObserverLocation) {
+export async function suggestLocations(query: string, signal: AbortSignal): Promise<GeocodeResult[]> {
+  const key = query.trim().toLowerCase();
+  const cached = suggestions.get(key);
+  if (cached && Date.now() - cached.at < CACHE_MS) return cached.value;
+  const results = await request(`suggest?query=${encodeURIComponent(query.trim())}`, signal);
+  const value = parsePlaces(results, query);
+  if (!containsKakao(results)) suggestions.set(key, { at: Date.now(), value });
+  return value;
+}
+
+export async function reverseGeocodeLocation(location: ObserverLocation): Promise<string | null> {
   const key = `${location.latitude.toFixed(5)},${location.longitude.toFixed(5)}`;
-  const cached = getCached(reverseGeocodeCache, key);
-  if (cached !== undefined) return cached;
-
-  const response = await firstResolved(
-    GEOCODE_URLS.map((baseUrl) =>
-      requestReverseGeocodeLocation(baseUrl, location)
-    )
-  );
-  setCached(reverseGeocodeCache, key, response.result);
-  return response.result;
-}
-
-async function requestReverseGeocodeLocation(
-  baseUrl: string,
-  location: ObserverLocation
-): Promise<ReverseGeocodeRequestResult> {
-  const params = new URLSearchParams({
-    lat: String(location.latitude),
-    lon: String(location.longitude),
-  });
+  const cached = addresses.get(key);
+  if (cached && Date.now() - cached.at < CACHE_MS) return cached.value;
   try {
-    const response = await fetchWithTimeout(
-      `${baseUrl}/reverse?${params.toString()}`,
-      REVERSE_GEOCODE_TIMEOUT_MS
-    );
-    if (!response.ok) return { reached: true, result: null };
-
-    const result = (await response.json()) as {
-      display_name?: string;
-      name?: string;
-    };
-
-    return { reached: true, result: result.display_name ?? result.name ?? null };
-  } catch {
-    return { reached: false, result: null };
-  }
+    const result = await request(`reverse?${new URLSearchParams({ lat: String(location.latitude), lon: String(location.longitude) })}`);
+    const value = result.display_name ?? result.name;
+    if (typeof value === "string" && value) {
+      if (!containsKakao(result)) addresses.set(key, { at: Date.now(), value });
+      return value;
+    }
+  } catch { /* Coordinates remain usable when address lookup is unavailable. */ }
+  return null;
 }

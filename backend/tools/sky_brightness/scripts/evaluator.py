@@ -1,7 +1,9 @@
 ﻿import argparse
+import importlib.util
 import json
 import os
 import sys
+from pathlib import Path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.dirname(SCRIPT_DIR)))
 SRC_DIR = os.path.join(BACKEND_DIR, "src")
@@ -69,6 +71,28 @@ def load_params(path: str | None) -> dict:
     return params
 
 
+def frozen_weather_query(cache_path: str):
+    """Reuse the archived, timezone-aware research adapter without API calls."""
+    adapter_path = Path(CODE_DIR) / "research/models/82a295073f54/data_loader.py"
+    name = "app.services.sky_brightness_model.core._evaluation_weather"
+    spec = importlib.util.spec_from_file_location(name, adapter_path)
+    adapter = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(adapter)
+    with open(cache_path, encoding="utf-8") as source:
+        cache = json.load(source)
+
+    def query(time, lat, lon):
+        for package in ("p1", "p2", "p3", "p4"):
+            metadata = cache[package]["metadata"]
+            coordinates = np.asarray([metadata["latitude"], metadata["longitude"]], dtype=float)
+            if (not np.isfinite(coordinates).all()
+                    or abs(coordinates[0] - lat) > 0.001 or abs(coordinates[1] - lon) > 0.001):
+                raise ValueError(f"{package}: weather cache coordinates do not match observations")
+        return adapter.environment_query(time, lat, lon, cache_path=cache_path)
+
+    return query
+
+
 def build_config(row_data: dict, params: dict) -> EnvironmentConfig:
     blended = {
         "gamma": params.get("gamma", FIXED_GAMMA),
@@ -109,9 +133,12 @@ def preload_cases(
     keep_radiance_fraction: float = 0.99,
     min_pixels: int = 50,
     max_pixels: int = 200,
+    *,
+    weather_cache: str | None = None,
 ) -> list[dict]:
     cases = []
     df = pd.read_csv(csv_path)
+    query_environment = frozen_weather_query(weather_cache) if weather_cache else environment_query
 
     with rasterio.open(dem_path) as src:
         dem_data = (src.read(1), src.transform)
@@ -126,13 +153,14 @@ def preload_cases(
             time_str = str(row["time"])
 
             if not np.isfinite([lat, lon, zen, az, actual_mag]).all():
-                print(f"[skip] row {i + 1}: invalid numeric value")
-                continue
+                raise ValueError("invalid numeric value")
+            if not (0 <= zen < 90 and 0 <= az < 360):
+                raise ValueError("Expected zenith angle [0,90), azimuth [0,360)")
 
             observer_coordinates = (lat, lon)
             observer_angles = (zen, az)
 
-            aod, cloud_fraction, cloud_base_h, seeing, moonlight, moon_angles, moon_phase_angle, moon_cloud_transmission = environment_query(
+            aod, cloud_fraction, cloud_base_h, seeing, moonlight, moon_angles, moon_phase_angle, moon_cloud_transmission = query_environment(
                 time_str, lat, lon
             )
 
@@ -149,8 +177,7 @@ def preload_cases(
                 max_pixels=max_pixels,
             )
             if not pixel_data:
-                print(f"[skip] row {i + 1}: no satellite pixels")
-                continue
+                raise ValueError("no satellite pixels")
 
             moon_shield_deg = calculate_directional_shielding(
                 observer_coordinates,
@@ -183,6 +210,8 @@ def preload_cases(
             )
             print(f"[load] row {i + 1}: ready")
         except Exception as exc:
+            if weather_cache:
+                raise ValueError(f"Offline evaluation failed at row {i + 1}: {exc}") from exc
             print(f"[skip] row {i + 1}: {exc}")
 
     return cases
@@ -210,6 +239,11 @@ def evaluate(cases: list[dict], params: dict) -> list[dict]:
             {
                 "row_no": case["row_no"],
                 "time": case.get("time", ""),
+                "lat": case["observer_coordinates"][0],
+                "lon": case["observer_coordinates"][1],
+                "zen": case["observer_angles"][0],
+                "az": case["observer_angles"][1],
+                "altitude": 90.0 - case["observer_angles"][0],
                 "pred_mag": pred_mag,
                 "actual_mag": case["actual_mag"],
                 "diff": diff,
@@ -230,6 +264,77 @@ def evaluate(cases: list[dict], params: dict) -> list[dict]:
     return results
 
 
+def error_metrics(diffs) -> dict:
+    errors = np.asarray(diffs, dtype=float)
+    errors = errors[np.isfinite(errors)]
+    if not len(errors):
+        raise ValueError("No finite prediction errors to evaluate.")
+    mse = float(np.mean(errors**2))
+    return {"n": int(len(errors)), "mse": mse, "rmse": float(np.sqrt(mse)),
+            "mae": float(np.mean(np.abs(errors))), "bias": float(np.mean(errors))}
+
+
+def directional_rmse(results: list[dict], angle: str) -> pd.DataFrame:
+    """Pool squared errors at each exact angle, excluding zenith from azimuth."""
+    if angle not in ("az", "altitude"):
+        raise ValueError("angle must be az or altitude")
+    groups = {}
+    for row in results:
+        if not np.isfinite([row["diff"], row[angle], row["altitude"]]).all():
+            continue
+        if angle == "az" and np.isclose(row["altitude"], 90.0, atol=1e-8, rtol=0):
+            continue
+        value = float(row[angle])
+        groups.setdefault(value, []).append(row["diff"])
+    return pd.DataFrame(
+        [{angle: value, **error_metrics(errors)} for value, errors in sorted(groups.items())],
+        columns=[angle, "n", "mse", "rmse", "mae", "bias"],
+    )
+
+
+def save_directional_report(results: list[dict], output_dir: str) -> dict:
+    # Lazy import: numerical evaluation and other scripts do not require plotting.
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    metrics = error_metrics([row["diff"] for row in results])
+    destination = Path(output_dir)
+    destination.mkdir(parents=True, exist_ok=True)
+    pd.DataFrame(results).to_csv(destination / "evaluation.csv", index=False)
+    fig, axes = plt.subplots(1, 2, figsize=(12, 4.8), layout="constrained")
+    for ax, angle, title, limit in zip(
+        axes, ("az", "altitude"),
+        ("RMSE by azimuth (zenith excluded)", "RMSE by altitude"), (360, 90),
+    ):
+        grouped = directional_rmse(results, angle)
+        filename = "rmse_by_azimuth.csv" if angle == "az" else "rmse_by_altitude.csv"
+        grouped.to_csv(destination / filename, index=False)
+        ax.vlines(grouped[angle], 0, grouped["rmse"], color="#2563eb", alpha=0.35)
+        ax.scatter(grouped[angle], grouped["rmse"], color="#2563eb", zorder=3)
+        for row in grouped.to_dict("records"):
+            ax.annotate(f"n={row['n']}", (row[angle], row["rmse"]),
+                        xytext=(0, 7), textcoords="offset points", ha="center", fontsize=7)
+        if grouped.empty:
+            ax.text(0.5, 0.5, "No directional observations", transform=ax.transAxes, ha="center")
+        ax.set(title=title, xlabel="Azimuth (degrees, N=0, E=90)" if angle == "az" else "Altitude (degrees)",
+               ylabel="RMSE (mag/arcsec²)", xlim=(-5, limit + 5))
+        ax.set_xticks(np.arange(0, limit + 1, 30 if angle == "az" else 15))
+        ax.set_ylim(bottom=0, top=max(0.1, grouped["rmse"].max() * 1.2) if not grouped.empty else 0.1)
+        ax.grid(alpha=0.2)
+    fig.suptitle(f"Directional model error | n={metrics['n']} | MSE={metrics['mse']:.5f} | RMSE={metrics['rmse']:.5f}\n"
+                 "Exact-angle groups pooled over other coordinates; n=1 means absolute error.", fontsize=11)
+    fig.savefig(destination / "rmse_by_direction.png", dpi=180)
+    plt.close(fig)
+    report = {**metrics, "error_definition": "predicted SQM - observed SQM",
+              "rmse_unit": "mag/arcsec^2", "mse_unit": "(mag/arcsec^2)^2",
+              "grouping": "Exact angles; squared errors pooled across all other coordinates and times.",
+              "azimuth_excludes_zenith": True,
+              "invalid_error_rows": len(results) - metrics["n"]}
+    (destination / "metrics.json").write_text(json.dumps(report, indent=2, allow_nan=False) + "\n", encoding="utf-8")
+    return report
+
+
 def print_report(results: list[dict]) -> None:
     valid = [r for r in results if np.isfinite(r["diff"])]
     if not valid:
@@ -237,10 +342,8 @@ def print_report(results: list[dict]) -> None:
         return
 
     diffs = np.array([r["diff"] for r in valid], dtype=float)
-    mse = float(np.mean(diffs**2))
-    rmse = float(np.sqrt(mse))
-    bias = float(np.mean(diffs))
-    mae = float(np.mean(np.abs(diffs)))
+    metrics = error_metrics(diffs)
+    mse, rmse, bias, mae = (metrics[key] for key in ("mse", "rmse", "bias", "mae"))
 
     print()
     print(f"{'No':<5} | {'Time':<16} | {'Pred':>9} | {'Actual':>9} | {'Diff':>9} | {'MoonSep':>7} | {'C':>5} | {'Ce':>5} | {'Hmax':>6} | {'q':>5}")
@@ -287,12 +390,17 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate light pollution model predictions.")
     parser.add_argument("--params", help="JSON file containing model parameters.", default=None)
     parser.add_argument("--fallback-csv", default=DEFAULT_FALLBACK_CSV_PATH)
+    parser.add_argument("--weather-cache", help="Frozen API JSON; KST observation times, metadata-aware offline adapter.")
+    parser.add_argument("--output-dir", default=os.path.join(CODE_DIR, "data", "evaluation"),
+                        help="Directory for predictions, metrics, grouped errors, and RMSE plot.")
     add_data_args(parser)
     args = parser.parse_args()
 
     params = load_params(args.params)
     print(f"Parameters: {params if params else 'EnvironmentConfig defaults'}")
 
+    if args.weather_cache and not os.path.exists(args.csv):
+        raise FileNotFoundError(args.csv)
     csv_path = args.csv if os.path.exists(args.csv) else args.fallback_csv
     if csv_path != args.csv:
         print(f"Evaluation CSV not found; fallback: {csv_path}")
@@ -305,9 +413,12 @@ def main() -> None:
         args.keep_radiance_fraction,
         args.min_pixels,
         args.max_pixels,
+        weather_cache=args.weather_cache,
     )
     results = evaluate(cases, params)
     print_report(results)
+    save_directional_report(results, args.output_dir)
+    print(f"Directional RMSE plot and tables saved: {args.output_dir}")
 
 
 if __name__ == "__main__":

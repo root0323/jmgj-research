@@ -5,6 +5,7 @@ import {
   type ChangeEvent,
   type FormEvent,
   type KeyboardEvent,
+  type ReactNode,
 } from "react";
 import { LocationPicker } from "./LocationPicker";
 import styles from "./SkyViewer.module.css";
@@ -19,6 +20,7 @@ const MIN_PICKER_YEAR = 1;
 const MAX_PICKER_YEAR = 9999;
 
 type SkyViewerControlsProps = {
+  weatherPanel?: ReactNode;
   calendarDays: Date[];
   deepSkyMode: boolean;
   isTimePaused: boolean;
@@ -63,6 +65,7 @@ function CalendarIcon() {
 }
 
 export function SkyViewerControls({
+  weatherPanel,
   calendarDays,
   deepSkyMode,
   formatDisplayDateTime,
@@ -193,6 +196,7 @@ export function SkyViewerControls({
         </span>
       </div>
 
+      <div className={styles.panelBody}>
       <form className={styles.search} onSubmit={onSearchSubmit}>
         <div className={styles.searchBox}>
           <input
@@ -442,6 +446,8 @@ export function SkyViewerControls({
         onApply={onApplyLocation}
       />
 
+      {weatherPanel}
+
       <div className={styles.buttonGrid} aria-label="표시 옵션">
         <button
           type="button"
@@ -458,6 +464,11 @@ export function SkyViewerControls({
           aria-pressed={toggles.constellationLines}
         >
           별자리선 {toggles.constellationLines ? "켜짐" : "꺼짐"}
+        </button>
+        <button type="button" className={toggles.annualTrajectory ? styles.active : ""}
+          onClick={() => onToggle("annualTrajectory")} aria-pressed={toggles.annualTrajectory}
+          disabled={status !== "ready"} title="선택한 천체의 매일 같은 시각, 1년간 위치">
+          별궤적 {toggles.annualTrajectory ? "켜짐" : "꺼짐"}
         </button>
         <button
           type="button"
@@ -483,6 +494,7 @@ export function SkyViewerControls({
         >
           딥스카이 {deepSkyMode ? "켜짐" : "꺼짐"}
         </button>
+      </div>
       </div>
     </section>
   );

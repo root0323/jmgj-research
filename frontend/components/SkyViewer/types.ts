@@ -11,6 +11,11 @@ export type SweObj = {
   data?: Record<string, unknown>;
   remove?: (obj: SweObj) => void;
   destroy?: () => void;
+  clone?: () => SweObj;
+  utc?: number;
+  latitude?: number;
+  longitude?: number;
+  roll?: number;
   addDataSource?: (args: { url: string; key?: string }) => void;
   designations?: () => string[];
   getInfo?: (format?: string, observer?: SweObj) => unknown;
@@ -67,6 +72,19 @@ export type TelescopeSettings = {
   apertureMm: number;
 };
 
+export type CameraSettings = {
+  sensorWidthMm: number | null;
+  sensorHeightMm: number | null;
+  pixelSizeUm: number | null;
+};
+
+export type EyepieceSettings = {
+  focalLengthMm: number | null;
+  apparentFieldDegrees: number | null;
+};
+
+export type ObservationFilter = "L" | "R" | "G" | "B" | "SII" | "Ha" | "OIII";
+
 export type GeocodeResult = ObserverLocation & {
   name: string;
 };
@@ -120,6 +138,7 @@ export type BrightStarCatalog = {
 };
 
 export type SearchSuggestion = {
+  kind?: "milkyWay";
   key: string;
   label: string;
   obj: SweObj;
