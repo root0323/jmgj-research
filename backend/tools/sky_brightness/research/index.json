@@ -1,5 +1,7 @@
 {
   "schema_version": 1,
+  "results_summary": "RESULTS.md",
+  "retention_policy": "Archive every submitted dataset and analysis, including unchanged or deferred results; preserve earlier runs and graphs.",
   "latest_dataset": "2026-10-22_2123-2218_KST_jeju",
   "latest_run": "002_scattering_calibration",
   "accepted_model_run": null,
