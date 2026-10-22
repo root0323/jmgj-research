@@ -1,0 +1,23 @@
+{
+  "fetched_at": "2026-10-22T14:50:54.419168+00:00",
+  "plan": "free3h",
+  "queries": [
+    {
+      "package": "airquality-3h",
+      "status": 200,
+      "credits_header": "8000"
+    },
+    {
+      "package": "clouds-3h",
+      "status": 200,
+      "credits_header": "8000"
+    },
+    {
+      "package": "air-3h",
+      "status": 200,
+      "credits_header": "8000"
+    }
+  ],
+  "secrets_removed": true,
+  "raw_response_scope": "Complete successful package JSONs with credentials redacted; no field downsampling."
+}

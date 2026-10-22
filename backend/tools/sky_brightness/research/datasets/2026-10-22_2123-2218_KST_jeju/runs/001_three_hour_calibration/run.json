@@ -1,0 +1,81 @@
+{
+  "source_base_commit": "b2a8c7531e4f81be94111d295e23d877319d394c",
+  "source_sha256": {
+    "backend/src/app/services/sky_brightness_model/core/calculator.py": "39851b1fad3c7f1d441ca2f887e4b26dbf9ba073ac5fcde50ab0b272a87bcf28",
+    "backend/src/app/services/sky_brightness_model/core/config.py": "5bbee049897dc5412770bca632b79798955d106cd6bd655dc13670734354b9c3",
+    "backend/src/app/services/sky_brightness_model/core/data_loader.py": "2ed9aa57540d874a413cd1b2faf97562dbc2b55a1409ae14d4e2cfa35d0b9bbd",
+    "backend/tools/sky_brightness/research/capture_weather.py": "f32a1297469a31d7bca246bf51d658a33ceb1272be01a1a74912e58b52b3863d",
+    "backend/tools/sky_brightness/research/calibrate_three_hour.py": "079ccb52fbaf71e6eca644172c41fad913d1b67735d8dbef0e1f2b5a4e98a7d3",
+    "backend/tools/sky_brightness/research/calibrate_scattering.py": "79fcddc9ddbc94935c0c6e7695ef9094598d954cb1a6e850c0a63227a484ffb1",
+    "backend/tools/sky_brightness/scripts/evaluator.py": "630e94112096577dfa0ed4316f51760b4f1b58b5e1a5fc897615bcd7bb6a26ee"
+  },
+  "input_sha256": {
+    "raw/sqm_observations.csv": "e47f2283a9a630cbce6c9fb034c9d5c80287b17447d05681bc9bf0c3d40de579",
+    "inputs/v001_all_49.csv": "78cc3fd9b89eb6cd0abdacfc8829e1f32000c2847e4eb0be146b2d82a6ba7972",
+    "raw/weather_cache_33.4268_126.5303_2026-10-22.json": "589632945820d923c40f65df308ffc42db725b2704c16052c642db45b63af540"
+  },
+  "assets": {
+    "h5_sha256": "564dab8277384ac4f14b37ef9940f726084584b082c42e3b71036bfe2adb5e15",
+    "dem_sha256": "1c3f6d441d95c1f5219ce90f4db53bd442d0040bb0caa0cccdcf1ca6a58866f0"
+  },
+  "instrument": "SQM-L (fixed by user)",
+  "raw_count": 49,
+  "included_count": 49,
+  "excluded_count": 0,
+  "previous_dataset_used": false,
+  "model_defaults_changed": false,
+  "timezone": "Asia/Seoul",
+  "units": {
+    "observed": "mag/arcsec^2",
+    "rmse": "mag/arcsec^2",
+    "mse": "(mag/arcsec^2)^2"
+  },
+  "geometry": {
+    "max_pixels": 1000,
+    "min_pixels": 50,
+    "radius_km": 30,
+    "keep_radiance_fraction": 0.99
+  },
+  "versions": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "astronomy-engine": "2.1.19",
+    "rasterio": "1.5.2",
+    "h5py": "3.16.0",
+    "numba": "0.68.0"
+  },
+  "tests": {
+    "unit_tests_passed": 9,
+    "folds_disjoint": true,
+    "all_observations_held_out_once": true,
+    "independent_mse_recomputed": true,
+    "baseline_reproduced_between_runs": true
+  },
+  "astronomy_reference": "https://github.com/cosinekitty/astronomy/blob/master/source/python/README.md",
+  "candidate_status": "research_candidate_not_applied",
+  "run_id": "001_three_hour_calibration",
+  "created_at": "2026-10-22T15:05:08.240872+00:00",
+  "report_sha256": "2ae72d3a6ca7d9aa6540257d3b5b305ebaa92f4eaa535e5230473ff8f1697b28",
+  "artifacts_sha256": {
+    "angular_holdout/evaluation.csv": "16458f9b5dc65fe59c429bc9088b978677c39cf80d5dc3edca0f19dadd6cafa0",
+    "angular_holdout/metrics.json": "dacb7bbb2295d4392ebe040447dc99a5af64863c0e86ae8e9b07e43f17fec466",
+    "angular_holdout/rmse_by_altitude.csv": "5aa45dd0503d97a11a14fe9317953c9e38fe89e08f26ae8a101addf90cfcbef0",
+    "angular_holdout/rmse_by_azimuth.csv": "9939c15e2bbee7463258df2c178015a85ea093ff911c36f5ec414aa33a794e62",
+    "angular_holdout/rmse_by_direction.png": "92b8a9cb551bdb59254572830caae81772cbe1a1387ddf98a956afb5b689fad6",
+    "baseline/evaluation.csv": "0f6cdf1d7a9dfd9f59b4bd2b5536446582ba9dcffd8703c31677ea2e05f93646",
+    "baseline/metrics.json": "b9b32cce14df7dafe231bb29960fa2b6a7558c7e7b4c5f599e237428634e5567",
+    "baseline/rmse_by_altitude.csv": "12d31b3d19a319fb9ffbb477f70e31c2257f171751c53d0f5f3767805bed3075",
+    "baseline/rmse_by_azimuth.csv": "8a335963c9d795488f4872e4f09faadf4bbf983f229cd6584c050a32017380ed",
+    "baseline/rmse_by_direction.png": "a0707472db919dae12f00c5e383cdedb997a4bd9a763794f20120e8c21c4f48f",
+    "candidate/evaluation.csv": "16458f9b5dc65fe59c429bc9088b978677c39cf80d5dc3edca0f19dadd6cafa0",
+    "candidate/metrics.json": "dacb7bbb2295d4392ebe040447dc99a5af64863c0e86ae8e9b07e43f17fec466",
+    "candidate/rmse_by_altitude.csv": "5aa45dd0503d97a11a14fe9317953c9e38fe89e08f26ae8a101addf90cfcbef0",
+    "candidate/rmse_by_azimuth.csv": "9939c15e2bbee7463258df2c178015a85ea093ff911c36f5ec414aa33a794e62",
+    "candidate/rmse_by_direction.png": "92b8a9cb551bdb59254572830caae81772cbe1a1387ddf98a956afb5b689fad6",
+    "candidate_params.json": "772d7c2d7c3a70dfc1392f4c40deec093fd21a2baa87396dd3fdc4cca4a53349",
+    "comparison.csv": "49c5e5d2fbdee36f736a6f0952570e8384c7e7831f717d08d4597625a1938ced",
+    "README.md": "60e1a1157b627aa5cfa63bfaff4c9b4ad2aa814c767f528d1d9fab527480bb6b",
+    "report.json": "2ae72d3a6ca7d9aa6540257d3b5b305ebaa92f4eaa535e5230473ff8f1697b28"
+  }
+}

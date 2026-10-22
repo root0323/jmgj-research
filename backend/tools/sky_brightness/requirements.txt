@@ -2,3 +2,5 @@
 pandas
 matplotlib
 optuna
+astronomy-engine
+scipy

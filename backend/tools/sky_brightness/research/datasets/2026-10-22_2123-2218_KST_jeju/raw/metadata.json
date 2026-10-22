@@ -1,0 +1,73 @@
+{
+  "dataset_id": "2026-10-22_2123-2218_KST_jeju",
+  "timezone": "Asia/Seoul",
+  "latitude": 33.426769,
+  "longitude": 126.530349,
+  "azimuth_convention": "North=0 East=90 South=180 West=270",
+  "raw_observation_count": 49,
+  "raw_csv_sha256": "e47f2283a9a630cbce6c9fb034c9d5c80287b17447d05681bc9bf0c3d40de579",
+  "user_supplied_data": true,
+  "building_obstructions": false,
+  "raw_values_modified": false,
+  "previous_dataset_retired_from_current_fitting": "2026-10-15_0000_KST_jeju (API UTC date 2026-10-14)",
+  "status": "research_candidate_not_applied",
+  "model_defaults_changed": false,
+  "measurement_device": "not specified",
+  "per_direction_time_known": false,
+  "intervals_kst": {
+    "30": [
+      "2026-10-22T21:23+09:00",
+      "2026-10-22T21:28+09:00"
+    ],
+    "60_and_zenith": [
+      "2026-10-22T22:12+09:00",
+      "2026-10-22T22:18+09:00"
+    ]
+  },
+  "observed_statistics": {
+    "30": {
+      "n": 24,
+      "min_sqm": 15.53,
+      "min_sqm_azimuth": 195.0,
+      "max_sqm": 17.88,
+      "max_sqm_azimuth": 285.0,
+      "zenith_azimuth_is_placeholder": false
+    },
+    "60": {
+      "n": 24,
+      "min_sqm": 15.86,
+      "min_sqm_azimuth": 165.0,
+      "max_sqm": 19.26,
+      "max_sqm_azimuth": 300.0,
+      "zenith_azimuth_is_placeholder": false
+    },
+    "90": {
+      "n": 1,
+      "min_sqm": 17.52,
+      "min_sqm_azimuth": 0.0,
+      "max_sqm": 17.52,
+      "max_sqm_azimuth": 0.0,
+      "zenith_azimuth_is_placeholder": true
+    }
+  },
+  "limitations": [
+    "Altitude rings were measured in different time intervals, so altitude and time effects are confounded.",
+    "No per-direction timestamps or measurement uncertainties were supplied.",
+    "One date and location do not provide independent-night validation.",
+    "SQM-L angular response and direct lunar intrusion are not yet modeled.",
+    "Empirical cloud/moon gain is confounded with absolute lunar intensity on this one night.",
+    "SQM-L angular response and direct lunar intrusion are not yet modeled.",
+    "Empirical cloud/moon gain is confounded with absolute lunar intensity on this one night."
+  ],
+  "instrument": {
+    "model": "SQM-L",
+    "fixed_by_user": true,
+    "angular_response_convolution_applied": false,
+    "zero_point_fitted": false
+  },
+  "weather_sha256": "589632945820d923c40f65df308ffc42db725b2704c16052c642db45b63af540",
+  "weather_plan": "free3h",
+  "weather_native_interval_hours": 3,
+  "weather_fetched_at": "2026-10-22T14:50:54.419168+00:00",
+  "previous_observations_used_for_fitting": false
+}

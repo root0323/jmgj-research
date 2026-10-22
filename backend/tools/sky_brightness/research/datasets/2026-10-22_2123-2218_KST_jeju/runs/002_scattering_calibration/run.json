@@ -1,0 +1,92 @@
+{
+  "source_base_commit": "b2a8c7531e4f81be94111d295e23d877319d394c",
+  "source_sha256": {
+    "backend/src/app/services/sky_brightness_model/core/calculator.py": "39851b1fad3c7f1d441ca2f887e4b26dbf9ba073ac5fcde50ab0b272a87bcf28",
+    "backend/src/app/services/sky_brightness_model/core/config.py": "5bbee049897dc5412770bca632b79798955d106cd6bd655dc13670734354b9c3",
+    "backend/src/app/services/sky_brightness_model/core/data_loader.py": "2ed9aa57540d874a413cd1b2faf97562dbc2b55a1409ae14d4e2cfa35d0b9bbd",
+    "backend/tools/sky_brightness/research/capture_weather.py": "f32a1297469a31d7bca246bf51d658a33ceb1272be01a1a74912e58b52b3863d",
+    "backend/tools/sky_brightness/research/calibrate_three_hour.py": "079ccb52fbaf71e6eca644172c41fad913d1b67735d8dbef0e1f2b5a4e98a7d3",
+    "backend/tools/sky_brightness/research/calibrate_scattering.py": "79fcddc9ddbc94935c0c6e7695ef9094598d954cb1a6e850c0a63227a484ffb1",
+    "backend/tools/sky_brightness/scripts/evaluator.py": "630e94112096577dfa0ed4316f51760b4f1b58b5e1a5fc897615bcd7bb6a26ee"
+  },
+  "input_sha256": {
+    "raw/sqm_observations.csv": "e47f2283a9a630cbce6c9fb034c9d5c80287b17447d05681bc9bf0c3d40de579",
+    "inputs/v001_all_49.csv": "78cc3fd9b89eb6cd0abdacfc8829e1f32000c2847e4eb0be146b2d82a6ba7972",
+    "raw/weather_cache_33.4268_126.5303_2026-10-22.json": "589632945820d923c40f65df308ffc42db725b2704c16052c642db45b63af540"
+  },
+  "assets": {
+    "h5_sha256": "564dab8277384ac4f14b37ef9940f726084584b082c42e3b71036bfe2adb5e15",
+    "dem_sha256": "1c3f6d441d95c1f5219ce90f4db53bd442d0040bb0caa0cccdcf1ca6a58866f0"
+  },
+  "instrument": "SQM-L (fixed by user)",
+  "raw_count": 49,
+  "included_count": 49,
+  "excluded_count": 0,
+  "previous_dataset_used": false,
+  "model_defaults_changed": false,
+  "timezone": "Asia/Seoul",
+  "units": {
+    "observed": "mag/arcsec^2",
+    "rmse": "mag/arcsec^2",
+    "mse": "(mag/arcsec^2)^2"
+  },
+  "geometry": {
+    "max_pixels": 1000,
+    "min_pixels": 50,
+    "radius_km": 30,
+    "keep_radiance_fraction": 0.99
+  },
+  "versions": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "astronomy-engine": "2.1.19",
+    "rasterio": "1.5.2",
+    "h5py": "3.16.0",
+    "numba": "0.68.0"
+  },
+  "tests": {
+    "unit_tests_passed": 9,
+    "folds_disjoint": true,
+    "all_observations_held_out_once": true,
+    "independent_mse_recomputed": true,
+    "baseline_reproduced_between_runs": true
+  },
+  "astronomy_reference": "https://github.com/cosinekitty/astronomy/blob/master/source/python/README.md",
+  "candidate_status": "research_candidate_not_applied",
+  "run_id": "002_scattering_calibration",
+  "created_at": "2026-10-22T15:05:08.281452+00:00",
+  "report_sha256": "6a6a89712e5d195278b8d05617448c12faab66ecf0aeadfb14a7877a42d87ce0",
+  "artifacts_sha256": {
+    "angular_holdout/evaluation.csv": "b02d5c1774f9e027c7709e78cbae6ce0e0acb9a2fcf274987980e359a8f6c7ba",
+    "angular_holdout/metrics.json": "844f75cde5d38e3cb6c4dbbfedbf629faae67396e28ca403d4c30969d8355d0f",
+    "angular_holdout/rmse_by_altitude.csv": "661e2aaa1ead7917c4929236e70004bcbd581941c4f3974d0b9341ac3ca2bb11",
+    "angular_holdout/rmse_by_azimuth.csv": "e076900f227a8c847230a57b6dfb4c543d6e021ea5d965630f9808f14573af07",
+    "angular_holdout/rmse_by_direction.png": "b8001fe7483015adf9232bfcfbe4683348a29818ac44a2802c4a255c50835a2d",
+    "baseline/evaluation.csv": "0f6cdf1d7a9dfd9f59b4bd2b5536446582ba9dcffd8703c31677ea2e05f93646",
+    "baseline/metrics.json": "b9b32cce14df7dafe231bb29960fa2b6a7558c7e7b4c5f599e237428634e5567",
+    "baseline/rmse_by_altitude.csv": "12d31b3d19a319fb9ffbb477f70e31c2257f171751c53d0f5f3767805bed3075",
+    "baseline/rmse_by_azimuth.csv": "8a335963c9d795488f4872e4f09faadf4bbf983f229cd6584c050a32017380ed",
+    "baseline/rmse_by_direction.png": "a0707472db919dae12f00c5e383cdedb997a4bd9a763794f20120e8c21c4f48f",
+    "candidate/evaluation.csv": "f270b41846a9dad3b17a958c3ac9fbe560ad126b0db2b494360ace35676a8a81",
+    "candidate/metrics.json": "72e1795b29cc1fbf2e1e0d80c42bf9d2294d4752d62bfde4b0029d6c729ce769",
+    "candidate/rmse_by_altitude.csv": "2accd81c8df3a0749b9b38f7d7fc3537b65abbaf9ddc36e3ebd51cf22f6c3a61",
+    "candidate/rmse_by_azimuth.csv": "69b4fb4e25d5d29bff138f73a3bf7c8476f6a89454a8c00a6f48c2ff03e6e2c6",
+    "candidate/rmse_by_direction.png": "04c5bb10bb9775b2dc93dab1475e7bb077ae2f8e1f136de9546286a8f44a055a",
+    "candidate_params.json": "1122e50cc5c02890794165049e6e67f99577072894be4d90006741c0731feba0",
+    "comparison.csv": "a766267360cc69040c1d7177735b62a81582a2baeeb8242f83f21a797626e90d",
+    "observed_vs_model.png": "d0a4a488468de51dad96d94a5bddbb75f49d99f418c2e94a81233300fe521c3e",
+    "README.md": "25493bfd9a810ba70399a975c33a77d69a3d826a7f2dd42f5c37e48dbbc1eb1d",
+    "report.json": "6a6a89712e5d195278b8d05617448c12faab66ecf0aeadfb14a7877a42d87ce0",
+    "scattering_components.csv": "e8a7d3703593ec27a3febe257daade71ce12ef79ebc871e5f182ea6c0c7d1f3d",
+    "time_interval_sensitivity.json": "4ee35f801cd97590bac8358bb48add8cc204edef5682fce81e859fca77995e5b"
+  },
+  "boundary_parameters": [
+    "g=0.5 (lower grid boundary)",
+    "art_scale=0.05 (lower bound)"
+  ],
+  "new_empirical_parameter": {
+    "moon_cloud_gain": 118.24386924943558,
+    "interpretation": "Effective one-night amplitude; not a measured cloud property."
+  }
+}

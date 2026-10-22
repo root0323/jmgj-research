@@ -7,7 +7,7 @@ import unittest
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "tools/sky_brightness/scripts"
 sys.path.insert(0, str(SCRIPTS))
-from evaluator import directional_rmse, error_metrics, frozen_weather_query, save_directional_report
+from evaluator import directional_rmse, error_metrics, frozen_weather_query, load_params, save_directional_report
 
 
 class DirectionalEvaluationTests(unittest.TestCase):
@@ -45,6 +45,13 @@ class DirectionalEvaluationTests(unittest.TestCase):
         for errors in ([], [float("nan"), float("inf")]):
             with self.assertRaises(ValueError):
                 error_metrics(errors)
+
+    def test_experimental_term_cannot_be_silently_ignored_by_runtime_evaluation(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'candidate.json'
+            path.write_text('{"g":0.5,"moon_cloud_gain":118}', encoding='utf-8')
+            with self.assertRaisesRegex(ValueError, 'moon_cloud_gain'):
+                load_params(str(path))
 
     def test_frozen_utc_weather_uses_correct_korean_observation_time(self):
         cache = SCRIPTS.parent / "research/datasets/2026-10-15_0000_KST_jeju/inputs/api_snapshot_2026-10-14_1500_UTC.json"

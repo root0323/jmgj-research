@@ -86,6 +86,14 @@ equally, which differs from a pooled RMSE if group sizes differ. The single-time
 Jeju data cannot support date-based cross-validation. The existing research
 angular holdouts are diagnostics within one night, not validation across nights.
 
+The current data set is the [2026-10-22 SQM-L sweep](research/datasets/2026-10-22_2123-2218_KST_jeju/).
+It includes all 49 readings and new native three-hour weather. `research/calibrate_three_hour.py`
+fits existing runtime parameters; `research/calibrate_scattering.py` additionally compares an
+explicitly empirical cloud/moon-scattering term. Both preserve fixed-physics baselines and
+directional held-out results. The new term is research-only; `evaluator.py --params` rejects
+unsupported fields instead of silently ignoring them. `research/capture_weather.py` captures
+the app's three weather packages with a process-only key and redacts credentials before saving.
+
 Common defaults are defined in `scripts/cli_common.py`.
 
 ## Common Arguments

@@ -1,0 +1,9 @@
+{
+  "id": "v001_all_49",
+  "raw_count": 49,
+  "included_count": 49,
+  "excluded_count": 0,
+  "user_confirmation": "Same location, KST and north=0 convention as before. No building-obstructed directions. Zenith belongs to the second interval.",
+  "previous_dataset_used_for_fitting": false,
+  "time_assignment": "No per-direction timestamps supplied. Nominal times are 21:25 and 22:15 KST; bounds are retained for sensitivity checks."
+}

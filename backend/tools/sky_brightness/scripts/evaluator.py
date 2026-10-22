@@ -67,6 +67,12 @@ def load_params(path: str | None) -> dict:
 
     if not isinstance(params, dict):
         raise ValueError("Parameter file must contain a JSON object.")
+    supported = {"gamma", "omega_a", "g", "ms_a", "ms_b", "moon_transmission_scale",
+                 "art_scale", "Q", "q", "rho_albedo"}
+    unsupported = set(params) - supported
+    if unsupported:
+        raise ValueError(f"Unsupported runtime evaluation parameters: {sorted(unsupported)}. "
+                         "Use the matching research runner for experimental model terms.")
 
     return params
 

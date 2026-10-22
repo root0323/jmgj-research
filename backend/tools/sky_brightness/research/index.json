@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "latest_dataset": "2026-10-15_0000_KST_jeju",
-  "latest_run": "003_directional_rmse",
+  "latest_dataset": "2026-10-22_2123-2218_KST_jeju",
+  "latest_run": "002_scattering_calibration",
   "accepted_model_run": null,
   "datasets": [
     {
@@ -13,7 +13,24 @@
         "002_unobstructed_21",
         "003_directional_rmse"
       ],
-      "status": "candidate_not_applied"
+      "status": "candidate_not_applied",
+      "active_for_fitting": false,
+      "retired_reason": "User replaced observations on 2026-10-22; archive only."
+    },
+    {
+      "id": "2026-10-22_2123-2218_KST_jeju",
+      "raw_observations": 49,
+      "included_observations": 49,
+      "runs": [
+        "001_three_hour_calibration",
+        "002_scattering_calibration"
+      ],
+      "active_for_fitting": true,
+      "status": "research_candidate_not_applied",
+      "instrument": "SQM-L"
     }
+  ],
+  "active_training_datasets": [
+    "2026-10-22_2123-2218_KST_jeju"
   ]
 }
