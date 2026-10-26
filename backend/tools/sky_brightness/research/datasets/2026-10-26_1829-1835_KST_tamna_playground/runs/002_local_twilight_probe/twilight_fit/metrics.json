@@ -1,0 +1,13 @@
+{
+  "n": 49,
+  "mse": 0.21622257580032972,
+  "rmse": 0.4649973933263817,
+  "mae": 0.3890569254161719,
+  "bias": -0.026526930879164794,
+  "error_definition": "predicted SQM - observed SQM",
+  "rmse_unit": "mag/arcsec^2",
+  "mse_unit": "(mag/arcsec^2)^2",
+  "grouping": "Exact angles; squared errors pooled across all other coordinates and times.",
+  "azimuth_excludes_zenith": true,
+  "invalid_error_rows": 0
+}

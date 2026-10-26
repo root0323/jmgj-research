@@ -69,11 +69,19 @@ export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
   {
     title: "장소·지도",
     sources: [
-      { name: "OpenStreetMap", url: "https://www.openstreetmap.org/copyright", description: "위치 선택 지도와 공개 지리 데이터 · © OpenStreetMap contributors", notice: { label: "ODbL", url: "https://www.openstreetmap.org/copyright" } },
+      { name: "OpenStreetMap", url: "https://www.openstreetmap.org/copyright", description: "위치 선택 지도와 공개 지리 데이터. 실측 연구에서는 운동장 도형으로 관측 장소의 근사 중심을 확인 · © OpenStreetMap contributors", notice: { label: "ODbL", url: "https://www.openstreetmap.org/copyright" } },
       { name: "Photon · komoot", url: "https://github.com/komoot/photon", description: "OpenStreetMap 기반 장소 자동완성과 검색" },
       { name: "Nominatim", url: "https://nominatim.org/", description: "OpenStreetMap 기반 장소·주소 검색과 좌표의 주소 변환" },
       { name: "카카오맵 · Local API", url: "https://developers.kakao.com/docs/ko/local/dev-guide", description: "국내 장소·주소 검색과 좌표의 주소 변환. 운영자 공용 검색 서버 또는 로컬 운영자 키가 연결된 경우 사용" },
       { name: "VWorld", url: "https://www.vworld.kr/", description: "국내 주소·장소 검색과 좌표의 주소 변환. 서버에 API 키가 설정된 경우 사용" },
+    ],
+  },
+  {
+    title: "실측 모델 연구 참고",
+    sources: [
+      { name: "US Naval Observatory", url: "https://aa.usno.navy.mil/faq/RST_defs", description: "실측 연구에서 태양 고도로 시민·항해·천문 황혼과 천문학적 밤을 구분하는 정의 참고" },
+      { name: "Astronomy Engine · Don Cross", url: "https://github.com/cosinekitty/astronomy", description: "보존된 실측 연구의 태양·달 좌표와 달 위상 계산. 앱 화면의 Stellarium 엔진과 별도로 연구 재현에 사용", notice: { label: "MIT License", url: "https://github.com/cosinekitty/astronomy/blob/master/LICENSE" } },
+      { name: "탐라교육원", url: "https://www.tamna.or.kr/hp/hm/htmlConvert.do?menuId=1000001032", description: "2026년 10월 실측 연구에서 교육원 주소와 관측 운동장 위치 확인" },
     ],
   },
   {

@@ -1,0 +1,83 @@
+{
+  "run_id": "002_local_twilight_probe",
+  "created_at": "2026-10-26T14:56:14.564015+00:00",
+  "source_base_commit": "2bd9401ff8ca0907abe71e8a41b784a07d92b786",
+  "source_sha256": {
+    "backend/src/app/services/sky_brightness_model/core/calculator.py": "39851b1fad3c7f1d441ca2f887e4b26dbf9ba073ac5fcde50ab0b272a87bcf28",
+    "backend/src/app/services/sky_brightness_model/core/config.py": "5bbee049897dc5412770bca632b79798955d106cd6bd655dc13670734354b9c3",
+    "backend/src/app/services/sky_brightness_model/core/data_loader.py": "2ed9aa57540d874a413cd1b2faf97562dbc2b55a1409ae14d4e2cfa35d0b9bbd",
+    "backend/tools/sky_brightness/research/capture_weather.py": "f32a1297469a31d7bca246bf51d658a33ceb1272be01a1a74912e58b52b3863d",
+    "backend/tools/sky_brightness/research/calibrate_three_hour.py": "079ccb52fbaf71e6eca644172c41fad913d1b67735d8dbef0e1f2b5a4e98a7d3",
+    "backend/tools/sky_brightness/research/evaluate_frozen.py": "acb2d6423bbd2d0e85f245f0c90d87f1f053cbff71fde69700e470f508fcb5c2",
+    "backend/tools/sky_brightness/research/probe_twilight.py": "b9ffe4a426025410dbb6550b9883fb1b4af8b3a8bc2137e5fe6bf1d0cde4a3c7",
+    "backend/tools/sky_brightness/scripts/evaluator.py": "630e94112096577dfa0ed4316f51760b4f1b58b5e1a5fc897615bcd7bb6a26ee"
+  },
+  "input_sha256": {
+    "raw/location_reference.json": "6f0decbc412e936c74328ea0c9e8ae6a16802fa0025944708f6c1a065f28b98c",
+    "raw/metadata.json": "62be75b6a7991dd2bde86331e856ef54a8dd18a5e26da948a68ec92a064a254d",
+    "raw/sqm_observations.csv": "8a8ec97a5bcf98f062a476de52cd9465cc2d4cfc1ab7814877bb1e05a9cedf8f",
+    "raw/weather_cache_33.42785_126.53208_2026-10-26.json": "aed2f0bafcae63e348dac3130f42b108340ab0bf616334950136cc3a048bdcdc",
+    "raw/weather_cache_33.42785_126.53208_2026-10-26.receipt.json": "dd8432fc8ae2399058e4191b8eba5dd43844dd14ca2740e58c68b7c3c8248f1f",
+    "inputs/v001_all_49.csv": "69e05183102a3a9832e5cd907bbb8a824eb78a58ee185f7037b7c8d51bb82982",
+    "selections/v001_all_49.json": "455c5bde97964df49c1d93ed0c8ea2ec8625021e02804a5fb6585878c7e85525",
+    "inputs/environment_snapshot.json": "e12018bbe1e48c53b0ada2d2b4e4630e1ae9633718fbdd2aeadf23c772803e23"
+  },
+  "assets": {
+    "h5_sha256": "564dab8277384ac4f14b37ef9940f726084584b082c42e3b71036bfe2adb5e15",
+    "dem_sha256": "1c3f6d441d95c1f5219ce90f4db53bd442d0040bb0caa0cccdcf1ca6a58866f0"
+  },
+  "previous_candidate_path": "backend/tools/sky_brightness/research/datasets/2026-10-22_2123-2218_KST_jeju/runs/002_scattering_calibration/candidate_params.json",
+  "previous_candidate_sha256": "1122e50cc5c02890794165049e6e67f99577072894be4d90006741c0731feba0",
+  "instrument": "SQM-L",
+  "raw_count": 49,
+  "included_count": 49,
+  "excluded_count": 0,
+  "timezone": "Asia/Seoul",
+  "coordinate_method": "User-authorized mapped sports-ground center; not GPS",
+  "geometry": {
+    "max_pixels": 1000,
+    "min_pixels": 50,
+    "radius_km": 30,
+    "keep_radiance_fraction": 0.99
+  },
+  "units": {
+    "sqm_rmse": "mag/arcsec^2",
+    "mse": "(mag/arcsec^2)^2"
+  },
+  "versions": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2",
+    "astronomy-engine": "2.1.19",
+    "rasterio": "1.5.2",
+    "h5py": "3.16.0",
+    "numba": "0.68.0"
+  },
+  "checks": {
+    "relevant_unit_tests_passed": 15,
+    "independent_mse_recomputed": true,
+    "all_csv_predictions_unchanged_during_plot_finalization": true,
+    "frozen_params_equal_archived_oct22_candidate": true,
+    "twilight_folds_disjoint_and_all_ids_held_once": true
+  },
+  "model_defaults_changed": false,
+  "application_release_created": false,
+  "candidate_status": "exploratory_local_twilight_candidate_not_adopted",
+  "artifacts_sha256": {
+    "candidate_params.json": "fac7c8067018e588fa9bffc2a103db099e9a9aba8198dd2c17579c9fd49d95b6",
+    "comparison.csv": "0d4036527ed21cb954531dd2cbfdc3912d6d33fb9edf7188a641fe97f7a7a828",
+    "observed_vs_model.png": "e69ecd0d670a115d6ff6d6e00e25caafaf08d2a7b7ecf2047948cb5cdb098b60",
+    "report.json": "3506ed6f73fe0233af4b922f9790268e7dfd073ad928e265a37a04c3b621d185",
+    "angular_holdout/evaluation.csv": "d59449b406760720eac30d2941ecfa357c2651918f846dca51ad74c7e703b261",
+    "angular_holdout/metrics.json": "c85a495f1c35e4109221aa3a5a50aa4346a788eda6bf1c0878130f248465d4a5",
+    "angular_holdout/rmse_by_altitude.csv": "6ca6996b3aef2680e91b71996f8aee6f46a11b3308a458d6d6f2e6a8af227c39",
+    "angular_holdout/rmse_by_azimuth.csv": "065e34979db37187aee9a7c8b09d8b7bd51e45722922b76274c5db872816832c",
+    "angular_holdout/rmse_by_direction.png": "9479a75c2cfb3da8427b4de57519507794415c148ce432a2f6f827ab2042be94",
+    "twilight_fit/evaluation.csv": "0965294a696e9bbd4cb1616b52f0cd3840898d9baa5e2bc3dece9e33cdf6e7d5",
+    "twilight_fit/metrics.json": "b76ec617d9c8d13d89888de01e0fbe14b3b3765e96be702f6cb2f70d30f23a5a",
+    "twilight_fit/rmse_by_altitude.csv": "43e1e355d104f727a3d286fa64116f077cf5d14088b5ee8d747893ba98fc05c7",
+    "twilight_fit/rmse_by_azimuth.csv": "e27a9e2f7f82d60552970bbf1bca905ce159cb96cc0fe92df208a48801ca17b6",
+    "twilight_fit/rmse_by_direction.png": "62ea1e4609ea5e6f7ccfe7a2abf7a68c950c7e2656045007e77ddf552b69756b"
+  }
+}

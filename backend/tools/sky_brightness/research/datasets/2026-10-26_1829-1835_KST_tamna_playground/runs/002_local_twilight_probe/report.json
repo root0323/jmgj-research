@@ -1,0 +1,595 @@
+{
+  "n": 49,
+  "base_model": "Unmodified production defaults, not the October 22 cloud/moon candidate",
+  "equation": "L_total = L_production + A*csc(alt)*exp(k*(cos(solar_separation)-1)); SQM=12.59-2.5*log10(L_total)",
+  "luminance_unit": "cd/m^2 (same photometric conversion as production, L=683*I)",
+  "params": {
+    "log10_amplitude": -1.2264546552883748,
+    "concentration": 1.2085459847741244
+  },
+  "amplitude_cd_m2": 0.059367033010857245,
+  "bounds": [
+    [
+      -6.0,
+      1.0
+    ],
+    [
+      0.0,
+      8.0
+    ]
+  ],
+  "fit": {
+    "n": 49,
+    "mse": 0.21622257580032972,
+    "rmse": 0.4649973933263817,
+    "mae": 0.3890569254161719,
+    "bias": -0.026526930879164794
+  },
+  "angular_holdout": {
+    "n": 49,
+    "mse": 0.3049932985334454,
+    "rmse": 0.5522619836032944,
+    "mae": 0.46615768703749916,
+    "bias": -0.036465623584041436
+  },
+  "folds": [
+    {
+      "held_out_group": 0,
+      "params": {
+        "log10_amplitude": -1.2603193424454016,
+        "concentration": 1.0391966464913913
+      },
+      "train_ids": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "test_ids": [
+        1,
+        2,
+        3,
+        4,
+        25,
+        26,
+        27,
+        28
+      ],
+      "test": {
+        "n": 8,
+        "mse": 0.5683709311055337,
+        "rmse": 0.7539037943302406,
+        "mae": 0.589760787438514,
+        "bias": -0.589760787438514
+      }
+    },
+    {
+      "held_out_group": 1,
+      "params": {
+        "log10_amplitude": -1.2458503704484873,
+        "concentration": 1.1561935814757833
+      },
+      "train_ids": [
+        1,
+        2,
+        3,
+        4,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "test_ids": [
+        5,
+        6,
+        7,
+        8,
+        29,
+        30,
+        31,
+        32
+      ],
+      "test": {
+        "n": 8,
+        "mse": 0.10907866471933025,
+        "rmse": 0.33027059317978985,
+        "mae": 0.3110896830610934,
+        "bias": -0.05328166181464544
+      }
+    },
+    {
+      "held_out_group": 2,
+      "params": {
+        "log10_amplitude": -1.201598600169229,
+        "concentration": 1.367730171554146
+      },
+      "train_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "test_ids": [
+        9,
+        10,
+        11,
+        12,
+        33,
+        34,
+        35,
+        36
+      ],
+      "test": {
+        "n": 8,
+        "mse": 0.2801403411546198,
+        "rmse": 0.5292828555268154,
+        "mae": 0.49122238542019225,
+        "bias": 0.49122238542019225
+      }
+    },
+    {
+      "held_out_group": 3,
+      "params": {
+        "log10_amplitude": -1.340682487168678,
+        "concentration": 1.0892302119206703
+      },
+      "train_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "test_ids": [
+        13,
+        14,
+        15,
+        16,
+        37,
+        38,
+        39,
+        40
+      ],
+      "test": {
+        "n": 8,
+        "mse": 0.39642691111755546,
+        "rmse": 0.6296244206807384,
+        "mae": 0.6265094627223198,
+        "bias": 0.6265094627223198
+      }
+    },
+    {
+      "held_out_group": 4,
+      "params": {
+        "log10_amplitude": -1.1647537155662266,
+        "concentration": 1.3178198425529448
+      },
+      "train_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        45,
+        46,
+        47,
+        48,
+        49
+      ],
+      "test_ids": [
+        17,
+        18,
+        19,
+        20,
+        41,
+        42,
+        43,
+        44
+      ],
+      "test": {
+        "n": 8,
+        "mse": 0.08278461859317912,
+        "rmse": 0.2877231631154835,
+        "mae": 0.21892778266831558,
+        "bias": -0.13917083547982645
+      }
+    },
+    {
+      "held_out_group": 5,
+      "params": {
+        "log10_amplitude": -1.1245557714533576,
+        "concentration": 1.3250648674531242
+      },
+      "train_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        49
+      ],
+      "test_ids": [
+        21,
+        22,
+        23,
+        24,
+        45,
+        46,
+        47,
+        48
+      ],
+      "test": {
+        "n": 8,
+        "mse": 0.42435931967676777,
+        "rmse": 0.6514286758170597,
+        "mae": 0.5882881198280137,
+        "bias": -0.5882881198280137
+      }
+    },
+    {
+      "held_out_group": 6,
+      "params": {
+        "log10_amplitude": -1.227111349366912,
+        "concentration": 1.2126965931248406
+      },
+      "train_ids": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48
+      ],
+      "test_ids": [
+        49
+      ],
+      "test": {
+        "n": 1,
+        "mse": 0.05538533720293741,
+        "rmse": 0.23534089572986971,
+        "mae": 0.23534089572986971,
+        "bias": 0.23534089572986971
+      }
+    }
+  ],
+  "cross_altitude": [
+    {
+      "train_altitude": 30,
+      "test_altitude": 60,
+      "params": {
+        "log10_amplitude": -1.2389198864823578,
+        "concentration": 1.4424592913722813
+      },
+      "test": {
+        "n": 24,
+        "mse": 0.2509480265003324,
+        "rmse": 0.5009471294461446,
+        "mae": 0.4151156901408915,
+        "bias": 0.40320449519389506
+      }
+    },
+    {
+      "train_altitude": 60,
+      "test_altitude": 30,
+      "params": {
+        "log10_amplitude": -1.2583496711013682,
+        "concentration": 0.9179788582866301
+      },
+      "test": {
+        "n": 24,
+        "mse": 0.47212430973982283,
+        "rmse": 0.68711302544765,
+        "mae": 0.5755032124388043,
+        "bias": -0.4373036158169687
+      }
+    }
+  ],
+  "fixed_amplitude_endpoint_sensitivity": {
+    "interval_start": {
+      "metrics": {
+        "n": 49,
+        "mse": 0.21313235636738975,
+        "rmse": 0.46166260013931143,
+        "mae": 0.3853828546265344,
+        "bias": -0.029674094733082235
+      },
+      "maximum_prediction_change": 0.011631729270408897
+    },
+    "interval_end": {
+      "metrics": {
+        "n": 49,
+        "mse": 0.21947117910621616,
+        "rmse": 0.4684775118468507,
+        "mae": 0.39277143706623296,
+        "bias": -0.023463343626197758
+      },
+      "maximum_prediction_change": 0.011750579277251205
+    }
+  },
+  "baseline": {
+    "n": 49,
+    "mse": 2.972916613517268,
+    "rmse": 1.7242147817245008,
+    "mae": 1.5290142105996933,
+    "bias": 1.5160991904386347
+  },
+  "previous_frozen_candidate": {
+    "n": 49,
+    "mse": 1.5203200161456618,
+    "rmse": 1.2330125774482845,
+    "mae": 1.0877416621060554,
+    "bias": 0.7196330444099943
+  },
+  "solar_context": {
+    "altitude": -9.76493793475069,
+    "azimuth": 261.39068888850994,
+    "regime": "nautical_twilight",
+    "source": "Astronomy Engine; topocentric geometric altitude, no refraction",
+    "definition": "https://aa.usno.navy.mil/faq/RST_defs"
+  },
+  "source_evaluation_sha256": "1a67dcc9f11cd4f28a49b30759558d26272e8f534ea871ab0392f88f062719dc",
+  "source_predictions_sha256": "57ffbdfa4fd01bed50e7b33e21a551a22ce4a5c50a5791a39bdd68e9257898da",
+  "model_defaults_changed": false,
+  "status": "exploratory_local_twilight_candidate_not_adopted",
+  "limitations": [
+    "Only two angular shape parameters; this is an empirical angular probe, not radiative transfer.",
+    "Designed after inspecting this new observation set; angular CV is exploratory, not an independent new-night test.",
+    "No fitted or validated amplitude law versus solar altitude, cloud, AOD or wavelength.",
+    "Only one 6-minute twilight interval with unknown per-direction times; sky evolution and scan order are confounded.",
+    "Endpoint sensitivity holds amplitude fixed and cannot estimate actual twilight brightness evolution.",
+    "Bright artificial sources or local direct light can mimic directional twilight; no causal attribution established.",
+    "No application to other times, dates, locations or production defaults has been validated.",
+    "Instrument angle response and obstruction status have the limitations recorded in the source evaluation."
+  ]
+}

@@ -2,8 +2,8 @@
   "schema_version": 1,
   "results_summary": "RESULTS.md",
   "retention_policy": "Archive every submitted dataset and analysis, including unchanged or deferred results; preserve earlier runs and graphs.",
-  "latest_dataset": "2026-10-22_2123-2218_KST_jeju",
-  "latest_run": "002_scattering_calibration",
+  "latest_dataset": "2026-10-26_1829-1835_KST_tamna_playground",
+  "latest_run": "002_local_twilight_probe",
   "accepted_model_run": null,
   "datasets": [
     {
@@ -30,9 +30,33 @@
       "active_for_fitting": true,
       "status": "research_candidate_not_applied",
       "instrument": "SQM-L"
+    },
+    {
+      "id": "2026-10-26_1829-1835_KST_tamna_playground",
+      "raw_observations": 49,
+      "included_observations": 49,
+      "runs": [
+        "001_frozen_candidate_evaluation",
+        "002_local_twilight_probe"
+      ],
+      "instrument": "SQM-L",
+      "site": "탐라교육원 운동장 중앙 (지도 근사)",
+      "coordinates": {
+        "latitude": 33.42785,
+        "longitude": 126.53208,
+        "surveyed": false
+      },
+      "role": "twilight_diagnostic_and_exploratory_local_fit",
+      "active_for_fitting": false,
+      "active_for_nocturnal_fitting": false,
+      "used_for_local_twilight_probe": true,
+      "status": "exploratory_local_twilight_candidate_not_adopted"
     }
   ],
   "active_training_datasets": [
     "2026-10-22_2123-2218_KST_jeju"
+  ],
+  "exploratory_datasets": [
+    "2026-10-26_1829-1835_KST_tamna_playground"
   ]
 }
