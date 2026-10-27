@@ -1,0 +1,25 @@
+{
+  "black_marble": {
+    "filename": "VJ146A4.A2025001.h30v05.002.2026072180152.h5",
+    "exists": true,
+    "sha256": "564dab8277384ac4f14b37ef9940f726084584b082c42e3b71036bfe2adb5e15",
+    "bytes": 3551132
+  },
+  "dem": {
+    "filename": "Copernicus_DSM_COG_30_N33_00_E126_00_DEM.tif",
+    "exists": true,
+    "sha256": "1c3f6d441d95c1f5219ce90f4db53bd442d0040bb0caa0cccdcf1ca6a58866f0",
+    "bytes": 1099040,
+    "crs": "EPSG:4326",
+    "bounds": [
+      125.99958333333333,
+      33.000416666666666,
+      126.99958333333333,
+      34.000416666666666
+    ],
+    "shape": [
+      1200,
+      1200
+    ]
+  }
+}

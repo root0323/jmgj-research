@@ -2,8 +2,8 @@
   "schema_version": 1,
   "results_summary": "RESULTS.md",
   "retention_policy": "Archive every submitted dataset and analysis, including unchanged or deferred results; preserve earlier runs and graphs.",
-  "latest_dataset": "2026-10-26_1829-1835_KST_tamna_playground",
-  "latest_run": "002_local_twilight_probe",
+  "latest_dataset": "2026-10-27_2108-2113_KST_jeju_science_high",
+  "latest_run": "002_scattering_calibration",
   "accepted_model_run": null,
   "datasets": [
     {
@@ -51,10 +51,37 @@
       "active_for_nocturnal_fitting": false,
       "used_for_local_twilight_probe": true,
       "status": "exploratory_local_twilight_candidate_not_adopted"
+    },
+    {
+      "id": "2026-10-27_2108-2113_KST_jeju_science_high",
+      "raw_observations": 49,
+      "valid_sqm_observations": 33,
+      "included_observations": 33,
+      "missing_observations": 16,
+      "runs": [
+        "001_frozen_candidate_evaluation",
+        "002_scattering_calibration"
+      ],
+      "active_for_fitting": true,
+      "status": "diagnostic_candidate_not_applied",
+      "instrument": "SQM-L",
+      "site": "제주과학고등학교 건물 북쪽 사용자 지도 핀",
+      "coordinates": {
+        "latitude": 33.426633,
+        "longitude": 126.530639,
+        "surveyed": false
+      },
+      "observation_interval_kst": [
+        "2026-10-27T21:08+09:00",
+        "2026-10-27T21:13+09:00"
+      ],
+      "api_ready": true,
+      "api_received_after_observation": true
     }
   ],
   "active_training_datasets": [
-    "2026-10-22_2123-2218_KST_jeju"
+    "2026-10-22_2123-2218_KST_jeju",
+    "2026-10-27_2108-2113_KST_jeju_science_high"
   ],
   "exploratory_datasets": [
     "2026-10-26_1829-1835_KST_tamna_playground"

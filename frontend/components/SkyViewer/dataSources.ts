@@ -82,6 +82,8 @@ export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
       { name: "US Naval Observatory", url: "https://aa.usno.navy.mil/faq/RST_defs", description: "실측 연구에서 태양 고도로 시민·항해·천문 황혼과 천문학적 밤을 구분하는 정의 참고" },
       { name: "Astronomy Engine · Don Cross", url: "https://github.com/cosinekitty/astronomy", description: "보존된 실측 연구의 태양·달 좌표와 달 위상 계산. 앱 화면의 Stellarium 엔진과 별도로 연구 재현에 사용", notice: { label: "MIT License", url: "https://github.com/cosinekitty/astronomy/blob/master/LICENSE" } },
       { name: "탐라교육원", url: "https://www.tamna.or.kr/hp/hm/htmlConvert.do?menuId=1000001032", description: "2026년 10월 실측 연구에서 교육원 주소와 관측 운동장 위치 확인" },
+      { name: "Unihedron · SQM-L", url: "https://www.unihedron.com/projects/sqm-l/", description: "고정 실측 장비 SQM-L의 각도 응답 참고. 연구에서는 반치폭 약 10° 안의 달 접근을 진단하며, 실제 차폐·직접 유입 여부는 별도 확인" },
+      { name: "카카오 지도 · 연구 좌표 변환", url: "https://devtalk.kakao.com/t/topic/38086", description: "사용자가 지도에 표시한 관측 핀의 공유 좌표를 WCONGNAMUL·WTM에서 위도·경도로 변환하는 근거. 지도 핀은 현장 GPS 측량값이 아님" },
     ],
   },
   {

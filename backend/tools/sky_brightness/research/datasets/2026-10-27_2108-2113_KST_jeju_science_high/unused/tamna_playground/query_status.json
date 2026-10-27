@@ -1,0 +1,8 @@
+{
+  "used_for_evaluation": false,
+  "reason": "Requested before the user corrected the observation site to the map pin. Metadata coordinates are the old playground center.",
+  "latitude": 33.42785,
+  "longitude": 126.53208,
+  "received_at": "2026-10-27T12:40:31.382818+00:00",
+  "replacement": "../../raw/weather_cache_33.426633_126.530639_2026-10-27.json"
+}

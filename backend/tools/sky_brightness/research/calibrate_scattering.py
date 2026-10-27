@@ -154,7 +154,7 @@ def main():
               'geometry':{'max_pixels':args.max_pixels,'radius_km':30},
               'direct_pipeline_prediction_max_delta':float(np.max(np.abs(np.array(direct)-predictions[winner]))),
               'limitations':['Single date/site; no independent-night validation.',
-                             'Altitude and measurement time are confounded.',
+                             'Individual reading times are unknown; sky changes can affect angular and altitude comparisons.',
                              'Three-hour weather cannot resolve cloud changes within the observation intervals.',
                              'No azimuth rotation, obstruction removal or direction-specific fitted correction was used.',
                              'New cloud/moon gain exists only in research; production calculator is unchanged.']}

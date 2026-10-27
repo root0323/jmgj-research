@@ -1,0 +1,269 @@
+{
+  "n": 33,
+  "evaluation": "Frozen parameters; none of this evaluation dataset is used for fitting.",
+  "metrics": {
+    "representative": {
+      "baseline": {
+        "n": 33,
+        "mse": 1.8677925506182602,
+        "rmse": 1.3666720713537173,
+        "mae": 1.0651879102251902,
+        "bias": 0.756924507315482
+      },
+      "frozen_candidate": {
+        "n": 33,
+        "mse": 1.889655233610733,
+        "rmse": 1.374647312444444,
+        "mae": 1.1600614428067864,
+        "bias": -0.2794443367224076
+      }
+    },
+    "interval_start": {
+      "baseline": {
+        "n": 33,
+        "mse": 1.8948488171567068,
+        "rmse": 1.3765350766169044,
+        "mae": 1.0778978890916509,
+        "bias": 0.7671398756652964
+      },
+      "frozen_candidate": {
+        "n": 33,
+        "mse": 1.9007998414662826,
+        "rmse": 1.378694977675005,
+        "mae": 1.1630519175901177,
+        "bias": -0.2914082985504572
+      }
+    },
+    "interval_end": {
+      "baseline": {
+        "n": 33,
+        "mse": 1.8341746049779728,
+        "rmse": 1.3543170252854289,
+        "mae": 1.0486389684732775,
+        "bias": 0.744251029744925
+      },
+      "frozen_candidate": {
+        "n": 33,
+        "mse": 1.8729221787589485,
+        "rmse": 1.3685474704075662,
+        "mae": 1.1553805136158375,
+        "bias": -0.2611157660536717
+      }
+    }
+  },
+  "frozen_params": {
+    "g": 0.5,
+    "art_scale": 0.05,
+    "moon_cloud_gain": 118.24386924943558
+  },
+  "environments": {
+    "representative": {
+      "weather": {
+        "aod": 0.10055555555555556,
+        "cloud_fraction": 0.6694444444444444,
+        "cloud_base_h": 19.209612564574975
+      },
+      "details": {
+        "aod550": 0.10055555555555556,
+        "totalcloudcover": 66.94444444444444,
+        "convectivecloudbase_pressure": 51.22222222222222,
+        "cloud_base_h_km": 19.209612564574975,
+        "cloud_base_fallback": false,
+        "interpolation": {
+          "p2": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-27 21:00",
+            "right": "2026-10-28 00:00",
+            "fraction": 0.05555555555555555,
+            "utc_offset_hours": 9.0
+          },
+          "p3": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-27 21:00",
+            "right": "2026-10-28 00:00",
+            "fraction": 0.05555555555555555,
+            "utc_offset_hours": 9.0
+          },
+          "p4": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-27 21:00",
+            "right": "2026-10-28 00:00",
+            "fraction": 0.05555555555555555,
+            "utc_offset_hours": 9.0
+          }
+        }
+      },
+      "moon": {
+        "altitude": 33.24423945519616,
+        "azimuth": 82.97369300893544,
+        "phase_angle": 18.65081718214594,
+        "illumination_fraction": 0.9737425718004823,
+        "source": "Astronomy Engine; topocentric apparent horizon, geocentric illumination"
+      },
+      "sun": {
+        "altitude": -42.71543157337632,
+        "azimuth": 284.22977610737377,
+        "regime": "astronomical_night",
+        "source": "Astronomy Engine; topocentric geometric altitude, no refraction",
+        "definition": "https://aa.usno.navy.mil/faq/RST_defs"
+      },
+      "moon_shield_deg": 2.561201933008502
+    },
+    "interval_start": {
+      "weather": {
+        "aod": 0.10044444444444445,
+        "cloud_fraction": 0.6755555555555556,
+        "cloud_base_h": 20.25397162311533
+      },
+      "details": {
+        "aod550": 0.10044444444444445,
+        "totalcloudcover": 67.55555555555556,
+        "convectivecloudbase_pressure": 40.97777777777778,
+        "cloud_base_h_km": 20.25397162311533,
+        "cloud_base_fallback": false,
+        "interpolation": {
+          "p2": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-27 21:00",
+            "right": "2026-10-28 00:00",
+            "fraction": 0.044444444444444446,
+            "utc_offset_hours": 9.0
+          },
+          "p3": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-27 21:00",
+            "right": "2026-10-28 00:00",
+            "fraction": 0.044444444444444446,
+            "utc_offset_hours": 9.0
+          },
+          "p4": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-27 21:00",
+            "right": "2026-10-28 00:00",
+            "fraction": 0.044444444444444446,
+            "utc_offset_hours": 9.0
+          }
+        }
+      },
+      "moon": {
+        "altitude": 32.84075989508239,
+        "azimuth": 82.74861411262584,
+        "phase_angle": 18.63256233931467,
+        "illumination_fraction": 0.973793492997675,
+        "source": "Astronomy Engine; topocentric apparent horizon, geocentric illumination"
+      },
+      "sun": {
+        "altitude": -42.31033772228048,
+        "azimuth": 283.8620047250213,
+        "regime": "astronomical_night",
+        "source": "Astronomy Engine; topocentric geometric altitude, no refraction",
+        "definition": "https://aa.usno.navy.mil/faq/RST_defs"
+      },
+      "moon_shield_deg": 2.561201933008502
+    },
+    "interval_end": {
+      "weather": {
+        "aod": 0.10072222222222223,
+        "cloud_fraction": 0.6602777777777777,
+        "cloud_base_h": 17.923601153313125
+      },
+      "details": {
+        "aod550": 0.10072222222222223,
+        "totalcloudcover": 66.02777777777777,
+        "convectivecloudbase_pressure": 66.58888888888889,
+        "cloud_base_h_km": 17.923601153313125,
+        "cloud_base_fallback": false,
+        "interpolation": {
+          "p2": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-27 21:00",
+            "right": "2026-10-28 00:00",
+            "fraction": 0.07222222222222222,
+            "utc_offset_hours": 9.0
+          },
+          "p3": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-27 21:00",
+            "right": "2026-10-28 00:00",
+            "fraction": 0.07222222222222222,
+            "utc_offset_hours": 9.0
+          },
+          "p4": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-27 21:00",
+            "right": "2026-10-28 00:00",
+            "fraction": 0.07222222222222222,
+            "utc_offset_hours": 9.0
+          }
+        }
+      },
+      "moon": {
+        "altitude": 33.849900065394685,
+        "azimuth": 83.31231257561521,
+        "phase_angle": 18.678201998561267,
+        "illumination_fraction": 0.9736660927052339,
+        "source": "Astronomy Engine; topocentric apparent horizon, geocentric illumination"
+      },
+      "sun": {
+        "altitude": -43.321825591724036,
+        "azimuth": 284.7884960197329,
+        "regime": "astronomical_night",
+        "source": "Astronomy Engine; topocentric geometric altitude, no refraction",
+        "definition": "https://aa.usno.navy.mil/faq/RST_defs"
+      },
+      "moon_shield_deg": 2.561201933008502
+    }
+  },
+  "observer_height_m": 495.853271484375,
+  "geometry": {
+    "max_pixels": 1000,
+    "radius_km": 30,
+    "retained_pixels": 965
+  },
+  "hashes": {
+    "observations": "ef16f2e2d1517ad5f71af2ac92fd25dd24e74e989ab35a7b06c920fb5d8342d9",
+    "cache": "3186a700177a78dbebf4566770ac3f311cf773c9243a16772570ebd3d86d02f0",
+    "params": "1122e50cc5c02890794165049e6e67f99577072894be4d90006741c0731feba0",
+    "h5": "564dab8277384ac4f14b37ef9940f726084584b082c42e3b71036bfe2adb5e15",
+    "dem": "1c3f6d441d95c1f5219ce90f4db53bd442d0040bb0caa0cccdcf1ca6a58866f0"
+  },
+  "status": "frozen_independent_evaluation_not_adopted",
+  "outside_dark_sky_regime": false,
+  "model_defaults_changed": false,
+  "limitations": [
+    "Coordinates are converted from the selected map pin; physical instrument position is not surveyed GPS.",
+    "Sixteen missing dash entries are retained raw but excluded; their causes are unspecified.",
+    "33 valid values include only 11 readings at altitude 30, 21 at 60, and one zenith reading.",
+    "Times use the interval midpoint floored to the minute, not exact per-direction timestamps.",
+    "SQM-L angular response, direct Moon/light, and actual obstruction are not integrated in the model.",
+    "Three-hour weather is post-observation model data and cannot resolve the five-minute scan.",
+    "The solar regime is astronomical night; the October 26 local twilight probe is not applied."
+  ]
+}

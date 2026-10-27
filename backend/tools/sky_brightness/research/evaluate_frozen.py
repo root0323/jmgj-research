@@ -91,14 +91,17 @@ def evaluate(rows, cache, geometry, dem, height, params, time):
                                       'moon_shield_deg':float(shield)}
 
 
-def comparison_plot(rows, predictions, output, title='Independent date/site diagnostic: frozen coefficients; twilight is not modeled'):
+def comparison_plot(rows, predictions, output, title='Independent date/site diagnostic: frozen coefficients; twilight is not modeled', expected_azimuth_step=15):
     fig, axes = plt.subplots(1,3,figsize=(15,4.4),gridspec_kw={'width_ratios':[1,1,.55]})
     for ax, altitude in zip(axes[:2],(30,60)):
         ids = [i for i,row in enumerate(rows) if row['altitude']==altitude]
         az = [rows[i]['az'] for i in ids]
-        ax.plot(az,[rows[i]['actual_mag'] for i in ids],'ko-',label='SQM-L observed',ms=3)
+        # Keep missing scan directions visibly empty instead of joining across them.
+        gaps = np.flatnonzero(np.diff(az)>expected_azimuth_step+1e-8)+1
+        plot_az = np.insert(np.asarray(az,dtype=float),gaps,np.nan)
+        ax.plot(plot_az,np.insert(np.array([rows[i]['actual_mag'] for i in ids]),gaps,np.nan),'ko-',label='SQM-L observed',ms=3)
         for label, values in predictions.items():
-            ax.plot(az,values[ids],'.-',label=label.replace('_',' '),ms=3)
+            ax.plot(plot_az,np.insert(values[ids],gaps,np.nan),'.-',label=label.replace('_',' '),ms=3)
         ax.set(title=f'Altitude {altitude} deg',xlabel='Azimuth (deg, N=0, E=90)',ylabel='SQM (mag/arcsec^2)')
         ax.set_xticks(range(0,361,60)); ax.grid(alpha=.25)
     ids = [i for i,row in enumerate(rows) if row['altitude']==90]
@@ -164,8 +167,10 @@ def main():
                           for assignment,models in all_predictions.items() for name,values in models.items()}}
                   for i,row in enumerate(rows)]).to_csv(args.output/'comparison.csv',index=False)
     pd.DataFrame(all_components).to_csv(args.output/'components.csv',index=False)
-    comparison_plot(rows,predictions,args.output/'observed_vs_model.png')
     outside_dark = any(context['sun']['regime']!='astronomical_night' for context in environment.values())
+    comparison_plot(rows,predictions,args.output/'observed_vs_model.png',
+                    title='Independent date/site diagnostic: frozen coefficients'+
+                    ('; twilight is not modeled' if outside_dark else '; astronomical night'))
     report = {'n':len(rows),'evaluation':'Frozen parameters; none of this evaluation dataset is used for fitting.',
               'metrics':metrics,'frozen_params':params,'environments':environment,'observer_height_m':height,
               'geometry':{'max_pixels':args.max_pixels,'radius_km':30,'retained_pixels':len(geometry)},
@@ -175,13 +180,13 @@ def main():
               'outside_dark_sky_regime':outside_dark,
               'model_defaults_changed':False,
               'limitations':['Production model and frozen candidate contain no solar twilight light.',
-                             'Coordinates approximate the map sports-ground center, not a GPS measurement.',
+                             'Coordinate provenance and accuracy must be read from this dataset metadata; map points are not surveyed GPS.',
                              'Individual reading times are unknown; all use the interval midpoint.',
                              'Interval endpoints test astronomy/weather sensitivity, not unmodeled twilight evolution.',
                              'Obstruction status was not explicitly confirmed for this new dataset; no directions removed.',
                              'SQM-L angular response and direct-light contamination are not integrated.',
                              'Weather is interpolated from 3h model data, not measured atmosphere.',
-                             'This is a new date and a nearby different site, and solar regime differs from training.']}
+                             'Compare the reported solar regime and site against training conditions before interpreting transfer performance.']}
     (args.output/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2,allow_nan=False)+'\n',encoding='utf-8',newline='\n')
     print(json.dumps({'metrics':metrics,'environments':environment},ensure_ascii=False),flush=True)
 

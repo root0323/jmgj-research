@@ -1,0 +1,42 @@
+{
+  "oct22_candidate_frozen_on_oct27": {
+    "n": 33,
+    "mse": 1.889655233610733,
+    "rmse": 1.374647312444444,
+    "mae": 1.1600614428067864,
+    "bias": -0.2794443367224076
+  },
+  "oct27_selected_params_frozen_on_oct22": {
+    "params": {
+      "g": 0.9,
+      "art_scale": 1.5,
+      "ms_a": 1.436802837480366
+    },
+    "metrics": {
+      "n": 49,
+      "mse": 2.032018002592291,
+      "rmse": 1.4254886890439682,
+      "mae": 1.1646366242584192,
+      "bias": 0.8119918394567767
+    }
+  },
+  "oct22_baseline": {
+    "n": 49,
+    "mse": 3.684607291713628,
+    "rmse": 1.919533092112149,
+    "mae": 1.5896450842369416,
+    "bias": 1.541795762833765
+  },
+  "oct22_own_candidate_fit": {
+    "n": 49,
+    "mse": 0.35074235065803894,
+    "rmse": 0.5922350467998655,
+    "mae": 0.47282004490894736,
+    "bias": -0.0009310759855648758
+  },
+  "reverse_evaluation_source_sha256": {
+    "observations": "78cc3fd9b89eb6cd0abdacfc8829e1f32000c2847e4eb0be146b2d82a6ba7972",
+    "components": "e8a7d3703593ec27a3febe257daade71ce12ef79ebc871e5f182ea6c0c7d1f3d"
+  },
+  "limitations": "Reverse-date diagnostic is not an untouched model-selection test: candidate families were originally studied using October 22. No October 26 twilight data are mixed in."
+}
