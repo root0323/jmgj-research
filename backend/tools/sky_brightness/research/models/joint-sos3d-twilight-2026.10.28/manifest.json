@@ -1,0 +1,26 @@
+{
+  "model_version": "joint-sos3d-twilight-2026.10.28",
+  "source_sha256": {
+    "joint_model.py": "05e126938ecf9ea4d08f802320e5f83e22ef562e6cb17af63bc4be42684ded26",
+    "prepare_joint_basis.py": "a4ac21ddd0e3962050074a2cac12f82f987b572558ca6f329929f6daf4e4cdf8",
+    "joint_three_dates.py": "6d1562420e5759aef5c07fd233507b51336114754dd96253a26a460c55312cdc",
+    "verify_joint_inference.py": "8236dc9b55e1344327f0e7acd58612a5fc9838413a2a028c387e5180bf48aae0",
+    "archive_joint.py": "8e622604aab02f4313cadf3d91f5db3a9e3f61553f00bb12974d43a3c00b6649",
+    "calibrate_three_hour.py": "079ccb52fbaf71e6eca644172c41fad913d1b67735d8dbef0e1f2b5a4e98a7d3",
+    "evaluate_frozen.py": "f7fed2e1b7d8228486eb7278317234a403a716080fa1a49d8525fdcd1708e4cf",
+    "calculator.py": "21cfacafdc78b49f858259e9201947337d978b1131f6d96b040af9245be8ed0f",
+    "config.py": "a0a9630ae653eacfabe5d3cfe26430846af341fcd85342e64d24793ea2be9814",
+    "data_loader.py": "53068838a0b00be625171f06d57dd2dcd970bd9b80bf593f639f653741b58e23",
+    "modern_sky.py": "94a58199d4a99d1846976983a22e405c609aabefa1a789ed073b86865d12cc7f",
+    "radiative_transfer.py": "e9aac29bc1a63a028d48778dd2e5dd6e48fbd742867dc7c229d043a0e6a53200"
+  },
+  "source_parent_commit": "48ecacbe0b54331ee114b087a086bf261aca593b",
+  "parameters": {
+    "art_scale": 0.19245974551701975,
+    "twilight_gain": 1.5970586375763038,
+    "twilight_concentration": 1.2644184970449495,
+    "cloud_optical_depth": 10.0
+  },
+  "application_adopted": false,
+  "note": "Research source snapshot. Full repository and frozen input adapters are needed for reproduction."
+}

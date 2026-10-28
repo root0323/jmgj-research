@@ -3,7 +3,7 @@
   "results_summary": "RESULTS.md",
   "retention_policy": "Archive every submitted dataset and analysis, including unchanged or deferred results; preserve earlier runs and graphs.",
   "latest_dataset": "2026-10-27_2108-2113_KST_jeju_science_high",
-  "latest_run": "003_transport_physics",
+  "latest_run": "004_joint_three_dates",
   "accepted_model_run": null,
   "datasets": [
     {
@@ -26,11 +26,13 @@
       "runs": [
         "001_three_hour_calibration",
         "002_scattering_calibration",
-        "003_transport_physics"
+        "003_transport_physics",
+        "004_joint_three_dates"
       ],
       "active_for_fitting": true,
-      "status": "physics_revision_retrospective_evaluation",
-      "instrument": "SQM-L"
+      "status": "joint_three_date_candidate_calibrated_not_applied",
+      "instrument": "SQM-L",
+      "active_for_joint_twilight_night_fitting": true
     },
     {
       "id": "2026-10-26_1829-1835_KST_tamna_playground",
@@ -38,7 +40,8 @@
       "included_observations": 49,
       "runs": [
         "001_frozen_candidate_evaluation",
-        "002_local_twilight_probe"
+        "002_local_twilight_probe",
+        "003_joint_three_dates"
       ],
       "instrument": "SQM-L",
       "site": "탐라교육원 운동장 중앙 (지도 근사)",
@@ -48,10 +51,11 @@
         "surveyed": false
       },
       "role": "twilight_diagnostic_and_exploratory_local_fit",
-      "active_for_fitting": false,
+      "active_for_fitting": true,
       "active_for_nocturnal_fitting": false,
       "used_for_local_twilight_probe": true,
-      "status": "exploratory_local_twilight_candidate_not_adopted"
+      "status": "joint_three_date_candidate_calibrated_not_applied",
+      "active_for_joint_twilight_night_fitting": true
     },
     {
       "id": "2026-10-27_2108-2113_KST_jeju_science_high",
@@ -62,10 +66,11 @@
       "runs": [
         "001_frozen_candidate_evaluation",
         "002_scattering_calibration",
-        "003_transport_physics"
+        "003_transport_physics",
+        "004_joint_three_dates"
       ],
       "active_for_fitting": true,
-      "status": "physics_revision_retrospective_evaluation",
+      "status": "joint_three_date_candidate_calibrated_not_applied",
       "instrument": "SQM-L",
       "site": "제주과학고등학교 건물 북쪽 사용자 지도 핀",
       "coordinates": {
@@ -78,17 +83,19 @@
         "2026-10-27T21:13+09:00"
       ],
       "api_ready": true,
-      "api_received_after_observation": true
+      "api_received_after_observation": true,
+      "active_for_joint_twilight_night_fitting": true
     }
   ],
   "active_training_datasets": [
     "2026-10-22_2123-2218_KST_jeju",
+    "2026-10-26_1829-1835_KST_tamna_playground",
     "2026-10-27_2108-2113_KST_jeju_science_high"
   ],
   "exploratory_datasets": [
     "2026-10-26_1829-1835_KST_tamna_playground"
   ],
-  "latest_model_revision": "revisions/2026-10-28_transport_physics",
+  "latest_model_revision": "revisions/2026-10-28_joint_three_dates",
   "runtime_model": {
     "physics_model": "legacy",
     "release": "0.9.3",
@@ -105,11 +112,31 @@
     "requested_on": "2026-10-28"
   },
   "research_candidate_model": {
-    "physics_model": "sos3d",
-    "version": "sos3d-2026.10.28",
-    "revision": "revisions/2026-10-28_transport_physics",
+    "version": "joint-sos3d-twilight-2026.10.28",
+    "physics_model": "sos3d_with_empirical_twilight_and_expected_sqm",
+    "revision": "revisions/2026-10-28_joint_three_dates",
     "adopted_by_app": false,
-    "validation": "retrospective; 2026-10-27 SQM-L error increased",
-    "adoption_status": "revisions/2026-10-28_transport_physics/ADOPTION_STATUS.json"
-  }
+    "coefficient_fit_performed": true,
+    "fitted_datasets": [
+      "2026-10-22_2123-2218_KST_jeju",
+      "2026-10-26_1829-1835_KST_tamna_playground",
+      "2026-10-27_2108-2113_KST_jeju_science_high"
+    ],
+    "n": 131,
+    "parameters": "models/joint-sos3d-twilight-2026.10.28/candidate_params.json",
+    "validation": "Retrospective angular/date-held-out diagnostics; the held-out twilight date uses a declared prior."
+  },
+  "research_model_history": [
+    {
+      "physics_model": "sos3d",
+      "version": "sos3d-2026.10.28",
+      "revision": "revisions/2026-10-28_transport_physics",
+      "adopted_by_app": false,
+      "validation": "retrospective; 2026-10-27 SQM-L error increased",
+      "adoption_status": "revisions/2026-10-28_transport_physics/ADOPTION_STATUS.json"
+    }
+  ],
+  "twilight_training_datasets": [
+    "2026-10-26_1829-1835_KST_tamna_playground"
+  ]
 }

@@ -1,0 +1,70 @@
+{
+  "parameters_fixed_no_refit": true,
+  "scenarios": {
+    "start": {
+      "2026-10-22_2123-2218_KST_jeju": {
+        "metrics": {
+          "n": 49,
+          "mse": 0.630657008861474,
+          "rmse": 0.7941391621507367,
+          "mae": 0.5615812667586103,
+          "bias": 0.358223060408165
+        },
+        "maximum_absolute_prediction_change": 0.05136130486734203
+      },
+      "2026-10-26_1829-1835_KST_tamna_playground": {
+        "metrics": {
+          "n": 49,
+          "mse": 0.47644365947568085,
+          "rmse": 0.690248983683193,
+          "mae": 0.5314637305489063,
+          "bias": -0.5119113336904135
+        },
+        "maximum_absolute_prediction_change": 0.6050689866650689
+      },
+      "2026-10-27_2108-2113_KST_jeju_science_high": {
+        "metrics": {
+          "n": 33,
+          "mse": 1.5069234519525025,
+          "rmse": 1.2275681048123166,
+          "mae": 0.9702307103394585,
+          "bias": 0.07078976617671316
+        },
+        "maximum_absolute_prediction_change": 0.03717623197173481
+      }
+    },
+    "end": {
+      "2026-10-22_2123-2218_KST_jeju": {
+        "metrics": {
+          "n": 49,
+          "mse": 0.6355564316318991,
+          "rmse": 0.797217932332119,
+          "mae": 0.5661264242857703,
+          "bias": 0.3616901330982739
+        },
+        "maximum_absolute_prediction_change": 0.05089077011986731
+      },
+      "2026-10-26_1829-1835_KST_tamna_playground": {
+        "metrics": {
+          "n": 49,
+          "mse": 0.4102530724140573,
+          "rmse": 0.6405100096126971,
+          "mae": 0.5689214495930077,
+          "bias": 0.37596248787456266
+        },
+        "maximum_absolute_prediction_change": 0.5508481750036118
+      },
+      "2026-10-27_2108-2113_KST_jeju_science_high": {
+        "metrics": {
+          "n": 33,
+          "mse": 1.5488918612472526,
+          "rmse": 1.244544840994993,
+          "mae": 0.9843424916420135,
+          "bias": 0.05894537178083304
+        },
+        "maximum_absolute_prediction_change": 0.057898445241317376
+      }
+    }
+  },
+  "interpretation": "All observations assigned to their own supplied interval start/end. These are sensitivity scenarios, not recovered individual scan times or confidence intervals."
+}

@@ -1,0 +1,55 @@
+{
+  "datasets": {
+    "2026-10-22_2123-2218_KST_jeju": {
+      "observations": "datasets\\2026-10-22_2123-2218_KST_jeju\\inputs\\v001_all_49.csv",
+      "observations_sha256": "78cc3fd9b89eb6cd0abdacfc8829e1f32000c2847e4eb0be146b2d82a6ba7972",
+      "weather": "datasets\\2026-10-22_2123-2218_KST_jeju\\raw\\weather_cache_33.4268_126.5303_2026-10-22.json",
+      "weather_sha256": "589632945820d923c40f65df308ffc42db725b2704c16052c642db45b63af540",
+      "n": 49,
+      "coordinates": [
+        33.426769,
+        126.530349
+      ],
+      "height_m": 494.35931396484375,
+      "pixels": 965
+    },
+    "2026-10-26_1829-1835_KST_tamna_playground": {
+      "observations": "datasets\\2026-10-26_1829-1835_KST_tamna_playground\\inputs\\v001_all_49.csv",
+      "observations_sha256": "69e05183102a3a9832e5cd907bbb8a824eb78a58ee185f7037b7c8d51bb82982",
+      "weather": "datasets\\2026-10-26_1829-1835_KST_tamna_playground\\raw\\weather_cache_33.42785_126.53208_2026-10-26.json",
+      "weather_sha256": "aed2f0bafcae63e348dac3130f42b108340ab0bf616334950136cc3a048bdcdc",
+      "n": 49,
+      "coordinates": [
+        33.42785,
+        126.53208
+      ],
+      "height_m": 496.2860412597656,
+      "pixels": 965
+    },
+    "2026-10-27_2108-2113_KST_jeju_science_high": {
+      "observations": "datasets\\2026-10-27_2108-2113_KST_jeju_science_high\\inputs\\v001_valid_33.csv",
+      "observations_sha256": "ef16f2e2d1517ad5f71af2ac92fd25dd24e74e989ab35a7b06c920fb5d8342d9",
+      "weather": "datasets\\2026-10-27_2108-2113_KST_jeju_science_high\\raw\\weather_cache_33.426633_126.530639_2026-10-27.json",
+      "weather_sha256": "3186a700177a78dbebf4566770ac3f311cf773c9243a16772570ebd3d86d02f0",
+      "n": 33,
+      "coordinates": [
+        33.426633,
+        126.530639
+      ],
+      "height_m": 495.853271484375,
+      "pixels": 965
+    }
+  },
+  "h5_sha256": "564dab8277384ac4f14b37ef9940f726084584b082c42e3b71036bfe2adb5e15",
+  "dem_sha256": "1c3f6d441d95c1f5219ce90f4db53bd442d0040bb0caa0cccdcf1ca6a58866f0",
+  "elapsed_seconds": 150.40698379999958,
+  "assignments": [
+    "start",
+    "end"
+  ],
+  "optical_depth_grid": [
+    10.0
+  ],
+  "no_new_weather_api_calls": true,
+  "reuse_previous": false
+}

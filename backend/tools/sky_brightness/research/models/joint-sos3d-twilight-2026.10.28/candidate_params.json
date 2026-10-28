@@ -1,0 +1,13 @@
+{
+  "model_version": "joint-sos3d-twilight-2026.10.28",
+  "parameters": {
+    "art_scale": 0.19245974551701975,
+    "twilight_gain": 1.5970586375763038,
+    "twilight_concentration": 1.2644184970449495,
+    "cloud_optical_depth": 10.0
+  },
+  "coefficient_fit_performed": true,
+  "all_three_dates_used": true,
+  "application_adopted": false,
+  "point_estimator": "E[SQM|cloud probability]=(1-C)*SQM(clear)+C*SQM(cloudy). Both conditional skies and SQM(E[radiance]) are retained."
+}
