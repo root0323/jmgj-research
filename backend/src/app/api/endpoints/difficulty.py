@@ -11,14 +11,12 @@ from fastapi import APIRouter, Query, HTTPException
 from pydantic import BaseModel, Field, ConfigDict
 from app.local_config import setting
 from app.services.geospatial_assets import cached_region, region_bounds
-from app.services.sky_brightness_model.core.config import EnvironmentConfig, ACTIVE_PHYSICS_MODEL
+from app.services.sky_brightness_model.core.config import EnvironmentConfig
 from app.services.sky_brightness_model.core.data_loader import (
     environment_query,
     environment_from_responses,
     get_interp_indices,
     interp_value,
-    interp_positive_value,
-    pressure_to_cloud_base_height_km,
     shift_astro_time,
     load_pixel_data_from_h5,
 )
@@ -232,7 +230,6 @@ def build_environment_config(feature_environment: dict[str, Any] | None):
         value = finite_number(feature_environment.get(name))
         return default if value is None else value
     return EnvironmentConfig(
-        physics_model=ACTIVE_PHYSICS_MODEL,
         aod=value_or_default("aod", 0.3),
         cloud_fraction=value_or_default("cloudFraction", 0.0),
         cloud_base_h=value_or_default("cloudBaseKm", 30.0),
@@ -619,7 +616,7 @@ def cached_block(response: dict[str, Any]) -> dict[str, Any]:
     return {}
 
 
-def cached_value(block: dict[str, Any], variable: str, target: str, *, positive: bool = False) -> float | None:
+def cached_value(block: dict[str, Any], variable: str, target: str) -> float | None:
     """Validate a variable at this time; never turn missing/sentinel values into zero."""
     try:
         indices = get_interp_indices(block, target)
@@ -633,8 +630,7 @@ def cached_value(block: dict[str, Any], variable: str, target: str, *, positive:
             if not values or any(value is None or value < 0 for value in values):
                 return None
             return sum(values) / len(values)
-        value = (interp_positive_value(series,*indices) if positive
-                 else finite_number(interp_value(series, *indices, default=math.nan)))
+        value = finite_number(interp_value(series, *indices, default=math.nan))
         return value if value is not None and value >= 0 else None
     except (TypeError, ValueError, IndexError, KeyError):
         return None
@@ -655,7 +651,7 @@ def evaluate_cached_weather(payload: CachedWeatherRequest):
     responses = payload.responses
     aod = cached_value(cached_block(responses.get("p2", {})), "aod550", target)
     cloud = cached_value(cached_block(responses.get("p3", {})), "totalcloudcover", target)
-    pressure = cached_value(cached_block(responses.get("p4", {})), "convectivecloudbase_pressure", target, positive=True)
+    pressure = cached_value(cached_block(responses.get("p4", {})), "convectivecloudbase_pressure", target)
     if pressure is not None and pressure <= 0:
         pressure = None
     seeing = cached_value(cached_block(responses.get("p1", {})), "seeing_arcsec", target)
@@ -709,8 +705,7 @@ def evaluate_cached_weather(payload: CachedWeatherRequest):
     if aod is not None and cloud_fraction is not None:
         parsed = environment_from_responses(target, responses)
         environment = {
-            "aod": clamp(aod, 0, 5), "cloudFraction": cloud_fraction,
-            "cloudBaseKm": pressure_to_cloud_base_height_km(pressure,1.) if pressure is not None and cloud_fraction>0 else 30.,
+            "aod": clamp(aod, 0, 5), "cloudFraction": cloud_fraction, "cloudBaseKm": parsed[2],
             "seeingArcsec": seeing, "moonZenith": parsed[5][0] if moon_valid else None,
             "moonAzimuth": parsed[5][1] if moon_valid else None,
             "moonPhaseAngle": parsed[6], "moonCloudTransmission": parsed[7],

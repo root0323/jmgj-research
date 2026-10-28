@@ -22,10 +22,12 @@ ART_SCALE_RANGE = (0.1, 1.5)
 # nWatts / (cm^2 sr). Convert to SI radiance W / (m^2 sr).
 BLACK_MARBLE_RADIANCE_UNIT = "nW/(cm^2 sr)"
 BLACK_MARBLE_RADIANCE_TO_SI = 1e-5
-ACTIVE_PHYSICS_MODEL = "sos3d"
+# Released application defaults stay unchanged until explicit adoption.
+ACTIVE_PHYSICS_MODEL = "legacy"
+RESEARCH_PHYSICS_MODEL = "sos3d"
 
 def effective_cloud_fraction(cloud_fraction: float, cloud_base_h: float, physics_model="legacy") -> float:
-    """Cloud probability; the squared transform belongs only to archived legacy physics."""
+    """Cloud probability; the squared transform belongs to the released legacy physics."""
     c = max(0.0, min(float(cloud_fraction), 1.0))
     if physics_model == "sos3d":
         return c
@@ -56,9 +58,9 @@ class EnvironmentConfig:
     moon_model_top_km: float = MOON_MODEL_TOP_KM
     art_scale: float = DEFAULT_ART_SCALE      # 위성 인공광 -> 하늘 밝기 변환 스케일
 
-    # The legacy path is retained for exact reproduction of archived research.
-    # The app and default run_pipeline select sos3d explicitly; this constructor
-    # default preserves existing analysis runners and their archived parameters.
+    # Application and implicit pipeline calls retain the released legacy model.
+    # Research runners explicitly select RESEARCH_PHYSICS_MODEL; experimental
+    # transport must not enter an application update without user adoption.
     physics_model: str = "legacy"
     cloud_optical_depth: Optional[float] = None
     cloud_liquid_water_path_kg_m2: Optional[float] = None

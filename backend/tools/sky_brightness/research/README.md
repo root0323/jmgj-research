@@ -84,7 +84,7 @@ python recompute_physics.py --observations datasets/2026-10-15_0000_KST_jeju/inp
 
 사용자 추가 지시(2026-10-28): **다음 실측 데이터부터는 연구용 모델만 개선하고 앱에 자동 적용하지 않는다.** 원본·조건·지표·그래프와 GitHub 기록은 계속 보존한다. 앱이 사용하는 코어와 연구 후보를 분리하고, 앱 반영은 사용자의 별도 요청으로 진행한다.
 
-현재 앱과 `evaluator.py`는 `sos3d`를 사용한다. [수식·단위·근사·문헌](../../../../docs/SKY_BRIGHTNESS_TRANSPORT.md) 및 [개정 실행](revisions/2026-10-28_transport_physics/README.md)을 먼저 확인한다. 이전 날짜 보정 실행기와 고정 스냅샷은 legacy 결과를 재현한다.
+현재 앱과 설정 없는 `run_pipeline`은 기존 `legacy`를 유지한다. 연구용 `evaluator.py`·대화형 연구 실행기는 `sos3d`를 명시적으로 선택한다. 이번 0.9.4 준비본도 게시·설치·웹앱 반영하지 않았다. 실제 채택 상태는 [ADOPTION_STATUS.json](revisions/2026-10-28_transport_physics/ADOPTION_STATUS.json)에 기록한다. [수식·단위·근사·문헌](../../../../docs/SKY_BRIGHTNESS_TRANSPORT.md) 및 [개정 실행](revisions/2026-10-28_transport_physics/README.md)을 먼저 확인한다. 이전 날짜 보정 실행기와 고정 스냅샷은 legacy 결과를 재현한다.
 
 `evaluator.py --physics-model sos3d --instrument-response sqm-l --weather-cache <동일 시각·위치 API JSON> --cloud-optical-depth 10`으로 평가한다. H5·DEM·관측 CSV 경로도 지정해야 한다. 보는 방향의 하늘 밝기는 `--instrument-response sky`로 분리한다. 광학 두께는 API에 없는 경우 가정이며 운량으로 추정하지 않는다. 새 출력 폴더를 사용하고 기본 출력 경로는 실행 시각별 폴더다. 3시간 API는 시상 패키지 없이 사용할 수 있으며 달 위치·위상은 연구용 Astronomy Engine으로 관측 시각에 계산한다.
 

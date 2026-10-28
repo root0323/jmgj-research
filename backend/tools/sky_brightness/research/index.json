@@ -90,18 +90,26 @@
   ],
   "latest_model_revision": "revisions/2026-10-28_transport_physics",
   "runtime_model": {
-    "physics_model": "sos3d",
-    "version": "sos3d-2026.10.28",
-    "release": "0.9.4_prepared",
-    "empirical_candidate_adopted": false,
-    "validation": "retrospective; 2026-10-27 SQM-L error increased"
+    "physics_model": "legacy",
+    "release": "0.9.3",
+    "research_candidate_adopted": false,
+    "prepared_0_9_4_published": false,
+    "status": "released application unchanged; transport candidate withheld"
   },
-  "accepted_model_run_scope": "Empirical fitted candidate; runtime physics adoption is tracked separately under runtime_model.",
+  "accepted_model_run_scope": "No research candidate adopted by the app. Runtime and research selection are explicit and separate.",
   "next_dataset_workflow": {
     "mode": "research_only",
     "automatic_app_adoption": false,
     "app_adoption_requires_explicit_user_request": true,
     "retain_and_publish_raw_conditions_metrics_plots": true,
     "requested_on": "2026-10-28"
+  },
+  "research_candidate_model": {
+    "physics_model": "sos3d",
+    "version": "sos3d-2026.10.28",
+    "revision": "revisions/2026-10-28_transport_physics",
+    "adopted_by_app": false,
+    "validation": "retrospective; 2026-10-27 SQM-L error increased",
+    "adoption_status": "revisions/2026-10-28_transport_physics/ADOPTION_STATUS.json"
   }
 }

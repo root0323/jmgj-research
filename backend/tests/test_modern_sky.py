@@ -9,6 +9,16 @@ from app.services.sky_brightness_model.core.modern_sky import (
 
 
 class ModernSkyTests(unittest.TestCase):
+    def test_research_transport_does_not_change_released_app_default(self):
+        from app.services.sky_brightness_model.core.config import (
+            ACTIVE_PHYSICS_MODEL, RESEARCH_PHYSICS_MODEL,
+        )
+        self.assertEqual(ACTIVE_PHYSICS_MODEL, "legacy")
+        self.assertEqual(EnvironmentConfig().physics_model, "legacy")
+        self.assertEqual(RESEARCH_PHYSICS_MODEL, "sos3d")
+        candidate = EnvironmentConfig(physics_model=RESEARCH_PHYSICS_MODEL)
+        self.assertEqual(candidate.physics_model, "sos3d")
+
     def test_cloud_probability_does_not_square_or_truncate_free_atmosphere(self):
         config=EnvironmentConfig(physics_model='sos3d',cloud_fraction=.5,cloud_base_h=2)
         self.assertEqual(config.cloud_effect_fraction,.5)

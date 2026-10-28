@@ -34,7 +34,7 @@ from app.services.sky_brightness_model.core.config import (
     FIXED_Q_DIRECT,
     FIXED_RHO_ALBEDO,
     DEFAULT_MOON_TRANSMISSION_SCALE,
-    ACTIVE_PHYSICS_MODEL,
+    RESEARCH_PHYSICS_MODEL,
 )
 from app.services.sky_brightness_model.core.data_loader import (
     environment_query, load_pixel_data_from_h5, interp_positive_value,pressure_to_cloud_base_height_km,
@@ -152,7 +152,7 @@ def build_config(row_data: dict, params: dict) -> EnvironmentConfig:
     }
 
     return EnvironmentConfig(
-        physics_model=params.get("physics_model", ACTIVE_PHYSICS_MODEL),
+        physics_model=params.get("physics_model", RESEARCH_PHYSICS_MODEL),
         cloud_optical_depth=params.get("cloud_optical_depth"),
         cloud_liquid_water_path_kg_m2=params.get("cloud_liquid_water_path_kg_m2"),
         cloud_effective_radius_um=params.get("cloud_effective_radius_um",10.),
@@ -189,7 +189,7 @@ def preload_cases(
     max_pixels: int = 200,
     *,
     weather_cache: str | None = None,
-    physics_model: str = ACTIVE_PHYSICS_MODEL,
+    physics_model: str = RESEARCH_PHYSICS_MODEL,
 ) -> list[dict]:
     cases = []
     df = pd.read_csv(csv_path)
@@ -472,7 +472,7 @@ def main() -> None:
     args = parser.parse_args()
 
     params = load_params(args.params)
-    args.physics_model=args.physics_model or params.get('physics_model',ACTIVE_PHYSICS_MODEL)
+    args.physics_model=args.physics_model or params.get('physics_model',RESEARCH_PHYSICS_MODEL)
     params.update(physics_model=args.physics_model,
                   instrument_fwhm_deg=20. if args.instrument_response=='sqm-l' else None)
     if args.cloud_optical_depth is not None:

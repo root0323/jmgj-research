@@ -87,5 +87,9 @@
       false
     ]
   },
-  "private_settings_or_h5_dem_bundled": false
+  "private_settings_or_h5_dem_bundled": false,
+  "published": false,
+  "installed": false,
+  "status": "unpublished_local_build_only; research candidate not adopted",
+  "pwa_deployment_performed": false
 }
