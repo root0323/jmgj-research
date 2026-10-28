@@ -79,10 +79,17 @@ export const DATA_SOURCE_GROUPS: readonly DataSourceGroup[] = [
   {
     title: "실측 모델 연구 참고",
     sources: [
+      { name: "Kocifaj·Falchi·Kundracik (2025)", url: "https://doi.org/10.1073/pnas.2508001122", description: "구름 아래·위 산란과 구름의 반사·차폐를 구분하는 연구 근거. 앱은 맑음·층운의 독립 기둥 근사를 사용하며 논문의 확률적 3차원 구름 형태를 재현한 것은 아님" },
+      { name: "Kocifaj·Wallner·Gueymard (2024)", url: "https://doi.org/10.1029/2023JD039804", description: "다중산란의 차수별 계산과 수렴 진단 참고. 앱은 독자적인 3차원 이산 방향 복사전달을 사용하며 MSOS-LP1 코드나 엄밀한 오차 보증을 이식하지 않음" },
+      { name: "Jones 외 (2013)", url: "https://doi.org/10.1051/0004-6361/201322433", description: "달빛의 위상·대기 소광·관측 방향을 물리적으로 분리하는 근거. 앱은 V등급 상당의 달 광도와 해상된 달 원반을 사용하며 전체 분광 모델은 아님" },
+      { name: "Cornette·Shanks (1992)", url: "https://doi.org/10.1364/AO.31.003152", description: "정규화된 비등방 산란 위상 함수. 반복 산란의 방향 전달과 달 주변 전방 산란에 사용" },
+      { name: "Korkin 외 · NASA (2022)", url: "https://ntrs.nasa.gov/citations/20220003592", description: "복사전달 방정식의 방향 이산화·소스 반복과 수치 검증 참고. 독립 구현이며 격자 오차와 산란 차수 수렴을 구분" },
+      { name: "Kocifaj (2007) · 첫 연구", url: "https://doi.org/10.1364/AO.46.003013", description: "초기 연구의 지상 인공광·대기·구름 모델 배경. 이전 계산식과 관측 결과는 연구 재현용 legacy 경로로 보존" },
+      { name: "Krisciunas·Schaefer (1991) · 첫 연구", url: "https://doi.org/10.1086/132921", description: "달의 위상별 상대 광도 법칙 참고. 상대 계수를 조도 단위로 사용하지 않고 V등급 상당 조도로 변환" },
       { name: "US Naval Observatory", url: "https://aa.usno.navy.mil/faq/RST_defs", description: "실측 연구에서 태양 고도로 시민·항해·천문 황혼과 천문학적 밤을 구분하는 정의 참고" },
       { name: "Astronomy Engine · Don Cross", url: "https://github.com/cosinekitty/astronomy", description: "보존된 실측 연구의 태양·달 좌표와 달 위상 계산. 앱 화면의 Stellarium 엔진과 별도로 연구 재현에 사용", notice: { label: "MIT License", url: "https://github.com/cosinekitty/astronomy/blob/master/LICENSE" } },
       { name: "탐라교육원", url: "https://www.tamna.or.kr/hp/hm/htmlConvert.do?menuId=1000001032", description: "2026년 10월 실측 연구에서 교육원 주소와 관측 운동장 위치 확인" },
-      { name: "Unihedron · SQM-L", url: "https://www.unihedron.com/projects/sqm-l/", description: "고정 실측 장비 SQM-L의 각도 응답 참고. 연구에서는 반치폭 약 10° 안의 달 접근을 진단하며, 실제 차폐·직접 유입 여부는 별도 확인" },
+      { name: "Unihedron · SQM-L", url: "https://www.unihedron.com/projects/sqm-l/", description: "고정 실측 장비 SQM-L의 각도 응답 참고. 연구 평가는 FWHM 약 20°의 가우스 응답으로 적분하며 실제 차폐·직접 달빛 유입은 불확실성으로 기록" },
       { name: "카카오 지도 · 연구 좌표 변환", url: "https://devtalk.kakao.com/t/topic/38086", description: "사용자가 지도에 표시한 관측 핀의 공유 좌표를 WCONGNAMUL·WTM에서 위도·경도로 변환하는 근거. 지도 핀은 현장 GPS 측량값이 아님" },
     ],
   },

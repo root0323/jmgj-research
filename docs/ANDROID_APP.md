@@ -1,5 +1,13 @@
 # AstroSky Android
 
+## 0.9.4 · 공통 복사전달 모델
+
+달의 국소 피크·구름 전달·차수별 다중산란 코어를 Windows와 공유한다. `versionCode 904`, `versionName 0.9.4`이며 기존 앱 ID·인증서·센서·저장·업데이트 경로는 유지한다. release/debug 빌드와 Java 10개를 통과했다. APK의 웹 입력과 실제 model.zip/BUILD 원본을 대조했다. [물리식과 검증 한계](SKY_BRIGHTNESS_TRANSPORT.md)를 함께 본다.
+
+실제 Pyodide 실행의 값과 수렴 차수가 네이티브와 일치했다. 일반 Python 셀 반복 대신 동일한 식을 NumPy 파면 순서로 실행하며 기기별 센서·성능 보증을 의미하지 않는다. 기존 인증서 SHA-256 `e5b8e6099682eb248b624e2baa28c2450e6ea8188409db784ecb9f596542c9d9`와 aapt의 ID·904/0.9.4를 확인했다.
+
+게시 대상 APK는 76,043,360 bytes, SHA-256 `6123a8f551842c922fc93b1a12955507112b6ad07d7a644fb39cf5da1b580360`다. 공개 릴리스 자산은 게시 후 대조한다. [검증 기록](releases/0.9.4-verification.json).
+
 ## 0.9.3 · 별자리 이름 표시 수정
 
 공통 하늘 화면에서 반대쪽 별자리 이름이 앞쪽 하늘에 겹쳐 보이는 오류를 수정했다. 궁수자리에는 Sagittarius, 쌍둥이자리에는 Gemini가 각각 올바른 위치에 표시되며 지평을 꺼도 반대쪽 이름은 표시하지 않는다. 이름과 선의 토글은 기존 별자리선을 공유한다. 계산·회귀 검증은 [Windows 기록](WINDOWS_APP.md)의 0.9.3 항목과 같다. versionCode 903, versionName 0.9.3이며 기존 앱 ID·서명·센서·저장·업데이트 경로를 유지한다.

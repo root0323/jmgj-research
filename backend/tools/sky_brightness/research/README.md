@@ -79,3 +79,13 @@ python recompute_physics.py --observations datasets/2026-10-15_0000_KST_jeju/inp
 앱 코드 기본 설정(최대 1,000개 광원)의 21개 관측 RMSE는 기본 **0.7653**, 전체 자료에 맞춘 후보 **0.6440**이다.
 새 `art_scale` 후보는 **0.673216**이지만 방향 구간 검증 RMSE **0.7733**으로 기본보다 개선되지 않았고 천정 오차도 커졌다.
 따라서 후보를 기록했으며 앱 기본값으로 채택하지 않았다. 10,000개 광원의 연구 조건도 별도로 보존한다.
+
+## 2026-10-28 복사전달 모델
+
+사용자 추가 지시(2026-10-28): **다음 실측 데이터부터는 연구용 모델만 개선하고 앱에 자동 적용하지 않는다.** 원본·조건·지표·그래프와 GitHub 기록은 계속 보존한다. 앱이 사용하는 코어와 연구 후보를 분리하고, 앱 반영은 사용자의 별도 요청으로 진행한다.
+
+현재 앱과 `evaluator.py`는 `sos3d`를 사용한다. [수식·단위·근사·문헌](../../../../docs/SKY_BRIGHTNESS_TRANSPORT.md) 및 [개정 실행](revisions/2026-10-28_transport_physics/README.md)을 먼저 확인한다. 이전 날짜 보정 실행기와 고정 스냅샷은 legacy 결과를 재현한다.
+
+`evaluator.py --physics-model sos3d --instrument-response sqm-l --weather-cache <동일 시각·위치 API JSON> --cloud-optical-depth 10`으로 평가한다. H5·DEM·관측 CSV 경로도 지정해야 한다. 보는 방향의 하늘 밝기는 `--instrument-response sky`로 분리한다. 광학 두께는 API에 없는 경우 가정이며 운량으로 추정하지 않는다. 새 출력 폴더를 사용하고 기본 출력 경로는 실행 시각별 폴더다. 3시간 API는 시상 패키지 없이 사용할 수 있으며 달 위치·위상은 연구용 Astronomy Engine으로 관측 시각에 계산한다.
+
+두 날짜 비교는 `compare_transport.py --h5 <H5> --dem <DEM> --output <새 폴더> --cloud-tau 10`으로 재현한다. 전체 차수 수렴 진단을 함께 저장하며 결과를 외부 날짜 검증과 혼동하지 않는다.

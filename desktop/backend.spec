@@ -6,7 +6,9 @@ a = Analysis([str(repo / 'desktop/run_backend.py')], pathex=[str(repo / 'backend
              binaries=[], datas=collect_data_files('rasterio'),
              hiddenimports=collect_submodules('rasterio') + ['uvicorn.logging', 'uvicorn.loops.auto',
                             'uvicorn.protocols.http.auto', 'uvicorn.protocols.websockets.auto', 'uvicorn.lifespan.on'],
-             hookspath=[], runtime_hooks=[], excludes=['tkinter', 'unittest', 'pytest', 'IPython'], noarchive=False)
+             hookspath=[], runtime_hooks=[],
+             # Research-only optional packages must not inflate the app worker.
+             excludes=['tkinter', 'unittest', 'pytest', 'IPython', 'pandas', 'scipy', 'matplotlib'], noarchive=False)
 pyz = PYZ(a.pure)
 exe = EXE(pyz, a.scripts, [], exclude_binaries=True, name='jmgj-backend', console=True, upx=False,
           append_pkg=False)

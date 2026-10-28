@@ -120,6 +120,7 @@ def main(args):
     print("calculating...")
     
     my_config = EnvironmentConfig(
+        physics_model="sos3d",
         aod=aod,
         cloud_fraction=cloud_fraction,
         cloud_base_h=cloud_base_h,

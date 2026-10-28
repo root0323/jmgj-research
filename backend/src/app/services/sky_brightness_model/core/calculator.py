@@ -4,7 +4,7 @@ import numpy as np
 import rasterio
 from numba import njit
 from functools import partial
-from .config import BLACK_MARBLE_RADIANCE_TO_SI, EnvironmentConfig
+from .config import BLACK_MARBLE_RADIANCE_TO_SI, EnvironmentConfig, ACTIVE_PHYSICS_MODEL
 
 # -------------------------------------------------------------------
 # 3. Numba 최적화된 함수들
@@ -730,9 +730,7 @@ def run_pipeline(
     return_components=False,
 ):
     if config is None:
-        config = EnvironmentConfig()
-    
-    model = LightPollutionModel(config)
+        config = EnvironmentConfig(physics_model=ACTIVE_PHYSICS_MODEL)
     
     obs_lat, obs_lon = observer_coordinates
     obs_z_rad = np.radians(observer_angles[0])
@@ -765,6 +763,20 @@ def run_pipeline(
             moon_shield_deg = calculate_directional_shielding(
                 (obs_lat, obs_lon), moon_angles[1], dem_arr_main, dem_trans_main, max_dist_km=30.0
             )
+
+    if getattr(config, 'physics_model', 'legacy') == 'sos3d':
+        from .modern_sky import run_modern_pipeline
+        prepared = pixel_data
+        if prepared and not all('distance_km' in pixel and 'phi_c_rad' in pixel and 'shield_deg' in pixel for pixel in prepared):
+            prepared = prepare_pixel_geometry(
+                prepared, observer_coordinates, max_radius_km=MAX_RADIUS_KM,
+                dem_data=(dem_arr_main,dem_trans_main) if dem_arr_main is not None else None,
+                keep_radiance_fraction=1., min_pixels=0, max_pixels=None,
+            )
+        return run_modern_pipeline(prepared, observer_angles, moon_angles, config,
+                                   moon_shield_deg, return_components=return_components)
+
+    model = LightPollutionModel(config)
 
     # 💡 2단계: 워커 함수에 지형 데이터(dem_array, dem_transform) 묶어주기
     worker_func = partial(

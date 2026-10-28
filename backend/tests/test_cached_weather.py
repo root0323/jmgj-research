@@ -92,6 +92,16 @@ class CachedWeatherTests(unittest.TestCase):
         self.assertEqual(config.aod, 0)
         self.assertEqual(config.moon_phase_angle_deg, 0)
         self.assertEqual(config.moon_cloud_transmission, 0)
+        self.assertEqual(config.physics_model, 'sos3d')
+
+    def test_zero_pressure_endpoint_cannot_create_a_stratospheric_cloud_base(self):
+        data=payload();block=data['responses']['p4']['data_1h']
+        block['convectivecloudbase_pressure'][19]=0
+        block['convectivecloudbase_pressure'][20]=922
+        with patch('app.api.endpoints.difficulty.fetch_black_marble_dem_sqm') as model:
+            result=self.client.post('/api/difficulty/evaluate-cached',json=data).json()
+        self.assertIn('convectivecloudbase_pressure',result['missing'])
+        model.assert_not_called()
 
     def test_only_known_zero_cloud_cover_can_omit_cloud_base(self):
         for cloud in (0, .01, 20, None):

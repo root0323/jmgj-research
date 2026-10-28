@@ -6,6 +6,8 @@ const desktop = path.resolve(__dirname, '..');
 const repo = path.dirname(desktop);
 const frontend = path.join(repo, 'frontend');
 const python = process.env.JMGJ_BUILD_PYTHON || path.join(repo, '.venv/Scripts/python.exe');
+const version = JSON.parse(fs.readFileSync(path.join(desktop, 'package.json'), 'utf8')).version;
+const backendStage = `desktop/build/backend-${version}`;
 function run(command, args, cwd, extra = {}) {
   const result = spawnSync(command, args, { cwd, env: { ...process.env, ...extra }, stdio: 'inherit', windowsHide: true });
   if (result.error || result.status !== 0) throw new Error('Build step failed: ' + command);
@@ -16,12 +18,20 @@ run(process.execPath, [path.join(frontend, 'node_modules/next/dist/bin/next'), '
 const destination = path.join(desktop, 'build/web');
 fs.mkdirSync(destination, { recursive: true });
 const filter = (source) => !path.basename(source).startsWith('.env');
-fs.cpSync(path.join(frontend, '.next-desktop/standalone'), destination, { recursive: true, filter });
-fs.cpSync(path.join(frontend, '.next-desktop/static'), path.join(destination, '.next-desktop/static'), { recursive: true });
-fs.cpSync(path.join(frontend, 'public'), path.join(destination, 'public'), { recursive: true });
+function copy(source, target) {
+  if (process.platform !== 'win32') return fs.cpSync(source, target, { recursive: true, filter });
+  // Native copying avoids Node cpSync failures on the OneDrive checkout.
+  // Never copy private environment files; the final inspection also rejects them.
+  const result = spawnSync('robocopy', [source, target, '/E', '/COPY:DAT', '/DCOPY:DAT', '/R:1', '/W:1',
+    '/NFL', '/NDL', '/NJH', '/NJS', '/NP', '/XF', '.env*'], { stdio: 'inherit', windowsHide: true });
+  if (result.error || result.status === null || result.status > 7) throw new Error('Runtime copy failed');
+}
+copy(path.join(frontend, '.next-desktop/standalone'), destination);
+copy(path.join(frontend, '.next-desktop/static'), path.join(destination, '.next-desktop/static'));
+copy(path.join(frontend, 'public'), path.join(destination, 'public'));
 fs.writeFileSync(path.join(destination, 'desktop-server.cjs'),
   "process.stdin.resume(); process.stdin.on('end', () => process.exit(0)); require('./server.js');\n");
-run(python, ['-m', 'PyInstaller', '--noconfirm', '--distpath', 'desktop/build/backend',
+run(python, ['-m', 'PyInstaller', '--noconfirm', '--distpath', backendStage,
   '--workpath', 'desktop/build/python-work', 'desktop/backend.spec'], repo);
 // Refuse to ship credentials or the large research datasets, even if tracing changes.
 function inspect(directory) {
@@ -34,5 +44,5 @@ function inspect(directory) {
   }
 }
 inspect(destination);
-inspect(path.join(desktop, 'build/backend/jmgj-backend'));
+inspect(path.join(repo, backendStage, 'jmgj-backend'));
 console.log('Desktop web + Python worker prepared. Only the pinned Black Marble catalogue ships; no worldwide H5s, credentials or raw research files.');

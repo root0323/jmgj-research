@@ -3,6 +3,10 @@ import importlib.util
 import json
 import os
 import sys
+import hashlib
+import shutil
+from dataclasses import asdict
+from datetime import datetime,timezone
 from pathlib import Path
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 BACKEND_DIR = os.path.dirname(os.path.dirname(os.path.dirname(SCRIPT_DIR)))
@@ -30,8 +34,11 @@ from app.services.sky_brightness_model.core.config import (
     FIXED_Q_DIRECT,
     FIXED_RHO_ALBEDO,
     DEFAULT_MOON_TRANSMISSION_SCALE,
+    ACTIVE_PHYSICS_MODEL,
 )
-from app.services.sky_brightness_model.core.data_loader import environment_query, load_pixel_data_from_h5
+from app.services.sky_brightness_model.core.data_loader import (
+    environment_query, load_pixel_data_from_h5, interp_positive_value,pressure_to_cloud_base_height_km,
+)
 from cli_common import (
     DEFAULT_CSV_PATH,
     DEFAULT_DEM_PATH,
@@ -68,7 +75,8 @@ def load_params(path: str | None) -> dict:
     if not isinstance(params, dict):
         raise ValueError("Parameter file must contain a JSON object.")
     supported = {"gamma", "omega_a", "g", "ms_a", "ms_b", "moon_transmission_scale",
-                 "art_scale", "Q", "q", "rho_albedo"}
+                 "art_scale", "Q", "q", "rho_albedo", "physics_model", "cloud_optical_depth",
+                 "cloud_liquid_water_path_kg_m2", "cloud_effective_radius_um", "instrument_fwhm_deg"}
     unsupported = set(params) - supported
     if unsupported:
         raise ValueError(f"Unsupported runtime evaluation parameters: {sorted(unsupported)}. "
@@ -77,7 +85,7 @@ def load_params(path: str | None) -> dict:
     return params
 
 
-def frozen_weather_query(cache_path: str):
+def frozen_weather_query(cache_path: str,physics_model="legacy"):
     """Reuse the archived, timezone-aware research adapter without API calls."""
     adapter_path = Path(CODE_DIR) / "research/models/82a295073f54/data_loader.py"
     name = "app.services.sky_brightness_model.core._evaluation_weather"
@@ -86,29 +94,69 @@ def frozen_weather_query(cache_path: str):
     spec.loader.exec_module(adapter)
     with open(cache_path, encoding="utf-8") as source:
         cache = json.load(source)
+    astronomy_required=physics_model=='sos3d' or 'p1' not in cache
 
     def query(time, lat, lon):
-        for package in ("p1", "p2", "p3", "p4"):
+        for package in (("p2","p3","p4") if astronomy_required else ("p1", "p2", "p3", "p4")):
             metadata = cache[package]["metadata"]
             coordinates = np.asarray([metadata["latitude"], metadata["longitude"]], dtype=float)
             if (not np.isfinite(coordinates).all()
                     or abs(coordinates[0] - lat) > 0.001 or abs(coordinates[1] - lon) > 0.001):
                 raise ValueError(f"{package}: weather cache coordinates do not match observations")
+        if astronomy_required:
+            fields={}
+            for package,field in [('p2','aod550'),('p3','totalcloudcover'),('p4','convectivecloudbase_pressure')]:
+                response=cache[package]
+                block=next((name for name in ('data_3h','data_1h','gfsensemble_1h') if isinstance(response.get(name),dict)),None)
+                if block is None:
+                    raise ValueError(f'{package}: missing weather time series')
+                indices=adapter.get_package_interp_indices(response,block,time)
+                if indices is None:
+                    raise ValueError(f'{package}: weather does not bracket observation time')
+                series=response[block].get(field,[])
+                if package=='p4':
+                    fields[field]=interp_positive_value(series,*indices)
+                else:
+                    left,right,fraction=indices
+                    if series and isinstance(series[0],list):
+                        raw=np.asarray([[member[left],member[right]] for member in series],dtype=float)
+                        if not np.isfinite(raw).all() or np.min(raw)<0:
+                            raise ValueError(f'{field}: invalid ensemble endpoint')
+                        values=raw.mean(axis=0)
+                    else:
+                        values=np.asarray([series[left],series[right]],dtype=float)
+                    if not np.isfinite(values).all() or np.min(values)<0:
+                        raise ValueError(f'{field}: invalid interpolation endpoint')
+                    fields[field]=float(values[0]+(values[1]-values[0])*fraction)
+            aod=fields['aod550'];cloud=fields['totalcloudcover']/100
+            if not 0<=aod<=5 or not 0<=cloud<=1:
+                raise ValueError('AOD/cloud outside physical range')
+            pressure=fields['convectivecloudbase_pressure']
+            height=pressure_to_cloud_base_height_km(pressure,1.) if pressure is not None else 2.
+            # Seeing is unused by this brightness calculation and remains absent.
+            # The placeholders below are replaced by Astronomy Engine before use.
+            return aod,cloud,height,None,0.,(90.,0.),180.,1.
         return adapter.environment_query(time, lat, lon, cache_path=cache_path)
 
+    query.astronomy_required=astronomy_required
     return query
 
 
 def build_config(row_data: dict, params: dict) -> EnvironmentConfig:
     blended = {
         "gamma": params.get("gamma", FIXED_GAMMA),
-        "omega_a": params.get("omega_a", FIXED_OMEGA_A),
-        "g": params.get("g", FIXED_G),
+        "omega_a": params.get("omega_a"),
+        "g": params.get("g"),
         "ms_a": params.get("ms_a"),
         "ms_b": params.get("ms_b"),
     }
 
     return EnvironmentConfig(
+        physics_model=params.get("physics_model", ACTIVE_PHYSICS_MODEL),
+        cloud_optical_depth=params.get("cloud_optical_depth"),
+        cloud_liquid_water_path_kg_m2=params.get("cloud_liquid_water_path_kg_m2"),
+        cloud_effective_radius_um=params.get("cloud_effective_radius_um",10.),
+        instrument_fwhm_deg=params.get("instrument_fwhm_deg",20.),
         aod=row_data["aod"],
         cloud_fraction=row_data["cloud_fraction"],
         cloud_base_h=row_data["cloud_base_h"],
@@ -141,10 +189,11 @@ def preload_cases(
     max_pixels: int = 200,
     *,
     weather_cache: str | None = None,
+    physics_model: str = ACTIVE_PHYSICS_MODEL,
 ) -> list[dict]:
     cases = []
     df = pd.read_csv(csv_path)
-    query_environment = frozen_weather_query(weather_cache) if weather_cache else environment_query
+    query_environment = frozen_weather_query(weather_cache,physics_model) if weather_cache else environment_query
 
     with rasterio.open(dem_path) as src:
         dem_data = (src.read(1), src.transform)
@@ -169,6 +218,20 @@ def preload_cases(
             aod, cloud_fraction, cloud_base_h, seeing, moonlight, moon_angles, moon_phase_angle, moon_cloud_transmission = query_environment(
                 time_str, lat, lon
             )
+            if physics_model=='sos3d' or getattr(query_environment,'astronomy_required',False):
+                # A stale seeing package must not supply the Moon's direction.
+                # Research-only dependency; app astronomy comes from Stellarium.
+                import astronomy
+                from datetime import datetime,timezone
+                instant=datetime.fromisoformat(time_str+'+09:00').astimezone(timezone.utc)
+                t=astronomy.Time.Make(instant.year,instant.month,instant.day,instant.hour,instant.minute,instant.second)
+                rr,cc=rasterio.transform.rowcol(dem_data[1],lon,lat)
+                height=float(dem_data[0][rr,cc]) if 0<=rr<dem_data[0].shape[0] and 0<=cc<dem_data[0].shape[1] else 0.
+                observer=astronomy.Observer(lat,lon,height)
+                eq=astronomy.Equator(astronomy.Body.Moon,t,observer,True,True)
+                horizon=astronomy.Horizon(t,observer,eq.ra,eq.dec,astronomy.Refraction.Normal)
+                moon_angles=(90-horizon.altitude,horizon.azimuth)
+                moon_phase_angle=astronomy.Illumination(astronomy.Body.Moon,t).phase_angle
 
             pixel_data = load_pixel_data_from_h5(
                 h5_path, observer_coordinates, max_radius_km=radius_km
@@ -395,14 +458,25 @@ def print_report(results: list[dict]) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate light pollution model predictions.")
     parser.add_argument("--params", help="JSON file containing model parameters.", default=None)
+    parser.add_argument("--physics-model",choices=['sos3d','legacy'],default=None,
+                        help="Default: current SOS physics, or physics_model in the parameter file.")
+    parser.add_argument("--instrument-response",choices=['sqm-l','sky'],default='sqm-l',
+                        help="Fixed SQM-L Gaussian 20-degree FWHM, or resolved sky radiance.")
+    parser.add_argument("--cloud-optical-depth",type=float,default=None,
+                        help="Explicit cloud optical-thickness scenario; not inferred from cloud fraction.")
     parser.add_argument("--fallback-csv", default=DEFAULT_FALLBACK_CSV_PATH)
     parser.add_argument("--weather-cache", help="Frozen API JSON; KST observation times, metadata-aware offline adapter.")
-    parser.add_argument("--output-dir", default=os.path.join(CODE_DIR, "data", "evaluation"),
+    parser.add_argument("--output-dir", default=None,
                         help="Directory for predictions, metrics, grouped errors, and RMSE plot.")
     add_data_args(parser)
     args = parser.parse_args()
 
     params = load_params(args.params)
+    args.physics_model=args.physics_model or params.get('physics_model',ACTIVE_PHYSICS_MODEL)
+    params.update(physics_model=args.physics_model,
+                  instrument_fwhm_deg=20. if args.instrument_response=='sqm-l' else None)
+    if args.cloud_optical_depth is not None:
+        params['cloud_optical_depth']=args.cloud_optical_depth
     print(f"Parameters: {params if params else 'EnvironmentConfig defaults'}")
 
     if args.weather_cache and not os.path.exists(args.csv):
@@ -410,6 +484,20 @@ def main() -> None:
     csv_path = args.csv if os.path.exists(args.csv) else args.fallback_csv
     if csv_path != args.csv:
         print(f"Evaluation CSV not found; fallback: {csv_path}")
+    if args.output_dir is None:
+        args.output_dir=str(Path(CODE_DIR)/'data/evaluation'/datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'))
+    output=Path(args.output_dir)
+    if output.exists() and any(output.iterdir()):
+        raise FileExistsError('Choose a new output directory; previous research is retained.')
+    output.mkdir(parents=True,exist_ok=True)
+    shutil.copyfile(csv_path,output/'input.csv')
+    conditions={'parameters':params,'inputs_sha256':{}}
+    for label,path in [('observations',csv_path),('weather',args.weather_cache),('h5',args.h5),('dem',args.dem)]:
+        if path:
+            conditions['inputs_sha256'][label]=hashlib.sha256(Path(path).read_bytes()).hexdigest()
+    if args.weather_cache:
+        shutil.copyfile(args.weather_cache,output/'weather.json')
+    (output/'run_conditions.json').write_text(json.dumps(conditions,indent=2,allow_nan=False)+'\n',encoding='utf-8')
 
     cases = preload_cases(
         csv_path,
@@ -420,8 +508,16 @@ def main() -> None:
         args.min_pixels,
         args.max_pixels,
         weather_cache=args.weather_cache,
+        physics_model=args.physics_model,
     )
     results = evaluate(cases, params)
+    environments={}
+    for case in cases:
+        key=f"{case['time']}|{case['observer_coordinates']}"
+        environments.setdefault(key,{'config':asdict(build_config(case,params)),
+                                             'moon_angles_deg':case['moon_angles']})
+    conditions['resolved_environments']=environments
+    (output/'run_conditions.json').write_text(json.dumps(conditions,indent=2,allow_nan=False)+'\n',encoding='utf-8')
     print_report(results)
     save_directional_report(results, args.output_dir)
     print(f"Directional RMSE plot and tables saved: {args.output_dir}")

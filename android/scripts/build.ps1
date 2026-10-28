@@ -1,4 +1,4 @@
-param([string]$Tools = (Join-Path $PSScriptRoot '../../.verification/android-tools'), [string]$Output = 'C:/Users/hyeon/AppData/Local/jmgj-research/android-build/0.9.3', [switch]$Debug)
+param([string]$Tools = (Join-Path $PSScriptRoot '../../.verification/android-tools'), [string]$Output = 'C:/Users/hyeon/AppData/Local/jmgj-research/android-build/0.9.4', [switch]$Debug)
 $ErrorActionPreference = 'Stop'
 $repo = (Resolve-Path (Join-Path $PSScriptRoot '../..')).Path
 $Tools = (Resolve-Path $Tools).Path

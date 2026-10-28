@@ -167,7 +167,7 @@ async function start() {
   const token = crypto.randomBytes(32).toString('hex');
   const backendPort = await freePort();
   const resources = app.isPackaged ? process.resourcesPath : path.join(__dirname, 'build');
-  const backend = app.isPackaged ? path.join(resources, 'backend') : path.join(resources, 'backend', 'jmgj-backend');
+  const backend = app.isPackaged ? path.join(resources, 'backend') : path.join(resources, `backend-${app.getVersion()}`, 'jmgj-backend');
   const web = path.join(resources, 'web');
   const env = { ...process.env, JMGJ_DESKTOP_TOKEN: token, JMGJ_DESKTOP_ORIGIN: origin,
     JMGJ_BACKEND_PORT: String(backendPort), PYTHONUTF8: '1',

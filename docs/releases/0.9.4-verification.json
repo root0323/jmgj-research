@@ -1,0 +1,91 @@
+{
+  "version": "0.9.4",
+  "files": [
+    {
+      "name": "AstroSky-0.9.4-Android.apk",
+      "bytes": 76043360,
+      "sha256": "6123a8f551842c922fc93b1a12955507112b6ad07d7a644fb39cf5da1b580360"
+    },
+    {
+      "name": "AstroSky-0.9.4-PWA.zip",
+      "bytes": 59178944,
+      "sha256": "ee4e97b19c21fda83bcb0142dd0b732978ef8675490940048c15f11d78eed98d"
+    },
+    {
+      "name": "JMGJ-Research-0.9.4-Windows-x64-Setup.exe",
+      "bytes": 221738625,
+      "sha256": "19c1549cc745745f5883195257a19b5334d607b1552414f7b69e208fa73c595c"
+    },
+    {
+      "name": "JMGJ-Research-0.9.4-Windows-x64-Setup.exe.blockmap",
+      "bytes": 230222,
+      "sha256": "fc852e6e2c4dad6f3ac43d5b0547662e0c97381a00c0f068fbbb7ec87a721745"
+    },
+    {
+      "name": "latest.yml",
+      "bytes": 379,
+      "sha256": "c3399cfdedd28375e2d0d398fa34a1d90b8633a1c6f73df001c7e601e7c467cd"
+    }
+  ],
+  "windows_web_build_id": "izUzKaQ12v-3yA-3LFuCc",
+  "backend_exe_sha256": "291978c0492276755e3e38654bd51860ca5bf6f4258c45e80f80760a20bfd23f",
+  "backend_pkg_sha256": "898a9797e1a3876b8471d565083681a2171faaa389039d79eca591d2dc0f033d",
+  "compiled_real_data_check": {
+    "passed": true,
+    "frozen_real_data_cases": [
+      {
+        "altitude": 30,
+        "azimuth": 0,
+        "compiled_sqm": 15.969,
+        "expected_sqm": 15.96945916887841,
+        "seconds": 17.29700000002049,
+        "pixel_count": 965
+      },
+      {
+        "altitude": 30,
+        "azimuth": 90,
+        "compiled_sqm": 16.931,
+        "expected_sqm": 16.931224738853825,
+        "seconds": 0.031000000017229468,
+        "pixel_count": 965
+      }
+    ],
+    "no_weather_fetch": true,
+    "exe_sha256": "291978c0492276755e3e38654bd51860ca5bf6f4258c45e80f80760a20bfd23f",
+    "pkg_sha256": "898a9797e1a3876b8471d565083681a2171faaa389039d79eca591d2dc0f033d"
+  },
+  "android_certificate_sha256": "e5b8e6099682eb248b624e2baa28c2450e6ea8188409db784ecb9f596542c9d9",
+  "android_java_tests": 10,
+  "android_model_manifest_matches": true,
+  "android_web_sources_match": true,
+  "pwa_model_manifest_matches": true,
+  "pwa_zip_entries": 222,
+  "pwa_zip_uncompressed_bytes_match": true,
+  "diagnostics": {
+    "ready": true,
+    "version": "0.9.4",
+    "frontendPort": 43168,
+    "backendPort": 64364,
+    "timings": {
+      "loadingWindow": 8770,
+      "session": 21,
+      "frontend": 9393,
+      "backend": 11555,
+      "page": 5164,
+      "total": 25639
+    },
+    "frontendDenied": 403,
+    "backendDenied": 403,
+    "packaged": true,
+    "updateFeedConfigured": true,
+    "installed": false,
+    "blackMarbleBundled": false,
+    "blackMarbleCatalogue": true,
+    "blackMarbleCloud": "https://astrosky-black-marble.jmgj-kakao-search.workers.dev/VJ146A4-2025",
+    "dataConnected": [
+      false,
+      false
+    ]
+  },
+  "private_settings_or_h5_dem_bundled": false
+}

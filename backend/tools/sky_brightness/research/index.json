@@ -3,7 +3,7 @@
   "results_summary": "RESULTS.md",
   "retention_policy": "Archive every submitted dataset and analysis, including unchanged or deferred results; preserve earlier runs and graphs.",
   "latest_dataset": "2026-10-27_2108-2113_KST_jeju_science_high",
-  "latest_run": "002_scattering_calibration",
+  "latest_run": "003_transport_physics",
   "accepted_model_run": null,
   "datasets": [
     {
@@ -25,10 +25,11 @@
       "included_observations": 49,
       "runs": [
         "001_three_hour_calibration",
-        "002_scattering_calibration"
+        "002_scattering_calibration",
+        "003_transport_physics"
       ],
       "active_for_fitting": true,
-      "status": "research_candidate_not_applied",
+      "status": "physics_revision_retrospective_evaluation",
       "instrument": "SQM-L"
     },
     {
@@ -60,10 +61,11 @@
       "missing_observations": 16,
       "runs": [
         "001_frozen_candidate_evaluation",
-        "002_scattering_calibration"
+        "002_scattering_calibration",
+        "003_transport_physics"
       ],
       "active_for_fitting": true,
-      "status": "diagnostic_candidate_not_applied",
+      "status": "physics_revision_retrospective_evaluation",
       "instrument": "SQM-L",
       "site": "제주과학고등학교 건물 북쪽 사용자 지도 핀",
       "coordinates": {
@@ -85,5 +87,21 @@
   ],
   "exploratory_datasets": [
     "2026-10-26_1829-1835_KST_tamna_playground"
-  ]
+  ],
+  "latest_model_revision": "revisions/2026-10-28_transport_physics",
+  "runtime_model": {
+    "physics_model": "sos3d",
+    "version": "sos3d-2026.10.28",
+    "release": "0.9.4_prepared",
+    "empirical_candidate_adopted": false,
+    "validation": "retrospective; 2026-10-27 SQM-L error increased"
+  },
+  "accepted_model_run_scope": "Empirical fitted candidate; runtime physics adoption is tracked separately under runtime_model.",
+  "next_dataset_workflow": {
+    "mode": "research_only",
+    "automatic_app_adoption": false,
+    "app_adoption_requires_explicit_user_request": true,
+    "retain_and_publish_raw_conditions_metrics_plots": true,
+    "requested_on": "2026-10-28"
+  }
 }

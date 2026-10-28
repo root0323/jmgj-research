@@ -145,6 +145,22 @@ def interp_value(values, idx0, idx1, fraction, default=0.0):
 
     return (1.0 - fraction) * v0 + fraction * v1
 
+
+def interp_positive_value(values, idx0, idx1, fraction):
+    """A zero/missing endpoint cannot become a positive physical observation.
+
+    Convective cloud-base pressure uses zero for an unavailable cloud base.
+    Interpolating 0 and 922 hPa must not invent a 51 hPa stratospheric cloud.
+    Kept separate from the original interpolation used by archived studies.
+    """
+    try:
+        endpoints=[float(values[idx0]),float(values[idx1])]
+    except (TypeError,ValueError,IndexError):
+        return None
+    if not np.isfinite(endpoints).all() or min(endpoints)<=0:
+        return None
+    return (1-fraction)*endpoints[0]+fraction*endpoints[1]
+
 def interp_angle_deg(values, idx0, idx1, fraction, default=0.0):
     try:
         a0 = float(values[idx0])

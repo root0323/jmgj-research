@@ -1,0 +1,257 @@
+{
+  "revision": "2026-10-28_transport_physics",
+  "model_version": "sos3d-2026.10.28",
+  "source_parent_commit": "1fe55696161bacaa0ed24fea6288169d047e20da",
+  "source_snapshot": "models/sos3d-2026.10.28",
+  "source_sha256": {
+    "calculator.py": "21cfacafdc78b49f858259e9201947337d978b1131f6d96b040af9245be8ed0f",
+    "config.py": "b72aec770f8f98c97f00cfc4f90431d4a7ed0b5c5db941981a274eec18f26c94",
+    "data_loader.py": "53068838a0b00be625171f06d57dd2dcd970bd9b80bf593f639f653741b58e23",
+    "modern_sky.py": "94a58199d4a99d1846976983a22e405c609aabefa1a789ed073b86865d12cc7f",
+    "radiative_transfer.py": "e9aac29bc1a63a028d48778dd2e5dd6e48fbd742867dc7c229d043a0e6a53200"
+  },
+  "data": {
+    "2026-10-22_2123-2218_KST_jeju": {
+      "observations": "datasets/2026-10-22_2123-2218_KST_jeju/inputs/v001_all_49.csv",
+      "observations_sha256": "78cc3fd9b89eb6cd0abdacfc8829e1f32000c2847e4eb0be146b2d82a6ba7972",
+      "weather": "datasets/2026-10-22_2123-2218_KST_jeju/raw/weather_cache_33.4268_126.5303_2026-10-22.json",
+      "weather_sha256": "589632945820d923c40f65df308ffc42db725b2704c16052c642db45b63af540"
+    },
+    "2026-10-27_2108-2113_KST_jeju_science_high": {
+      "observations": "datasets/2026-10-27_2108-2113_KST_jeju_science_high/inputs/v001_valid_33.csv",
+      "observations_sha256": "ef16f2e2d1517ad5f71af2ac92fd25dd24e74e989ab35a7b06c920fb5d8342d9",
+      "weather": "datasets/2026-10-27_2108-2113_KST_jeju_science_high/raw/weather_cache_33.426633_126.530639_2026-10-27.json",
+      "weather_sha256": "3186a700177a78dbebf4566770ac3f311cf773c9243a16772570ebd3d86d02f0"
+    }
+  },
+  "aggregate": {
+    "legacy": {
+      "n": 82,
+      "mse": 2.953450139809395,
+      "rmse": 1.718560484768981,
+      "mae": 1.378583050793188,
+      "bias": 1.2259329404910417
+    },
+    "transport_sky": {
+      "n": 82,
+      "mse": 1.3685083571820025,
+      "rmse": 1.169832619301583,
+      "mae": 1.0355877768520105,
+      "bias": -0.451286938077972
+    },
+    "transport_sqm_l": {
+      "n": 82,
+      "mse": 1.7217651233964775,
+      "rmse": 1.3121604792846329,
+      "mae": 1.0900181441446357,
+      "bias": -0.602791413063431
+    }
+  },
+  "nominal": {
+    "2026-10-22_2123-2218_KST_jeju": {
+      "legacy": {
+        "n": 49,
+        "mse": 3.684607291713628,
+        "rmse": 1.919533092112149,
+        "mae": 1.5896450842369416,
+        "bias": 1.541795762833765
+      },
+      "transport_sky": {
+        "n": 49,
+        "mse": 1.166214144043004,
+        "rmse": 1.0799139521475791,
+        "mae": 0.9528380302133045,
+        "bias": -0.3063304055522255
+      },
+      "transport_sqm_l": {
+        "n": 49,
+        "mse": 1.1802234838737653,
+        "rmse": 1.0863809110407663,
+        "mae": 0.9370347314206767,
+        "bias": -0.4501663108433853
+      }
+    },
+    "2026-10-27_2108-2113_KST_jeju_science_high": {
+      "legacy": {
+        "n": 33,
+        "mse": 1.8677925506182602,
+        "rmse": 1.3666720713537173,
+        "mae": 1.0651879102251902,
+        "bias": 0.756924507315482
+      },
+      "transport_sky": {
+        "n": 33,
+        "mse": 1.6688846130550599,
+        "rmse": 1.2918531700836051,
+        "mae": 1.1584586127700887,
+        "bias": -0.6665254257677166
+      },
+      "transport_sqm_l": {
+        "n": 33,
+        "mse": 2.52587240632414,
+        "rmse": 1.5892993444672843,
+        "mae": 1.3171753327347564,
+        "bias": -0.8294165648447107
+      }
+    }
+  },
+  "cloud_optical_depth_scenarios": {
+    "10": {
+      "2026-10-22_2123-2218_KST_jeju": {
+        "legacy": {
+          "n": 49,
+          "mse": 3.684607291713628,
+          "rmse": 1.919533092112149,
+          "mae": 1.5896450842369416,
+          "bias": 1.541795762833765
+        },
+        "transport_sky": {
+          "n": 49,
+          "mse": 1.166214144043004,
+          "rmse": 1.0799139521475791,
+          "mae": 0.9528380302133045,
+          "bias": -0.3063304055522255
+        },
+        "transport_sqm_l": {
+          "n": 49,
+          "mse": 1.1802234838737653,
+          "rmse": 1.0863809110407663,
+          "mae": 0.9370347314206767,
+          "bias": -0.4501663108433853
+        }
+      },
+      "2026-10-27_2108-2113_KST_jeju_science_high": {
+        "legacy": {
+          "n": 33,
+          "mse": 1.8677925506182602,
+          "rmse": 1.3666720713537173,
+          "mae": 1.0651879102251902,
+          "bias": 0.756924507315482
+        },
+        "transport_sky": {
+          "n": 33,
+          "mse": 1.6688846130550599,
+          "rmse": 1.2918531700836051,
+          "mae": 1.1584586127700887,
+          "bias": -0.6665254257677166
+        },
+        "transport_sqm_l": {
+          "n": 33,
+          "mse": 2.52587240632414,
+          "rmse": 1.5892993444672843,
+          "mae": 1.3171753327347564,
+          "bias": -0.8294165648447107
+        }
+      }
+    },
+    "1": {
+      "2026-10-22_2123-2218_KST_jeju": {
+        "legacy": {
+          "n": 49,
+          "mse": 3.684607291713628,
+          "rmse": 1.919533092112149,
+          "mae": 1.5896450842369416,
+          "bias": 1.541795762833765
+        },
+        "transport_sky": {
+          "n": 49,
+          "mse": 0.5746347731745479,
+          "rmse": 0.7580466827145594,
+          "mae": 0.6080427355439364,
+          "bias": 0.08939106255169989
+        },
+        "transport_sqm_l": {
+          "n": 49,
+          "mse": 0.6895356070308234,
+          "rmse": 0.8303828075236285,
+          "mae": 0.6956799410660608,
+          "bias": -0.09240600659396636
+        }
+      },
+      "2026-10-27_2108-2113_KST_jeju_science_high": {
+        "legacy": {
+          "n": 33,
+          "mse": 1.8677925506182602,
+          "rmse": 1.3666720713537173,
+          "mae": 1.0651879102251902,
+          "bias": 0.756924507315482
+        },
+        "transport_sky": {
+          "n": 33,
+          "mse": 2.8226416964879695,
+          "rmse": 1.6800719319386208,
+          "mae": 1.371087962697696,
+          "bias": -0.12804379195380422
+        },
+        "transport_sqm_l": {
+          "n": 33,
+          "mse": 3.4486160742861625,
+          "rmse": 1.857044984454109,
+          "mae": 1.4689598359801748,
+          "bias": -0.29118171346778443
+        }
+      }
+    },
+    "30": {
+      "2026-10-22_2123-2218_KST_jeju": {
+        "legacy": {
+          "n": 49,
+          "mse": 3.684607291713628,
+          "rmse": 1.919533092112149,
+          "mae": 1.5896450842369416,
+          "bias": 1.541795762833765
+        },
+        "transport_sky": {
+          "n": 49,
+          "mse": 1.303782073422955,
+          "rmse": 1.1418327694644934,
+          "mae": 1.0264105269985748,
+          "bias": -0.13207749058728824
+        },
+        "transport_sqm_l": {
+          "n": 49,
+          "mse": 1.2404493530482277,
+          "rmse": 1.1137546197651562,
+          "mae": 0.9680722744350581,
+          "bias": -0.3037342168342351
+        }
+      },
+      "2026-10-27_2108-2113_KST_jeju_science_high": {
+        "legacy": {
+          "n": 33,
+          "mse": 1.8677925506182602,
+          "rmse": 1.3666720713537173,
+          "mae": 1.0651879102251902,
+          "bias": 0.756924507315482
+        },
+        "transport_sky": {
+          "n": 33,
+          "mse": 1.709286871427174,
+          "rmse": 1.3073969831031331,
+          "mae": 1.1731324060406347,
+          "bias": -0.6247738563897307
+        },
+        "transport_sqm_l": {
+          "n": 33,
+          "mse": 2.582827770077117,
+          "rmse": 1.607117845734132,
+          "mae": 1.337929422665555,
+          "bias": -0.7946572691917957
+        }
+      }
+    }
+  },
+  "validation": "Retrospective comparison; model structure was inspected using these data. No independent future test.",
+  "coefficient_fit_performed": false,
+  "primary_observation_response": "SQM-L, Gaussian FWHM 20 degrees",
+  "cloud_optical_depth_status": "Assumed scenarios 1/10/30, not retrieved cloud microphysics; nominal 10 was set before these comparisons.",
+  "runtime_adoption": "Directional transport implementation; no old date-specific empirical candidate was adopted.",
+  "instrument_warning": "2026-10-27 Moon-proximity measurements disagree with an unoccluded direct Moon expectation. No points rotated, filled or excluded.",
+  "limitations": [
+    "Cloud optical thickness is an explicit assumed scenario, not measured or inferred from cloud fraction.",
+    "Independent-column mixing does not resolve observed 3-D cloud morphology or actual Moon occlusion.",
+    "Finite spatial/angular grid; scattering-order convergence does not bound spatial discretization error.",
+    "Full finite Moon disk and approximate Gaussian SQM-L response are reported separately from sky radiance.",
+    "No October 26 twilight observations are fitted or treated as fully dark sky."
+  ]
+}

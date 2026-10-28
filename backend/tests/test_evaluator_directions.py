@@ -4,6 +4,7 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 SCRIPTS = Path(__file__).resolve().parents[1] / "tools/sky_brightness/scripts"
 sys.path.insert(0, str(SCRIPTS))
@@ -64,6 +65,17 @@ class DirectionalEvaluationTests(unittest.TestCase):
             query("2026-10-15 00:00", 37.5, 127.0)
         with self.assertRaises(ValueError):
             query("2020-01-01 00:00", 33.426769, 126.530349)
+
+    def test_modern_free_weather_needs_no_seeing_package_and_rejects_zero_pressure_endpoint(self):
+        cache=SCRIPTS.parent/'research/datasets/2026-10-27_2108-2113_KST_jeju_science_high/raw/weather_cache_33.426633_126.530639_2026-10-27.json'
+        query=frozen_weather_query(str(cache),'sos3d')
+        with patch('requests.get',side_effect=AssertionError('network')):
+            values=query('2026-10-27 21:10',33.426633,126.530639)
+        self.assertAlmostEqual(values[0],.10055555555555556)
+        self.assertAlmostEqual(values[1],.6694444444444444)
+        self.assertEqual(values[2],2.)
+        self.assertIsNone(values[3])
+        self.assertTrue(query.astronomy_required)
 
 
 if __name__ == "__main__":

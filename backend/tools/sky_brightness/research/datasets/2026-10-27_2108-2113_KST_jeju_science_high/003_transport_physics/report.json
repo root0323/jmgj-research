@@ -1,0 +1,45 @@
+{
+  "dataset": "2026-10-27_2108-2113_KST_jeju_science_high",
+  "run": "003_transport_physics",
+  "n": 33,
+  "metrics": {
+    "legacy": {
+      "n": 33,
+      "mse": 1.8677925506182602,
+      "rmse": 1.3666720713537173,
+      "mae": 1.0651879102251902,
+      "bias": 0.756924507315482
+    },
+    "transport_sky": {
+      "n": 33,
+      "mse": 1.6688846130550599,
+      "rmse": 1.2918531700836051,
+      "mae": 1.1584586127700887,
+      "bias": -0.6665254257677166
+    },
+    "transport_sqm_l": {
+      "n": 33,
+      "mse": 2.52587240632414,
+      "rmse": 1.5892993444672843,
+      "mae": 1.3171753327347564,
+      "bias": -0.8294165648447107
+    }
+  },
+  "response": "SQM-L, Gaussian FWHM 20 degrees",
+  "conditions": {
+    "observations": "datasets/2026-10-27_2108-2113_KST_jeju_science_high/inputs/v001_valid_33.csv",
+    "observations_sha256": "ef16f2e2d1517ad5f71af2ac92fd25dd24e74e989ab35a7b06c920fb5d8342d9",
+    "weather": "datasets/2026-10-27_2108-2113_KST_jeju_science_high/raw/weather_cache_33.426633_126.530639_2026-10-27.json",
+    "weather_sha256": "3186a700177a78dbebf4566770ac3f311cf773c9243a16772570ebd3d86d02f0"
+  },
+  "source_sha256": {
+    "calculator.py": "21cfacafdc78b49f858259e9201947337d978b1131f6d96b040af9245be8ed0f",
+    "config.py": "b72aec770f8f98c97f00cfc4f90431d4a7ed0b5c5db941981a274eec18f26c94",
+    "data_loader.py": "53068838a0b00be625171f06d57dd2dcd970bd9b80bf593f639f653741b58e23",
+    "modern_sky.py": "94a58199d4a99d1846976983a22e405c609aabefa1a789ed073b86865d12cc7f",
+    "radiative_transfer.py": "e9aac29bc1a63a028d48778dd2e5dd6e48fbd742867dc7c229d043a0e6a53200"
+  },
+  "shared_revision": "revisions/2026-10-28_transport_physics",
+  "validation": "Retrospective comparison; model structure was inspected using these data. No independent future test.",
+  "coefficient_fit_performed": false
+}
