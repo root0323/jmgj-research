@@ -1,0 +1,14 @@
+{
+  "uid": "2026-10-26_1829-1835_KST_tamna_playground:16",
+  "prediction_without_sqm_input": 15.263060213758862,
+  "cached_fit_prediction": 15.263060213758862,
+  "absolute_sqm_difference": 0.0,
+  "native_art_scale_rerun_absolute_sqm_difference": 0.0,
+  "location_and_time": {
+    "latitude": 33.42785,
+    "longitude": 126.53208,
+    "time_kst": "2026-10-26 18:32"
+  },
+  "actual_sqm_passed_to_predictor": false,
+  "source_linearity_checked": true
+}

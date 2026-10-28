@@ -16,6 +16,7 @@ type ObjectInfoOptions = {
   skyBrightness?: number;
   telescopeApertureMm?: number;
   seeingArcsec?: number | null;
+  seeingLabel?: string;
   daylight?: boolean;
 };
 
@@ -165,35 +166,15 @@ export function projectTargetToScreen(
   );
   const fov = rawFov > Math.PI ? (rawFov * Math.PI) / 180 : rawFov;
   const projection = getCoreNumber(engine, "projection", 0);
-  const distance = Math.hypot(x, y);
-
-  if (projection === 2) {
-    const forward = -z;
-    const angle = Math.atan2(distance, forward);
-    const radius = angle * (rect.height / fov);
-    const normalizedX = distance > 0 ? x / distance : 0;
-    const normalizedY = distance > 0 ? y / distance : 0;
-
-    return {
-      x: rect.width / 2 + normalizedY * radius,
-      y: rect.height / 2 + normalizedX * radius,
-    };
-  }
-
-  const angle = Math.atan2(distance, z);
-  const scale =
-    projection === 1
-      ? rect.height / 2 / Math.tan(fov / 4)
-      : rect.height / 2 / Math.tan(fov / 2);
-  const radius =
-    projection === 1 ? Math.tan(angle / 2) * scale : Math.tan(angle) * scale;
-  const normalizedX = distance > 0 ? x / distance : 0;
-  const normalizedY = distance > 0 ? y / distance : 0;
-
-  return {
-    x: rect.width / 2 + normalizedX * radius,
-    y: rect.height / 2 - normalizedY * radius,
-  };
+  // Stellarium VIEW uses OpenGL axes: X right, Y up, -Z forward.
+  // Native fov is the viewport's smaller dimension (projection.h).
+  const forward = -z;
+  if (forward <= 0 || !Number.isFinite(fov) || fov <= 0) return null;
+  const halfSize = Math.min(rect.width, rect.height) / 2;
+  const scale = projection === 2
+    ? halfSize / Math.tan(fov / 4) / (Math.hypot(x, y, z) + forward)
+    : halfSize / Math.tan(fov / 2) / forward;
+  return { x: rect.width / 2 + x * scale, y: rect.height / 2 - y * scale };
 }
 
 function vectorToSpherical(vector: number[]) {
@@ -869,6 +850,38 @@ function buildPhysicalFields({
 
   return fields;
 }
+export function getLunarContext(engine: StellariumEngine, time: Date, location: { latitude: number; longitude: number }) {
+  const original = getObserver(engine);
+  const observer = original?.clone?.();
+  if (!observer) return null;
+  try {
+    const utc = engine.date2MJD?.(time.getTime());
+    if (typeof utc !== "number" || !Number.isFinite(utc) || !engine.convertFrame) return null;
+    observer.utc = utc;
+    observer.latitude = location.latitude * Math.PI / 180;
+    observer.longitude = location.longitude * Math.PI / 180;
+    engine._observer_update?.(observer.v, false);
+    const moon = engine.getObj?.("NAME Moon");
+    if (!moon) return null;
+    // Preserve the homogeneous distance flag (fourth component). Treating this
+    // finite-distance lunar position as an infinite-distance star changes altitude.
+    const raw = moon.getInfo?.("radec", observer);
+    if (!Array.isArray(raw) || raw.length < 4) return null;
+    const vector = raw.slice(0, 4).map(Number);
+    if (!vector.every(Number.isFinite)) return null;
+    const horizontal = vectorToSpherical(engine.convertFrame(observer, "ICRF", "OBSERVED", vector));
+    const illumination = normalizePhaseFraction(readNumber(moon.getInfo?.("phase", observer)));
+    if (!horizontal || illumination === null) return null;
+    return { source: "stellarium" as const, datetime: time.toISOString(), location,
+      altitude: horizontal.latitude, azimuth: horizontal.longitude,
+      phaseAngle: Math.acos(Math.max(-1, Math.min(1, 2 * illumination - 1))) * 180 / Math.PI };
+  } catch {
+    return null;
+  } finally {
+    observer.destroy?.();
+  }
+}
+
 export function getObjectInfo(
   engine: StellariumEngine,
   target: SweObj,
@@ -1046,12 +1059,12 @@ export function getObjectInfo(
   const skyBrightnessText = `${difficulty.skyBrightness.toFixed(2)} mag/arcsec\u00B2`;
   const telescopeLimitText = `${difficulty.telescopeLimitMagnitude.toFixed(2)} mag`;
   const difficultyDisplayText = `${difficulty.difficulty}\uB2E8\uACC4`;
-  const seeingText =
+  const seeingText = options.seeingLabel ?? (
     options.seeingArcsec !== null &&
     options.seeingArcsec !== undefined &&
     Number.isFinite(options.seeingArcsec)
       ? `${options.seeingArcsec.toFixed(2)}"`
-      : "\uC815\uBCF4 \uC5C6\uC74C";
+      : "\uC815\uBCF4 \uC5C6\uC74C");
   const calculationFields: Array<[string, string]> = [
     ["\uAD00\uCE21 \uB09C\uC774\uB3C4", difficultyDisplayText],
     ["\uB09C\uC774\uB3C4 \uC124\uBA85", difficulty.description],

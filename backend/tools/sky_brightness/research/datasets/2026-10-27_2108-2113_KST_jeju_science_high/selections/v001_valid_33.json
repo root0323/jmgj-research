@@ -1,0 +1,157 @@
+{
+  "raw_grid_count": 49,
+  "valid_count": 33,
+  "missing_count": 16,
+  "included_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    37,
+    38,
+    39,
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49
+  ],
+  "missing": [
+    {
+      "observation_id": 8,
+      "altitude": 30,
+      "azimuth": 105,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 9,
+      "altitude": 30,
+      "azimuth": 120,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 10,
+      "altitude": 30,
+      "azimuth": 135,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 11,
+      "altitude": 30,
+      "azimuth": 150,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 12,
+      "altitude": 30,
+      "azimuth": 165,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 13,
+      "altitude": 30,
+      "azimuth": 180,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 14,
+      "altitude": 30,
+      "azimuth": 195,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 15,
+      "altitude": 30,
+      "azimuth": 210,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 16,
+      "altitude": 30,
+      "azimuth": 225,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 17,
+      "altitude": 30,
+      "azimuth": 240,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 18,
+      "altitude": 30,
+      "azimuth": 255,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 19,
+      "altitude": 30,
+      "azimuth": 270,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 20,
+      "altitude": 30,
+      "azimuth": 285,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 34,
+      "altitude": 60,
+      "azimuth": 135,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 35,
+      "altitude": 60,
+      "azimuth": 150,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    },
+    {
+      "observation_id": 36,
+      "altitude": 60,
+      "azimuth": 165,
+      "raw_value": "-",
+      "reason": "User supplied missing dash; cause unspecified"
+    }
+  ],
+  "outlier_exclusions": [],
+  "imputation_used": false,
+  "previous_date_exclusions_transferred": false
+}

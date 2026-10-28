@@ -42,6 +42,58 @@ python component_residual_plots.py --y-mode radiance
 python main.py --max-pixels 10000
 ```
 
+Install the research dependencies with `python -m pip install -r backend/tools/sky_brightness/requirements.txt`
+from the repository root.
+
+### Directional RMSE evaluation
+
+`evaluator.py` now writes `evaluation.csv`, `metrics.json`, `rmse_by_azimuth.csv`,
+`rmse_by_altitude.csv`, and `rmse_by_direction.png` to `--output-dir` (default:
+`backend/tools/sky_brightness/data/evaluation`). Choose a new output directory for
+each archived research run.
+
+The observation CSV requires `time,lat,lon,zen,az,actual_mag`. Angles are degrees:
+`zen = 90 - altitude`, and azimuth is north=0, east=90. Metrics use predicted SQM
+minus observed SQM: MSE is the mean squared error, RMSE its square root. Each
+directional group pools **squared sample errors**, then takes the square root;
+it does not average per-sample absolute errors or per-group RMSEs. Exact equal
+azimuths/altitudes are grouped across other coordinates and times. Zenith is
+included in altitude/overall metrics and excluded from azimuth metrics. Each
+plot point displays its sample count; n=1 is an absolute error. Empty directions
+are left blank. An altitude sweep with only 30 and 90 degrees produces only two
+altitude points.
+
+Use `--weather-cache` to evaluate the archived API data without network requests,
+API keys, or changes to the application's weather cache. This option reuses the
+timezone-aware research adapter archived in `research/models/82a295073f54/`;
+the calculator and default coefficients still come from the **current runtime
+model**. Observation times are KST; each API package's `metadata.utc_timeoffset`
+determines its time axis. Missing weather coverage, mismatched locations, or
+invalid observation rows stop this offline evaluation instead of being skipped.
+
+From the repository root:
+
+```powershell
+python backend/tools/sky_brightness/scripts/evaluator.py --csv backend/tools/sky_brightness/research/datasets/2026-10-15_0000_KST_jeju/inputs/v002_unobstructed_21.csv --weather-cache backend/tools/sky_brightness/research/datasets/2026-10-15_0000_KST_jeju/inputs/api_snapshot_2026-10-14_1500_UTC.json --h5 <Black-Marble-H5> --dem <DEM-raster> --max-pixels 1000 --output-dir <new-run-directory>
+```
+
+`evaluator.py` scores a fixed model on supplied observations. It does not fit
+parameters or establish independent validation when those observations were
+used for calibration. `kfold_evaluator.py` fits coefficients using all but one
+date (or date-hour), evaluates the held-out group, and repeats for each group.
+It requires at least two groups. Its printed mean fold RMSE weights groups
+equally, which differs from a pooled RMSE if group sizes differ. The single-time
+Jeju data cannot support date-based cross-validation. The existing research
+angular holdouts are diagnostics within one night, not validation across nights.
+
+The current data set is the [2026-10-22 SQM-L sweep](research/datasets/2026-10-22_2123-2218_KST_jeju/).
+It includes all 49 readings and new native three-hour weather. `research/calibrate_three_hour.py`
+fits existing runtime parameters; `research/calibrate_scattering.py` additionally compares an
+explicitly empirical cloud/moon-scattering term. Both preserve fixed-physics baselines and
+directional held-out results. The new term is research-only; `evaluator.py --params` rejects
+unsupported fields instead of silently ignoring them. `research/capture_weather.py` captures
+the app's three weather packages with a process-only key and redacts credentials before saving.
+
 Common defaults are defined in `scripts/cli_common.py`.
 
 ## Common Arguments

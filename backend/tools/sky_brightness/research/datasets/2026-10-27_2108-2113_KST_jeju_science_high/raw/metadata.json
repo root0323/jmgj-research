@@ -1,0 +1,33 @@
+{
+  "dataset_id": "2026-10-27_2108-2113_KST_jeju_science_high",
+  "instrument": "SQM-L",
+  "instrument_fixed_by_user": true,
+  "raw_grid_count": 49,
+  "valid_sqm_count": 33,
+  "missing_sqm_count": 16,
+  "timezone": "Asia/Seoul",
+  "latitude": 33.426633,
+  "longitude": 126.530639,
+  "location_source": "location_reference.json",
+  "observation_interval": [
+    "2026-10-27T21:08+09:00",
+    "2026-10-27T21:13+09:00"
+  ],
+  "initial_planned_interval": [
+    "21:05",
+    "21:15"
+  ],
+  "actual_interval_precedence": "The submitted observation table supersedes the earlier planned interval.",
+  "representative_time": "2026-10-27T21:10+09:00",
+  "exact_midpoint": "2026-10-27T21:10:30+09:00",
+  "time_note": "Minute precision of the existing interpolation adapter; exact reading times unavailable.",
+  "azimuth_convention": "North=0, East=90, South=180, West=270",
+  "units": "SQM in mag/arcsec^2",
+  "missing_note": "Dash is retained in raw data; no zero substitution or imputation.",
+  "weather_received_at": "2026-10-27T12:48:02.022418+00:00",
+  "weather_role": "Post-observation model data; not a pre-observation forecast snapshot.",
+  "raw_observation_sha256": "c1be917d2cd5a56acccc9da99bcf5f80f97ec1fbc7949136fae92e574cb75881",
+  "raw_api_sha256": "3186a700177a78dbebf4566770ac3f311cf773c9243a16772570ebd3d86d02f0",
+  "unused_initial_query": "../unused/tamna_playground/README.md",
+  "model_defaults_changed": false
+}

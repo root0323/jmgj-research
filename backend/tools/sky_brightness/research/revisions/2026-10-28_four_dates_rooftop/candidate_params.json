@@ -1,0 +1,14 @@
+{
+  "model_version": "joint-sos3d-roofmask-2026.10.28",
+  "parameters": {
+    "art_scale": 0.3548913200550485,
+    "twilight_gain": 1.481668301347112,
+    "twilight_concentration": 1.3230622918214614,
+    "cloud_optical_depth": 10.0
+  },
+  "all_four_dates_used": true,
+  "coefficient_fit_performed": true,
+  "application_adopted": false,
+  "default_local_moon_disk_visibility": 1.0,
+  "local_visibility_is_observation_metadata_not_fitted": true
+}

@@ -1,0 +1,21 @@
+{
+  "recorded_on": "2026-10-28",
+  "candidate_version": "sos3d-2026.10.28",
+  "candidate_source_commit": "b6c4577364b72fa13e159ef6f692ce3d89240dea",
+  "candidate_adopted_by_app": false,
+  "released_app_version": "0.9.3",
+  "released_app_physics": "legacy",
+  "prepared_0_9_4_published": false,
+  "prepared_0_9_4_installed": false,
+  "pwa_deployment_performed": false,
+  "application_adoption_requires": "separate explicit user request",
+  "research_results_modified": false,
+  "note": "The transport calculation, raw data, metrics and graphs remain research records. App-default and build changes were withdrawn. The summary runtime_adoption wording describes implementation preparation, not a deployed release; this status record controls actual adoption.",
+  "research_only_selection_checks": {
+    "backend_tests_passed": 97,
+    "run_seconds": 25.161,
+    "application_defaults": "legacy",
+    "research_default": "sos3d",
+    "public_release_observed": "v0.9.3"
+  }
+}

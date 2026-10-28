@@ -1,0 +1,21 @@
+{
+  "instrument": "SQM-L",
+  "source": "https://www.unihedron.com/projects/sqm-l/",
+  "approx_hwhm_deg": 10,
+  "approx_fwhm_deg": 20,
+  "threshold_is_hard_field_stop": false,
+  "moon": {
+    "altitude": 33.24423945519616,
+    "azimuth": 82.97369300893544,
+    "phase_angle": 18.65081718214594,
+    "illumination_fraction": 0.9737425718004823,
+    "source": "Astronomy Engine; topocentric apparent horizon, geocentric illumination"
+  },
+  "nearby_valid_reading_ids": [
+    6,
+    7
+  ],
+  "actual_direct_moon_entry_or_occlusion_confirmed": false,
+  "additional_exclusions": [],
+  "interpretation": "Geometric proximity only. Clouds, building blockage, pointing and the full angular response are not measured."
+}

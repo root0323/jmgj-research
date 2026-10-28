@@ -1,0 +1,35 @@
+{
+  "uid": "2026-10-28_2113-2123_KST_jeju_science_rooftop:6",
+  "time_kst": "2026-10-28 21:13",
+  "angles": [
+    60.0,
+    75.0
+  ],
+  "actual_sqm_passed_to_predictor": false,
+  "native_shaded_sqm": 16.92804723169349,
+  "native_unobstructed_sqm": 15.995136169501787,
+  "native_vs_cached_absolute_sqm_difference": 0.0,
+  "unobstructed_vs_previous_wrapper_absolute_sqm_difference": 0.0,
+  "native_source_gain_and_direct_disk_flag_absolute_sqm_difference": 0.0,
+  "mask_changes_only_direct_disk_channel": true,
+  "conditional_components_cd_m2": {
+    "clear": {
+      "art": 0.0022824543736850267,
+      "moon_diffuse": 0.03608395600114735,
+      "moon_direct_unobstructed": 0.45879065390823565,
+      "moon_direct_visible": 0.0,
+      "background": 0.0001317189763836881,
+      "other": 0.03621567497753104
+    },
+    "cloudy": {
+      "art": 0.01691435673207323,
+      "moon_diffuse": 0.006954286276821894,
+      "moon_direct_unobstructed": 4.036449239417028e-12,
+      "moon_direct_visible": 0.0,
+      "background": 5.650822208296947e-05,
+      "other": 0.0070107944989048635
+    }
+  },
+  "local_roof_mask_fitted": false,
+  "app_adopted": false
+}

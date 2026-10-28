@@ -1,0 +1,56 @@
+{
+  "dataset": "2026-10-28_2113-2123_KST_jeju_science_rooftop",
+  "n": 48,
+  "raw_slots": 49,
+  "missing_observation_ids": [
+    21
+  ],
+  "source_observations": "datasets\\2026-10-28_2113-2123_KST_jeju_science_rooftop\\inputs\\v001_valid_48.csv",
+  "source_sha256": "4dea74081bfd29a9ba845ae4c77c5e2512da6e2756ec4266295c082d6225dcfc",
+  "weather_path": "datasets\\2026-10-28_2113-2123_KST_jeju_science_rooftop\\raw\\weather_cache_33.42642_126.53016_2026-10-28.json",
+  "weather_sha256": "2cf229d55e7935884f98f68b3932a0f707e0ebfc413a672a21278cc2c611006e",
+  "weather_receipt": {
+    "fetched_at": "2026-10-28T12:57:19.946820+00:00",
+    "plan": "free3h",
+    "queries": [
+      {
+        "package": "airquality-3h",
+        "status": 200,
+        "credits_header": "8000"
+      },
+      {
+        "package": "clouds-3h",
+        "status": 200,
+        "credits_header": "8000"
+      },
+      {
+        "package": "air-3h",
+        "status": 200,
+        "credits_header": "8000"
+      }
+    ],
+    "secrets_removed": true,
+    "raw_response_scope": "Complete successful package JSONs with credentials redacted; no field downsampling."
+  },
+  "latitude": 33.42642,
+  "longitude": 126.53016,
+  "coordinate_provenance": "Manual screenshot-to-map registration; approximate, not GPS. Assumed horizontal uncertainty at least 10 m.",
+  "dsm_height_m_used": 494.35931396484375,
+  "vertical_offset_m_added": 0.0,
+  "roof_height": "User: four-storey roof, exact metres unknown. DSM may include structures; no invented 12 m added to a DSM.",
+  "vertical_transport_limitation": "The existing ground-relative RTE grid is retained; elevated sensor/roof geometry is not spatially resolved.",
+  "local_moon_disk_visibility": 0.0,
+  "atmospheric_moon_light_retained": true,
+  "time_policy": "Each user-specified minute is evaluated separately at its start; actual seconds unknown. No transport-field interpolation.",
+  "unique_minute_count": 11,
+  "optical_depth_grid": [
+    10.0,
+    1.0,
+    30.0
+  ],
+  "h5_sha256": "564dab8277384ac4f14b37ef9940f726084584b082c42e3b71036bfe2adb5e15",
+  "dem_sha256": "1c3f6d441d95c1f5219ce90f4db53bd442d0040bb0caa0cccdcf1ca6a58866f0",
+  "retained_source_pixels": 965,
+  "elapsed_seconds": 1077.6656965999864,
+  "application_modified": false
+}

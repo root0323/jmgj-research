@@ -1,0 +1,109 @@
+{
+  "run_id": "001_frozen_candidate_evaluation",
+  "created_at": "2026-10-27T12:55:25.738357+00:00",
+  "source_base_commit": "fa907de8fc53f3752201e45d9b2a2e3cf895904c",
+  "source_sha256": {
+    "backend/src/app/services/sky_brightness_model/core/calculator.py": "39851b1fad3c7f1d441ca2f887e4b26dbf9ba073ac5fcde50ab0b272a87bcf28",
+    "backend/src/app/services/sky_brightness_model/core/config.py": "5bbee049897dc5412770bca632b79798955d106cd6bd655dc13670734354b9c3",
+    "backend/src/app/services/sky_brightness_model/core/data_loader.py": "2ed9aa57540d874a413cd1b2faf97562dbc2b55a1409ae14d4e2cfa35d0b9bbd",
+    "backend/tools/sky_brightness/research/capture_weather.py": "f32a1297469a31d7bca246bf51d658a33ceb1272be01a1a74912e58b52b3863d",
+    "backend/tools/sky_brightness/research/calibrate_three_hour.py": "079ccb52fbaf71e6eca644172c41fad913d1b67735d8dbef0e1f2b5a4e98a7d3",
+    "backend/tools/sky_brightness/research/calibrate_scattering.py": "bfd74c35814ddb4d149a8ac4d330b6db1707b3dc66cd67de29c1043975ff7119",
+    "backend/tools/sky_brightness/research/evaluate_frozen.py": "f7fed2e1b7d8228486eb7278317234a403a716080fa1a49d8525fdcd1708e4cf",
+    "backend/tools/sky_brightness/scripts/evaluator.py": "630e94112096577dfa0ed4316f51760b4f1b58b5e1a5fc897615bcd7bb6a26ee"
+  },
+  "input_sha256": {
+    "raw/location_reference.json": "7a7758054ebc9010a80dfde8aeb99d0253d52976be34b62b7b55e43ac1bb22bd",
+    "raw/location_reference_user.png": "3c98a31f44548ea8d4d71599c98b4696d5c89c9dfa457595141b5f589a8c0afd",
+    "raw/metadata.json": "36004ef8bf372cb4e81281eff890f0d5c294fa252fc8c8522ab8ff5dfc325fc7",
+    "raw/sqm_observations.csv": "c1be917d2cd5a56acccc9da99bcf5f80f97ec1fbc7949136fae92e574cb75881",
+    "raw/weather_cache_33.426633_126.530639_2026-10-27.json": "3186a700177a78dbebf4566770ac3f311cf773c9243a16772570ebd3d86d02f0",
+    "raw/weather_cache_33.426633_126.530639_2026-10-27.receipt.json": "d65f7660487ec3734f6d68908f4a36e3cef415cccb60879d0adb254d3a1bd2fd",
+    "inputs/environment_snapshot.json": "98685bdfaf17ed25e4d5e18c64f50cddcc8b44623d440ef5f2cd72462712fe4b",
+    "inputs/instrument_context.json": "509ef6a734cb5704d609aa5567195bdbb636c597cc1661b00550022d6aac41f1",
+    "inputs/local_assets_verified.json": "e412a44e2aa669551db8de386909a444bc17ce7d0277799bae5693755c0eec0b",
+    "inputs/moon_angular_proximity.csv": "de6bf410eba37c9a259a482d7714d2afafdddfe4d82c80dd65fc7ff9b05a9c0b",
+    "inputs/v001_valid_33.csv": "ef16f2e2d1517ad5f71af2ac92fd25dd24e74e989ab35a7b06c920fb5d8342d9",
+    "selections/v001_valid_33.json": "d9f03d100f09bf437f4b956673538a0919c2f146e97d3771702471a068c9bc85"
+  },
+  "instrument": "SQM-L",
+  "raw_grid_count": 49,
+  "valid_count": 33,
+  "missing_count": 16,
+  "extra_outlier_exclusions": 0,
+  "timezone": "Asia/Seoul",
+  "observer_coordinates": [
+    33.426633,
+    126.530639
+  ],
+  "coordinate_method": "User-selected map pin; WCONGNAMUL to WGS84, not surveyed GPS",
+  "assets": {
+    "black_marble": {
+      "filename": "VJ146A4.A2025001.h30v05.002.2026072180152.h5",
+      "exists": true,
+      "sha256": "564dab8277384ac4f14b37ef9940f726084584b082c42e3b71036bfe2adb5e15",
+      "bytes": 3551132
+    },
+    "dem": {
+      "filename": "Copernicus_DSM_COG_30_N33_00_E126_00_DEM.tif",
+      "exists": true,
+      "sha256": "1c3f6d441d95c1f5219ce90f4db53bd442d0040bb0caa0cccdcf1ca6a58866f0",
+      "bytes": 1099040,
+      "crs": "EPSG:4326",
+      "bounds": [
+        125.99958333333333,
+        33.000416666666666,
+        126.99958333333333,
+        34.000416666666666
+      ],
+      "shape": [
+        1200,
+        1200
+      ]
+    }
+  },
+  "geometry": {
+    "max_pixels": 1000,
+    "radius_km": 30,
+    "keep_radiance_fraction": 0.99,
+    "min_pixels": 50
+  },
+  "versions": {
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "rasterio": "1.5.2",
+    "astronomy-engine": "2.1.19",
+    "numba": "0.68.0",
+    "h5py": "3.16.0"
+  },
+  "checks": {
+    "mse_recomputed_from_saved_csv": true,
+    "all_33_held_once_in_each_calibration_family": true,
+    "missing_readings_not_imputed": true,
+    "direct_pipeline_component_equivalence_atol": 1e-10,
+    "relevant_unit_tests_passed": 15,
+    "missing_angle_plot_verified_visually": true
+  },
+  "model_defaults_changed": false,
+  "application_release_created": false,
+  "candidate_status": "research_only_not_adopted",
+  "api_capture_after_observation": true,
+  "twilight_probe_applied": false,
+  "artifacts_sha256": {
+    "comparison.csv": "119d67ef10318eb4f51dbe6eda063504ccfb02dee3537ba14169ab6a808ee413",
+    "components.csv": "79503841772baa9502a795677bdc9b6967176d8b16fe0fe122959008da777802",
+    "observed_vs_model.png": "afdea72b911f46e32ff3024e249f28f16adcb16379088df950d585d9620cb3ee",
+    "report.json": "6e13d96e50ae249d157041a4a7782eccc0dd2a3f13743ea3ee5c6e377a49dcab",
+    "baseline/evaluation.csv": "354c1df2bf551e7296bfb3da31ae0cf2ce17e4c7e4ed62a9c13f174539ce2265",
+    "baseline/metrics.json": "8ebd7dc37274b1bcbbbe348c35dedfcb8b21ce4b50d6d4b8f69be0cad1be5667",
+    "baseline/rmse_by_altitude.csv": "84e84644ac9e6f118224b8ab58cdbc6880c4011b1e491c5a6e56273666c8a2d9",
+    "baseline/rmse_by_azimuth.csv": "125f00c82a6ba560aae584b060df690a2140e1a536f18ede116c43153f684175",
+    "baseline/rmse_by_direction.png": "2fac0a1c7d6dacc46d1e4a676ea87affa07e1a9a39f1062099264004a5c9c3a0",
+    "frozen_candidate/evaluation.csv": "6d14774a8bf896bc98564e11bcbeaecbc775569e6e49d32fa64f8b3b6614203f",
+    "frozen_candidate/metrics.json": "8014ba31b2cb41eef93541d120f32a3dc3f8fee639d1da5cca5571fe62c75232",
+    "frozen_candidate/rmse_by_altitude.csv": "74cedf7ab64f2417693ee3b38ea5be7ed74564d42a9ca51c8440b391157f04c3",
+    "frozen_candidate/rmse_by_azimuth.csv": "f5e84d089f93df0ff6c0adda38e7353fb3828def572b2f5cc808c2b0a662a9eb",
+    "frozen_candidate/rmse_by_direction.png": "509df2dd87c67516ffcbcd47ba83e1741d443cdf52c41b7cb2a1d6e5eb8cb703"
+  }
+}

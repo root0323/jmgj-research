@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "run_id": "003_directional_rmse",
+  "created_at": "2026-10-21T03:13:11.271008+00:00",
+  "dataset": "2026-10-15_0000_KST_jeju",
+  "selection": "v002_unobstructed_21",
+  "observation_time": "2026-10-15T00:00:00+09:00",
+  "api_time": "2026-10-14T15:00:00Z",
+  "raw_observations": 25,
+  "included_observations": 21,
+  "exclusion": {
+    "altitude": 30,
+    "azimuths": [
+      300,
+      315,
+      330,
+      345
+    ],
+    "reason": "User-confirmed building obstruction"
+  },
+  "source_base_commit": "e7d2ca9f7850db7ce19dd7aa3d4393f8406c8a11",
+  "source_sha256": {
+    "backend/src/app/services/sky_brightness_model/core/calculator.py": "39851b1fad3c7f1d441ca2f887e4b26dbf9ba073ac5fcde50ab0b272a87bcf28",
+    "backend/src/app/services/sky_brightness_model/core/config.py": "5bbee049897dc5412770bca632b79798955d106cd6bd655dc13670734354b9c3",
+    "backend/src/app/services/sky_brightness_model/core/data_loader.py": "2ed9aa57540d874a413cd1b2faf97562dbc2b55a1409ae14d4e2cfa35d0b9bbd",
+    "backend/tools/sky_brightness/scripts/evaluator.py": "b424589c8d63ba7ed9d118fe7220f664adf34304735bd6e34e1a5409970d8018",
+    "backend/tools/sky_brightness/research/models/82a295073f54/data_loader.py": "2ad29891552918fda44e09ee430cc050548b83fdd90e8dba2fa62d69e039076d"
+  },
+  "input_sha256": {
+    "datasets/2026-10-15_0000_KST_jeju/inputs/v002_unobstructed_21.csv": "7a67ae00aca823a49bf5b5825c85925b42d02710182d9ede253f85ecdd9141a8",
+    "datasets/2026-10-15_0000_KST_jeju/inputs/api_snapshot_2026-10-14_1500_UTC.json": "bab252c27342e719c641e5369bf954b147858d2bd509a04fc7a1669328141a1a",
+    "datasets/2026-10-15_0000_KST_jeju/raw/sqm_observations.csv": "0bb55a8ff690f8ec3b3a9da53f2dbdd52047e6dba42b1af7f3be9dc46edae617",
+    "datasets/2026-10-15_0000_KST_jeju/raw/weather_cache_33.4268_126.5303.json.gz": "276ceaaf8eb0ef94c36b7a227a39888b6c262f9a6868b8cc0748cbba69382a38",
+    "datasets/2026-10-15_0000_KST_jeju/selections/v002_building_obstruction.json": "14e3cf7e7f31dfe6a6ef44d2b1a01b2da6b826568805174dbdc1ca86771a9151"
+  },
+  "asset_sha256": {
+    "h5": "564dab8277384ac4f14b37ef9940f726084584b082c42e3b71036bfe2adb5e15",
+    "dem": "1c3f6d441d95c1f5219ce90f4db53bd442d0040bb0caa0cccdcf1ca6a58866f0"
+  },
+  "geometry": {
+    "max_pixels": 1000,
+    "min_pixels": 50,
+    "radius_km": 30,
+    "keep_radiance_fraction": 0.99
+  },
+  "coefficients": {
+    "baseline": "Current EnvironmentConfig defaults; config.py byte-identical to snapshot 82a295073f54",
+    "candidate": {
+      "art_scale": 0.6732156660053734,
+      "other_coefficients": "Same defaults as baseline"
+    }
+  },
+  "weather_adapter": "Frozen research adapter models/82a295073f54/data_loader.py; explicit read-only API file, KST-to-package-timezone conversion",
+  "split": {
+    "mode": "fixed_model_scoring",
+    "parameter_fitting_this_run": false,
+    "independent_test_set": false,
+    "angular_holdout_rerun": false,
+    "candidate_calibrated_on": "Same 21 observations in run 002",
+    "prior_angular_holdout_rmse": 0.7732588335433445
+  },
+  "status": "diagnostic_only_not_applied",
+  "limitations": [
+    "One location and observation time; no independent-night validation.",
+    "API data was generated after observation; retrospective evaluation.",
+    "Azimuth samples are singletons; their RMSE equals absolute error.",
+    "Only altitude 30 (n=20) and zenith 90 (n=1) were observed."
+  ],
+  "verification": {
+    "unit_tests": "4 tests passed",
+    "regression_checks": {
+      "baseline": {
+        "metrics": {
+          "n": 21,
+          "mse": 0.585648207200708,
+          "rmse": 0.7652765560244924,
+          "mae": 0.5924529447569332,
+          "bias": -0.40839897531961017,
+          "error_definition": "predicted SQM - observed SQM",
+          "rmse_unit": "mag/arcsec^2",
+          "mse_unit": "(mag/arcsec^2)^2",
+          "grouping": "Exact angles; squared errors pooled across all other coordinates and times.",
+          "azimuth_excludes_zenith": true,
+          "invalid_error_rows": 0
+        },
+        "max_prediction_delta_vs_run_002": 0.0,
+        "altitude_groups": [
+          {
+            "altitude": "30.0",
+            "n": "20",
+            "mse": "0.6148509578221641",
+            "rmse": "0.7841243254880976",
+            "mae": "0.6200798497947547",
+            "bias": "-0.4308146662856158"
+          },
+          {
+            "altitude": "90.0",
+            "n": "1",
+            "mse": "0.0015931947715844762",
+            "rmse": "0.039914844000502825",
+            "mae": "0.039914844000502825",
+            "bias": "0.039914844000502825"
+          }
+        ],
+        "azimuth_observations": 20
+      },
+      "candidate": {
+        "metrics": {
+          "n": 21,
+          "mse": 0.4147060286986421,
+          "rmse": 0.6439767299356726,
+          "mae": 0.5384579419032317,
+          "bias": 0.006052832805222593,
+          "error_definition": "predicted SQM - observed SQM",
+          "rmse_unit": "mag/arcsec^2",
+          "mse_unit": "(mag/arcsec^2)^2",
+          "grouping": "Exact angles; squared errors pooled across all other coordinates and times.",
+          "azimuth_excludes_zenith": true,
+          "invalid_error_rows": 0
+        },
+        "max_prediction_delta_vs_run_002": 3.552713678800501e-15,
+        "altitude_groups": [
+          {
+            "altitude": "30.0",
+            "n": "20",
+            "mse": "0.4258142869293011",
+            "rmse": "0.6525444712272882",
+            "mae": "0.5434410997061032",
+            "bias": "-0.015584264846806306"
+          },
+          {
+            "altitude": "90.0",
+            "n": "1",
+            "mse": "0.19254086408546198",
+            "rmse": "0.43879478584580056",
+            "mae": "0.43879478584580056",
+            "bias": "0.43879478584580056"
+          }
+        ],
+        "azimuth_observations": 20
+      }
+    },
+    "independent_mse_and_weighted_altitude_checks": "passed",
+    "asset_hashes_match_run_002": true
+  },
+  "runtime": {
+    "python": "3.12.14",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "matplotlib": "3.11.2",
+    "rasterio": "1.5.2",
+    "numba": "0.68.0",
+    "h5py": "3.16.0"
+  },
+  "artifact_sha256": {
+    "baseline/evaluation.csv": "a32b2c8bbd44077c3d71258b0d4d3d0f6cc3a73bc1e72659dfc04055247c4567",
+    "baseline/metrics.json": "3c68b242bee56c8033b13c07f98f5d725f2cd51864f0ceec3b69f83e8800887a",
+    "baseline/rmse_by_altitude.csv": "28490933f114e3098c61fa979461cbf6df1dcb0b949ad499a821ebeeced94894",
+    "baseline/rmse_by_azimuth.csv": "5ee8425413067ad03c1c240e122a19a0575ceb9a26cd85567b1a8fac438ff148",
+    "baseline/rmse_by_direction.png": "2e0274df69849a53924eaeca909503b9b3a8a53789b17d0248bab1e6a6a60edc",
+    "baseline_console.txt": "16e9b41d01efbb60494008d9e651542d1402bcc7e85262755cfa158ecfe0e3d0",
+    "candidate/evaluation.csv": "c3bb9edba38bb74fc6c43638e7bc6ce006a6a8faf1ec34ecc7700b2d4d7fddeb",
+    "candidate/metrics.json": "ae8dcc7ce1a9b91ecaef6b00176ef3785c94d7711b8d254fbacf696207d412b7",
+    "candidate/rmse_by_altitude.csv": "8aa79de9ad6afa2096f5c9d7193c9654f0c88bba44832270fdb5c6f6774a2f88",
+    "candidate/rmse_by_azimuth.csv": "5355ec249de4f3d17b34d3cfe9eeacb28d0952c2d46d95458ce5c4a25fdac2ae",
+    "candidate/rmse_by_direction.png": "ced294066536421a3d25f572448e69efe781fcc34bd6665b3cd8ccbdee1383e3",
+    "candidate_console.txt": "6325bb6b79e711f95750c616fa1a2822fbf3eb384c0fc3bd0e98fdfdf6f94476",
+    "candidate_params.json": "4c7b5b1c78fce175924bd5ff14085d7c05e69b0aa4e9703c25b273c8257eb1d7",
+    "README.md": "ed66769b67702c1d2cb4deeb63de48db72fdab20ff728a47c1a1fa3b0e9ef303"
+  }
+}

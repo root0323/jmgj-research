@@ -1,0 +1,1643 @@
+{
+  "created_at": "2026-10-28T05:38:28.109666+00:00",
+  "model_version": "sos3d-2026.10.28",
+  "n": 82,
+  "datasets": {
+    "2026-10-22_2123-2218_KST_jeju": {
+      "legacy": {
+        "n": 49,
+        "mse": 3.684607291713628,
+        "rmse": 1.919533092112149,
+        "mae": 1.5896450842369416,
+        "bias": 1.541795762833765
+      },
+      "transport_sky": {
+        "n": 49,
+        "mse": 0.5746347731745479,
+        "rmse": 0.7580466827145594,
+        "mae": 0.6080427355439364,
+        "bias": 0.08939106255169989
+      },
+      "transport_sqm_l": {
+        "n": 49,
+        "mse": 0.6895356070308234,
+        "rmse": 0.8303828075236285,
+        "mae": 0.6956799410660608,
+        "bias": -0.09240600659396636
+      }
+    },
+    "2026-10-27_2108-2113_KST_jeju_science_high": {
+      "legacy": {
+        "n": 33,
+        "mse": 1.8677925506182602,
+        "rmse": 1.3666720713537173,
+        "mae": 1.0651879102251902,
+        "bias": 0.756924507315482
+      },
+      "transport_sky": {
+        "n": 33,
+        "mse": 2.8226416964879695,
+        "rmse": 1.6800719319386208,
+        "mae": 1.371087962697696,
+        "bias": -0.12804379195380422
+      },
+      "transport_sqm_l": {
+        "n": 33,
+        "mse": 3.4486160742861625,
+        "rmse": 1.857044984454109,
+        "mae": 1.4689598359801748,
+        "bias": -0.29118171346778443
+      }
+    }
+  },
+  "contexts": {
+    "2026-10-22_2123-2218_KST_jeju/2026-10-22 21:25": {
+      "weather": {
+        "aod": 0.13694444444444445,
+        "cloud_fraction": 0.6841666666666667,
+        "cloud_base_h": 0.7992436827912015
+      },
+      "modern_weather": {
+        "aod": 0.13694444444444445,
+        "cloud_fraction": 0.6841666666666667,
+        "cloud_base_h": 0.7992436827912015,
+        "cloud_base_source": "convective_cloud_base_pressure_proxy"
+      },
+      "details": {
+        "aod550": 0.13694444444444445,
+        "totalcloudcover": 68.41666666666667,
+        "convectivecloudbase_pressure": 920.8611111111111,
+        "cloud_base_h_km": 0.7992436827912015,
+        "cloud_base_fallback": false,
+        "interpolation": {
+          "p2": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-22 21:00",
+            "right": "2026-10-23 00:00",
+            "fraction": 0.1388888888888889,
+            "utc_offset_hours": 9.0
+          },
+          "p3": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-22 21:00",
+            "right": "2026-10-23 00:00",
+            "fraction": 0.1388888888888889,
+            "utc_offset_hours": 9.0
+          },
+          "p4": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-22 21:00",
+            "right": "2026-10-23 00:00",
+            "fraction": 0.1388888888888889,
+            "utc_offset_hours": 9.0
+          }
+        }
+      },
+      "moon": {
+        "altitude": 50.369861182499264,
+        "azimuth": 180.32904847398925,
+        "phase_angle": 46.36648344347946,
+        "illumination_fraction": 0.845021523810952,
+        "source": "Astronomy Engine; topocentric apparent horizon, geocentric illumination"
+      },
+      "shield": 12.41783975153975,
+      "transport_sky_transport": {
+        "clear": {
+          "scattering_orders": 7,
+          "converged": true,
+          "last_order_fraction": 0.00023535652738618487,
+          "observed_tail_fraction_estimate": 8.901786784833294e-05,
+          "requested_order_tolerance": 0.005,
+          "spatial_grid_shape": [
+            11,
+            16,
+            16
+          ],
+          "angular_directions": 48,
+          "order_fractions": [
+            0.569088300694513,
+            0.15449845681696614,
+            0.045262761531080664,
+            0.012269033135057977,
+            0.0032576116753424253,
+            0.0008714878104533283,
+            0.00023535652738618487
+          ],
+          "order_ratios": [
+            [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.26873944443474856,
+              0.3210924425402396,
+              0.28610753781529813,
+              0.0
+            ],
+            [
+              0.2672715054439647,
+              0.3068548834322722,
+              0.2810772708520829,
+              0.0
+            ],
+            [
+              0.275519496477542,
+              0.2744293913333522,
+              0.2684315466467175,
+              0.0
+            ],
+            [
+              0.27819945720651384,
+              0.26638271786058804,
+              0.2672823338078368,
+              0.0
+            ],
+            [
+              0.27693466158208424,
+              0.2677568878217782,
+              0.269507667616918,
+              0.0
+            ],
+            [
+              0.27525850452526784,
+              0.2701264783024493,
+              0.2710830311093695,
+              0.0
+            ]
+          ],
+          "last_order_fraction_by_channel": [
+            9.614634284761522e-05,
+            0.00023535652738618487,
+            4.144972042102878e-05,
+            0.0
+          ],
+          "convergence_scope": "Each source channel independently; a bright Moon cannot hide unconverged artificial light.",
+          "error_scope": "Observed scattering-order convergence; not a spatial/angular error bound or exact MSOS-LP1 guarantee.",
+          "method": "3-D upwind finite-volume discrete ordinates; positive successive-order summation",
+          "lateral_boundary": "vacuum",
+          "ground_reflection": "Lambertian",
+          "single_global_multiplier_used": false
+        },
+        "cloudy": {
+          "scattering_orders": 16,
+          "converged": true,
+          "last_order_fraction": 0.001574348093696302,
+          "observed_tail_fraction_estimate": 0.003501104226294517,
+          "requested_order_tolerance": 0.005,
+          "spatial_grid_shape": [
+            16,
+            16,
+            16
+          ],
+          "angular_directions": 48,
+          "order_fractions": [
+            1.0,
+            0.5118723660311948,
+            0.28291382753520183,
+            0.16424025479603857,
+            0.10748726795746238,
+            0.07438878077297834,
+            0.05067368782322386,
+            0.03423728141658843,
+            0.023065335317742353,
+            0.015548440383156094,
+            0.010510692643734413,
+            0.007133483411162296,
+            0.004862463467250512,
+            0.003328089790334062,
+            0.0022858869308858085,
+            0.001574348093696302
+          ],
+          "order_ratios": [
+            [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.1958805298166616,
+              0.47187206580360996,
+              0.4192182993715793,
+              1.0486445151021848
+            ],
+            [
+              0.18330935567939696,
+              0.8589914318374444,
+              0.8290024862706012,
+              0.7707635029928197
+            ],
+            [
+              0.1753481475019835,
+              0.8580619682746775,
+              0.8359656267674506,
+              0.6946147264633642
+            ],
+            [
+              0.16983537257773307,
+              0.7951604846140748,
+              0.7807314722455784,
+              0.6680206666918431
+            ],
+            [
+              0.1662771113105816,
+              0.7476904030167366,
+              0.7396745402551285,
+              0.6613037836059009
+            ],
+            [
+              0.16408051541475083,
+              0.7175621999045447,
+              0.7139169173086708,
+              0.6642997460099795
+            ],
+            [
+              0.1627054766557663,
+              0.6995944003694137,
+              0.6986823228268182,
+              0.671808523269341
+            ],
+            [
+              0.1617954352473722,
+              0.689596391211088,
+              0.6902800617506346,
+              0.6804244082974341
+            ],
+            [
+              0.16115611600424284,
+              0.684751053025577,
+              0.6862672651046701,
+              0.6879811057631839
+            ],
+            [
+              0.16068821154503146,
+              0.6831772538794265,
+              0.6850213656232836,
+              0.6934641562694022
+            ],
+            [
+              0.160337377954528,
+              0.6835644278577331,
+              0.6854152341284309,
+              0.6967643743201946
+            ],
+            [
+              0.16006970939504953,
+              0.6849700579981393,
+              0.6866428743912528,
+              0.6982888516081505
+            ],
+            [
+              0.15986202222243556,
+              0.6867307034994183,
+              0.6881427787575752,
+              0.6986109664859714
+            ],
+            [
+              0.15969796119340246,
+              0.688420182761895,
+              0.6895597204535172,
+              0.698255888298654
+            ],
+            [
+              0.15956594482308323,
+              0.6898112730770073,
+              0.6907089083818236,
+              0.6976134175296799
+            ]
+          ],
+          "last_order_fraction_by_channel": [
+            3.6464790591356283e-13,
+            0.001574348093696302,
+            0.000257949278572971,
+            0.0013077786645296322
+          ],
+          "convergence_scope": "Each source channel independently; a bright Moon cannot hide unconverged artificial light.",
+          "error_scope": "Observed scattering-order convergence; not a spatial/angular error bound or exact MSOS-LP1 guarantee.",
+          "method": "3-D upwind finite-volume discrete ordinates; positive successive-order summation",
+          "lateral_boundary": "vacuum",
+          "ground_reflection": "Lambertian",
+          "single_global_multiplier_used": false
+        },
+        "cloud_fraction": 0.6841666666666667,
+        "cloud_mixing": "independent-column radiance expectation, linear probability",
+        "cloud_optical_depth": 1.0,
+        "cloud_optical_depth_source": "explicit_optical_depth",
+        "cloud_base_km": 0.7992436827912015,
+        "cloud_base_source": "convective_cloud_base_pressure_proxy",
+        "cloud_thickness_km": 1.0,
+        "cloud_component_definition": "Artificial photons with at least one cloud-scattering event; paths are tagged through subsequent scattering.",
+        "instrument_response": "resolved sky radiance",
+        "spatial_cloud_morphology_resolved": false,
+        "legacy_global_multiple_scattering_factor_applied": false
+      },
+      "transport_sqm_l_transport": {
+        "clear": {
+          "scattering_orders": 7,
+          "converged": true,
+          "last_order_fraction": 0.00023535652738618487,
+          "observed_tail_fraction_estimate": 8.901786784833294e-05,
+          "requested_order_tolerance": 0.005,
+          "spatial_grid_shape": [
+            11,
+            16,
+            16
+          ],
+          "angular_directions": 48,
+          "order_fractions": [
+            0.569088300694513,
+            0.15449845681696614,
+            0.045262761531080664,
+            0.012269033135057977,
+            0.0032576116753424253,
+            0.0008714878104533283,
+            0.00023535652738618487
+          ],
+          "order_ratios": [
+            [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.26873944443474856,
+              0.3210924425402396,
+              0.28610753781529813,
+              0.0
+            ],
+            [
+              0.2672715054439647,
+              0.3068548834322722,
+              0.2810772708520829,
+              0.0
+            ],
+            [
+              0.275519496477542,
+              0.2744293913333522,
+              0.2684315466467175,
+              0.0
+            ],
+            [
+              0.27819945720651384,
+              0.26638271786058804,
+              0.2672823338078368,
+              0.0
+            ],
+            [
+              0.27693466158208424,
+              0.2677568878217782,
+              0.269507667616918,
+              0.0
+            ],
+            [
+              0.27525850452526784,
+              0.2701264783024493,
+              0.2710830311093695,
+              0.0
+            ]
+          ],
+          "last_order_fraction_by_channel": [
+            9.614634284761522e-05,
+            0.00023535652738618487,
+            4.144972042102878e-05,
+            0.0
+          ],
+          "convergence_scope": "Each source channel independently; a bright Moon cannot hide unconverged artificial light.",
+          "error_scope": "Observed scattering-order convergence; not a spatial/angular error bound or exact MSOS-LP1 guarantee.",
+          "method": "3-D upwind finite-volume discrete ordinates; positive successive-order summation",
+          "lateral_boundary": "vacuum",
+          "ground_reflection": "Lambertian",
+          "single_global_multiplier_used": false
+        },
+        "cloudy": {
+          "scattering_orders": 16,
+          "converged": true,
+          "last_order_fraction": 0.001574348093696302,
+          "observed_tail_fraction_estimate": 0.003501104226294517,
+          "requested_order_tolerance": 0.005,
+          "spatial_grid_shape": [
+            16,
+            16,
+            16
+          ],
+          "angular_directions": 48,
+          "order_fractions": [
+            1.0,
+            0.5118723660311948,
+            0.28291382753520183,
+            0.16424025479603857,
+            0.10748726795746238,
+            0.07438878077297834,
+            0.05067368782322386,
+            0.03423728141658843,
+            0.023065335317742353,
+            0.015548440383156094,
+            0.010510692643734413,
+            0.007133483411162296,
+            0.004862463467250512,
+            0.003328089790334062,
+            0.0022858869308858085,
+            0.001574348093696302
+          ],
+          "order_ratios": [
+            [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.1958805298166616,
+              0.47187206580360996,
+              0.4192182993715793,
+              1.0486445151021848
+            ],
+            [
+              0.18330935567939696,
+              0.8589914318374444,
+              0.8290024862706012,
+              0.7707635029928197
+            ],
+            [
+              0.1753481475019835,
+              0.8580619682746775,
+              0.8359656267674506,
+              0.6946147264633642
+            ],
+            [
+              0.16983537257773307,
+              0.7951604846140748,
+              0.7807314722455784,
+              0.6680206666918431
+            ],
+            [
+              0.1662771113105816,
+              0.7476904030167366,
+              0.7396745402551285,
+              0.6613037836059009
+            ],
+            [
+              0.16408051541475083,
+              0.7175621999045447,
+              0.7139169173086708,
+              0.6642997460099795
+            ],
+            [
+              0.1627054766557663,
+              0.6995944003694137,
+              0.6986823228268182,
+              0.671808523269341
+            ],
+            [
+              0.1617954352473722,
+              0.689596391211088,
+              0.6902800617506346,
+              0.6804244082974341
+            ],
+            [
+              0.16115611600424284,
+              0.684751053025577,
+              0.6862672651046701,
+              0.6879811057631839
+            ],
+            [
+              0.16068821154503146,
+              0.6831772538794265,
+              0.6850213656232836,
+              0.6934641562694022
+            ],
+            [
+              0.160337377954528,
+              0.6835644278577331,
+              0.6854152341284309,
+              0.6967643743201946
+            ],
+            [
+              0.16006970939504953,
+              0.6849700579981393,
+              0.6866428743912528,
+              0.6982888516081505
+            ],
+            [
+              0.15986202222243556,
+              0.6867307034994183,
+              0.6881427787575752,
+              0.6986109664859714
+            ],
+            [
+              0.15969796119340246,
+              0.688420182761895,
+              0.6895597204535172,
+              0.698255888298654
+            ],
+            [
+              0.15956594482308323,
+              0.6898112730770073,
+              0.6907089083818236,
+              0.6976134175296799
+            ]
+          ],
+          "last_order_fraction_by_channel": [
+            3.6464790591356283e-13,
+            0.001574348093696302,
+            0.000257949278572971,
+            0.0013077786645296322
+          ],
+          "convergence_scope": "Each source channel independently; a bright Moon cannot hide unconverged artificial light.",
+          "error_scope": "Observed scattering-order convergence; not a spatial/angular error bound or exact MSOS-LP1 guarantee.",
+          "method": "3-D upwind finite-volume discrete ordinates; positive successive-order summation",
+          "lateral_boundary": "vacuum",
+          "ground_reflection": "Lambertian",
+          "single_global_multiplier_used": false
+        },
+        "cloud_fraction": 0.6841666666666667,
+        "cloud_mixing": "independent-column radiance expectation, linear probability",
+        "cloud_optical_depth": 1.0,
+        "cloud_optical_depth_source": "explicit_optical_depth",
+        "cloud_base_km": 0.7992436827912015,
+        "cloud_base_source": "convective_cloud_base_pressure_proxy",
+        "cloud_thickness_km": 1.0,
+        "cloud_component_definition": "Artificial photons with at least one cloud-scattering event; paths are tagged through subsequent scattering.",
+        "instrument_response": "SQM-L Gaussian approximation",
+        "spatial_cloud_morphology_resolved": false,
+        "legacy_global_multiple_scattering_factor_applied": false
+      }
+    },
+    "2026-10-22_2123-2218_KST_jeju/2026-10-22 22:15": {
+      "weather": {
+        "aod": 0.15083333333333332,
+        "cloud_fraction": 0.6925,
+        "cloud_base_h": 0.8017427613192543
+      },
+      "modern_weather": {
+        "aod": 0.15083333333333332,
+        "cloud_fraction": 0.6925,
+        "cloud_base_h": 0.8017427613192543,
+        "cloud_base_source": "convective_cloud_base_pressure_proxy"
+      },
+      "details": {
+        "aod550": 0.15083333333333332,
+        "totalcloudcover": 69.25,
+        "convectivecloudbase_pressure": 920.5833333333334,
+        "cloud_base_h_km": 0.8017427613192543,
+        "cloud_base_fallback": false,
+        "interpolation": {
+          "p2": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-22 21:00",
+            "right": "2026-10-23 00:00",
+            "fraction": 0.4166666666666667,
+            "utc_offset_hours": 9.0
+          },
+          "p3": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-22 21:00",
+            "right": "2026-10-23 00:00",
+            "fraction": 0.4166666666666667,
+            "utc_offset_hours": 9.0
+          },
+          "p4": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-22 21:00",
+            "right": "2026-10-23 00:00",
+            "fraction": 0.4166666666666667,
+            "utc_offset_hours": 9.0
+          }
+        }
+      },
+      "moon": {
+        "altitude": 48.83692025131953,
+        "azimuth": 199.10098045751303,
+        "phase_angle": 45.953106882834504,
+        "illumination_fraction": 0.8476234368467628,
+        "source": "Astronomy Engine; topocentric apparent horizon, geocentric illumination"
+      },
+      "shield": 10.753194605437505,
+      "transport_sky_transport": {
+        "clear": {
+          "scattering_orders": 7,
+          "converged": true,
+          "last_order_fraction": 0.0003072190439958405,
+          "observed_tail_fraction_estimate": 0.00012415212564825012,
+          "requested_order_tolerance": 0.005,
+          "spatial_grid_shape": [
+            11,
+            16,
+            16
+          ],
+          "angular_directions": 48,
+          "order_fractions": [
+            0.5891534746038806,
+            0.16337318528137126,
+            0.0501744769179814,
+            0.014235058805527051,
+            0.003936403737502907,
+            0.001094363869274724,
+            0.0003072190439958405
+          ],
+          "order_ratios": [
+            [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.28045966684053086,
+              0.3314519307550318,
+              0.29871218938123906,
+              0.0
+            ],
+            [
+              0.2766981070616072,
+              0.3233391121933471,
+              0.2953714234722849,
+              0.0
+            ],
+            [
+              0.28553340582073533,
+              0.2878081206740908,
+              0.2803066993504747,
+              0.0
+            ],
+            [
+              0.2893119485433576,
+              0.2776216313951206,
+              0.27796707764519935,
+              0.0
+            ],
+            [
+              0.2884447066522185,
+              0.2783156623892169,
+              0.2800895016989144,
+              0.0
+            ],
+            [
+              0.286690447043339,
+              0.28081469534062065,
+              0.2819283147473911,
+              0.0
+            ]
+          ],
+          "last_order_fraction_by_channel": [
+            0.00012579585311825342,
+            0.0003072190439958405,
+            5.283388330376258e-05,
+            0.0
+          ],
+          "convergence_scope": "Each source channel independently; a bright Moon cannot hide unconverged artificial light.",
+          "error_scope": "Observed scattering-order convergence; not a spatial/angular error bound or exact MSOS-LP1 guarantee.",
+          "method": "3-D upwind finite-volume discrete ordinates; positive successive-order summation",
+          "lateral_boundary": "vacuum",
+          "ground_reflection": "Lambertian",
+          "single_global_multiplier_used": false
+        },
+        "cloudy": {
+          "scattering_orders": 16,
+          "converged": true,
+          "last_order_fraction": 0.0016431459245664093,
+          "observed_tail_fraction_estimate": 0.0036811417823448623,
+          "requested_order_tolerance": 0.005,
+          "spatial_grid_shape": [
+            16,
+            16,
+            16
+          ],
+          "angular_directions": 48,
+          "order_fractions": [
+            1.0,
+            0.5157400137230552,
+            0.28603358326039424,
+            0.16637634625996353,
+            0.10839339442752295,
+            0.07541982792815714,
+            0.05162170245621637,
+            0.03502079530927419,
+            0.023675148657625458,
+            0.016006839395766463,
+            0.010848619065267445,
+            0.007380138899990686,
+            0.005041763748342463,
+            0.0034583102432659426,
+            0.0023805061094246066,
+            0.0016431459245664093
+          ],
+          "order_ratios": [
+            [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.20520923181340006,
+              0.4685142892300432,
+              0.41821131199156364,
+              1.065006460038417
+            ],
+            [
+              0.19188951638512206,
+              0.857945158660028,
+              0.8280026722728523,
+              0.776798565961079
+            ],
+            [
+              0.18397405023622654,
+              0.8623087312860667,
+              0.838611701334153,
+              0.697757521808322
+            ],
+            [
+              0.17842964185707136,
+              0.8004187811433545,
+              0.7839435020204798,
+              0.6699894934128985
+            ],
+            [
+              0.17473833680787218,
+              0.7525548254358607,
+              0.7425726022747462,
+              0.662754798969693
+            ],
+            [
+              0.17241334340569936,
+              0.7217140813528465,
+              0.7164007281839643,
+              0.6655562505330184
+            ],
+            [
+              0.17095488647558366,
+              0.7030330256305102,
+              0.7008183622993335,
+              0.6730509466679637
+            ],
+            [
+              0.16999850264689856,
+              0.6924244044438037,
+              0.6921609747268775,
+              0.681749119847314
+            ],
+            [
+              0.16933273629131038,
+              0.6871013360632758,
+              0.6879786093744661,
+              0.6894226976298374
+            ],
+            [
+              0.16884745584659835,
+              0.6851822608233556,
+              0.686633358939397,
+              0.6950147928139083
+            ],
+            [
+              0.1684838230144561,
+              0.6853416332587442,
+              0.6869810078019173,
+              0.6983950764497238
+            ],
+            [
+              0.16820634243267424,
+              0.6866147110021663,
+              0.6881988639096827,
+              0.6999668522346968
+            ],
+            [
+              0.16799107220560927,
+              0.6883130251312765,
+              0.6897104879992247,
+              0.700309452994446
+            ],
+            [
+              0.16782108056153017,
+              0.6899862282372178,
+              0.6911486854679553,
+              0.6999570797623543
+            ],
+            [
+              0.16768431080422935,
+              0.6913867140512525,
+              0.6923203519377904,
+              0.699307790189597
+            ]
+          ],
+          "last_order_fraction_by_channel": [
+            7.965777959835062e-13,
+            0.0016431459245664093,
+            0.00026717001138568087,
+            0.0013544775508371344
+          ],
+          "convergence_scope": "Each source channel independently; a bright Moon cannot hide unconverged artificial light.",
+          "error_scope": "Observed scattering-order convergence; not a spatial/angular error bound or exact MSOS-LP1 guarantee.",
+          "method": "3-D upwind finite-volume discrete ordinates; positive successive-order summation",
+          "lateral_boundary": "vacuum",
+          "ground_reflection": "Lambertian",
+          "single_global_multiplier_used": false
+        },
+        "cloud_fraction": 0.6925,
+        "cloud_mixing": "independent-column radiance expectation, linear probability",
+        "cloud_optical_depth": 1.0,
+        "cloud_optical_depth_source": "explicit_optical_depth",
+        "cloud_base_km": 0.8017427613192543,
+        "cloud_base_source": "convective_cloud_base_pressure_proxy",
+        "cloud_thickness_km": 1.0,
+        "cloud_component_definition": "Artificial photons with at least one cloud-scattering event; paths are tagged through subsequent scattering.",
+        "instrument_response": "resolved sky radiance",
+        "spatial_cloud_morphology_resolved": false,
+        "legacy_global_multiple_scattering_factor_applied": false
+      },
+      "transport_sqm_l_transport": {
+        "clear": {
+          "scattering_orders": 7,
+          "converged": true,
+          "last_order_fraction": 0.0003072190439958405,
+          "observed_tail_fraction_estimate": 0.00012415212564825012,
+          "requested_order_tolerance": 0.005,
+          "spatial_grid_shape": [
+            11,
+            16,
+            16
+          ],
+          "angular_directions": 48,
+          "order_fractions": [
+            0.5891534746038806,
+            0.16337318528137126,
+            0.0501744769179814,
+            0.014235058805527051,
+            0.003936403737502907,
+            0.001094363869274724,
+            0.0003072190439958405
+          ],
+          "order_ratios": [
+            [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.28045966684053086,
+              0.3314519307550318,
+              0.29871218938123906,
+              0.0
+            ],
+            [
+              0.2766981070616072,
+              0.3233391121933471,
+              0.2953714234722849,
+              0.0
+            ],
+            [
+              0.28553340582073533,
+              0.2878081206740908,
+              0.2803066993504747,
+              0.0
+            ],
+            [
+              0.2893119485433576,
+              0.2776216313951206,
+              0.27796707764519935,
+              0.0
+            ],
+            [
+              0.2884447066522185,
+              0.2783156623892169,
+              0.2800895016989144,
+              0.0
+            ],
+            [
+              0.286690447043339,
+              0.28081469534062065,
+              0.2819283147473911,
+              0.0
+            ]
+          ],
+          "last_order_fraction_by_channel": [
+            0.00012579585311825342,
+            0.0003072190439958405,
+            5.283388330376258e-05,
+            0.0
+          ],
+          "convergence_scope": "Each source channel independently; a bright Moon cannot hide unconverged artificial light.",
+          "error_scope": "Observed scattering-order convergence; not a spatial/angular error bound or exact MSOS-LP1 guarantee.",
+          "method": "3-D upwind finite-volume discrete ordinates; positive successive-order summation",
+          "lateral_boundary": "vacuum",
+          "ground_reflection": "Lambertian",
+          "single_global_multiplier_used": false
+        },
+        "cloudy": {
+          "scattering_orders": 16,
+          "converged": true,
+          "last_order_fraction": 0.0016431459245664093,
+          "observed_tail_fraction_estimate": 0.0036811417823448623,
+          "requested_order_tolerance": 0.005,
+          "spatial_grid_shape": [
+            16,
+            16,
+            16
+          ],
+          "angular_directions": 48,
+          "order_fractions": [
+            1.0,
+            0.5157400137230552,
+            0.28603358326039424,
+            0.16637634625996353,
+            0.10839339442752295,
+            0.07541982792815714,
+            0.05162170245621637,
+            0.03502079530927419,
+            0.023675148657625458,
+            0.016006839395766463,
+            0.010848619065267445,
+            0.007380138899990686,
+            0.005041763748342463,
+            0.0034583102432659426,
+            0.0023805061094246066,
+            0.0016431459245664093
+          ],
+          "order_ratios": [
+            [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.20520923181340006,
+              0.4685142892300432,
+              0.41821131199156364,
+              1.065006460038417
+            ],
+            [
+              0.19188951638512206,
+              0.857945158660028,
+              0.8280026722728523,
+              0.776798565961079
+            ],
+            [
+              0.18397405023622654,
+              0.8623087312860667,
+              0.838611701334153,
+              0.697757521808322
+            ],
+            [
+              0.17842964185707136,
+              0.8004187811433545,
+              0.7839435020204798,
+              0.6699894934128985
+            ],
+            [
+              0.17473833680787218,
+              0.7525548254358607,
+              0.7425726022747462,
+              0.662754798969693
+            ],
+            [
+              0.17241334340569936,
+              0.7217140813528465,
+              0.7164007281839643,
+              0.6655562505330184
+            ],
+            [
+              0.17095488647558366,
+              0.7030330256305102,
+              0.7008183622993335,
+              0.6730509466679637
+            ],
+            [
+              0.16999850264689856,
+              0.6924244044438037,
+              0.6921609747268775,
+              0.681749119847314
+            ],
+            [
+              0.16933273629131038,
+              0.6871013360632758,
+              0.6879786093744661,
+              0.6894226976298374
+            ],
+            [
+              0.16884745584659835,
+              0.6851822608233556,
+              0.686633358939397,
+              0.6950147928139083
+            ],
+            [
+              0.1684838230144561,
+              0.6853416332587442,
+              0.6869810078019173,
+              0.6983950764497238
+            ],
+            [
+              0.16820634243267424,
+              0.6866147110021663,
+              0.6881988639096827,
+              0.6999668522346968
+            ],
+            [
+              0.16799107220560927,
+              0.6883130251312765,
+              0.6897104879992247,
+              0.700309452994446
+            ],
+            [
+              0.16782108056153017,
+              0.6899862282372178,
+              0.6911486854679553,
+              0.6999570797623543
+            ],
+            [
+              0.16768431080422935,
+              0.6913867140512525,
+              0.6923203519377904,
+              0.699307790189597
+            ]
+          ],
+          "last_order_fraction_by_channel": [
+            7.965777959835062e-13,
+            0.0016431459245664093,
+            0.00026717001138568087,
+            0.0013544775508371344
+          ],
+          "convergence_scope": "Each source channel independently; a bright Moon cannot hide unconverged artificial light.",
+          "error_scope": "Observed scattering-order convergence; not a spatial/angular error bound or exact MSOS-LP1 guarantee.",
+          "method": "3-D upwind finite-volume discrete ordinates; positive successive-order summation",
+          "lateral_boundary": "vacuum",
+          "ground_reflection": "Lambertian",
+          "single_global_multiplier_used": false
+        },
+        "cloud_fraction": 0.6925,
+        "cloud_mixing": "independent-column radiance expectation, linear probability",
+        "cloud_optical_depth": 1.0,
+        "cloud_optical_depth_source": "explicit_optical_depth",
+        "cloud_base_km": 0.8017427613192543,
+        "cloud_base_source": "convective_cloud_base_pressure_proxy",
+        "cloud_thickness_km": 1.0,
+        "cloud_component_definition": "Artificial photons with at least one cloud-scattering event; paths are tagged through subsequent scattering.",
+        "instrument_response": "SQM-L Gaussian approximation",
+        "spatial_cloud_morphology_resolved": false,
+        "legacy_global_multiple_scattering_factor_applied": false
+      }
+    },
+    "2026-10-27_2108-2113_KST_jeju_science_high/2026-10-27 21:10": {
+      "weather": {
+        "aod": 0.10055555555555556,
+        "cloud_fraction": 0.6694444444444444,
+        "cloud_base_h": 19.209612564574975
+      },
+      "modern_weather": {
+        "aod": 0.10055555555555556,
+        "cloud_fraction": 0.6694444444444444,
+        "cloud_base_h": 2.0,
+        "cloud_base_source": "assumed_2km_invalid_pressure_endpoint"
+      },
+      "details": {
+        "aod550": 0.10055555555555556,
+        "totalcloudcover": 66.94444444444444,
+        "convectivecloudbase_pressure": 51.22222222222222,
+        "cloud_base_h_km": 19.209612564574975,
+        "cloud_base_fallback": false,
+        "interpolation": {
+          "p2": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-27 21:00",
+            "right": "2026-10-28 00:00",
+            "fraction": 0.05555555555555555,
+            "utc_offset_hours": 9.0
+          },
+          "p3": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-27 21:00",
+            "right": "2026-10-28 00:00",
+            "fraction": 0.05555555555555555,
+            "utc_offset_hours": 9.0
+          },
+          "p4": {
+            "block": "data_3h",
+            "native_step_hours": [
+              3.0
+            ],
+            "left": "2026-10-27 21:00",
+            "right": "2026-10-28 00:00",
+            "fraction": 0.05555555555555555,
+            "utc_offset_hours": 9.0
+          }
+        }
+      },
+      "moon": {
+        "altitude": 33.24423945519616,
+        "azimuth": 82.97369300893544,
+        "phase_angle": 18.65081718214594,
+        "illumination_fraction": 0.9737425718004823,
+        "source": "Astronomy Engine; topocentric apparent horizon, geocentric illumination"
+      },
+      "shield": 2.561201933008502,
+      "transport_sky_transport": {
+        "clear": {
+          "scattering_orders": 7,
+          "converged": true,
+          "last_order_fraction": 0.00012797296272701734,
+          "observed_tail_fraction_estimate": 4.127530392507321e-05,
+          "requested_order_tolerance": 0.005,
+          "spatial_grid_shape": [
+            11,
+            16,
+            16
+          ],
+          "angular_directions": 48,
+          "order_fractions": [
+            0.6310389939069304,
+            0.1507666689176413,
+            0.03903643425108282,
+            0.00943020796998278,
+            0.0022367495212392815,
+            0.0005333733180814526,
+            0.00012797296272701734
+          ],
+          "order_ratios": [
+            [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.23805970040914426,
+              0.2813339292296131,
+              0.24934257335095708,
+              0.0
+            ],
+            [
+              0.24135870399068876,
+              0.26943740001273603,
+              0.24255892429507975,
+              0.0
+            ],
+            [
+              0.2466452219324402,
+              0.24387430808918936,
+              0.23661306375449065,
+              0.0
+            ],
+            [
+              0.24655605295054814,
+              0.23772156377128933,
+              0.23790343046057924,
+              0.0
+            ],
+            [
+              0.24480760214738942,
+              0.2385863736324979,
+              0.23980824041016063,
+              0.0
+            ],
+            [
+              0.24357735129287653,
+              0.2399620257771355,
+              0.24060155605506406,
+              0.0
+            ]
+          ],
+          "last_order_fraction_by_channel": [
+            4.2442605288085534e-05,
+            0.00012797296272701734,
+            1.9879956269132467e-05,
+            0.0
+          ],
+          "convergence_scope": "Each source channel independently; a bright Moon cannot hide unconverged artificial light.",
+          "error_scope": "Observed scattering-order convergence; not a spatial/angular error bound or exact MSOS-LP1 guarantee.",
+          "method": "3-D upwind finite-volume discrete ordinates; positive successive-order summation",
+          "lateral_boundary": "vacuum",
+          "ground_reflection": "Lambertian",
+          "single_global_multiplier_used": false
+        },
+        "cloudy": {
+          "scattering_orders": 16,
+          "converged": true,
+          "last_order_fraction": 0.001604762141856872,
+          "observed_tail_fraction_estimate": 0.0034857432662547426,
+          "requested_order_tolerance": 0.005,
+          "spatial_grid_shape": [
+            15,
+            16,
+            16
+          ],
+          "angular_directions": 48,
+          "order_fractions": [
+            1.0,
+            0.5038001977229506,
+            0.2767400931903782,
+            0.16030572022497439,
+            0.11017684531938164,
+            0.07599976965241337,
+            0.051998085257197554,
+            0.035368831865490044,
+            0.023972405696641132,
+            0.01622340361657424,
+            0.010980638162243542,
+            0.007441983406275459,
+            0.005054062215792931,
+            0.003440407313296615,
+            0.002347327439481135,
+            0.001604762141856872
+          ],
+          "order_ratios": [
+            [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.19383613334719765,
+              0.53406940797305,
+              0.4866421950198613,
+              1.0153172077276473
+            ],
+            [
+              0.1920612513019209,
+              0.8584234752228772,
+              0.8159701127579416,
+              0.7594852750636649
+            ],
+            [
+              0.1898837049472688,
+              0.831858584980592,
+              0.796407187246284,
+              0.6898517052149814
+            ],
+            [
+              0.18684267999272136,
+              0.7827026707302762,
+              0.7523612097417319,
+              0.6666071208792504
+            ],
+            [
+              0.1844906236089367,
+              0.7465344666032135,
+              0.7217140284832727,
+              0.6616159504277432
+            ],
+            [
+              0.18314362029234071,
+              0.721715215325743,
+              0.7025154200246853,
+              0.664873713398957
+            ],
+            [
+              0.18246645305068812,
+              0.705134679613464,
+              0.6911283262974075,
+              0.6714813701661563
+            ],
+            [
+              0.18210778348311846,
+              0.6944305302747511,
+              0.6848700136114086,
+              0.6786030279964235
+            ],
+            [
+              0.18187558072115326,
+              0.6879135555664301,
+              0.6819257684087932,
+              0.684652162052001
+            ],
+            [
+              0.18169510487402707,
+              0.6843540062683322,
+              0.6810700068735955,
+              0.6889783549454644
+            ],
+            [
+              0.18154257660907,
+              0.6828183993532234,
+              0.6814496082601375,
+              0.6915770588263068
+            ],
+            [
+              0.1814097587801814,
+              0.6825781835044966,
+              0.6824580973434313,
+              0.6927873008734505
+            ],
+            [
+              0.18129226886293576,
+              0.6830712466538471,
+              0.6836746366353796,
+              0.6930505503038623
+            ],
+            [
+              0.18118710267117366,
+              0.6838871492263402,
+              0.6848315981065203,
+              0.6927673180277278
+            ],
+            [
+              0.18109220113143065,
+              0.6847538676022784,
+              0.6857865333221094,
+              0.6922383167689872
+            ]
+          ],
+          "last_order_fraction_by_channel": [
+            1.567108560475538e-12,
+            0.001604762141856872,
+            0.00025025744106037294,
+            0.001217561109680767
+          ],
+          "convergence_scope": "Each source channel independently; a bright Moon cannot hide unconverged artificial light.",
+          "error_scope": "Observed scattering-order convergence; not a spatial/angular error bound or exact MSOS-LP1 guarantee.",
+          "method": "3-D upwind finite-volume discrete ordinates; positive successive-order summation",
+          "lateral_boundary": "vacuum",
+          "ground_reflection": "Lambertian",
+          "single_global_multiplier_used": false
+        },
+        "cloud_fraction": 0.6694444444444444,
+        "cloud_mixing": "independent-column radiance expectation, linear probability",
+        "cloud_optical_depth": 1.0,
+        "cloud_optical_depth_source": "explicit_optical_depth",
+        "cloud_base_km": 2.0,
+        "cloud_base_source": "assumed_2km_invalid_pressure_endpoint",
+        "cloud_thickness_km": 1.0,
+        "cloud_component_definition": "Artificial photons with at least one cloud-scattering event; paths are tagged through subsequent scattering.",
+        "instrument_response": "resolved sky radiance",
+        "spatial_cloud_morphology_resolved": false,
+        "legacy_global_multiple_scattering_factor_applied": false
+      },
+      "transport_sqm_l_transport": {
+        "clear": {
+          "scattering_orders": 7,
+          "converged": true,
+          "last_order_fraction": 0.00012797296272701734,
+          "observed_tail_fraction_estimate": 4.127530392507321e-05,
+          "requested_order_tolerance": 0.005,
+          "spatial_grid_shape": [
+            11,
+            16,
+            16
+          ],
+          "angular_directions": 48,
+          "order_fractions": [
+            0.6310389939069304,
+            0.1507666689176413,
+            0.03903643425108282,
+            0.00943020796998278,
+            0.0022367495212392815,
+            0.0005333733180814526,
+            0.00012797296272701734
+          ],
+          "order_ratios": [
+            [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.23805970040914426,
+              0.2813339292296131,
+              0.24934257335095708,
+              0.0
+            ],
+            [
+              0.24135870399068876,
+              0.26943740001273603,
+              0.24255892429507975,
+              0.0
+            ],
+            [
+              0.2466452219324402,
+              0.24387430808918936,
+              0.23661306375449065,
+              0.0
+            ],
+            [
+              0.24655605295054814,
+              0.23772156377128933,
+              0.23790343046057924,
+              0.0
+            ],
+            [
+              0.24480760214738942,
+              0.2385863736324979,
+              0.23980824041016063,
+              0.0
+            ],
+            [
+              0.24357735129287653,
+              0.2399620257771355,
+              0.24060155605506406,
+              0.0
+            ]
+          ],
+          "last_order_fraction_by_channel": [
+            4.2442605288085534e-05,
+            0.00012797296272701734,
+            1.9879956269132467e-05,
+            0.0
+          ],
+          "convergence_scope": "Each source channel independently; a bright Moon cannot hide unconverged artificial light.",
+          "error_scope": "Observed scattering-order convergence; not a spatial/angular error bound or exact MSOS-LP1 guarantee.",
+          "method": "3-D upwind finite-volume discrete ordinates; positive successive-order summation",
+          "lateral_boundary": "vacuum",
+          "ground_reflection": "Lambertian",
+          "single_global_multiplier_used": false
+        },
+        "cloudy": {
+          "scattering_orders": 16,
+          "converged": true,
+          "last_order_fraction": 0.001604762141856872,
+          "observed_tail_fraction_estimate": 0.0034857432662547426,
+          "requested_order_tolerance": 0.005,
+          "spatial_grid_shape": [
+            15,
+            16,
+            16
+          ],
+          "angular_directions": 48,
+          "order_fractions": [
+            1.0,
+            0.5038001977229506,
+            0.2767400931903782,
+            0.16030572022497439,
+            0.11017684531938164,
+            0.07599976965241337,
+            0.051998085257197554,
+            0.035368831865490044,
+            0.023972405696641132,
+            0.01622340361657424,
+            0.010980638162243542,
+            0.007441983406275459,
+            0.005054062215792931,
+            0.003440407313296615,
+            0.002347327439481135,
+            0.001604762141856872
+          ],
+          "order_ratios": [
+            [
+              1.0,
+              1.0,
+              1.0,
+              1.0
+            ],
+            [
+              0.19383613334719765,
+              0.53406940797305,
+              0.4866421950198613,
+              1.0153172077276473
+            ],
+            [
+              0.1920612513019209,
+              0.8584234752228772,
+              0.8159701127579416,
+              0.7594852750636649
+            ],
+            [
+              0.1898837049472688,
+              0.831858584980592,
+              0.796407187246284,
+              0.6898517052149814
+            ],
+            [
+              0.18684267999272136,
+              0.7827026707302762,
+              0.7523612097417319,
+              0.6666071208792504
+            ],
+            [
+              0.1844906236089367,
+              0.7465344666032135,
+              0.7217140284832727,
+              0.6616159504277432
+            ],
+            [
+              0.18314362029234071,
+              0.721715215325743,
+              0.7025154200246853,
+              0.664873713398957
+            ],
+            [
+              0.18246645305068812,
+              0.705134679613464,
+              0.6911283262974075,
+              0.6714813701661563
+            ],
+            [
+              0.18210778348311846,
+              0.6944305302747511,
+              0.6848700136114086,
+              0.6786030279964235
+            ],
+            [
+              0.18187558072115326,
+              0.6879135555664301,
+              0.6819257684087932,
+              0.684652162052001
+            ],
+            [
+              0.18169510487402707,
+              0.6843540062683322,
+              0.6810700068735955,
+              0.6889783549454644
+            ],
+            [
+              0.18154257660907,
+              0.6828183993532234,
+              0.6814496082601375,
+              0.6915770588263068
+            ],
+            [
+              0.1814097587801814,
+              0.6825781835044966,
+              0.6824580973434313,
+              0.6927873008734505
+            ],
+            [
+              0.18129226886293576,
+              0.6830712466538471,
+              0.6836746366353796,
+              0.6930505503038623
+            ],
+            [
+              0.18118710267117366,
+              0.6838871492263402,
+              0.6848315981065203,
+              0.6927673180277278
+            ],
+            [
+              0.18109220113143065,
+              0.6847538676022784,
+              0.6857865333221094,
+              0.6922383167689872
+            ]
+          ],
+          "last_order_fraction_by_channel": [
+            1.567108560475538e-12,
+            0.001604762141856872,
+            0.00025025744106037294,
+            0.001217561109680767
+          ],
+          "convergence_scope": "Each source channel independently; a bright Moon cannot hide unconverged artificial light.",
+          "error_scope": "Observed scattering-order convergence; not a spatial/angular error bound or exact MSOS-LP1 guarantee.",
+          "method": "3-D upwind finite-volume discrete ordinates; positive successive-order summation",
+          "lateral_boundary": "vacuum",
+          "ground_reflection": "Lambertian",
+          "single_global_multiplier_used": false
+        },
+        "cloud_fraction": 0.6694444444444444,
+        "cloud_mixing": "independent-column radiance expectation, linear probability",
+        "cloud_optical_depth": 1.0,
+        "cloud_optical_depth_source": "explicit_optical_depth",
+        "cloud_base_km": 2.0,
+        "cloud_base_source": "assumed_2km_invalid_pressure_endpoint",
+        "cloud_thickness_km": 1.0,
+        "cloud_component_definition": "Artificial photons with at least one cloud-scattering event; paths are tagged through subsequent scattering.",
+        "instrument_response": "SQM-L Gaussian approximation",
+        "spatial_cloud_morphology_resolved": false,
+        "legacy_global_multiple_scattering_factor_applied": false
+      }
+    }
+  },
+  "cloud_optical_depth": 1.0,
+  "coefficient_fit_performed": false,
+  "nominal_optics": "SSA=.95, CS phase-shape g=.75; water-cloud SSA=.999, CS g=.85",
+  "legacy_global_multiplier_used_by_transport": false,
+  "hashes": {
+    "h5": "564dab8277384ac4f14b37ef9940f726084584b082c42e3b71036bfe2adb5e15",
+    "dem": "1c3f6d441d95c1f5219ce90f4db53bd442d0040bb0caa0cccdcf1ca6a58866f0"
+  },
+  "elapsed_seconds": 16.945810300006997,
+  "limitations": [
+    "Cloud optical thickness is an explicit assumed scenario, not measured or inferred from cloud fraction.",
+    "Independent-column mixing does not resolve observed 3-D cloud morphology or actual Moon occlusion.",
+    "Finite spatial/angular grid; scattering-order convergence does not bound spatial discretization error.",
+    "Full finite Moon disk and approximate Gaussian SQM-L response are reported separately from sky radiance.",
+    "No October 26 twilight observations are fitted or treated as fully dark sky."
+  ]
+}

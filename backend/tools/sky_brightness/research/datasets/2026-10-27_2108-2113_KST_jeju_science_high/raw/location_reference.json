@@ -1,0 +1,25 @@
+{
+  "place": "제주과학고등학교 건물 북쪽, 사용자가 표시한 파란 핀",
+  "source": "User screenshot, followed by the selected pin share link in the user-open Kakao map tab",
+  "source_screenshot": "location_reference_user.png",
+  "share_url": "https://kko.to/hwFh2rXa3Y",
+  "share_query": {
+    "urlX": 390872,
+    "urlY": -18336,
+    "urlLevel": 1,
+    "q": "제주특별자치도 제주시 오라이동 1-1"
+  },
+  "coordinate_conversion": "WCONGNAMUL / 2.5 -> EPSG:5181 (WTM) -> EPSG:4326 via Rasterio/GDAL",
+  "coordinate_references": [
+    "https://devtalk.kakao.com/t/wtm/59226",
+    "https://devtalk.kakao.com/t/topic/38086"
+  ],
+  "latitude_unrounded": 33.426632630634906,
+  "longitude_unrounded": 126.53063865973988,
+  "latitude": 33.426633,
+  "longitude": 126.530639,
+  "surveyed_gps": false,
+  "accuracy_note": "Exact selected map point converted to six decimals; physical instrument position and map accuracy are not surveyed.",
+  "projection_reference_example_checked": true,
+  "screenshot_sha256": "3c98a31f44548ea8d4d71599c98b4696d5c89c9dfa457595141b5f589a8c0afd"
+}

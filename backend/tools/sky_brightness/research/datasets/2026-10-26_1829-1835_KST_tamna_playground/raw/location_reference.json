@@ -1,0 +1,46 @@
+{
+  "place": "탐라교육원 운동장 중앙",
+  "latitude": 33.42785,
+  "longitude": 126.53208,
+  "method": "Approximate center of four unique vertices of the mapped pitch, rounded to five decimals. Not surveyed GPS.",
+  "user_instruction": "운동장 중앙을 기준으로 해줘",
+  "official_address": "제주특별자치도 제주시 산록북로 429(오라이동)",
+  "official_institute_url": "https://www.tamna.or.kr/hp/hm/htmlConvert.do?menuId=1000001032",
+  "mapped_feature": {
+    "id": "1204798054",
+    "tags": {
+      "leisure": "pitch"
+    },
+    "points": [
+      [
+        33.4278261,
+        126.5310868
+      ],
+      [
+        33.4284808,
+        126.5327051
+      ],
+      [
+        33.4278535,
+        126.5330672
+      ],
+      [
+        33.4272309,
+        126.5314599
+      ],
+      [
+        33.4278261,
+        126.5310868
+      ]
+    ],
+    "center": [
+      33.427847825,
+      126.53207975000001
+    ]
+  },
+  "mapped_feature_url": "https://www.openstreetmap.org/way/1204798054",
+  "retrieved_at": "2026-10-26T14:45:21.122231+00:00",
+  "credit": "© OpenStreetMap contributors",
+  "license": "https://www.openstreetmap.org/copyright",
+  "uncertainty": "Ground-center proxy; actual instrument point and map accuracy are unmeasured."
+}

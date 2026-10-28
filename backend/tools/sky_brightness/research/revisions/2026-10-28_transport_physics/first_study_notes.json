@@ -1,0 +1,24 @@
+{
+  "role": "User-supplied first-study report; design background, not new training observations. Original document not uploaded.",
+  "original_document_sha256": "86a34baa041d5f6cf81ee1896260c9a53ca96b783f70703cb9a27f7e18eeee7a",
+  "first_study_validation": {
+    "n": 83,
+    "dates": [
+      "2026-05-18",
+      "2026-05-19",
+      "2026-05-22",
+      "2026-05-30",
+      "2026-05-31"
+    ],
+    "split": "date-held-out"
+  },
+  "original_framework": {
+    "cloud_fraction_transform": "C squared",
+    "cloud_reflectance": 0.5,
+    "global_multiple_scattering": "1.003796191310424 + 1.1800854377233085*AOD",
+    "aerosol_omega": 0.85,
+    "aerosol_g": 0.9,
+    "aerosol_gamma_km_inverse": 0.65
+  },
+  "use_in_revision": "Preserved input lineage and legacy reproduction; replaced transport and lunar/cloud treatment with independent implementation."
+}

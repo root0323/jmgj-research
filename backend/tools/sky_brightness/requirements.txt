@@ -1,0 +1,6 @@
+-r ../../src/app/requirements.txt
+pandas
+matplotlib
+optuna
+astronomy-engine
+scipy

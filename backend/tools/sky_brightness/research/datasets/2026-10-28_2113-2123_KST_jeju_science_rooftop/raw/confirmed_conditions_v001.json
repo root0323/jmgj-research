@@ -1,0 +1,29 @@
+{
+  "dataset_id": "2026-10-28_2113-2123_KST_jeju_science_rooftop",
+  "site": "제주과학고등학교 서쪽 건물 북쪽 부분 옥상, 사진의 파란 핀",
+  "latitude": 33.42642,
+  "longitude": 126.53016,
+  "location_method": "사용자 사진의 농구장·건물 외곽과 카카오 지도 핀을 수동 대조한 근사값; GPS 측량값 아님",
+  "horizontal_uncertainty_m_assumption": 10,
+  "map_reference": "https://map.kakao.com/link/map/옥상근사,33.42642,126.53016",
+  "registration_image_sha256": "cdd5945708f506cf2ec9948b145a16d1f193be0657478249ec0bf1fa257b3b79",
+  "confirmation": {
+    "height": "건물 4층 높이, 정확한 미터값 미상",
+    "moon": "측정 21:13–21:23 내내 달 원반이 지붕에 가려짐",
+    "sky": "측정한 하늘 중심 방향은 가리지 않았음; 전체 빔의 각도별 가림은 미측정",
+    "time": "빈 칸은 바로 위 명시 시각을 이어받음; 각 분 안의 초는 미상"
+  },
+  "instrument": "SQM-L, fixed 20-degree FWHM Gaussian response approximation",
+  "timezone": "Asia/Seoul",
+  "azimuth": "North=0, East=90",
+  "valid_count": 48,
+  "raw_slots": 49,
+  "missing_observation_ids": [
+    21
+  ],
+  "raw_sha256": "992cc23e6c422b47616dab2c4e2db966538399ac799647b5e9c0442bb2731716",
+  "input_sha256": "4dea74081bfd29a9ba845ae4c77c5e2512da6e2756ec4266295c082d6225dcfc",
+  "baseline_parameter_artifact": "models/joint-sos3d-twilight-2026.10.28/candidate_params.json",
+  "baseline_source_commit": "c23fbf4947860ec1e5672ebbc0801e5e200666d2",
+  "application_modified": false
+}

@@ -1,0 +1,9 @@
+{
+  "model_version": "joint-sos3d-roofmask-2026.10.28",
+  "model_snapshot": "models/joint-sos3d-roofmask-2026.10.28",
+  "joint_report": "revisions/2026-10-28_four_dates_rooftop/report.json",
+  "input": "datasets/2026-10-26_1829-1835_KST_tamna_playground/inputs/v001_all_49.csv",
+  "input_sha256": "69e05183102a3a9832e5cd907bbb8a824eb78a58ee185f7037b7c8d51bb82982",
+  "previous_date_conditions_unchanged": true,
+  "app_adopted": false
+}

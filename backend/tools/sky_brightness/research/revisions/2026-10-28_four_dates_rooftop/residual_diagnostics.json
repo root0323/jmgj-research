@@ -1,0 +1,138 @@
+{
+  "datasets": {
+    "2026-10-22_2123-2218_KST_jeju": {
+      "maximum_absolute_residual": 1.7163274725388256,
+      "worst_point": {
+        "uid": "2026-10-22_2123-2218_KST_jeju:45",
+        "observation_id": 45,
+        "time": "2026-10-22 22:15",
+        "altitude": 60,
+        "az": 300
+      },
+      "worst_observed_sqm": 19.26,
+      "worst_predicted_sqm": 17.543672527461176,
+      "altitude_30": {
+        "n": 24,
+        "mse": 0.6151659535630772,
+        "rmse": 0.7843251580582362,
+        "mae": 0.5880384491435662,
+        "bias": 0.27428414664906825
+      },
+      "altitude_60": {
+        "n": 24,
+        "mse": 0.6609322282723585,
+        "rmse": 0.8129773848468101,
+        "mae": 0.6394707642796017,
+        "bias": 0.16636227335584955
+      },
+      "altitude_90": {
+        "n": 1,
+        "mse": 0.0009820473820175586,
+        "rmse": 0.03133763523333499,
+        "mae": 0.03133763523333499,
+        "bias": -0.03133763523333499
+      }
+    },
+    "2026-10-26_1829-1835_KST_tamna_playground": {
+      "maximum_absolute_residual": 1.0213019887669326,
+      "worst_point": {
+        "uid": "2026-10-26_1829-1835_KST_tamna_playground:2",
+        "observation_id": 2,
+        "time": "2026-10-26 18:32",
+        "altitude": 30,
+        "az": 15
+      },
+      "worst_observed_sqm": 17.2,
+      "worst_predicted_sqm": 16.178698011233067,
+      "altitude_30": {
+        "n": 24,
+        "mse": 0.40775230018661796,
+        "rmse": 0.6385548529191661,
+        "mae": 0.5716707993661598,
+        "bias": -0.31867274098992043
+      },
+      "altitude_60": {
+        "n": 24,
+        "mse": 0.1307362083139102,
+        "rmse": 0.3615746234374174,
+        "mae": 0.29289420419823403,
+        "bias": 0.2241394876150946
+      },
+      "altitude_90": {
+        "n": 1,
+        "mse": 0.07846460652588633,
+        "rmse": 0.28011534503822944,
+        "mae": 0.28011534503822944,
+        "bias": 0.28011534503822944
+      }
+    },
+    "2026-10-27_2108-2113_KST_jeju_science_high": {
+      "maximum_absolute_residual": 2.6014148126299013,
+      "worst_point": {
+        "uid": "2026-10-27_2108-2113_KST_jeju_science_high:6",
+        "observation_id": 6,
+        "time": "2026-10-27 21:10",
+        "altitude": 30,
+        "az": 75
+      },
+      "worst_observed_sqm": 18.03,
+      "worst_predicted_sqm": 15.4285851873701,
+      "altitude_30": {
+        "n": 11,
+        "mse": 1.9148104818488938,
+        "rmse": 1.3837667729241419,
+        "mae": 1.1559484945446994,
+        "bias": -0.982574853254405
+      },
+      "altitude_60": {
+        "n": 21,
+        "mse": 1.4396247561232265,
+        "rmse": 1.1998436381975888,
+        "mae": 0.97192913659709,
+        "bias": 0.403763849752396
+      },
+      "altitude_90": {
+        "n": 1,
+        "mse": 0.010639678717376685,
+        "rmse": 0.10314881830334599,
+        "mae": 0.10314881830334599,
+        "bias": -0.10314881830334599
+      }
+    },
+    "2026-10-28_2113-2123_KST_jeju_science_rooftop": {
+      "maximum_absolute_residual": 2.6104868776289205,
+      "worst_point": {
+        "uid": "2026-10-28_2113-2123_KST_jeju_science_rooftop:15",
+        "observation_id": 15,
+        "time": "2026-10-28 21:16",
+        "altitude": 30,
+        "az": 210
+      },
+      "worst_observed_sqm": 15.62,
+      "worst_predicted_sqm": 18.23048687762892,
+      "altitude_30": {
+        "n": 23,
+        "mse": 1.6406706179293657,
+        "rmse": 1.280886653037405,
+        "mae": 0.9419972025482596,
+        "bias": 0.6272692113710575
+      },
+      "altitude_60": {
+        "n": 24,
+        "mse": 0.09898867602087513,
+        "rmse": 0.3146246589523382,
+        "mae": 0.2503161527290998,
+        "bias": 0.21762851127145919
+      },
+      "altitude_90": {
+        "n": 1,
+        "mse": 0.002530242015991792,
+        "rmse": 0.05030151107066061,
+        "mae": 0.05030151107066061,
+        "bias": 0.05030151107066061
+      }
+    }
+  },
+  "oct28_interpretation": "Moon direction around ENE differs from the bright southern measurements. Local lighting, cloud anisotropy, unresolved surroundings and beam-wing occultation remain hypotheses; no cause or azimuth correction is inferred from SQM alone.",
+  "points_removed_for_large_residual": 0
+}

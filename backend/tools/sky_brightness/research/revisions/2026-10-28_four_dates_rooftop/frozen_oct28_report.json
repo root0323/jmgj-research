@@ -1,0 +1,32 @@
+{
+  "dataset": "2026-10-28_2113-2123_KST_jeju_science_rooftop",
+  "n": 48,
+  "baseline_model_version": "joint-sos3d-twilight-2026.10.28",
+  "baseline_parameters": {
+    "art_scale": 0.19245974551701975,
+    "twilight_gain": 1.5970586375763038,
+    "twilight_concentration": 1.2644184970449495,
+    "cloud_optical_depth": 10.0
+  },
+  "baseline_parameter_sha256": "5723c93e987f425d6432b24d86650f08385ba3fea1df72b2a68d8761d9b98673",
+  "new_labels_used_for_coefficients": false,
+  "previous_131_prediction_max_absolute_change": 0.0,
+  "metrics": {
+    "frozen_unobstructed": {
+      "n": 48,
+      "mse": 1.0491040353430288,
+      "rmse": 1.0242577973064344,
+      "mae": 0.6933099776970777,
+      "bias": 0.5470133974114543
+    },
+    "frozen_roof_condition": {
+      "n": 48,
+      "mse": 0.9787587593317743,
+      "rmse": 0.9893223738154183,
+      "mae": 0.6453253787711261,
+      "bias": 0.5978847267885103
+    }
+  },
+  "local_condition": "Moon disk continuously hidden, fixed from user report, not fitted; diffuse lunar radiance retained.",
+  "interpretation": "Frozen coefficients on new observations, with a newly recorded local roof condition. Post-observation weather model output is used; not a forecast-skill test."
+}

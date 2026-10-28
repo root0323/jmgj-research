@@ -1,0 +1,112 @@
+{
+  "source_raw_sha256": "338500c8ebfe595e96e21f1260a002df5d4700f7fa2130710591c38816f982d7",
+  "source": "Archived original API JSON from previous dataset; cadence and coverage inspection only, not input to new calibration.",
+  "all_original_blocks_step_hours": [
+    1
+  ],
+  "current_app_plan": "free3h",
+  "current_app_requested_packages": [
+    "airquality-3h",
+    "clouds-3h",
+    "air-3h"
+  ],
+  "current_app_source": "frontend/lib/meteoblue.ts and docs/PERSONAL_WEATHER.md",
+  "new_app_response_cadence_verified": true,
+  "blocks": [
+    {
+      "package": "p1",
+      "block": "data_1h",
+      "count": 265,
+      "start": "2026-10-11 00:00",
+      "end": "2026-10-22 00:00",
+      "utc_offset": 0.0,
+      "step_hours": {
+        "1.0": 264
+      },
+      "contains_new_observation_intervals": false,
+      "end_in_kst": "2026-10-22T09:00+09:00"
+    },
+    {
+      "package": "p2",
+      "block": "data_1h",
+      "count": 265,
+      "start": "2026-10-11 00:00",
+      "end": "2026-10-22 00:00",
+      "utc_offset": 0.0,
+      "step_hours": {
+        "1.0": 264
+      },
+      "contains_new_observation_intervals": false,
+      "end_in_kst": "2026-10-22T09:00+09:00"
+    },
+    {
+      "package": "p3",
+      "block": "gfsensemble_1h",
+      "count": 433,
+      "start": "2026-10-11 00:00",
+      "end": "2026-10-29 00:00",
+      "utc_offset": 0.0,
+      "step_hours": {
+        "1.0": 432
+      },
+      "contains_new_observation_intervals": true,
+      "end_in_kst": "2026-10-29T09:00+09:00"
+    },
+    {
+      "package": "p3",
+      "block": "ecmwfensemble_1h",
+      "count": 433,
+      "start": "2026-10-11 00:00",
+      "end": "2026-10-29 00:00",
+      "utc_offset": 0.0,
+      "step_hours": {
+        "1.0": 432
+      },
+      "contains_new_observation_intervals": true,
+      "end_in_kst": "2026-10-29T09:00+09:00"
+    },
+    {
+      "package": "p4",
+      "block": "data_1h",
+      "count": 265,
+      "start": "2026-10-11 00:00",
+      "end": "2026-10-22 00:00",
+      "utc_offset": 0.0,
+      "step_hours": {
+        "1.0": 264
+      },
+      "contains_new_observation_intervals": false,
+      "end_in_kst": "2026-10-22T09:00+09:00"
+    }
+  ],
+  "new_response_sha256": "589632945820d923c40f65df308ffc42db725b2704c16052c642db45b63af540",
+  "new_response_blocks": [
+    {
+      "package": "p2",
+      "block": "data_3h",
+      "native_step_hours": 3,
+      "start": "2026-10-18 00:00",
+      "end": "2026-10-29 00:00",
+      "count": 89,
+      "utc_offset_hours": 9.0
+    },
+    {
+      "package": "p3",
+      "block": "data_3h",
+      "native_step_hours": 3,
+      "start": "2026-10-18 00:00",
+      "end": "2026-10-29 00:00",
+      "count": 89,
+      "utc_offset_hours": 9.0
+    },
+    {
+      "package": "p4",
+      "block": "data_3h",
+      "native_step_hours": 3,
+      "start": "2026-10-18 00:00",
+      "end": "2026-10-29 00:00",
+      "count": 89,
+      "utc_offset_hours": 9.0
+    }
+  ]
+}
