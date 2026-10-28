@@ -1,0 +1,9 @@
+{
+  "model_version": "joint-sos3d-roofmask-2026.10.28",
+  "model_snapshot": "models/joint-sos3d-roofmask-2026.10.28",
+  "joint_report": "revisions/2026-10-28_four_dates_rooftop/report.json",
+  "input": "datasets/2026-10-28_2113-2123_KST_jeju_science_rooftop/inputs/v001_valid_48.csv",
+  "input_sha256": "4dea74081bfd29a9ba845ae4c77c5e2512da6e2756ec4266295c082d6225dcfc",
+  "previous_date_conditions_unchanged": false,
+  "app_adopted": false
+}

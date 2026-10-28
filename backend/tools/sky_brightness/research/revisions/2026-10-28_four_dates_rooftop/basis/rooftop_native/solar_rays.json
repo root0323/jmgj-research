@@ -1,0 +1,6058 @@
+{
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:1": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.4562094213703545
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.545492099412509
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.6093294904722023
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.6103265166531808
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": 0.5478991335406693
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.45861645549851515
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.3947790644388217
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.39378203825784275
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 0.4023411804465662
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.6078931455130177
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.7548634365569322
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.7571588503507038
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.6134347646252021
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.40788279955875073
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.26091250851483694
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.25861709472106414
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.35248108921338983
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.6770708993352168
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.9091536179220785
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.91277833601821
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.6858217429226766
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.3612319328008494
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.1291492142139875
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": 0.12552449611785588
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.3069171803964531
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 1.0844564226263973
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.7695027825345989
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": 0.3190609564558
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": -0.0030063429531425045
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": -0.0080364596953455
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:2": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.2878621913959364
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.3725717577998038
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.43848263408519395
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.4469851228320205
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": 0.3930985814463176
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.3083890150424503
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.24247813875706015
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.23397565001023335
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 0.23022377715714948
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.42524724885477133
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.5769912426148717
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.5965661849014424
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.4725053400056806
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.27748186830805915
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.1257378745479586
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.10616293226138807
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.1810842421521961
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.4890483699928902
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.7286693052916385
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.75958035397896
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.5636742429609967
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.2557101151203028
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.016089179821554334
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": -0.014821868865767307
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.14247250684465707
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.9452667932485666
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.6734027247067764
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": 0.24603279569002212
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": -0.08649548553410857
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": -0.12939156169713373
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:3": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.12537759944887894
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.20235397710636338
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.26584662132147413
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.278662402223929
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": 0.23329400917347243
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.1563176315159881
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.09282498730087729
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.08000920639842235
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 0.0710312013391442
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.24825085959942417
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.3944274536697665
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.42393271724527143
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.31948286708480134
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.14226320882452193
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.003913385245820633
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": -0.033418648821325725
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.02983040345467669
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.3096802954562581
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.5405096767186018
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.587101826292417
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.4221636948574782
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.1423138028558968
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.08851557840644708
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": -0.13510772798026216
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.005785770100834919
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.7791259967405696
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.550237008864783
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": 0.16188194518045218
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": -0.1584460650224092
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": -0.2231032177749519
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:4": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.02017129804811002
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.046438817788262865
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.10318631115638999
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.1168292700718998
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.07937583423298578
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.012765718396613224
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.04398177497151401
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": -0.05762473388702416
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": -0.06438783604362275
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.08896598917436471
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.21961349023729865
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.25102313291266587
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.16479557451052917
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.011441749292542047
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.11920575177039205
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": -0.15061539444575933
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": -0.09097272773071885
+    },
+    {
+      "weight_airmass": 0.0448960118504637,
+      "cosine_minus_zenith": 0.15119031358523383
+    },
+    {
+      "weight_airmass": 0.0448960118504637,
+      "cosine_minus_zenith": 0.3574974999417329
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.4070968795861747
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.270933808608137
+    },
+    {
+      "weight_airmass": 0.00594565979216543,
+      "cosine_minus_zenith": 0.028770767292184196
+    },
+    {
+      "weight_airmass": 0.005945659792165429,
+      "cosine_minus_zenith": -0.17753641906431517
+    },
+    {
+      "weight_airmass": 0.007971173598224272,
+      "cosine_minus_zenith": -0.22713579870875678
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": -0.09382805461143462
+    },
+    {
+      "weight_airmass": 0.0003140059719305756,
+      "cosine_minus_zenith": 0.597356253823778
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.40839917500228223
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.07234314632346228
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": -0.21395476832987126
+    },
+    {
+      "weight_airmass": 0.00010574661711699009,
+      "cosine_minus_zenith": -0.28278513343293044
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:5": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.1388655842615366
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.08454835970895258
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.03841326508118004
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.02748561310980202
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": -0.05816667411475818
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.11248389866734221
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.15861899329511475
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": -0.1695466452664931
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": -0.16680475138405626
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": -0.0417523617316331
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.0644626350316575
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.08962093432929408
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.01898514563896314
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.10606724401345957
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.2122822407767504
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": -0.23744054007438709
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": -0.17309261765032002
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.024379254727248445
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.1921047523664532
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.2318325535060245
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.12029065104166259
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.07718122133590577
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.24490671897511085
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": -0.28463452011468193
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": -0.14958044975763896
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.4123448720892679
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.25755523709890016
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": -0.016481679708705288
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": -0.2492387690585608
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": -0.3043700847480071
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:6": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.2226164397375383
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.18168099570539364
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.14930233027500972
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.14444742652396447
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": -0.16996022122560384
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.21089566525774817
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.2432743306881322
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": -0.24812923443917767
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": -0.22924000115366128
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": -0.13499595352661453
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": -0.06045183756380457
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": -0.04927458540113183
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": -0.10801167976542647
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.20225572739247255
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.27679984335528307
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": -0.2879770955179556
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": -0.21093293151564008
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": -0.062110917021709566
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.05560267641557948
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.07325282223633511
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": -0.01949969560337861
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.16832171009730934
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.2860353035345983
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": -0.3036854493553538
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": -0.15767198174375385
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.23670007145648198
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.10798496024135806
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": -0.09853926781192401
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": -0.26189352086838547
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": -0.2863870929588779
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:7": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.2619113307061597
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.23418961905875868
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.21762114177300373
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.2219114881350196
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": -0.244547431433215
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.27226914308061567
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.2888376203663706
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": -0.2845472740043552
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": -0.24369531759757945
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": -0.17987272144473565
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": -0.14172777397085035
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": -0.15160526807011598
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": -0.20371910166144291
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.2675416978142863
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.3056866452881718
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": -0.29580915118890616
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": -0.19827057516054347
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": -0.09748747459501794
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": -0.03725228660422053
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": -0.05284996738106729
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": -0.1351436070680475
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.23592670763357293
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.29616189562437045
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": -0.2805642148475237
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": -0.1140602241182721
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.08774378227703294
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": -0.02645726833931661
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": -0.16631663065133706
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": -0.24990658704149937
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": -0.228261274734622
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:8": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.2619733008869578
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.24703507445014106
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.24748409173944375
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.2630573245165321
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": -0.2846321842305811
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.29957041066739765
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.29912139337809496
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": -0.28354816060100674
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": -0.21706979416263394
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": -0.18267810849606458
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": -0.18371186317489918
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": -0.2195654987284431
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": -0.269236441709812
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.303628127376381
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.3025943726975464
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": -0.2667407371440028
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": -0.143753020786355
+    },
+    {
+      "weight_airmass": 0.0448960118504637,
+      "cosine_minus_zenith": -0.08944465785403088
+    },
+    {
+      "weight_airmass": 0.0448960118504637,
+      "cosine_minus_zenith": -0.09107707345661098
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": -0.1476940206735332
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": -0.22613005968528632
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.2804384226176103
+    },
+    {
+      "weight_airmass": 0.00594565979216543,
+      "cosine_minus_zenith": -0.27880600701503033
+    },
+    {
+      "weight_airmass": 0.007971173598224272,
+      "cosine_minus_zenith": -0.22218905979810788
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": -0.02928492537700178
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": -0.03475395468845999
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": -0.14360171127570875
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": -0.2189668564766768
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": -0.216701510362855
+    },
+    {
+      "weight_airmass": 0.00010574661711699009,
+      "cosine_minus_zenith": -0.13813268196425077
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:9": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.2186077777229406
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.21484862451753894
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.23228453659566928
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.2607017931343075
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": -0.2834539506585546
+    },
+    {
+      "weight_airmass": 0.12809714763481225,
+      "cosine_minus_zenith": -0.28721310386395615
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.2697771917858258
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": -0.24135993524718768
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": -0.14693102924281332
+    },
+    {
+      "weight_airmass": 0.16949302201525948,
+      "cosine_minus_zenith": -0.13827648005924953
+    },
+    {
+      "weight_airmass": 0.16949302201525948,
+      "cosine_minus_zenith": -0.17841848821780193
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": -0.24384240976008165
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": -0.2962237987502546
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.3048783479338183
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.264736339775266
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": -0.1993124182329863
+    },
+    {
+      "weight_airmass": 0.015381878727186141,
+      "cosine_minus_zenith": -0.0468348920305538
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": -0.03316837964632613
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": -0.0965571524166623
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": -0.19986892695488523
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": -0.2825850668893358
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.29625157927356327
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.23286280650322722
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": -0.12955103196500428
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.09509221700804915
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": -0.11727714270059442
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": -0.23206450803495005
+    },
+    {
+      "weight_airmass": 7.198656736431488e-05,
+      "cosine_minus_zenith": -0.2510298871149942
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": -0.16306361809118364
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": -0.0196951483263067
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:10": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.13294483499641352
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.13761691689995204
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.17055346399868665
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.21246069369991905
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": -0.23878991920615122
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.2341178373026126
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.20118129020387776
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": -0.1592740605026458
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": -0.0365298583782373
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": -0.04728620705956055
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": -0.12311471183908962
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": -0.21959606303144896
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": -0.2802127936242357
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.26945644494291177
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.19362794016338303
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": -0.09714658897102402
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.08711831109321777
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.070132819492851
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": -0.04960896920886426
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": -0.20196393917327649
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": -0.29768461529017864
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.2806991236898122
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.16095733498809695
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": -0.008602365023684944
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.25154647454811785
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": -0.14962057579192534
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": -0.28245467840103655
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": -0.25888346447277566
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": -0.09271463144471948
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": 0.11871237193900608
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:11": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.015138254397653372
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.02567662127407655
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": -0.0721356618495762
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.12730030024986638
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": -0.15885583946346482
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.14831747258704142
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.10185843201154188
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": -0.04669379361125181
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 0.10284616034790772
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.07858409666947241
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": -0.02837670798837011
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": -0.15538006489939538
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": -0.22802913005203473
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.2037670663735992
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.09680626171575646
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.030197095195268253
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.24577446819790938
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.20746192450609302
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.038558711816575886
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": -0.16199395860551047
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": -0.2767150523970494
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.23840250870523338
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.06949929601571592
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": 0.13105337440637066
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.4267984246580381
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": -0.13907255791431405
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": -0.2982740404187184
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": -0.24510671475378698
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": -0.01071527921892923
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": 0.2675969421536334
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:12": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.12936849582389465
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.11631409040658502
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.05949866319234565
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": -0.007796079108742249
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": -0.04614978913310497
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": -0.03309538371579501
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.02372004349844381
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.09101478579953226
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 0.2640393258742517
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.23398468655177052
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.10318078409195841
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": -0.05174922945555349
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": -0.14004945337328045
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": -0.10999481405079903
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.020809088409013188
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.17573910195652465
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.4204054805171029
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.3729458044794134
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.16639164262112827
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": -0.07826037840577615
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": -0.21769642274572754
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.170236746708038
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.03631741515024722
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": 0.2809694361771514
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.6107092276883841
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": -0.08130251479998474
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": -0.27480158493443707
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": -0.20894054286567532
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.0777001061944449
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": 0.41721015755393187
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:13": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.2907275194493277
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.2786787857917405
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.21537884941147994
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.13790795454274862
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": 0.09164750071046912
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.10369623436805653
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.1669961707483173
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.24446706561704828
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 0.436064590354475
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.40832526919847234
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.262592338725658
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.08423417312263226
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": -0.022269433160338914
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.005469887995664391
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.1512028184684785
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.3295609840715039
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.5991105331526386
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.5553070064676724
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.3251782202243698
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.043530496311598665
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": -0.12465074841405321
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": -0.0808472217290871
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.1492815645142157
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": 0.43092928842698675
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.7907456663396112
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.019752620582331404
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": -0.21363692099937992
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": -0.15284961365519079
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.16650616239281502
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": 0.5573561247578996
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:14": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.4569483740333429
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.44958000062427084
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.38433144902752
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.2994244358432663
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": 0.24459633785425494
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.2519647112633271
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.3172132628600781
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.4021202760443314
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 0.6060180953964881
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.589054181826791
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.43883503190255274
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.24335698632123476
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.11712843303818732
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.13409234660788427
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.28431149653212257
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.4797895421134405
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.7684332321855136
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.7416452932683104
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.5044322589156219
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.19575030747957745
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": -0.0035788603483817294
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.02320907856882104
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.2604221129215101
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": 0.5691040643575548
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.953384291771634
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.1586571181987172
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": -0.1179572164086875
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": -0.08078288823669955
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.24840388544363967
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": 0.676769957164229
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:15": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.6182140030437799
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.6183911239072086
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.5553700011486368
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.46606755376405584
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": 0.4027959442782443
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.4026188234148156
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.46563994617338766
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.5549423935579685
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 0.7642871815983019
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.7646949599303403
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.6196039309896281
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.41400645175096645
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.2683387371626431
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.2679309588306049
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.41302198777131727
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.6186194670099784
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.9191061184538265
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.919750046578403
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.6906348954825652
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.36597321333309407
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.13594741035028712
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.13530348222571065
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.36441863332154895
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": 0.6890803154710197
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 1.0899063178810293
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.32230922124592587
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.0030963577800984243
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": 0.0022027617667521593
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.32015188963122365
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": 0.7706934544152013
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:16": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.763111568607776
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.7734637930811299
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.716964884529404
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.6267111373229217
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.5555719725202479
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.5452197480468941
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.6017186565986201
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.6919724038051023
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 0.8994025016194829
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.9232360170333265
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.7931608229241875
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.5853732038728864
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.42159232902646104
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.3977588136126176
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.5278340077217569
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.735621626773058
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 1.039986846022578
+    },
+    {
+      "weight_airmass": 0.0448960118504637,
+      "cosine_minus_zenith": 1.0776226635162915
+    },
+    {
+      "weight_airmass": 0.0448960118504637,
+      "cosine_minus_zenith": 0.8722192145937965
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.5440990538756814
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.2854705214225782
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.24783470392886436
+    },
+    {
+      "weight_airmass": 0.00594565979216543,
+      "cosine_minus_zenith": 0.4532381528513597
+    },
+    {
+      "weight_airmass": 0.007971173598224272,
+      "cosine_minus_zenith": 0.7813583135694744
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 1.1900352372596323
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.5018786911838452
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.14297306691137868
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.09074485201001159
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.3757886264304285
+    },
+    {
+      "weight_airmass": 0.00010574661711699009,
+      "cosine_minus_zenith": 0.8311296129871653
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:17": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.8817665410866937
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.9042300620115358
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.8581036749155951
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.770407591776402
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.6925129887298982
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.6700494678050564
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.7161758549009972
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.80387193804019
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 1.0021561696892123
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 1.0538730420956661
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.9476780923372163
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.7457788817268329
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.566445229607657
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.5147283572012035
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.6209233069596536
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.8228225175700363
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 1.122837593072804
+    },
+    {
+      "weight_airmass": 0.0448960118504637,
+      "cosine_minus_zenith": 1.2045043861344937
+    },
+    {
+      "weight_airmass": 0.0448960118504637,
+      "cosine_minus_zenith": 1.036810544984161
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.7179888474412306
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.434800719947539
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.35313392688584927
+    },
+    {
+      "weight_airmass": 0.00594565979216543,
+      "cosine_minus_zenith": 0.5208277680361824
+    },
+    {
+      "weight_airmass": 0.007971173598224272,
+      "cosine_minus_zenith": 0.8396494655791119
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 1.2469474295226548
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.6851281653887862
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.29214054441504833
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.178809385365723
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.41152254417244394
+    },
+    {
+      "weight_airmass": 0.00010574661711699009,
+      "cosine_minus_zenith": 0.8539598085489164
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:18": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.9660927801927088
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 1.001778425572296
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.9691679969852697
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.8873642412231111
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": 0.8042866889582369
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.7686010435786499
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.801211472165676
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.8830152279278345
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 1.065545693137003
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 1.1477033377472523
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 1.0726256426700778
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.8842921034499763
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.6930259531123593
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.6108683085021107
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.6859460035792851
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.8742795427993859
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 1.1620122181103656
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 1.2917484347185404
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 1.1731922594875892
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.8757922919647221
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.5737613996755158
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.44402518306734046
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.5625813582982917
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": 0.8599813258211588
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 1.2567644228192167
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.8595694950277573
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.440433273210144
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": 0.2603949094192181
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.4249184354162429
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": 0.8376282010016031
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:19": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 1.009256119215893
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 1.058311260933407
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 1.0412882910796122
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.9681590345229929
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": 0.8817616179481562
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.832706476230642
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.8497294460844371
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.9228587026410562
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 1.0845610694794028
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 1.1974987747293215
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 1.1583074670597369
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.9899448829763553
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.7910355408390408
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.6780978355891225
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.7172891432587072
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.8856517273420884
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 1.1546660966589184
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 1.333007511642788
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 1.2711200025120235
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 1.0052564327739386
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.6911560758401765
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.5128146608563069
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.5747021699870716
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": 0.8405657397251567
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 1.219333359578615
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 1.0119936349923426
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.5761082992939011
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": 0.3286192219237265
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.41450214786606276
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": 0.7834480238801732
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:20": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 1.0109635272525885
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 1.0727159370332122
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 1.0725158892343734
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 1.0104805691435084
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": 0.922949425923691
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.8611970161430675
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.8613970639419064
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.9234323840327711
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 1.0598911894134755
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 1.2020613108339244
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 1.2016007487287061
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 1.0587792941327434
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.8572598181504976
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.7150896967300493
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.7155502588352673
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.85837171343123
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 1.1023828187584679
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 1.3268855263922377
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 1.326158246717564
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 1.1006270103042328
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.7824049567043998
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.5579022490706297
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.5586295287453031
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": 0.7841607651586346
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 1.137034268998321
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 1.1345976873752763
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.6929925646874915
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": 0.3814442460627171
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.38245351121681087
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": 0.6954291463105353
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:22": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.888956336113806
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.9705703498085704
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 1.0026104686525643
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.9663080255670213
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": 0.8829284993641766
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.8013144856694125
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.7692743668254186
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.805576809910961
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 0.8871110697772504
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 1.0750077733684935
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 1.1487724669660135
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 1.0651947934846793
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.8732334205382664
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.6853367169470236
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.6115720233495032
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.6951496968308373
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.8799886372620793
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 1.1766987919009897
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 1.2931815892353444
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 1.161202986369835
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.8580742589200236
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.561364104281113
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.44488130694675815
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": 0.5768599098122679
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.8653859893500307
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 1.2556345460872724
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.8349748295108719
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": 0.42322233542761284
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.2615760905305209
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": 0.4447262727736298
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:23": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.7735304284879608
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.8610705114555592
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.9065972961256302
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.8834418094896865
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": 0.8051682215757152
+    },
+    {
+      "weight_airmass": 0.12809714763481225,
+      "cosine_minus_zenith": 0.7176281386081172
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.6721013539380458
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.6952568405739893
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 0.7501792420871831
+    },
+    {
+      "weight_airmass": 0.16949302201525948,
+      "cosine_minus_zenith": 0.9517192996958286
+    },
+    {
+      "weight_airmass": 0.16949302201525948,
+      "cosine_minus_zenith": 1.0565338085938696
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 1.0032238510023102
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.8230176770687498
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.6214776194601046
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.5166631105620632
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.5699730681536234
+    },
+    {
+      "weight_airmass": 0.015381878727186141,
+      "cosine_minus_zenith": 0.7237771436819485
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 1.042031697998585
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 1.2075456668396476
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 1.1233632120202397
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.8387972738597095
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.520542719543073
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.35502875070201023
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": 0.43921120552141846
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.692491954649715
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 1.2470080629354081
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.8521084178210213
+    },
+    {
+      "weight_airmass": 7.198656736431488e-05,
+      "cosine_minus_zenith": 0.4104581930327722
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": 0.18077010042648967
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": 0.297592309535328
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:24": [
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.6313380452871762
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.7214992529137249
+    },
+    {
+      "weight_airmass": 0.18874913755784473,
+      "cosine_minus_zenith": 0.7774101282711775
+    },
+    {
+      "weight_airmass": 0.165761302967239,
+      "cosine_minus_zenith": 0.7663188388592892
+    },
+    {
+      "weight_airmass": 0.14140588582914146,
+      "cosine_minus_zenith": 0.6947225115913402
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.6045613039647911
+    },
+    {
+      "weight_airmass": 0.1280971476348122,
+      "cosine_minus_zenith": 0.5486504286073388
+    },
+    {
+      "weight_airmass": 0.1414058858291414,
+      "cosine_minus_zenith": 0.5597417180192269
+    },
+    {
+      "weight_airmass": 0.11383704277617776,
+      "cosine_minus_zenith": 0.5912641238714214
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.7988386927217332
+    },
+    {
+      "weight_airmass": 0.16949302201525976,
+      "cosine_minus_zenith": 0.9275600813530609
+    },
+    {
+      "weight_airmass": 0.1138370427761778,
+      "cosine_minus_zenith": 0.9020250460726689
+    },
+    {
+      "weight_airmass": 0.07773728023847203,
+      "cosine_minus_zenith": 0.7371916642321368
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.5296170953818248
+    },
+    {
+      "weight_airmass": 0.0634985958441969,
+      "cosine_minus_zenith": 0.4008957067504979
+    },
+    {
+      "weight_airmass": 0.07773728023847201,
+      "cosine_minus_zenith": 0.4264307420308892
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 0.5513221493035723
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 0.8791058796486525
+    },
+    {
+      "weight_airmass": 0.04489601185046361,
+      "cosine_minus_zenith": 1.0823715165446703
+    },
+    {
+      "weight_airmass": 0.015381878727186151,
+      "cosine_minus_zenith": 1.0420488066623448
+    },
+    {
+      "weight_airmass": 0.007971173598224275,
+      "cosine_minus_zenith": 0.7817582465791059
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.453974516234026
+    },
+    {
+      "weight_airmass": 0.005945659792165431,
+      "cosine_minus_zenith": 0.25070887933800745
+    },
+    {
+      "weight_airmass": 0.007971173598224274,
+      "cosine_minus_zenith": 0.29103158922033306
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 0.5105616644156632
+    },
+    {
+      "weight_airmass": 0.00031400597193057494,
+      "cosine_minus_zenith": 1.191555967851335
+    },
+    {
+      "weight_airmass": 0.0001057466171169902,
+      "cosine_minus_zenith": 0.8303439040747116
+    },
+    {
+      "weight_airmass": 7.198656736431487e-05,
+      "cosine_minus_zenith": 0.37546979080497467
+    },
+    {
+      "weight_airmass": 7.198656736431486e-05,
+      "cosine_minus_zenith": 0.09339271442310038
+    },
+    {
+      "weight_airmass": 0.00010574661711699012,
+      "cosine_minus_zenith": 0.14934960063903946
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:25": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": 0.14161555316502183
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.2188352897573208
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.2810459021424603
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.2918052573087607
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.24481067092219305
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.16759093432989436
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.10538032194475488
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.094620966778454
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.09038338243880328
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.26816331631317264
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.41138833939900765
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.43615917564382506
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.32796540512673467
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.15018547125236548
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.006960448166530631
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.017810388078287165
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.05240729148447232
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.3331419220733715
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.5593104387941741
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.5984263919336388
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.42757618664781843
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.14684155605891935
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.07932696066188283
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": -0.11844291380134786
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.03182105087075171
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.42140388958820585
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.7352638953444398
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.7895461334539488
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.5524528050281484
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.1628699663106945
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.15099003944553957
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": -0.20527227755504873
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:26": [
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.04038053971765765
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.10905019845001296
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.17362447922495616
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.19627664414501367
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.16373736221712776
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.09506770348477245
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.030493422709829243
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.007841257789771738
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.02113022784484786
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.13696520121714606
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.2856320041973994
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.3377831841847285
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.26286928723631614
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.1047738581743225
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.04389294480593098
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.09604412479326008
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.0670455106983312
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.18260505957849293
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.4173667624655429
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.4997193763373881
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.38142185688477515
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.1317712866079509
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.102990416279099
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": -0.18534303015094367
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.09253302878210656
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.2539136409851902
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.5796986374461751
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.6939815280916739
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.5298169455287545
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.1833702757614578
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.14241472069952743
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": -0.2566976113450261
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:27": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": -0.055795958433146886
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.0011855675801314414
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.06372288622411071
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.09518248439159571
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.07713575614288148
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.020154230129603268
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.042383088514376
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.073842686681861
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.1206845876923005
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.010501717438291647
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.15447890337336745
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.22690708726447228
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.1853588212862496
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.05417251615565777
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.08980466977941826
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.1622328536705231
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.16746735075239427
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.03969066819019784
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.2670469351538006
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.38141923244165343
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.3158098194623
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.1086518005197078
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.11870446644389498
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": -0.2330767637317478
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.19037062405597083
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.09710801337982822
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.4126162914219107
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.5713337398342055
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.48028582992204316
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.19280719248624412
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.1227010855558387
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": -0.28141853396813354
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:28": [
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.14035967187759224
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.0974078065132723
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.04116926491803863
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.004587822030295841
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.009092390962506802
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.052044256326826854
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.10828279792206053
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.1448642408098033
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.20149523200130925
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": -0.10260885759465044
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.026866904007322057
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.11108690765675833
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.10071621743893033
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.0018298430322716275
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.12764591856970087
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.21186592221913736
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.24201464623296998
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.08586187249560029
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.11859500467498196
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.2515879195526995
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.2352114263017161
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.07905865256434652
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.12539822460623573
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": -0.2583911394839532
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.2550242645171982
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.03832694884012644
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.24540324303656774
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.42996101276623744
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.40723492188257276
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.19053760620550142
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.09319258567119315
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": -0.2777503554008627
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:29": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": -0.20754772329258386
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.1800109483189869
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.13390374744362976
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.09623509361623594
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.08907077337255553
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.11660754834615228
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.16271474922150952
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.20038340304890345
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.25805504890811914
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": -0.19465822511724828
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": -0.0885074470327406
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.0017844008000439393
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.01470972926803682
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.04868709452283404
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.15483787260734194
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.24156091884003839
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.28560712214828754
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.1854963643165477
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.017872275237196367
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.11907322708751866
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.14511932470177524
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.04500856687003563
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.12261552220931593
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": -0.2595610245340306
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.2820879114135485
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.14316157681624153
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.08945478520497951
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.27949766460797315
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.3156425200709002
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.17671618547359358
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.0559001765476278
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": -0.24594305595062127
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:30": [
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.2527813580076944
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.24099459023109948
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.20816085961952224
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.17351372026192025
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.15734899649654588
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.16913576427314092
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.20196949488471805
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.23661663424232016
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.28650958036004803
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": -0.2593733728516091
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": -0.18378157838857045
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.10401484496326063
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.06679944319002673
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.09393565069846554
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.1695274451615042
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.24929417858681402
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.29527402330469055
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.25242288130882995
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.13305488497956242
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.007094187653270634
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.051673142502275504
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.008822000506415129
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.11054599582285263
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": -0.23650669314914408
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.26971722193382663
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.21025156389935895
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.044601452388643215
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.1301975238839589
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.21175049530688977
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.15228483727242237
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.013365274238293479
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": -0.18816425051089547
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:31": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": -0.2711298556585271
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.2740008437808322
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.25652927420797766
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.2289497554397968
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.20741799552696616
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.20454700740466092
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.22201857697751548
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.24959809574569647
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.2830568301354537
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": -0.289666592109032
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": -0.24944249111600558
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.18594725998382455
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.13637554396370577
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.12976578199012745
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.16998988298315387
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.2334851141153348
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.26846057072322493
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.278898132744394
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.2153797260999879
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.11511357194197047
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": -0.036834223529116694
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.026396661507947616
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.08991506815235373
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": -0.19018122231037116
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.2167998456304474
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.23128432527218812
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.1431381599080217
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.00399617773709493
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.10463413518033837
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.1191186148220792
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.030972449457912554
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": -0.10816953271301388
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:32": [
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.26527538260909234
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.2813790656959152
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.2805328628406738
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.26323246819944945
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.23961221831866475
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.22350853523184178
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.22435473808708317
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.2416551327283074
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.25201604008926526
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": -0.2890909103316315
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": -0.2871427310929038
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.2473127193491952
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.19293275579049052
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.1558578855481243
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.15780606478685177
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.19763607653056037
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.21126038064979558
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.26980579561759055
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.26672940017190605
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.20383330504160146
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": -0.11796118973370107
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.059415774765906204
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.06249217021159059
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": -0.12538826534189507
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.13143821719998594
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.21268323107376308
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.20841403611112874
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.12113146882077896
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": -0.001964473362658703
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.07928054051111844
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.07501134554848399
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": -0.012271221741865679
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:33": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": -0.23350483739682815
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.2601966571247285
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.27603348831326824
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.27173833003721426
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.24982722776213961
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.22313540803423926
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.2072985768456994
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.2115937351217534
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.1932443258869
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": -0.2546958427609676
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": -0.2911563504721393
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.28126777809421966
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.23082271721368575
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.16937120033961817
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.13291069262844646
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.14279926500636597
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.1251500983127607
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.22218899642012513
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.279764263438802
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.26414908880650256
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": -0.18449063004400368
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.08745173193663935
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.029876464917962586
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": -0.04549163955026203
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.016837332886679768
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.15150076686124014
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.23139948088166296
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.20972989189095403
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": -0.09918575122882001
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.03547768274574015
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.11537639676616329
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.09370680777545415
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:34": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": -0.17798333017464174
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.21189716420581295
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.24333777556423608
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.25388768052544863
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.23736688784491933
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.20345305381374823
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.17201244245532488
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.16146253749411232
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.11074688272639888
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": -0.18882535641144438
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": -0.261209827725837
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.2854984550788122
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.24746328997842282
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.16938481629337754
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.09700034497898458
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.07271171762600948
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.015997997149418852
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.13929274132682368
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.25359601151016675
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.29195050224964114
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": -0.23188867304797645
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.10859392887057162
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.005709341312771121
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.04406383205224551
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.11919294643043576
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.05190641646189975
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.21052807414375607
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.26375361083120463
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": -0.1804042289973249
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.009304866104989928
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.14931679157686684
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.20254232826431517
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:35": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": -0.10249455990609635
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.13977211756290653
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.18467388338520352
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.2108970119287864
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.20308035014067705
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.16580279248386665
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.12090102666156954
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.09467789811798688
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.01014577502567926
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": -0.09596841607165607
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": -0.19934396889018857
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.25971643665799704
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.24172044655063152
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.15589780550465482
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.052522252686122095
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.007850215081686263
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.10875738752832353
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.026766273129756657
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.1900079675098557
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.28534292498887526
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": -0.2569252204438679
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.1214015597857876
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.04184013459431146
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.13717509207333078
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.2673823820165638
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.07931262973198894
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.14722216777496577
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.27952099847416934
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": -0.2400850016281303
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.052015249343555725
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.17451954816339965
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.30681837886260277
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:36": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": -0.012182961533902081
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.04873671993244877
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.10403965908150647
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.14569606726665119
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.14930418553277436
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.11275042713422756
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.057447487985169965
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.015791079800025365
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.10170319797664551
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.01754693122758999
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": -0.10977483000667776
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.20567872478035298
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.21398555221941828
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.12982928547036277
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.0025075242360946826
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.09339637053758032
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.24061418242269994
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.10772191532222763
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": -0.09333355155227918
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.24477665249498837
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": -0.257894072901499
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.1250018058010265
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.07605366107348022
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.2274967620161893
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.4176321087311313
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.23321401057203894
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": -0.04579595467636899
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.25595753340882044
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": -0.27416092309358686
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.08974282493449437
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.18926714031391378
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.39942871904636507
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:37": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": 0.08679687875984898
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.05500511678015285
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": -0.00693019178508536
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": -0.06272818316811146
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": -0.07970315076992596
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": -0.047911388790229714
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.014023919775008498
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.0698219111580346
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.21717771360963534
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.14398480216083154
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.0013936001297847334
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.12706790020879977
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.1661486941993754
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.09295578275057159
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.049635419280475324
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.1780969196190596
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.37058656486531516
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.25500667623836626
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.0298390346770806
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.1730162091995041
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": -0.23472920472698644
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.11914931610003743
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.10601832546124812
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.3088735693378327
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.5597028559979547
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.39930960128805826
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.0868385363441081
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.19466902683889398
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": -0.28030977565894655
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.11991652094905048
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.19255454399490035
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.4740621071779023
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:38": [
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.18656136087421082
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.16335511661479318
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.09923692947052365
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.03176636387573939
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.00046676209488083487
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.023673006354298254
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.0877911934985679
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.15526175909335227
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.32696604603397006
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.2735392311810019
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.12592247445938587
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": -0.029412330076885485
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.10147216063903797
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": -0.04804534578606989
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.09957141093554633
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.25490621547181763
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.4881571513758288
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.4037901657187825
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.17068660468213992
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": -0.07460462711629856
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": -0.1883952528202103
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.10402826716316416
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.1290752938734786
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.37436652567191686
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.6821491809386807
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.565070893527685
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.24158694417201404
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": -0.09881015680579253
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": -0.2567204042454193
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.13964211683442407
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.18384183252124775
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.5242389334990536
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:39": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": 0.28228142971615416
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.27061035467550276
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.2084023549520898
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.13209803309578838
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.08639542598233851
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.09806650102299008
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.16027450074640326
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.23657882260270424
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.4262226055836438
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": 0.39935275286807836
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": 0.25613374480961126
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.08046133393927046
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": -0.024757963989877063
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.002111888725688127
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.14533089678415556
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.32100330765449614
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.5884596057882767
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.5460290681472122
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.3198700498351968
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.042463436526423703
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": -0.12368973999481703
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.08125920235375284
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.14489981595826285
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.4223064292670358
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.7800776531166909
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.7211956788200462
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.4073488542557824
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.022384392745915416
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": -0.20819074518872982
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.1493087708920855
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.16453805367217889
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.5495025151820454
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:40": [
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.36662996705072504
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.36884197045772615
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.3127835305327395
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.2312929210983452
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.17210623595516206
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.16989423254816083
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.2259526724731472
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.30744328190754155
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.5070262683850506
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.5121188760107774
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.3830577553340418
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.19544516047220561
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.059182005023322715
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.054089397397596106
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.18315051807433125
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.37076311293616754
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.6632234549219651
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.671265258568674
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.4674631463338004
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.17120163152424928
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": -0.043973308493741925
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.05201511214045096
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.15178700009442292
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.4480485149039737
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.8451982107453778
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.8563580334096543
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.5735364760744517
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.1624065712952517
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": -0.13619735860544946
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.1473571812697262
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.1354643760654769
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.5465942808446762
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:41": [
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.4338587594511205
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.4513556416813248
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.4052670515947008
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.32259106019333833
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.2517581419575139
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.2342612597273092
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.2803498498139332
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.3630258412152958
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.5638703983526412
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.6041527756717529
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.49804484446728264
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.3077031917634579
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.14462737622966937
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.1043449989105576
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.21045293011502764
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.4007945828188522
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.707353666011536
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.7709640975685355
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.6034076685606955
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.30283666263800363
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.04532149861384882
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.018288932943150926
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.14926749606468925
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.44983850198738085
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.873072995439156
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.9613468661975793
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.7288243978391102
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.3117140987716701
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": -0.045646474816531835
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.13392034557495547
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.09860212278351432
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.5157124218509535
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:42": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": 0.4793862758160862
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.5125281980127008
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.4795503190138459
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.39977063307875266
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.31992299822633213
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.2867810760297177
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.3197589550285725
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.3995386409636657
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.5928811619684906
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.6691824936823207
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.5932588321100531
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.4095852284956976
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.22575518878660306
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.14945385707277326
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.22537751864504085
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.40905112225939605
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.7178428380998569
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.838331274029078
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.7184392219850648
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.42839782003445925
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.1381093877902192
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.01762095186099788
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.1375130039050113
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.42755440585561677
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.8618023866864041
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 1.0290073617315747
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.8626300043069208
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.46013191392000874
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.057291013090219445
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.10991396195495129
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.056463395469702804
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.45896148585661445
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:43": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": 0.5001098911431283
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.5481908308302986
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.5305710508744634
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.457571979407722
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.37195548245464766
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.32387454276747757
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.34149432272331276
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.4144933941900543
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.5920815236347325
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.7027763622267501
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.6622110423530521
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.49414817823364765
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.29703671633841755
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.1863418777464001
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.22690719762009826
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.394970061739502
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.6939761514432853
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.8687758262040379
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.8047185963396668
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.5393283183366699
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.22806701772723575
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.053267342966482834
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.11732457283085396
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.38271485083385093
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.8121544578480606
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 1.0547285690552535
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.9658346645213217
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.5975455879099436
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.16560008542620064
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.076974025780992
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.01191987875293965
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.380208955364317
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:44": [
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.4939219639539347
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.5550046506904092
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.5537293492422319
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.4908431139016316
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.4031838484445451
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.34210116170807064
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.3433764631562477
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.40626269849684793
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.5612164461843354
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.7018446908287527
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.6989086149350487
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.554128131941599
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.35231368521903894
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.21168544057462224
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.21462151646832578
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.3594019994617754
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.6375612923892943
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.8596292021372768
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.8549928060973143
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.6263680421890838
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.3076801964156798
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.08561228666769716
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.09024868270765973
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.3188734466158896
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.7283420469854613
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 1.0365115324749778
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 1.0300774836122568
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.7128088789601095
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.27055736420857546
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.037612121280940713
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.031178072418219793
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.2860905322339272
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:45": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": 0.4630237996062207
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.5346985929016317
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.5500022238813012
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.4999700330708919
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.4139101992919028
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.3422354059964918
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.32693177501682236
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.3769639658272316
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.5035305703275438
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": 0.66854460138794
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": 0.7037775434266821
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.5885904168397798
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.39045827817105344
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.22544424711065697
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.19021130507191497
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.3053984316588172
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.5527357748787878
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.8133116005198409
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.8689484024482073
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.6870548966613153
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.3741818319415369
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.1136060063004839
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.05796920437211761
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.23986271015900962
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.6152097340439542
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.9768176683463063
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 1.0540263233203846
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.8016079160149587
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.3674257260369307
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.005817791734578415
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.07139086323950006
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.1810275440659257
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:46": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": 0.4084641749500917
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.48740450234357935
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.5182441485902769
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.48291766717765755
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.4021188318063123
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.32317850441282475
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.29233885816612715
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.32766533957874644
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.4221602437180086
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": 0.6039014254851952
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": 0.6749023186816323
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.5935715630134505
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.4075516121130177
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.22581043034583098
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.15480953714939383
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.23614029281757565
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.44485684195511943
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.7318467311641903
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.8439651749536292
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.7155347095437483
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.4217881597497669
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.13479827054069582
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.022679826751256904
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.15111029216113758
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.4805757937788483
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.8788392195868451
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 1.0344289361545742
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.8562025976824454
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.4485627760753339
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.050299350267336784
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.10529036630039246
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": 0.0729359721717362
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:47": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": 0.3339612382418202
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.41634539313060365
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.4606193837175414
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.4408481067771852
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.3686133081957604
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.2862291533069772
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.24195516272003925
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.2617264396603955
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.3226507196433466
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": 0.5123204887303904
+    },
+    {
+      "weight_airmass": 0.06287329327911688,
+      "cosine_minus_zenith": 0.614250739547709
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.568732113582609
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.402428804584857
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.2127590354978136
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.11082878468049484
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.156347410645595
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.3212762646186701
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.6207862902898502
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.7817456892806003
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.709866628653562
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.4472548872734154
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.14774486160223543
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.013214537388514969
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": 0.05866452323852345
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.3336153067261045
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.7492532555625091
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.9726208516639623
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.8728723866289079
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.5084391584489827
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.0928012096125782
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.1305663864888752
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": -0.030817921453821007
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:48": [
+    {
+      "weight_airmass": 0.09050614441871693,
+      "cosine_minus_zenith": 0.2445922414961505
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.3263638261248375
+    },
+    {
+      "weight_airmass": 0.09411964088269344,
+      "cosine_minus_zenith": 0.3810549617597455
+    },
+    {
+      "weight_airmass": 0.09050614441871695,
+      "cosine_minus_zenith": 0.3766283228875314
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.31567697452381044
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.2339053898951231
+    },
+    {
+      "weight_airmass": 0.08282890672350866,
+      "cosine_minus_zenith": 0.1792142542602151
+    },
+    {
+      "weight_airmass": 0.08584515456661786,
+      "cosine_minus_zenith": 0.18364089313242926
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.2117834077219825
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.40004288061871107
+    },
+    {
+      "weight_airmass": 0.06287329327911689,
+      "cosine_minus_zenith": 0.5259561109114153
+    },
+    {
+      "weight_airmass": 0.05691392134756357,
+      "cosine_minus_zenith": 0.5157648359768356
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.37543896645377595
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.18717949355704744
+    },
+    {
+      "weight_airmass": 0.04631559645699881,
+      "cosine_minus_zenith": 0.061266263264343146
+    },
+    {
+      "weight_airmass": 0.050186669922533546,
+      "cosine_minus_zenith": 0.07145753819892264
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.19041585498835856
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.4876988634063494
+    },
+    {
+      "weight_airmass": 0.00814173543882873,
+      "cosine_minus_zenith": 0.6865301005551754
+    },
+    {
+      "weight_airmass": 0.006779722686769197,
+      "cosine_minus_zenith": 0.6704369243364752
+    },
+    {
+      "weight_airmass": 0.005482636973113029,
+      "cosine_minus_zenith": 0.44884649911750296
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": 0.15156349069951192
+    },
+    {
+      "weight_airmass": 0.0048293149776549235,
+      "cosine_minus_zenith": -0.047267746449314085
+    },
+    {
+      "weight_airmass": 0.0054826369731130285,
+      "cosine_minus_zenith": -0.031174570230613763
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.18434338721467924
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.5968908455706252
+    },
+    {
+      "weight_airmass": 0.00015205486298688984,
+      "cosine_minus_zenith": 0.8728141886638942
+    },
+    {
+      "weight_airmass": 0.00010944425110038665,
+      "cosine_minus_zenith": 0.8504812642857734
+    },
+    {
+      "weight_airmass": 7.838118712490339e-05,
+      "cosine_minus_zenith": 0.5429743966495137
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": 0.13042693829356788
+    },
+    {
+      "weight_airmass": 6.527985338710177e-05,
+      "cosine_minus_zenith": -0.14549640479970127
+    },
+    {
+      "weight_airmass": 7.838118712490338e-05,
+      "cosine_minus_zenith": -0.12316348042158076
+    }
+  ],
+  "representative/2026-10-28_2113-2123_KST_jeju_science_rooftop:49": [
+    {
+      "weight_airmass": 0.0763090093512987,
+      "cosine_minus_zenith": -0.0597473689208754
+    },
+    {
+      "weight_airmass": 0.0763090093512987,
+      "cosine_minus_zenith": -0.0038742336914867614
+    },
+    {
+      "weight_airmass": 0.0763090093512987,
+      "cosine_minus_zenith": 0.057228112460987135
+    },
+    {
+      "weight_airmass": 0.0763090093512987,
+      "cosine_minus_zenith": 0.08776674385324246
+    },
+    {
+      "weight_airmass": 0.0763090093512987,
+      "cosine_minus_zenith": 0.06985254439200905
+    },
+    {
+      "weight_airmass": 0.0763090093512987,
+      "cosine_minus_zenith": 0.013979409162620415
+    },
+    {
+      "weight_airmass": 0.0763090093512987,
+      "cosine_minus_zenith": -0.04712293698985348
+    },
+    {
+      "weight_airmass": 0.0763090093512987,
+      "cosine_minus_zenith": -0.0776615683821088
+    },
+    {
+      "weight_airmass": 0.04619294463138436,
+      "cosine_minus_zenith": -0.12198195144917245
+    },
+    {
+      "weight_airmass": 0.04619294463138436,
+      "cosine_minus_zenith": 0.006652549583624601
+    },
+    {
+      "weight_airmass": 0.04619294463138436,
+      "cosine_minus_zenith": 0.14732605532100296
+    },
+    {
+      "weight_airmass": 0.04619294463138436,
+      "cosine_minus_zenith": 0.2176339339685759
+    },
+    {
+      "weight_airmass": 0.04619294463138436,
+      "cosine_minus_zenith": 0.17639078375627681
+    },
+    {
+      "weight_airmass": 0.04619294463138436,
+      "cosine_minus_zenith": 0.04775628272347987
+    },
+    {
+      "weight_airmass": 0.04619294463138436,
+      "cosine_minus_zenith": -0.0929172230138986
+    },
+    {
+      "weight_airmass": 0.04619294463138436,
+      "cosine_minus_zenith": -0.16322510166147153
+    },
+    {
+      "weight_airmass": 0.005250346887966347,
+      "cosine_minus_zenith": -0.16560795577117216
+    },
+    {
+      "weight_airmass": 0.005250346887966347,
+      "cosine_minus_zenith": 0.037520475775825624
+    },
+    {
+      "weight_airmass": 0.005250346887966347,
+      "cosine_minus_zenith": 0.2596598579106836
+    },
+    {
+      "weight_airmass": 0.005250346887966347,
+      "cosine_minus_zenith": 0.37068395331598153
+    },
+    {
+      "weight_airmass": 0.005250346887966347,
+      "cosine_minus_zenith": 0.3055563526535003
+    },
+    {
+      "weight_airmass": 0.005250346887966347,
+      "cosine_minus_zenith": 0.10242792110650245
+    },
+    {
+      "weight_airmass": 0.005250346887966347,
+      "cosine_minus_zenith": -0.11971146102835561
+    },
+    {
+      "weight_airmass": 0.005250346887966347,
+      "cosine_minus_zenith": -0.2307355564336534
+    },
+    {
+      "weight_airmass": 7.910628821023944e-05,
+      "cosine_minus_zenith": -0.18457977859589325
+    },
+    {
+      "weight_airmass": 7.910628821023944e-05,
+      "cosine_minus_zenith": 0.09730689431047623
+    },
+    {
+      "weight_airmass": 7.910628821023944e-05,
+      "cosine_minus_zenith": 0.4055755639131544
+    },
+    {
+      "weight_airmass": 7.910628821023944e-05,
+      "cosine_minus_zenith": 0.5596466244136031
+    },
+    {
+      "weight_airmass": 7.910628821023944e-05,
+      "cosine_minus_zenith": 0.4692673381398653
+    },
+    {
+      "weight_airmass": 7.910628821023944e-05,
+      "cosine_minus_zenith": 0.18738066523349584
+    },
+    {
+      "weight_airmass": 7.910628821023944e-05,
+      "cosine_minus_zenith": -0.12088800436918257
+    },
+    {
+      "weight_airmass": 7.910628821023944e-05,
+      "cosine_minus_zenith": -0.2749590648696312
+    }
+  ]
+}

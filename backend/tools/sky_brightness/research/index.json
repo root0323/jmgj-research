@@ -2,8 +2,8 @@
   "schema_version": 1,
   "results_summary": "RESULTS.md",
   "retention_policy": "Archive every submitted dataset and analysis, including unchanged or deferred results; preserve earlier runs and graphs.",
-  "latest_dataset": "2026-10-27_2108-2113_KST_jeju_science_high",
-  "latest_run": "004_joint_three_dates",
+  "latest_dataset": "2026-10-28_2113-2123_KST_jeju_science_rooftop",
+  "latest_run": "002_four_dates_rooftop",
   "accepted_model_run": null,
   "datasets": [
     {
@@ -27,10 +27,11 @@
         "001_three_hour_calibration",
         "002_scattering_calibration",
         "003_transport_physics",
-        "004_joint_three_dates"
+        "004_joint_three_dates",
+        "005_four_dates_rooftop"
       ],
       "active_for_fitting": true,
-      "status": "joint_three_date_candidate_calibrated_not_applied",
+      "status": "joint_four_date_candidate_calibrated_not_applied",
       "instrument": "SQM-L",
       "active_for_joint_twilight_night_fitting": true
     },
@@ -41,7 +42,8 @@
       "runs": [
         "001_frozen_candidate_evaluation",
         "002_local_twilight_probe",
-        "003_joint_three_dates"
+        "003_joint_three_dates",
+        "004_four_dates_rooftop"
       ],
       "instrument": "SQM-L",
       "site": "탐라교육원 운동장 중앙 (지도 근사)",
@@ -54,7 +56,7 @@
       "active_for_fitting": true,
       "active_for_nocturnal_fitting": false,
       "used_for_local_twilight_probe": true,
-      "status": "joint_three_date_candidate_calibrated_not_applied",
+      "status": "joint_four_date_candidate_calibrated_not_applied",
       "active_for_joint_twilight_night_fitting": true
     },
     {
@@ -67,10 +69,11 @@
         "001_frozen_candidate_evaluation",
         "002_scattering_calibration",
         "003_transport_physics",
-        "004_joint_three_dates"
+        "004_joint_three_dates",
+        "005_four_dates_rooftop"
       ],
       "active_for_fitting": true,
-      "status": "joint_three_date_candidate_calibrated_not_applied",
+      "status": "joint_four_date_candidate_calibrated_not_applied",
       "instrument": "SQM-L",
       "site": "제주과학고등학교 건물 북쪽 사용자 지도 핀",
       "coordinates": {
@@ -85,17 +88,47 @@
       "api_ready": true,
       "api_received_after_observation": true,
       "active_for_joint_twilight_night_fitting": true
+    },
+    {
+      "id": "2026-10-28_2113-2123_KST_jeju_science_rooftop",
+      "raw_observations": 49,
+      "included_observations": 48,
+      "missing_observations": 1,
+      "runs": [
+        "001_frozen_three_day",
+        "002_four_dates_rooftop"
+      ],
+      "active_for_fitting": true,
+      "instrument": "SQM-L",
+      "site": "제주과학고 서쪽 건물 북쪽 부분 4층 높이 옥상",
+      "coordinates": {
+        "latitude": 33.42642,
+        "longitude": 126.53016,
+        "surveyed": false,
+        "method": "manual screenshot registration",
+        "uncertainty_m_assumed": 10
+      },
+      "observation_interval_kst": [
+        "2026-10-28T21:13+09:00",
+        "2026-10-28T21:23+09:00"
+      ],
+      "per_minute_times_preserved": true,
+      "local_moon_disk_visibility": 0.0,
+      "api_ready": true,
+      "api_received_after_observation": true,
+      "status": "joint_four_date_candidate_calibrated_not_applied"
     }
   ],
   "active_training_datasets": [
     "2026-10-22_2123-2218_KST_jeju",
     "2026-10-26_1829-1835_KST_tamna_playground",
-    "2026-10-27_2108-2113_KST_jeju_science_high"
+    "2026-10-27_2108-2113_KST_jeju_science_high",
+    "2026-10-28_2113-2123_KST_jeju_science_rooftop"
   ],
   "exploratory_datasets": [
     "2026-10-26_1829-1835_KST_tamna_playground"
   ],
-  "latest_model_revision": "revisions/2026-10-28_joint_three_dates",
+  "latest_model_revision": "revisions/2026-10-28_four_dates_rooftop",
   "runtime_model": {
     "physics_model": "legacy",
     "release": "0.9.3",
@@ -112,19 +145,20 @@
     "requested_on": "2026-10-28"
   },
   "research_candidate_model": {
-    "version": "joint-sos3d-twilight-2026.10.28",
-    "physics_model": "sos3d_with_empirical_twilight_and_expected_sqm",
-    "revision": "revisions/2026-10-28_joint_three_dates",
+    "version": "joint-sos3d-roofmask-2026.10.28",
+    "physics_model": "sos3d_with_twilight_expected_sqm_and_local_lunar_disk_visibility",
+    "revision": "revisions/2026-10-28_four_dates_rooftop",
     "adopted_by_app": false,
     "coefficient_fit_performed": true,
     "fitted_datasets": [
       "2026-10-22_2123-2218_KST_jeju",
       "2026-10-26_1829-1835_KST_tamna_playground",
-      "2026-10-27_2108-2113_KST_jeju_science_high"
+      "2026-10-27_2108-2113_KST_jeju_science_high",
+      "2026-10-28_2113-2123_KST_jeju_science_rooftop"
     ],
-    "n": 131,
-    "parameters": "models/joint-sos3d-twilight-2026.10.28/candidate_params.json",
-    "validation": "Retrospective angular/date-held-out diagnostics; the held-out twilight date uses a declared prior."
+    "n": 179,
+    "parameters": "models/joint-sos3d-roofmask-2026.10.28/candidate_params.json",
+    "validation": "Frozen previous coefficients on Oct28, then retrospective four-date/angular-held-out diagnostics. Twilight held-out uses declared priors."
   },
   "research_model_history": [
     {
@@ -134,6 +168,21 @@
       "adopted_by_app": false,
       "validation": "retrospective; 2026-10-27 SQM-L error increased",
       "adoption_status": "revisions/2026-10-28_transport_physics/ADOPTION_STATUS.json"
+    },
+    {
+      "version": "joint-sos3d-twilight-2026.10.28",
+      "physics_model": "sos3d_with_empirical_twilight_and_expected_sqm",
+      "revision": "revisions/2026-10-28_joint_three_dates",
+      "adopted_by_app": false,
+      "coefficient_fit_performed": true,
+      "fitted_datasets": [
+        "2026-10-22_2123-2218_KST_jeju",
+        "2026-10-26_1829-1835_KST_tamna_playground",
+        "2026-10-27_2108-2113_KST_jeju_science_high"
+      ],
+      "n": 131,
+      "parameters": "models/joint-sos3d-twilight-2026.10.28/candidate_params.json",
+      "validation": "Retrospective angular/date-held-out diagnostics; the held-out twilight date uses a declared prior."
     }
   ],
   "twilight_training_datasets": [

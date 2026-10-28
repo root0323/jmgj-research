@@ -1,0 +1,39 @@
+{
+  "model_version": "joint-sos3d-roofmask-2026.10.28",
+  "source_parent_commit": "c23fbf4947860ec1e5672ebbc0801e5e200666d2",
+  "source_sha256": {
+    "roof_model.py": "0209cf0be8ffac5900fa845745ead231572d80255c79278586bc47d489110890",
+    "joint_model.py": "05e126938ecf9ea4d08f802320e5f83e22ef562e6cb17af63bc4be42684ded26",
+    "prepare_rooftop_basis.py": "1efcf5f57cbbc26a7e5d7a32f5b3aed66335f27a5dd9af0b2ace7330ea9cb642",
+    "prepare_rooftop_inputs.py": "8bc2974a1217c726393384c568bff0d99bebb697d777f219b45c7d86cd529983",
+    "four_dates_rooftop.py": "3a1553807fc6f493572d390cece0caa9f1c3e075c9f1bec9473b72129ca885d2",
+    "verify_roof_inference.py": "13fd94294b2fdd7ff7cede4f741212f3179ea1c203c3652ffdef84608f1d771d",
+    "archive_rooftop.py": "e05e9537ea590fab833efc5badd408cf0f91257058b48a49d4061d012c1b2437",
+    "prepare_joint_basis.py": "a4ac21ddd0e3962050074a2cac12f82f987b572558ca6f329929f6daf4e4cdf8",
+    "calibrate_three_hour.py": "079ccb52fbaf71e6eca644172c41fad913d1b67735d8dbef0e1f2b5a4e98a7d3",
+    "evaluate_frozen.py": "f7fed2e1b7d8228486eb7278317234a403a716080fa1a49d8525fdcd1708e4cf",
+    "calculator.py": "21cfacafdc78b49f858259e9201947337d978b1131f6d96b040af9245be8ed0f",
+    "config.py": "a0a9630ae653eacfabe5d3cfe26430846af341fcd85342e64d24793ea2be9814",
+    "data_loader.py": "53068838a0b00be625171f06d57dd2dcd970bd9b80bf593f639f653741b58e23",
+    "modern_sky.py": "94a58199d4a99d1846976983a22e405c609aabefa1a789ed073b86865d12cc7f",
+    "radiative_transfer.py": "e9aac29bc1a63a028d48778dd2e5dd6e48fbd742867dc7c229d043a0e6a53200"
+  },
+  "versions": {
+    "python": "3.12.14",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scipy": "1.18.1",
+    "rasterio": "1.5.2",
+    "numba": "0.68.0",
+    "astronomy-engine": "2.1.19",
+    "matplotlib": "3.11.2"
+  },
+  "parameters": {
+    "art_scale": 0.3548913200550485,
+    "twilight_gain": 1.481668301347112,
+    "twilight_concentration": 1.3230622918214614,
+    "cloud_optical_depth": 10.0
+  },
+  "application_adopted": false,
+  "note": "Source snapshot; full repository and earlier frozen weather adapter are required for reproduction."
+}

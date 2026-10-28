@@ -1,0 +1,22 @@
+{
+  "dataset_id": "2026-10-28_2113-2123_KST_jeju_science_rooftop",
+  "site": "제주과학고등학교 4층 높이 옥상, 사용자 지도 사진 핀",
+  "instrument": "SQM-L",
+  "timezone": "Asia/Seoul",
+  "raw_count": 49,
+  "valid_count": 48,
+  "missing_count": 1,
+  "observation_interval_kst": [
+    "2026-10-28T21:13+09:00",
+    "2026-10-28T21:23+09:00"
+  ],
+  "time_rule": "User confirmed: blank time cells inherit the preceding explicit minute label; seconds within each minute unknown.",
+  "roof_moon_occultation": "User confirmed lunar disk continuously hidden throughout the scan.",
+  "sky_obstruction": "User states roof did not block the observed sky; full angular mask of the sensor beam is unknown.",
+  "observer_height_information": "User: four-storey building height. Exact metres and vertical datum unknown.",
+  "coordinates_status": "Pending screenshot-to-map registration; do not reuse the October 27 ground pin as if it were this roof.",
+  "azimuth_convention": "North=0, East=90, South=180, West=270",
+  "raw_sha256": "992cc23e6c422b47616dab2c4e2db966538399ac799647b5e9c0442bb2731716",
+  "location_image_sha256": "293a0264a310508e41a4b2b5ca96954f26725f8fe9026ef7f43baf838c2f7acf",
+  "application_modified": false
+}
